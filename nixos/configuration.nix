@@ -59,69 +59,85 @@
     };
   };
 
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = true;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
 
-  # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
+    # Bootloader.
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot/efi";
+    };
+
+    initrd = {
+      # Setup keyfile
+      secrets = {
+        "/crypto_keyfile.bin" = null;
+      };
+
+      # Enable swap on luks
+      luks.devices."luks-bb046e96-eefd-4a8a-93af-074d42285087".device = "/dev/disk/by-uuid/bb046e96-eefd-4a8a-93af-074d42285087";
+      luks.devices."luks-bb046e96-eefd-4a8a-93af-074d42285087".keyFile = "/crypto_keyfile.bin";
+    };
   };
 
-  # Enable grub cryptodisk
-  boot.loader.grub.enableCryptodisk=true;
+  networking = {
+    hostName = "nixos"; # Define your hostname.
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  boot.initrd.luks.devices."luks-2160ef7c-da89-499d-a470-60775bbd28f1".keyFile = "/crypto_keyfile.bin";
-  # Enable swap on luks
-  boot.initrd.luks.devices."luks-da9b9d0c-8b49-46bc-86fb-982d3b776c06".device = "/dev/disk/by-uuid/da9b9d0c-8b49-46bc-86fb-982d3b776c06";
-  boot.initrd.luks.devices."luks-da9b9d0c-8b49-46bc-86fb-982d3b776c06".keyFile = "/crypto_keyfile.bin";
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
+    # Enable networking
+    networkmanager.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Stockholm";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "sv_SE.UTF-8";
-    LC_IDENTIFICATION = "sv_SE.UTF-8";
-    LC_MEASUREMENT = "sv_SE.UTF-8";
-    LC_MONETARY = "sv_SE.UTF-8";
-    LC_NAME = "sv_SE.UTF-8";
-    LC_NUMERIC = "sv_SE.UTF-8";
-    LC_PAPER = "sv_SE.UTF-8";
-    LC_TELEPHONE = "sv_SE.UTF-8";
-    LC_TIME = "sv_SE.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "sv_SE.UTF-8";
+      LC_IDENTIFICATION = "sv_SE.UTF-8";
+      LC_MEASUREMENT = "sv_SE.UTF-8";
+      LC_MONETARY = "sv_SE.UTF-8";
+      LC_NAME = "sv_SE.UTF-8";
+      LC_NUMERIC = "sv_SE.UTF-8";
+      LC_PAPER = "sv_SE.UTF-8";
+      LC_TELEPHONE = "sv_SE.UTF-8";
+      LC_TIME = "sv_SE.UTF-8";
+    };
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # List packages installed in system profile.
+  environment.systemPackages = with pkgs; [
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+  ];
 
-  # Enable the XFCE Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
 
-  # Configure keymap in X11
   services.xserver = {
+    # Enable the X11 windowing system.
+    enable = true;
+
+    # Configure keymap in X11
     layout = "se";
     xkbVariant = "";
+
+    # Enable the XFCE Desktop Environment.
+    displayManager.lightdm.enable = true;
+    desktopManager.xfce.enable = true;
+
+    # Enable automatic login for the user.
+    displayManager.autoLogin.enable = true;
+    displayManager.autoLogin.user = "tob";
   };
 
   # Configure console keymap
   console.keyMap = "sv-latin1";
+
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -147,11 +163,9 @@
   users.users = {
     # FIXME: Replace with your username
     tob = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "pwd123";
       isNormalUser = true;
+      description = "Tobias Lindholm";
+      initialPassword = "pwd123";
       openssh.authorizedKeys.keys = [
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
