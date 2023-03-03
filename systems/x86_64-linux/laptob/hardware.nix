@@ -9,34 +9,60 @@
     initrd = {
       availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
       kernelModules = [ "kvm-intel" ];
-      luks.devices.root.device = "/dev/disk/by-label/crypt-nixos";
+      luks.devices."system".device = "/dev/disk/by-partlabel/cryptsystem";
     };
 
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
-    kernelParams = [ "mem_sleep_default=deep" "resume_offset=140544" ];
-    resumeDevice = "/dev/disk/by-uuid/54482a88-e7a0-4942-a5ea-03581cec2767";
+    kernelParams = [
+      "mem_sleep_default=deep"
+      "resume_offset=140544" # Value from `btrfs inspect-internal map-swapfile -r /mnt/swap/swapfile`
+    ];
+    resumeDevice = "/dev/mapper/system";
   };
+
 
   fileSystems = {
     "/" = {
-      device = "/dev/mapper/root";
-      fsType = "ext4";
+      device = "/dev/mapper/system";
+      fsType = "btrfs";
+      # options = [ "subvol=@root" "compress=zstd" "ssd" "noatime" ];
+      options = [ "subvol=@root" "compress=zstd" "noatime" ];
     };
 
-    "/boot/efi" = {
-      device = "/dev/disk/by-label/ESP";
+    "/nix" = {
+      device = "/dev/mapper/system";
+      fsType = "btrfs";
+      # options = [ "subvol=@nix" "compress=zstd" "ssd" "noatime" ];
+      options = [ "subvol=@nix" "compress=zstd" "noatime" ];
+    };
+
+    "/persist" = {
+      device = "/dev/mapper/system";
+      fsType = "btrfs";
+      # options = [ "subvol=@persist" "compress=zstd" "ssd" "noatime" ];
+      options = [ "subvol=@persist" "compress=zstd" "noatime" ];
+    };
+
+    "/swap" = {
+      device = "/dev/mapper/system";
+      fsType = "btrfs";
+      # options = [ "subvol=@swap" "compress=none" "ssd" "noatime" ];
+      options = [ "subvol=@swap" "compress=none" "noatime" ];
+    };
+
+    "/efi" = {
+      device = "/dev/disk/by-partlabel/EFI";
       fsType = "vfat";
     };
   };
 
-  swapDevices = [{ device = "/dev/mapper/swap"; }];
+  swapDevices = [{ device = "/swap/swapfile"; }];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   #powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  #hardware.cpu.intel.updateMicrocode =
-  #  lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # high-resolution display
   #hardware.video.hidpi.enable = true;

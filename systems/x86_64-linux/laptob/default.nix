@@ -15,22 +15,16 @@ with lib;
         configurationLimit = 5;
       };
 
-      efi.canTouchEfiVariables = true;
-      efi.efiSysMountPoint = "/boot/efi";
-    };
-
-    initrd = {
-      # Setup keyfile
-      secrets = {
-        "/crypto_keyfile.bin" = null;
-      };
-
-      # Enable swap on luks
-      luks.devices.swap = {
-        device = "/dev/disk/by-label/crypt-swap";
-        keyFile = "/crypto_keyfile.bin";
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/efi";
       };
     };
+  };
+
+  services.logind = {
+    lidSwitch = "suspend-then-hibernate";
+    lidSwitchExternalPower = "suspend";
   };
 
   antob = {
