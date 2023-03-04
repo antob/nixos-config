@@ -24,10 +24,15 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/mapper/system";
-      fsType = "btrfs";
-      # options = [ "subvol=@root" "compress=zstd" "ssd" "noatime" ];
-      options = [ "subvol=@root" "compress=zstd" "noatime" ];
+      device = "none";
+      fsType = "tmpfs";
+      options = [ "defaults" "size=500M" "mode=755" ];
+    };
+
+    "/home/${config.antob.user.name}" = {
+      device = "none";
+      fsType = "tmpfs";
+      options = [ "defaults" "size=1G" "mode=777" ];
     };
 
     "/nix" = {
@@ -42,6 +47,7 @@
       fsType = "btrfs";
       # options = [ "subvol=@persist" "compress=zstd" "ssd" "noatime" ];
       options = [ "subvol=@persist" "compress=zstd" "noatime" ];
+      neededForBoot = true;
     };
 
     "/swap" = {
@@ -54,6 +60,7 @@
     "/efi" = {
       device = "/dev/disk/by-partlabel/EFI";
       fsType = "vfat";
+      neededForBoot = true;
     };
   };
 
@@ -61,7 +68,7 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-  #powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # high-resolution display

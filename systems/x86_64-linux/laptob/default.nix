@@ -1,8 +1,12 @@
-{ pkgs, config, lib, channel, ... }:
+{ pkgs, config, lib, channel, inputs, ... }:
 
 with lib;
 {
-  imports = [ ./hardware.nix ];
+  imports = [
+    ./hardware.nix
+    inputs.impermanence.nixosModules.impermanence
+    ./persist.nix
+  ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -33,6 +37,7 @@ with lib;
       fullName = "Tobias Lindholm";
       email = "tobias.lindholm@antob.se";
       initialPassword = "password";
+      autoLogin = true;
     };
 
     services = {
@@ -59,7 +64,6 @@ with lib;
   };
 
   environment.systemPackages = with pkgs; [
-    firefox
   ];
 
   # Enable passwordless sudo for wheel group

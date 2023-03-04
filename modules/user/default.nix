@@ -30,8 +30,8 @@ in
     name = mkOpt str "short" "The name to use for the user account.";
     fullName = mkOpt str "Tobias Lindholm" "The full name of the user.";
     email = mkOpt str "tobias.lindholm@antob.se" "The email of the user.";
-    initialPassword = mkOpt str "password"
-      "The initial password to use when the user is first created.";
+    initialPassword = mkOpt str "password" "The initial password to use when the user is first created.";
+    autoLogin = mkBoolOpt false "Whether or not to autologin user.";
     icon = mkOpt (nullOr package) defaultIcon
       "The profile picture to use for the user.";
     extraGroups = mkOpt (listOf str) [ ] "Groups for the user to be assigned.";
@@ -111,6 +111,8 @@ in
         };
       };
     };
+
+    services.getty.autologinUser = mkIf cfg.autoLogin cfg.name;
 
     users.users.${cfg.name} = {
       isNormalUser = true;
