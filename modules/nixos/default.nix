@@ -1,7 +1,13 @@
-# Add your reusable NixOS modules to this directory, on their own file (https://nixos.wiki/wiki/Module).
-# These should be stuff you would like to share with others, not your personal configurations.
-
 {
-  # List your module files here
-  # my-module = import ./my-module.nix;
+  user = import ./user.nix;
+
+  hardware = {
+    networking = import ./hardware/networking.nix;
+    fingerprint = import ./hardware/fingerprint.nix;
+  };
+
+  system = {
+    locale = import ./system/locale.nix;
+    console = import ./system/console.nix;
+  };
 }

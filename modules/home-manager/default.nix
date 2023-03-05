@@ -1,7 +1,9 @@
-# Add your reusable home-manager modules to this directory, on their own file (https://nixos.wiki/wiki/Module).
-# These should be stuff you would like to share with others, not your personal configurations.
-
 {
-  # List your module files here
-  # my-module = import ./my-module.nix;
+  user = import ./user.nix;
+  fonts = import ./fonts.nix;
+  git = import ./git.nix;
+  neovim = import ./neovim.nix;
+  zsh = import ./zsh.nix;
+  starship = import ./starship.nix;
+  exa = import ./exa.nix;
 }
