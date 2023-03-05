@@ -1,29 +1,11 @@
-# This is your system's configuration file.
-# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-
 { inputs, outputs, lib, config, pkgs, ... }:
 
 let enabled = { enable = true; };
 in {
-  # You can import other NixOS modules here
-  imports = [
-    # If you want to use modules your own flake exports (from modules/nixos):
-    # outputs.nixosModules.example
-    outputs.nixosModules.user
-    outputs.nixosModules.hardware.networking
-    outputs.nixosModules.hardware.fingerprint
-    outputs.nixosModules.system.locale
-    outputs.nixosModules.system.console
-
-    # Or modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
+  imports = outputs.nixosModules.all ++ [
     inputs.impermanence.nixosModules.impermanence
 
-    # You can also split up your configuration and import pieces of it here:
-    # ./users.nix
-
-    # Import your generated (nixos-generate-config) hardware configuration
+    ./persist.nix
     ./hardware-configuration.nix
   ];
 
@@ -40,6 +22,7 @@ in {
 
     hardware = {
       networking = enabled;
+      audio = enabled;
       fingerprint = enabled;
     };
 
@@ -65,41 +48,6 @@ in {
 
     # Enable CUPS to print documents.
     printing.enable = true;
-  };
-
-  # Necessary for user-specific impermanence
-  programs.fuse.userAllowOther = true;
-
-  environment.persistence."/persist" = {
-    hideMounts = true;
-    directories = [
-      "/etc/NetworkManager/system-connections"
-
-    ];
-    files = [
-      "/etc/machine-id"
-      "/ssh/ssh_host_rsa_key"
-      "/ssh/ssh_host_rsa_key.pub"
-      "/ssh/ssh_host_ed25519_key"
-      "/ssh/ssh_host_ed25519_key.pub"
-    ];
-  };
-
-  # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Set your time zone.
@@ -171,8 +119,13 @@ in {
   #   enable = true;
 
   #   # Configure keymap in X11
-  #   layout = "se";
-  #   xkbVariant = "";
+  #   layout = "se,se";
+  #   xkbVariant = ",us";
+  #   xkbOptions = "caps:ctrl_modifier,grp:win_space_toggle";
+
+  #   # Configure Set console typematic delay and rate in X11
+  #   autoRepeatDelay = 200;
+  #   autoRepeatInterval = 40;
 
   #   # Enable the XFCE Desktop Environment.
   #   displayManager.lightdm.enable = true;

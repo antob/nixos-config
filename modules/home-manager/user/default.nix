@@ -19,6 +19,8 @@ in {
     home = {
       username = cfg.name;
       homeDirectory = "/home/${cfg.name}";
+
+      file = { ".face".source = ./profile.png; };
     };
   };
 }
