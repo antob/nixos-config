@@ -13,6 +13,14 @@ in {
       enableCompletion = true;
       enableAutosuggestions = true;
       enableSyntaxHighlighting = true;
+      defaultKeymap = "emacs";
+      dotDir = ".config/zsh";
+
+      historySubstringSearch = {
+        enable = true;
+        searchUpKey = "^[[A";
+        searchDownKey = "^[[B";
+      };
 
       history = {
         expireDuplicatesFirst = true;
@@ -21,16 +29,21 @@ in {
 
       initExtra = ''
         # Use vim bindings.
-        set -o vi
+        #set -o vi
 
         # Improved vim bindings.
-        source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+        #source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
       '';
 
       oh-my-zsh = {
         enable = true;
         plugins = [ "git" ];
       };
+    };
+
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
     };
   };
 }

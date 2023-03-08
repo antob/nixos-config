@@ -20,7 +20,10 @@ in {
       zsh = enabled;
       starship = enabled;
       exa = enabled;
+      alacritty = enabled;
     };
+
+    security.gpg = enabled;
   };
 
   # home.file = mkAliasDefinitions options.host.home.file;

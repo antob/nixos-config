@@ -27,4 +27,6 @@ in {
   zsh = import ./zsh.nix;
   starship = import ./starship.nix;
   exa = import ./exa.nix;
+  alacritty = import ./alacritty.nix;
+  gpg = import ./gpg.nix;
 }
