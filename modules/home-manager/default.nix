@@ -21,7 +21,6 @@ let
 in {
   all = validFiles ./.;
   user = import ./user;
-  fonts = import ./fonts.nix;
   git = import ./git.nix;
   neovim = import ./neovim.nix;
   zsh = import ./zsh.nix;

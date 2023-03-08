@@ -6,6 +6,8 @@ in {
     inputs.impermanence.nixosModules.impermanence
 
     ./persist.nix
+    ./services.nix
+    ./programs.nix
     ./hardware-configuration.nix
   ];
 
@@ -32,33 +34,21 @@ in {
     };
   };
 
-  services = {
-    logind = {
-      lidSwitch = "suspend-then-hibernate";
-      lidSwitchExternalPower = "suspend";
-    };
-
-    avahi = {
-      enable = true;
-      nssmdns = true;
-    };
-
-    # Enable the OpenSSH daemon.
-    openssh.enable = true;
-
-    # Enable CUPS to print documents.
-    printing.enable = true;
-  };
-
-  # Set your time zone.
-  time.timeZone = "Europe/Stockholm";
-
   # List packages installed in system profile.
   environment.systemPackages = with pkgs;
     [
       #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
       wget
     ];
+
+  # Set your time zone.
+  time.timeZone = "Europe/Stockholm";
+
+  # Enable Bluetooth
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+
+  # systemd.services.upower.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -113,28 +103,6 @@ in {
       auto-optimise-store = true;
     };
   };
-
-  # services.xserver = {
-  #   # Enable the X11 windowing system.
-  #   enable = true;
-
-  #   # Configure keymap in X11
-  #   layout = "se,se";
-  #   xkbVariant = ",us";
-  #   xkbOptions = "caps:ctrl_modifier,grp:win_space_toggle";
-
-  #   # Configure Set console typematic delay and rate in X11
-  #   autoRepeatDelay = 200;
-  #   autoRepeatInterval = 40;
-
-  #   # Enable the XFCE Desktop Environment.
-  #   displayManager.lightdm.enable = true;
-  #   desktopManager.xfce.enable = true;
-
-  #   # Enable automatic login for the user.
-  #   displayManager.autoLogin.enable = true;
-  #   displayManager.autoLogin.user = "tob";
-  # };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.11";
