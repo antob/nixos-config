@@ -2,12 +2,10 @@
 
 with lib;
 let cfg = config.antob.services.printing;
-in
-{
+in {
   options.antob.services.printing = with types; {
-    enable = mkBoolOpt false "Whether or not to configure printing support.";
+    enable = mkEnableOption "Whether or not to configure printing support.";
   };
 
   config = mkIf cfg.enable { services.printing.enable = true; };
 }
-

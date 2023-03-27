@@ -2,11 +2,8 @@
 
 with lib;
 let cfg = config.antob.home;
-in
-{
-  imports = with inputs; [
-    home-manager.nixosModules.home-manager
-  ];
+in {
+  imports = with inputs; [ home-manager.nixosModules.home-manager ];
 
   options.antob.home = with types; {
     file = mkOpt attrs { }
@@ -36,4 +33,3 @@ in
     };
   };
 }
-

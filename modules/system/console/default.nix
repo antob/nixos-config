@@ -2,10 +2,9 @@
 
 with lib;
 let cfg = config.antob.system.console;
-in
-{
+in {
   options.antob.system.console = with types; {
-    enable = mkBoolOpt false "Whether or not to manage console settings.";
+    enable = mkEnableOption "Whether or not to manage console settings.";
   };
 
   config = mkIf cfg.enable {
@@ -26,4 +25,3 @@ in
     };
   };
 }
-

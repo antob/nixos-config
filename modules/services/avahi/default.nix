@@ -4,8 +4,7 @@ let
   cfg = config.antob.services.avahi;
 
   inherit (lib) types mkEnableOption mkIf;
-in
-{
+in {
   options.antob.services.avahi = with types; {
     enable = mkEnableOption "Avahi";
   };

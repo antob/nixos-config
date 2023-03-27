@@ -2,10 +2,9 @@
 
 with lib;
 let cfg = config.antob.system.locale;
-in
-{
+in {
   options.antob.system.locale = with types; {
-    enable = mkBoolOpt false "Whether or not to manage locale settings.";
+    enable = mkEnableOption "Whether or not to manage locale settings.";
   };
 
   config = mkIf cfg.enable {
@@ -29,4 +28,3 @@ in
     # console = { keyMap = mkForce "sv-latin1"; };
   };
 }
-

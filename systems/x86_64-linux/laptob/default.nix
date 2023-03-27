@@ -1,28 +1,21 @@
 { pkgs, config, lib, channel, inputs, ... }:
 
-with lib;
-{
-  imports = [
-    ./hardware.nix
-    inputs.impermanence.nixosModules.impermanence
-    ./persist.nix
-  ];
+with lib; {
+  imports = [ ./hardware.nix ];
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+  # Bootloader.
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "max";
+      configurationLimit = 5;
+      # https://github.com/NixOS/nixpkgs/blob/c32c39d6f3b1fe6514598fa40ad2cf9ce22c3fb7/nixos/modules/system/boot/loader/systemd-boot/systemd-boot.nix#L66
+      editor = false;
+    };
 
-    # Bootloader.
-    loader = {
-      systemd-boot = {
-        enable = true;
-        consoleMode = "max";
-        configurationLimit = 5;
-      };
-
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/efi";
-      };
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/efi";
     };
   };
 
@@ -36,7 +29,8 @@ with lib;
       name = "tob";
       fullName = "Tobias Lindholm";
       email = "tobias.lindholm@antob.se";
-      initialPassword = "password";
+      hashedPassword =
+        "$y$j9T$wjUKjUTgvrxCg7HVJIrl2/$A0nvjyLzv869pQYmjyuIgXafrZDk2Lzg9B/nA/W4609";
       autoLogin = true;
     };
 
@@ -49,25 +43,41 @@ with lib;
     hardware = {
       fingerprint = enabled;
       networking = enabled;
+      audio = enabled;
     };
 
     system = {
       time = enabled;
       locale = enabled;
       console = enabled;
+      fonts = enabled;
     };
 
-    tools = {
-      git = enabled;
-      neovim = enabled;
+    persistence = {
+      enable = true;
+
+      directories = [ "/etc/NetworkManager/system-connections" ];
+      files = [
+        "/etc/machine-id"
+        "/ssh/ssh_host_rsa_key"
+        "/ssh/ssh_host_rsa_key.pub"
+        "/ssh/ssh_host_ed25519_key"
+        "/ssh/ssh_host_ed25519_key.pub"
+      ];
     };
   };
 
   environment.systemPackages = with pkgs; [
+    htop
+    wget
+    gcc
+    inetutils
+    gnumake
+    powertop
+    procs
+    unzip
+    du-dust
   ];
-
-  # Enable passwordless sudo for wheel group
-  security.sudo.wheelNeedsPassword = false;
 
   system.stateVersion = "22.11";
 }

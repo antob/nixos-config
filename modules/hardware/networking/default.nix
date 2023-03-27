@@ -2,8 +2,7 @@
 
 with lib;
 let cfg = config.antob.hardware.networking;
-in
-{
+in {
   options.antob.hardware.networking = with types; {
     enable = mkBoolOpt false "Whether or not to enable networking support";
     hosts = mkOpt attrs { }

@@ -2,8 +2,7 @@
 
 with lib;
 let cfg = config.antob.system.env;
-in
-{
+in {
   options.antob.system.env = with types;
     mkOption {
       type = attrsOf (oneOf [ str path (listOf (either str path)) ]);
@@ -36,4 +35,3 @@ in
     };
   };
 }
-

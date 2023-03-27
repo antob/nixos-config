@@ -1,13 +1,19 @@
 { config, lib, pkgs, modulesPath, inputs, ... }:
 
-{
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+let inherit (inputs) nixos-hardware;
+in {
+  imports = with nixos-hardware.nixosModules;
+    [
+      (modulesPath + "/profiles/qemu-guest.nix")
+      # lenovo-thinkpad-x1-9th-gen
+    ];
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+
     initrd = {
-      availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
+      availableKernelModules =
+        [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
       kernelModules = [ "kvm-intel" ];
       luks.devices."system".device = "/dev/disk/by-partlabel/cryptsystem";
     };
@@ -20,7 +26,6 @@
     ];
     resumeDevice = "/dev/mapper/system";
   };
-
 
   fileSystems = {
     "/" = {
@@ -69,14 +74,17 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # high-resolution display
   #hardware.video.hidpi.enable = true;
 
   #hardware.opengl.enable = true;
 
-  #hardware.bluetooth.enable = true;
+  hardware.bluetooth.enable = true;
 
   # Enable DHCP on the wireless link
   networking = {
