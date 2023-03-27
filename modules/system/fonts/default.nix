@@ -22,6 +22,7 @@ in {
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
         noto-fonts-emoji
+        sfns-display-font
         (nerdfonts.override { fonts = [ "Hack" "SourceCodePro" ]; })
       ] ++ cfg.fonts;
   };

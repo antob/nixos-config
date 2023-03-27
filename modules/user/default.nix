@@ -50,11 +50,16 @@ in {
         exa = enabled;
       };
 
-      cli-apps.neovim = enabled;
+      cli-apps = {
+        neovim = enabled;
+        helix = enabled;
+      };
 
       apps.alacritty = enabled;
 
       security.gpg = enabled;
+
+      virtualisation.podman = enabled;
 
       debug.trackChanges = enabled;
 
@@ -107,10 +112,7 @@ in {
       tealdeer.enable = true;
     };
 
-    environment.shellAliases = {
-      cat = "bat -p";
-      # docker-compose = "podman-compose";
-    };
+    environment.shellAliases = { cat = "bat -p"; };
 
     environment.systemPackages = with pkgs; [
       propagatedIcon
@@ -119,6 +121,19 @@ in {
       fd
       dconf2nix
       jq
+      gitui
+      lazygit
+      rustc
+      cargo
+      rustfmt
+      clippy
+      gcc
+      inetutils
+      gnumake
+      powertop
+      procs
+      unzip
+      du-dust
     ];
 
     services.getty.autologinUser = mkIf cfg.autoLogin cfg.name;

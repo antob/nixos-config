@@ -84,8 +84,6 @@ in {
 
   #hardware.opengl.enable = true;
 
-  hardware.bluetooth.enable = true;
-
   # Enable DHCP on the wireless link
   networking = {
     # Derived from `head -c 8 /etc/machine-id`

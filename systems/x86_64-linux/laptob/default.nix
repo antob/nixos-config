@@ -43,6 +43,7 @@ with lib; {
     hardware = {
       fingerprint = enabled;
       networking = enabled;
+      bluetooth = enabled;
       audio = enabled;
     };
 

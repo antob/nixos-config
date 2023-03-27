@@ -1,10 +1,11 @@
 { options, config, pkgs, lib, ... }:
 
 with lib;
-let cfg = config.antob.tools.git;
+let cfg = config.antob.tools.zsh;
 in {
   options.antob.tools.zsh = with types; {
     enable = mkEnableOption "Whether or not to install and configure zsh.";
+    extraOhMyZshPlugins = mkOpt (listOf str) [ ] "Extra plugins for OhMyZsh.";
   };
 
   config = mkIf cfg.enable {
@@ -44,7 +45,7 @@ in {
 
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" "docker-compose" ];
+          plugins = [ "git" ] ++ cfg.extraOhMyZshPlugins;
         };
       };
 
