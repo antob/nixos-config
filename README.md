@@ -162,7 +162,7 @@ Add `resume_offset` kernel parameter using value calculated in a previous step.
 
 ```
 # In relevant host hardware file (e.g `systems/x86_64-linux/laptob/hardware.nix`)
-boot.kernelParams = [ "resume_offset=140544" ]; # Example valu
+boot.kernelParams = [ "resume_offset=140544" ]; # Example value
 ```
 
 If needed, switch (or compare) specific host `hardware.nix` with generated `/mnt/etc/nixos/hardware-configuration.nix`.
@@ -197,4 +197,3 @@ Iterate on the config and rebuild system with
 ```
 sudo nixos-rebuild switch --flake '.#laptob'
 ```
-

@@ -1,7 +1,9 @@
 { options, config, pkgs, lib, inputs, ... }:
 
 with lib;
-let cfg = config.antob.persistence;
+let
+  cfg = config.antob.persistence;
+  user = config.users.users.${config.antob.user.name};
 
 in {
   imports = with inputs; [ impermanence.nixosModules.impermanence ];
@@ -33,6 +35,12 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d /persist/safe 0755 root root -"
+      "d /persist/safe/home 0755 ${user.name} ${user.group} -"
+      "d /persist/home 0755 ${user.name} ${user.group} -"
+    ];
+
     # Necessary for user-specific impermanence
     programs.fuse.userAllowOther = true;
 
