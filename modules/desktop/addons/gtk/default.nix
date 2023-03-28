@@ -4,10 +4,10 @@ with lib;
 let cfg = config.antob.desktop.addons.gtk;
 in {
   options.antob.desktop.addons.gtk = with types; {
-    enable = mkBoolOpt false "Whether to customize GTK and apply themes.";
+    enable = mkEnableOption "Whether to customize GTK and apply themes.";
     theme = {
       name = mkOpt str "Adwaita-dark" "The name of the GTK theme to apply.";
-      pkg = mkOpt (nullOr package) "The package to use for the theme.";
+      pkg = mkOpt (nullOr package) null "The package to use for the theme.";
     };
     cursor = {
       name =
@@ -26,7 +26,7 @@ in {
     environment.systemPackages = [ cfg.icon.pkg cfg.cursor.pkg ];
 
     environment.sessionVariables = {
-      GTK_THEME = gtk.theme.name;
+      GTK_THEME = cfg.theme.name;
       XCURSOR_THEME = cfg.cursor.name;
     };
 
@@ -36,7 +36,7 @@ in {
 
         theme = {
           name = cfg.theme.name;
-          package = optional (cfg.theme.pkg != null) cfg.theme.pkg;
+          package = cfg.theme.pkg;
         };
 
         cursorTheme = {

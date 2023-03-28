@@ -55,8 +55,6 @@ in {
         helix = enabled;
       };
 
-      apps.alacritty = enabled;
-
       security.gpg = enabled;
 
       virtualisation.podman = enabled;
@@ -114,27 +112,7 @@ in {
 
     environment.shellAliases = { cat = "bat -p"; };
 
-    environment.systemPackages = with pkgs; [
-      propagatedIcon
-      bottom
-      ripgrep
-      fd
-      dconf2nix
-      jq
-      gitui
-      lazygit
-      rustc
-      cargo
-      rustfmt
-      clippy
-      gcc
-      inetutils
-      gnumake
-      powertop
-      procs
-      unzip
-      du-dust
-    ];
+    environment.systemPackages = with pkgs; [ propagatedIcon ];
 
     services.getty.autologinUser = mkIf cfg.autoLogin cfg.name;
 

@@ -11,6 +11,8 @@ in {
 
   config = mkIf cfg.enable {
     antob.user.extraGroups = [ "networkmanager" ];
+    antob.persistence.directories =
+      [ "/etc/NetworkManager/system-connections" ];
 
     networking = {
       hosts = {
@@ -20,7 +22,13 @@ in {
       networkmanager = {
         enable = true;
         dhcp = "internal";
+        plugins = with pkgs; [ networkmanager-openvpn networkmanager-l2tp ];
       };
+    };
+
+    services.strongswan = {
+      enable = true;
+      secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
     };
 
     # Fixes an issue that normally causes nixos-rebuild to fail.

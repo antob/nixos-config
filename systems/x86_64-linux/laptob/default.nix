@@ -19,9 +19,17 @@ with lib; {
     };
   };
 
-  services.logind = {
-    lidSwitch = "suspend-then-hibernate";
-    lidSwitchExternalPower = "suspend";
+  services = {
+    logind = {
+      lidSwitch = "suspend-then-hibernate";
+      lidSwitchExternalPower = "suspend";
+    };
+
+    upower.enable = true;
+    dbus.enable = true;
+
+    # Spice VDA
+    spice-vdagentd.enable = true;
   };
 
   antob = {
@@ -32,6 +40,15 @@ with lib; {
       hashedPassword =
         "$y$j9T$wjUKjUTgvrxCg7HVJIrl2/$A0nvjyLzv869pQYmjyuIgXafrZDk2Lzg9B/nA/W4609";
       autoLogin = true;
+    };
+
+    desktop.xfce-xmonad = enabled;
+
+    apps = {
+      alacritty = enabled;
+      firefox = enabled;
+      librewolf = enabled;
+      vscodium = enabled;
     };
 
     services = {
@@ -56,8 +73,6 @@ with lib; {
 
     persistence = {
       enable = true;
-
-      directories = [ "/etc/NetworkManager/system-connections" ];
       files = [
         "/etc/machine-id"
         "/ssh/ssh_host_rsa_key"
@@ -71,6 +86,17 @@ with lib; {
   environment.systemPackages = with pkgs; [
     htop
     wget
+    bottom
+    ripgrep
+    fd
+    dconf2nix
+    jq
+    gitui
+    lazygit
+    rustc
+    cargo
+    rustfmt
+    clippy
     gcc
     inetutils
     gnumake
@@ -78,6 +104,11 @@ with lib; {
     procs
     unzip
     du-dust
+    arandr
+    chromium
+    libreoffice-still
+    yubikey-touch-detector
+    slack
   ];
 
   system.stateVersion = "22.11";

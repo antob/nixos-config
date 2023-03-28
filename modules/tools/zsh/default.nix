@@ -9,6 +9,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    programs.zsh.enable = true;
     antob.home.extraOptions = {
       programs.zsh = {
         enable = true;

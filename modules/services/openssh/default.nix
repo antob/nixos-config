@@ -46,8 +46,10 @@ in {
   config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
-      passwordAuthentication = false;
-      permitRootLogin = if format == "install-iso" then "yes" else "no";
+      settings = {
+        PasswordAuthentication = false;
+        PermitRootLogin = if format == "install-iso" then "yes" else "no";
+      };
 
       extraConfig = ''
         StreamLocalBindUnlink yes
