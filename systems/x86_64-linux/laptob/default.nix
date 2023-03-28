@@ -109,6 +109,7 @@ with lib; {
     libreoffice-still
     yubikey-touch-detector
     slack
+    fwupd
   ];
 
   system.stateVersion = "22.11";

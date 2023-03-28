@@ -34,6 +34,7 @@ in {
       xdg-portal = enabled;
       polybar = enabled;
       volumeicon = enabled;
+      udisks2 = enabled;
     };
 
     # dconf and xfconf settings
