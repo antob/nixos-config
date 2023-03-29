@@ -55,6 +55,7 @@ with lib; {
       openssh = enabled;
       avahi = enabled;
       printing = enabled;
+      syncthing = enabled;
     };
 
     hardware = {

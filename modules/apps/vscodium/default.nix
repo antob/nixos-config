@@ -12,6 +12,6 @@ in {
       systemPackages = with pkgs; [ vscodium ];
       shellAliases = { code = "codium"; };
     };
-    antob.persistence.home.directories = [ ".config/VSCodium" ];
+    antob.persistence.home.directories = [ ".config/VSCodium" ".vscode-oss" ];
   };
 }
