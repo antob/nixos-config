@@ -11,5 +11,6 @@ in {
     services.gnome.gnome-keyring.enable = true;
 
     environment.systemPackages = with pkgs; [ gnome.seahorse ];
+    antob.persistence.home.directories = [ ".local/share/keyrings" ];
   };
 }

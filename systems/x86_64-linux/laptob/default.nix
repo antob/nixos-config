@@ -74,6 +74,11 @@ with lib; {
 
     persistence = {
       enable = true;
+      directories = [
+        "/var/log"
+        "/var/lib/nixos"
+        "/var/lib/systemd/coredump"
+      ];
       files = [
         "/etc/machine-id"
         "/ssh/ssh_host_rsa_key"
@@ -83,6 +88,12 @@ with lib; {
       ];
     };
   };
+
+  systemd.tmpfiles.rules = [
+    "d /persist/var/log 0755 root root -"
+    "d /persist/var/lib/nixos 0755 root root -"
+    "d /persist/var/lib/systemd/coredump 0755 root root -"
+  ];
 
   environment.systemPackages = with pkgs; [
     htop
@@ -111,6 +122,7 @@ with lib; {
     yubikey-touch-detector
     slack
     fwupd
+    killall
   ];
 
   system.stateVersion = "22.11";

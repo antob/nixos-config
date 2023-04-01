@@ -12,7 +12,8 @@ in {
     cursor = {
       name =
         mkOpt str "Bibata-Modern-Ice" "The name of the cursor theme to apply.";
-      pkg = mkOpt package pkgs.bibata-cursors
+      size = mkOpt int 16 "Cursor size to apply.";
+      pkg = mkOpt (nullOr package) pkgs.bibata-cursors
         "The package to use for the cursor theme.";
     };
     icon = {
@@ -23,11 +24,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.icon.pkg cfg.cursor.pkg ];
+    environment.systemPackages = [ cfg.icon.pkg ];
 
     environment.sessionVariables = {
       GTK_THEME = cfg.theme.name;
       XCURSOR_THEME = cfg.cursor.name;
+      XCURSOR_SIZE = builtins.toString cfg.cursor.size;
     };
 
     antob.home.extraOptions = {
@@ -41,6 +43,7 @@ in {
 
         cursorTheme = {
           name = cfg.cursor.name;
+          size = cfg.cursor.size;
           package = cfg.cursor.pkg;
         };
 

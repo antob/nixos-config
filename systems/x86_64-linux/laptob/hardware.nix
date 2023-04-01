@@ -4,8 +4,8 @@ let inherit (inputs) nixos-hardware;
 in {
   imports = with nixos-hardware.nixosModules;
     [
-      (modulesPath + "/profiles/qemu-guest.nix")
-      # lenovo-thinkpad-x1-9th-gen
+      (modulesPath + "/installer/scan/not-detected.nix")
+      lenovo-thinkpad-x1-9th-gen
     ];
 
   boot = {
@@ -13,8 +13,8 @@ in {
 
     initrd = {
       availableKernelModules =
-        [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
-      kernelModules = [ "kvm-intel" ];
+        [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
+      kernelModules = [ ];
       luks.devices."system".device = "/dev/disk/by-partlabel/cryptsystem";
     };
 
@@ -22,7 +22,7 @@ in {
     extraModulePackages = [ ];
     kernelParams = [
       "mem_sleep_default=deep"
-      "resume_offset=140544" # Value from `btrfs inspect-internal map-swapfile -r /mnt/swap/swapfile`
+      "resume_offset=533760" # Value from `btrfs inspect-internal map-swapfile -r /mnt/swap/swapfile`
     ];
     resumeDevice = "/dev/mapper/system";
   };
@@ -87,9 +87,10 @@ in {
   # Enable DHCP on the wireless link
   networking = {
     # Derived from `head -c 8 /etc/machine-id`
-    hostId = "a789b055";
+    hostId = "67fedb6a";
 
     useDHCP = lib.mkDefault true;
-    # networking.interfaces.wlp0s20f3.useDHCP = true;
+    # networking.interfaces.enp82s0u2u4.useDHCP = lib.mkDefault true;
+    # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
   };
 }

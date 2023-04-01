@@ -17,15 +17,17 @@ let
 
     passthru = { fileName = defaultIconFileName; };
   };
-  propagatedIcon = pkgs.runCommandNoCC "propagated-icon" {
-    passthru = { fileName = cfg.icon.fileName; };
-  } ''
+  propagatedIcon = pkgs.runCommandNoCC "propagated-icon"
+    {
+      passthru = { fileName = cfg.icon.fileName; };
+    } ''
     local target="$out/share/antob-icons/user/${cfg.name}"
     mkdir -p "$target"
 
     cp ${cfg.icon} "$target/${cfg.icon.fileName}"
   '';
-in {
+in
+{
   options.antob.user = with types; {
     name = mkOpt str "short" "The name to use for the user account.";
     fullName = mkOpt str "Tobias Lindholm" "The full name of the user.";
@@ -72,7 +74,10 @@ in {
         enable = true;
 
         home = {
-          directories = [ ".cache/tealdeer" ];
+          directories = [
+            ".cache/tealdeer"
+            ".local/share/zoxide"
+          ];
           files = [ ".fehbg" ];
         };
 

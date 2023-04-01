@@ -9,6 +9,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.autorandr ];
+    antob.persistence.home.directories = [ ".config/autorandr" ];
 
     antob.home.extraOptions = {
       services.autorandr.enable = true;
@@ -16,7 +17,8 @@ in {
         enable = true;
         hooks = {
           postswitch = mkIf config.antob.desktop.xfce-xmonad.enable {
-            "notify-xmonad" = "xmonad --restart";
+            "restart-xmonad" = "xmonad --restart";
+            "restart-polybar" = "polybar-msg cmd restart";
           };
         };
       };

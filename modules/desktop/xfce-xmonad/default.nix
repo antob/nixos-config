@@ -11,7 +11,8 @@ let
     pkgs.callPackage ./scripts/dm-librewolf-profile.nix { };
   toggle-kbd-variant = pkgs.callPackage ./scripts/toggle-kbd-variant.nix { };
 
-in {
+in
+{
   options.antob.desktop.xfce-xmonad = with types; {
     enable = mkEnableOption "Enable XMonad window manager.";
   };
@@ -27,6 +28,8 @@ in {
       xdotool
     ];
 
+    antob.persistence.home.directories = [ ".config/xfce4" ];
+
     # Desktop additions
     antob.desktop.addons = {
       gtk = enabled;
@@ -35,6 +38,7 @@ in {
       polybar = enabled;
       volumeicon = enabled;
       udisks2 = enabled;
+      autorandr = enabled;
     };
 
     # dconf and xfconf settings
@@ -51,11 +55,19 @@ in {
 
           xsettings = {
             "Gtk/CursorThemeName" = gtkCfg.cursor.name;
+            "Gtk/CursorThemeSize" = gtkCfg.cursor.size;
             "Net/ThemeName" = gtkCfg.theme.name;
           };
 
           xfce4-power-manager = {
             "xfce4-power-manager/show-tray-icon" = true;
+            "xfce4-power-manager/brightness-switch" = 0;
+            "xfce4-power-manager/brightness-switch-restore-on-exit" = 1;
+            "xfce4-power-manager/handle-brightness-keys" = true;
+            "xfce4-power-manager/lid-action-on-battery" = 3;
+            "xfce4-power-manager/logind-handle-lid-switch" = true;
+            "xfce4-power-manager/critical-power-action" = 0;
+            "xfce4-power-manager/lid-action-on-ac" = 1;
           };
 
           # displays = {
@@ -80,6 +92,7 @@ in {
           color-scheme = "prefer-dark";
           gtk-theme = gtkCfg.theme.name;
           cursor-theme = gtkCfg.cursor.name;
+          cursor-size = gtkCfg.cursor.size;
         };
       };
     };
