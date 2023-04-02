@@ -5,13 +5,14 @@ let
   cfg = config.antob.tools.git;
   # gpg = config.antob.security.gpg;
   user = config.antob.user;
-in {
+in
+{
   options.antob.tools.git = with types; {
     enable = mkEnableOption "Whether or not to install and configure git.";
     userName = mkOpt types.str user.fullName "The name to configure git with.";
     userEmail = mkOpt types.str user.email "The email to configure git with.";
     signingKey =
-      mkOpt types.str "9762169A1B35EA68" "The key ID to sign commits with.";
+      mkOpt types.str "tobias.lindholm@antob.se" "The key ID to sign commits with.";
   };
 
   config = mkIf cfg.enable {
@@ -25,7 +26,7 @@ in {
 
         signing = {
           key = cfg.signingKey;
-          # signByDefault = mkIf gpg.enable true;
+          signByDefault = mkIf config.antob.security.gpg.enable true;
         };
 
         aliases.hist =
@@ -48,6 +49,9 @@ in {
           merge = {
             tool = "fugitive";
             conflictstyle = "diff3";
+          };
+          credential = {
+            helper = "cache";
           };
         };
 
