@@ -85,6 +85,8 @@ in
           directories = [
             "Documents"
             "Pictures"
+            "Music"
+            "Videos"
             "Projects"
             ".ssh"
             ".local/share/password-store"
