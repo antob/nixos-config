@@ -8,5 +8,8 @@ in
     enable = mkBoolOpt false "Whether or not to enable fingerprint support.";
   };
 
-  config = mkIf cfg.enable { services.fprintd.enable = true; };
+  config = mkIf cfg.enable {
+    antob.persistence.directories = [ "/var/lib/fprint" ];
+    services.fprintd.enable = true;
+  };
 }

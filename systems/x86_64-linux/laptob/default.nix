@@ -56,6 +56,7 @@ with lib; {
       avahi = enabled;
       printing = enabled;
       syncthing = enabled;
+      redshift = enabled;
     };
 
     hardware = {

@@ -20,15 +20,20 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       xmonad-log
+      xfce.thunar-volman
       feh
       dmenu
       j4-dmenu-desktop
       gnome.gnome-calculator
       xcwd
       xdotool
+      xclip
     ];
 
-    antob.persistence.home.directories = [ ".config/xfce4" ];
+    antob.persistence.home.directories = [{
+      directory = ".config/xfce4";
+      method = "symlink";
+    }];
 
     # Desktop additions
     antob.desktop.addons = {

@@ -119,7 +119,7 @@ in
 
     environment.systemPackages = with pkgs; [ propagatedIcon ];
 
-    services.getty.autologinUser = mkIf cfg.autoLogin cfg.name;
+    # services.getty.autologinUser = mkIf cfg.autoLogin cfg.name;
 
     # Enable passwordless sudo for wheel group
     security.sudo.wheelNeedsPassword = false;

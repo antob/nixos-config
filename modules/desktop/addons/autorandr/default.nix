@@ -9,6 +9,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.autorandr ];
+    services.udev.packages = [ pkgs.autorandr ];
     antob.persistence.home.directories = [ ".config/autorandr" ];
 
     antob.home.extraOptions = {

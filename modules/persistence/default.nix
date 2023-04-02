@@ -5,7 +5,8 @@ let
   cfg = config.antob.persistence;
   user = config.users.users.${config.antob.user.name};
 
-in {
+in
+{
   imports = with inputs; [ impermanence.nixosModules.impermanence ];
 
   options.antob.persistence = with types; {
