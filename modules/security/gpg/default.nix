@@ -4,14 +4,6 @@ with lib;
 let
   cfg = config.antob.security.gpg;
 
-  pinentry = if config.antob.desktop.addons.gtk.enable then {
-    package = pkgs.pinentry-gnome;
-    name = "gnome3";
-  } else {
-    package = pkgs.pinentry-curses;
-    name = "curses";
-  };
-
   reload-yubikey = pkgs.writeShellScriptBin "reload-yubikey" ''
     ${pkgs.gnupg}/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
   '';
@@ -29,9 +21,6 @@ in {
       cryptsetup
       paperkey
       gnupg
-      pinentry-curses
-      pinentry-qt
-      pinentry.package
       paperkey
       reload-yubikey
     ];
@@ -44,8 +33,11 @@ in {
         defaultCacheTtl = 60;
         maxCacheTtl = 120;
         # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
-        pinentryFlavor = pinentry.name;
+        pinentryFlavor = null;
         enableExtraSocket = true;
+        extraConfig = ''
+          pinentry-program ${pkgs.pinentry-dmenu}/bin/pinentry-dmenu
+        '';
       };
 
       programs = let
