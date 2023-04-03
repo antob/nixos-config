@@ -10,6 +10,7 @@ let
   check-kbd-variant = pkgs.callPackage ./scripts/check-kbd-variant.nix { };
   check-vpn = pkgs.callPackage ./scripts/check-vpn.nix { };
   external-ip = pkgs.callPackage ./scripts/external-ip.nix { };
+  disk-usage = pkgs.callPackage ./scripts/disk-usage.nix { };
 
 in {
   options.antob.desktop.addons.polybar = with types; {
@@ -57,6 +58,14 @@ in {
           format-background = ''${colors.mb}
           format-foreground = ''${colors.cyshade4}
           format =     <label>
+
+          [module/disk_usage]
+          type = custom/script
+          exec = ${disk-usage}/bin/disk-usage
+          interval = 10
+          format-background = ''${colors.mb}
+          format-foreground = ''${colors.blshade4}
+          format =     <label>
         '';
 
         script = ''
