@@ -9,6 +9,6 @@ in {
 
   config = mkIf cfg.enable {
     antob.home.extraOptions = { services.syncthing.enable = true; };
-    antob.persistence.home.directories = [ ".config/syncthing" ];
+    antob.persistence.home.directories = [ ".config/syncthing" ".local/share/syncthing" ];
   };
 }
