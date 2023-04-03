@@ -49,6 +49,7 @@ with lib; {
       firefox = enabled;
       librewolf = enabled;
       vscodium = enabled;
+      slack = enabled;
     };
 
     services = {
@@ -121,7 +122,6 @@ with lib; {
     chromium
     libreoffice-still
     yubikey-touch-detector
-    slack
     fwupd
     killall
   ];
