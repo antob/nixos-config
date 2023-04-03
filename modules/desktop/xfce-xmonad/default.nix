@@ -15,6 +15,7 @@ in
 {
   options.antob.desktop.xfce-xmonad = with types; {
     enable = mkEnableOption "Enable XMonad window manager.";
+    dpi = mkOpt int 120 "DPI to add to xrdb.";
   };
 
   config = mkIf cfg.enable {
@@ -131,6 +132,11 @@ in
           enable = true;
           user = config.antob.user.name;
         };
+        sessionCommands = ''
+          ${pkgs.xorg.xrdb}/bin/xrdb -merge <<EOF
+            Xft.dpi: ${builtins.toString cfg.dpi}
+          EOF
+        '';
       };
 
       # Enable the XFCE Desktop Environment.
