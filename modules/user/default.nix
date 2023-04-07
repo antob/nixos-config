@@ -48,7 +48,7 @@ in {
         zsh = enabled;
         starship = enabled;
         exa = enabled;
-        rbenv = enabled;
+        direnv = enabled;
       };
 
       cli-apps = {
