@@ -121,7 +121,6 @@ with lib; {
     arandr
     chromium
     libreoffice-still
-    yubikey-touch-detector
     fwupd
     killall
   ];

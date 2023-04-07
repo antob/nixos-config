@@ -45,6 +45,7 @@ in
       volumeicon = enabled;
       udisks2 = enabled;
       autorandr = enabled;
+      yubikey-touch-detector = enabled;
     };
 
     # dconf and xfconf settings
