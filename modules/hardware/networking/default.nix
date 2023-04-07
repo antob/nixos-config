@@ -16,7 +16,7 @@ in {
 
     networking = {
       hosts = {
-        "127.0.0.1" = [ "local.test" ] ++ (cfg.hosts."127.0.0.1" or [ ]);
+        "127.0.0.1" = (cfg.hosts."127.0.0.1" or [ ]);
       } // cfg.hosts;
 
       networkmanager = {
@@ -29,6 +29,13 @@ in {
     services.strongswan = {
       enable = true;
       secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
+    };
+
+    services.dnsmasq = {
+      enable = true;
+      settings = {
+        address = "/.test/127.0.0.1";
+      };
     };
 
     # Fixes an issue that normally causes nixos-rebuild to fail.
