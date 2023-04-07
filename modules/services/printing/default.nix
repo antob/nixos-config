@@ -7,5 +7,10 @@ in {
     enable = mkEnableOption "Whether or not to configure printing support.";
   };
 
-  config = mkIf cfg.enable { services.printing.enable = true; };
+  config = mkIf cfg.enable {
+    services.printing.enable = true;
+
+    environment.systemPackages = [ pkgs.system-config-printer ];
+    antob.persistence.directories = [ "/etc/cups" ];
+  };
 }
