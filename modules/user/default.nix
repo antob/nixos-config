@@ -60,7 +60,7 @@ in {
 
       virtualisation.podman = enabled;
 
-      debug.trackChanges = enabled;
+      # debug.trackChanges = enabled;
 
       home.file = {
         ".face".source = cfg.icon;
@@ -95,11 +95,7 @@ in {
     antob.home.extraOptions.programs = {
       zoxide = {
         enable = true;
-        enableZshIntegration = true;
-      };
-
-      direnv = {
-        enable = true;
+        options = [ "--cmd cd" ];
         enableZshIntegration = true;
       };
 

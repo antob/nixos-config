@@ -80,6 +80,7 @@ with lib; {
         "/var/log"
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
+        "/var/lib/systemd/backlight"
       ];
       files = [
         "/etc/machine-id"
@@ -95,6 +96,7 @@ with lib; {
     "d /persist/var/log 0755 root root -"
     "d /persist/var/lib/nixos 0755 root root -"
     "d /persist/var/lib/systemd/coredump 0755 root root -"
+    "d /mnt 0755 root root -"
   ];
 
   environment.systemPackages = with pkgs; [
