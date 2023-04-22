@@ -410,6 +410,7 @@ in
               , ("M-<Return>", spawn (myTerminal))            -- Terminal
               , ("M-w", spawn (myBrowser))                    -- Web browser
               , ("M-S-i", spawn "${toggle-kbd-variant}/bin/toggle-kbd-variant") -- Switch keyboard variant
+              , ("M-v", spawn "${pkgs.pavucontrol}/bin/pavucontrol") -- Volume control
 
               -- Monitors"
               , ("M-.", nextScreen) -- Switch focus to next monitor

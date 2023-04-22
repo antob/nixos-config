@@ -54,12 +54,14 @@ in {
               })
             end, { desc = 'Fuzzily search in current buffer' })
             vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
+            vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Find files' })
             vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = 'Find old files' })
             vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Find keymaps' })
             vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Find help' })
             vim.keymap.set('n', '<leader>fw', builtin.live_grep, { desc = 'Find word' })
             vim.keymap.set('n', '<leader>fd', builtin.diagnostics, { desc = 'Find diagnostics' })
             vim.keymap.set('n', '<leader>fj', builtin.jumplist, { desc = 'Find jumplist' })
+            vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
 
             require('telescope').load_extension('fzf')
           '';

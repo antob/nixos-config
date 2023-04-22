@@ -11,6 +11,10 @@ in {
     vim.keymap.set("n", "<C-d>", "<C-d>zz")
     vim.keymap.set("n", "<C-u>", "<C-u>zz")
     vim.keymap.set("n", "<C-q>", "<cmd>qa<cr>", { desc = 'Quit all' })
+    vim.keymap.set("n", "<C-c>", "<cmd>close<cr>", { desc = 'Close window' })
+    vim.keymap.set("n", "<leader>c", "<cmd>bd<cr>", { desc = 'Close buffer' })
+    vim.keymap.set("n", "\\", "<cmd>vsplit<cr>", { desc = 'Vertical split' })
+    vim.keymap.set("n", "|", "<cmd>split<cr>", { desc = 'Horizontal split' })
 
     vim.keymap.set('n', '<leader>fn', "<cmd>enew<cr>", { desc = 'New File' })
     vim.keymap.set('n', 'gn', '<cmd>bnext<cr>', { desc = 'Next Buffer' })
@@ -32,5 +36,6 @@ in {
     vim.keymap.set('n', '<c-j>', ':wincmd j<CR>', { desc = 'Go to lower window' })
     vim.keymap.set('n', '<c-h>', ':wincmd h<CR>', { desc = 'Go to left window' })
     vim.keymap.set('n', '<c-l>', ':wincmd l<CR>', { desc = 'Go to right window' })
+    vim.keymap.set('n', '<c-pagedown>', ':wincmd w<CR>', { desc = 'Go to next window' })
   '';
 }

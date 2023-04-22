@@ -73,7 +73,7 @@ in {
         enable = true;
 
         home = {
-          directories = [ ".cache/tealdeer" ".local/share/zoxide" "persist" ];
+          directories = [ ".cache" ".local/share/zoxide" "persist" ];
           files = [ ".fehbg" ];
         };
 
@@ -84,7 +84,7 @@ in {
             "Music"
             "Videos"
             "Projects"
-            ".ssh"
+            ".ssh/safe"
             ".local/share/password-store"
           ];
           files = [ ".local/share/zsh/zsh_history" ];

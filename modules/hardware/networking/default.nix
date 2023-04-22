@@ -10,9 +10,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    antob.user.extraGroups = [ "networkmanager" ];
-    antob.persistence.directories =
-      [ "/etc/NetworkManager/system-connections" ];
+    antob = {
+      user.extraGroups = [ "networkmanager" ];
+      persistence = {
+        directories = [ "/etc/NetworkManager/system-connections" ];
+        home.directories = [ ".cert" ];
+      };
+    };
 
     networking = {
       hosts = {
