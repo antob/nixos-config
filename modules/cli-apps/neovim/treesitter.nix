@@ -15,7 +15,6 @@ in {
           p.python
           p.rust
           p.typescript
-          p.help
           p.vim
           p.nix
         ]);
