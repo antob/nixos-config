@@ -4,7 +4,7 @@ with lib;
 let cfg = config.antob.apps.slack;
 in {
   options.antob.apps.slack = with types; {
-    enable = mkEnableOption "Enable VSCodium";
+    enable = mkEnableOption "Enable Slack";
   };
 
   config = mkIf cfg.enable {
