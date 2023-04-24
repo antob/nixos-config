@@ -23,6 +23,7 @@ in
         enable = true;
         inherit (cfg) userName userEmail;
         lfs = enabled;
+        difftastic = enabled;
 
         signing = {
           key = cfg.signingKey;

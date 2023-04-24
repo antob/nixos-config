@@ -109,7 +109,10 @@ in {
       tealdeer.enable = true;
     };
 
-    environment.shellAliases = { cat = "bat -p"; };
+    environment.shellAliases = {
+      cat = "bat -p";
+      http = "xh";
+    };
 
     environment.systemPackages = with pkgs; [ propagatedIcon ];
 

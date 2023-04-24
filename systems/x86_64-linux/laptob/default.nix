@@ -125,6 +125,14 @@ with lib; {
     libreoffice-still
     fwupd
     killall
+    dogdns
+    duf
+    jqp
+    xh
+    vulkan-tools
+    glxinfo
+    clinfo
+    libva-utils
   ];
 
   system.stateVersion = "22.11";
