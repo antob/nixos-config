@@ -115,13 +115,15 @@ in
       };
     };
 
+    services.xbanish.enable = true;
+    
     services.xserver = {
       # Enable the X11 windowing system.
       enable = true;
 
       # Configure keymap in X11
       layout = "se,se";
-      xkbVariant = ",us";
+      xkbVariant = "us,";
       xkbOptions = "caps:ctrl_modifier,grp:win_space_toggle";
 
       # Configure Set console typematic delay and rate in X11
