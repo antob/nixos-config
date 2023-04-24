@@ -54,6 +54,7 @@ in {
       cli-apps = {
         neovim = enabled;
         helix = enabled;
+        tmux = enabled;
       };
 
       security.gpg = enabled;
@@ -89,6 +90,10 @@ in {
           ];
           files = [ ".local/share/zsh/zsh_history" ];
         };
+      };
+
+      system.env = {
+        CARGO_HOME = "$XDG_CACHE_HOME/cargo";
       };
     };
 
