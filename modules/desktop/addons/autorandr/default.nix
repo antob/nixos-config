@@ -17,9 +17,8 @@ in {
       programs.autorandr = {
         enable = true;
         hooks = {
-          postswitch = mkIf config.antob.desktop.xfce-xmonad.enable {
-            "restart-xmonad" = "xmonad --restart";
-            "restart-polybar" = "polybar-msg cmd restart";
+          postswitch = {
+            "feh" = "~/.fehbg";
           };
         };
       };

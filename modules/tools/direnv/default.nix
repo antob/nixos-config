@@ -22,6 +22,11 @@ in
       keep-derivations = true
     '';
 
+    # make `direnv` silent
+    antob.system.env = {
+      DIRENV_LOG_FORMAT = "";
+    };
+
     antob.persistence.home.directories = [ ".local/share/direnv" ];
   };
 }

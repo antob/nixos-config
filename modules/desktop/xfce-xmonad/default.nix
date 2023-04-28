@@ -88,6 +88,10 @@ in
             "notify-location" = 3;
           };
 
+           xfce4-session = {
+            "compat/LaunchGNOME" = true;
+          };
+
           # displays = {
           #   "ActiveProfile" = "Default";
           #   "Default/Virtual-1" = "Virtual-1";
@@ -111,6 +115,10 @@ in
           gtk-theme = gtkCfg.theme.name;
           cursor-theme = gtkCfg.cursor.name;
           cursor-size = gtkCfg.cursor.size;
+        };
+        "org/gnome/nm-applet" = {
+          disable-connected-notifications = true;
+          disable-disconnected-notifications = true;
         };
       };
     };

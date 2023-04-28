@@ -55,5 +55,7 @@ in {
         enableZshIntegration = true;
       };
     };
+
+    antob.persistence.safe.home.directories = [ ".local/share/zsh" ];
   };
 }

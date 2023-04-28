@@ -29,7 +29,7 @@ with lib; {
     dbus.enable = true;
 
     # Spice VDA
-    spice-vdagentd.enable = true;
+    # spice-vdagentd.enable = true;
   };
 
   antob = {
