@@ -133,7 +133,6 @@ with lib; {
     glxinfo
     clinfo
     libva-utils
-    devbox-custom
   ];
 
   system.stateVersion = "22.11";
