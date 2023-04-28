@@ -133,6 +133,7 @@ with lib; {
     glxinfo
     clinfo
     libva-utils
+    python39
   ];
 
   system.stateVersion = "22.11";
