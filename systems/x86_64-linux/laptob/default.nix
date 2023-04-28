@@ -107,8 +107,6 @@ with lib; {
     fd
     dconf2nix
     jq
-    gitui
-    lazygit
     rustc
     cargo
     rustfmt
