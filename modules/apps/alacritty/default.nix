@@ -19,8 +19,7 @@ in {
             x = 8;
             y = 6;
           };
-          # decorations = "none";
-          decorations = "full";
+          decorations = "none";
         };
 
         font = {
@@ -41,7 +40,8 @@ in {
             cursor = "#add8e6";
           };
           normal = {
-            black = "#282828";
+            # black = "#282828";
+            black = "#928374"; # Make comments (black on black) visible.
             red = "#cc241d";
             green = "#98971a";
             yellow = "#d79921";
@@ -61,7 +61,6 @@ in {
             white = "#ebdbb2";
           };
         };
-
         cursor.style.shape = "Beam";
 
         key_bindings = [
