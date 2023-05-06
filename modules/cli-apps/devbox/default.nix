@@ -8,7 +8,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ devbox-custom ];
+    environment.systemPackages = with pkgs; [ devbox ];
     antob.persistence.home.directories = [ ".local/state/devbox" ];
   };
 }
