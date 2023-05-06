@@ -4,7 +4,6 @@ with lib;
 let
   cfg = config.antob.desktop.xfce-xmonad;
   gtkCfg = config.antob.desktop.addons.gtk;
-  lockBackground = "/home/${config.antob.user.name}/Pictures/Wallpapers/Peux-Backgrounds/1.png";
 
   dm-logout = pkgs.callPackage ./scripts/dm-logout.nix { };
   dm-vpn = pkgs.callPackage ./scripts/dm-vpn.nix { };
@@ -81,7 +80,7 @@ in
           xfce4-desktop = {
             "backdrop/screen0/monitoreDP-1/workspace0/color-style" = 0;
             "backdrop/screen0/monitoreDP-1/workspace0/image-style" = 5;
-            "backdrop/screen0/monitoreDP-1/workspace0/last-image" = lockBackground;
+            # "backdrop/screen0/monitoreDP-1/workspace0/last-image" = lockBackground;
           };
 
           xfce4-notifyd = {
@@ -150,7 +149,7 @@ in
       displayManager = {
         lightdm = {
           enable = true;
-          background = lockBackground;
+          # background = lockBackground;
         };
         defaultSession = "xfce+xmonad";
         autoLogin = mkIf config.antob.user.autoLogin {
