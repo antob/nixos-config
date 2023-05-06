@@ -88,7 +88,7 @@ in
             "notify-location" = 3;
           };
 
-           xfce4-session = {
+          xfce4-session = {
             "compat/LaunchGNOME" = true;
           };
 
@@ -124,7 +124,7 @@ in
     };
 
     services.xbanish.enable = true;
-    
+
     services.xserver = {
       # Enable the X11 windowing system.
       enable = true;

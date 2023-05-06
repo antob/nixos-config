@@ -123,10 +123,6 @@ with lib; {
     duf
     jqp
     xh
-    vulkan-tools
-    glxinfo
-    clinfo
-    libva-utils
     python39
   ];
 

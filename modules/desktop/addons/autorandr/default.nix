@@ -18,7 +18,7 @@ in {
         enable = true;
         hooks = {
           postswitch = {
-            "feh" = "~/.fehbg";
+            feh = "~/.fehbg";
           };
         };
       };
