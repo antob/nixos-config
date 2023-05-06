@@ -107,10 +107,6 @@ with lib; {
     fd
     dconf2nix
     jq
-    rustc
-    cargo
-    rustfmt
-    clippy
     gcc
     inetutils
     gnumake

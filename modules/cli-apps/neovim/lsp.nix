@@ -90,7 +90,6 @@ in {
     ];
 
   antob.home.extraOptions.home.packages = with pkgs; [
-    rust-analyzer
     nil
     nixpkgs-fmt
     lua-language-server
