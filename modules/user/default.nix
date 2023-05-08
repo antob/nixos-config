@@ -98,10 +98,6 @@ in
           ];
         };
       };
-
-      system.env = {
-        CARGO_HOME = "$XDG_CACHE_HOME/cargo";
-      };
     };
 
     antob.home.extraOptions.programs = {
