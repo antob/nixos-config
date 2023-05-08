@@ -15,8 +15,8 @@ in {
           ".." = "cd ..";
           ls = "${pkgs.exa}/bin/exa --group-directories-first";
           la = "ls -a";
-          l = "ls --git -l";
-          ll = "ls --git -al";
+          l = "ls -l";
+          ll = "ls -al";
           lt = "ls --tree -D -L 2 -I ${treeIgnore}";
           ltt = "ls --tree -D -L 3 -I ${treeIgnore}";
         };
