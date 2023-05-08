@@ -19,7 +19,7 @@ in {
             x = 8;
             y = 6;
           };
-          decorations = "none";
+          decorations = "full";
         };
 
         font = {
