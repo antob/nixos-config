@@ -28,6 +28,12 @@
 
     # Impermanence
     impermanence.url = "github:nix-community/impermanence";
+
+    # Devenv
+    devenv = {
+      url = "github:cachix/devenv/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:

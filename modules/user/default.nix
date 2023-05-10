@@ -51,6 +51,7 @@ in
         starship = enabled;
         exa = enabled;
         direnv = enabled;
+        devenv = enabled;
       };
 
       cli-apps = {
