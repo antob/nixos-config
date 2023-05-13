@@ -107,9 +107,7 @@ with lib; {
     fd
     dconf2nix
     jq
-    gcc
     inetutils
-    gnumake
     powertop
     procs
     unzip
