@@ -58,7 +58,6 @@ in
         neovim = enabled;
         helix = enabled;
         tmux = enabled;
-        devbox = enabled;
       };
 
       security.gpg = enabled;
@@ -75,8 +74,6 @@ in
       };
 
       persistence = {
-        enable = true;
-
         home = {
           directories = [
             ".cache"

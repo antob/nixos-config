@@ -27,47 +27,59 @@ in {
     resumeDevice = "/dev/mapper/system";
   };
 
-  fileSystems = {
-    "/" = {
-      device = "none";
-      fsType = "tmpfs";
-      options = [ "defaults" "size=2G" "mode=755" ];
-    };
+  fileSystems = lib.mkMerge [
+    {
+      "/" = lib.mkDefault {
+        device = "/dev/mapper/system";
+        fsType = "btrfs";
+        options = [ "subvol=@root-test" "compress=zstd" ];
+      };
 
-    "/home/${config.antob.user.name}" = {
-      device = "none";
-      fsType = "tmpfs";
-      options = [ "defaults" "size=1G" "mode=777" ];
-    };
+      "/home" = lib.mkIf (!config.antob.persistence.enable) {
+        device = "/dev/mapper/system";
+        fsType = "btrfs";
+        options = [ "subvol=@home" "compress=zstd" ];
+      };
 
-    "/nix" = {
-      device = "/dev/mapper/system";
-      fsType = "btrfs";
-      # options = [ "subvol=@nix" "compress=zstd" "ssd" "noatime" ];
-      options = [ "subvol=@nix" "compress=zstd" "noatime" ];
-    };
+      "/nix" = {
+        device = "/dev/mapper/system";
+        fsType = "btrfs";
+        options = [ "subvol=@nix" "compress=zstd" "noatime" ];
+      };
 
-    "/persist" = {
-      device = "/dev/mapper/system";
-      fsType = "btrfs";
-      # options = [ "subvol=@persist" "compress=zstd" "ssd" "noatime" ];
-      options = [ "subvol=@persist" "compress=zstd" "noatime" ];
-      neededForBoot = true;
-    };
+      "/persist" = {
+        device = "/dev/mapper/system";
+        fsType = "btrfs";
+        options = [ "subvol=@persist" "compress=zstd" ];
+        neededForBoot = true;
+      };
 
-    "/swap" = {
-      device = "/dev/mapper/system";
-      fsType = "btrfs";
-      # options = [ "subvol=@swap" "compress=none" "ssd" "noatime" ];
-      options = [ "subvol=@swap" "compress=none" "noatime" ];
-    };
+      "/swap" = {
+        device = "/dev/mapper/system";
+        fsType = "btrfs";
+        options = [ "subvol=@swap" "compress=none" "noatime" ];
+      };
 
-    "/efi" = {
-      device = "/dev/disk/by-partlabel/EFI";
-      fsType = "vfat";
-      neededForBoot = true;
-    };
-  };
+      "/efi" = {
+        device = "/dev/disk/by-partlabel/EFI";
+        fsType = "vfat";
+        neededForBoot = true;
+      };
+    }
+    (lib.mkIf (config.antob.persistence.enable) {
+      "/" = {
+        device = "none";
+        fsType = "tmpfs";
+        options = [ "defaults" "size=2G" "mode=755" ];
+      };
+
+      "/home/${config.antob.user.name}" = {
+        device = "none";
+        fsType = "tmpfs";
+        options = [ "defaults" "size=1G" "mode=777" ];
+      };
+    })
+  ];
 
   swapDevices = [{ device = "/swap/swapfile"; }];
 

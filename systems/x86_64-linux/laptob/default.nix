@@ -74,8 +74,9 @@ with lib; {
       fonts = enabled;
     };
 
+    persistence.enable = true;
+
     persistence = {
-      enable = true;
       directories = [
         "/var/log"
         "/var/lib/nixos"
@@ -84,15 +85,15 @@ with lib; {
       ];
       files = [
         "/etc/machine-id"
-        "/ssh/ssh_host_rsa_key"
-        "/ssh/ssh_host_rsa_key.pub"
-        "/ssh/ssh_host_ed25519_key"
-        "/ssh/ssh_host_ed25519_key.pub"
+        "/etc/ssh/ssh_host_rsa_key"
+        "/etc/ssh/ssh_host_rsa_key.pub"
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
       ];
     };
   };
 
-  systemd.tmpfiles.rules = [
+  systemd.tmpfiles.rules = lib.mkIf (config.antob.persistence.enable) [
     "d /persist/var/log 0755 root root -"
     "d /persist/var/lib/nixos 0755 root root -"
     "d /persist/var/lib/systemd/coredump 0755 root root -"
