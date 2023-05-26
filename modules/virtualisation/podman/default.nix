@@ -17,9 +17,9 @@ in {
     virtualisation.containers.storage.settings = {
       storage = {
         driver = "btrfs";
-        graphroot = "/persist/var/lib/containers/storage";
+        graphroot = lib.mkIf config.antob.persistence.enable "/persist/var/lib/containers/storage";
         runroot = "/run/containers/storage";
-        rootless_storage_path = "/persist/home/${config.antob.user.name}/.local/share/containers";
+        rootless_storage_path = lib.mkIf config.antob.persistence.enable "/persist/home/${config.antob.user.name}/.local/share/containers";
       };
     };
 
