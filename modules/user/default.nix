@@ -86,15 +86,18 @@ in
 
         safe.home = {
           directories = [
-            "Documents"
-            "Pictures"
-            "Music"
-            "Videos"
-            "Projects"
             ".ssh/safe"
             ".local/share/password-store"
           ];
         };
+
+        safe.directories = [
+          "/home/${cfg.name}/Projects"
+          "/home/${cfg.name}/Documents"
+          "/home/${cfg.name}/Pictures"
+          "/home/${cfg.name}/Videos"
+          "/home/${cfg.name}/Music"
+        ];
       };
     };
 
