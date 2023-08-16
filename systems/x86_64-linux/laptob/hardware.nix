@@ -32,7 +32,7 @@ in {
       "/" = lib.mkDefault {
         device = "/dev/mapper/system";
         fsType = "btrfs";
-        options = [ "subvol=@root-test" "compress=zstd" ];
+        options = [ "subvol=@root" "compress=zstd" ];
       };
 
       "/home" = lib.mkIf (!config.antob.persistence.enable) {
@@ -47,7 +47,7 @@ in {
         options = [ "subvol=@nix" "compress=zstd" "noatime" ];
       };
 
-      "/persist" = {
+      "/persist" = lib.mkIf config.antob.persistence.enable {
         device = "/dev/mapper/system";
         fsType = "btrfs";
         options = [ "subvol=@persist" "compress=zstd" ];

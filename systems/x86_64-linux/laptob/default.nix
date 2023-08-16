@@ -43,6 +43,7 @@ with lib; {
     };
 
     desktop.xfce-xmonad = enabled;
+    # desktop.gnome = enabled;
 
     apps = {
       alacritty = enabled;
@@ -57,6 +58,7 @@ with lib; {
       avahi = enabled;
       printing = enabled;
       syncthing = enabled;
+      # redshift = enabled;
       redshift = enabled;
     };
 
@@ -74,7 +76,7 @@ with lib; {
       fonts = enabled;
     };
 
-    persistence.enable = true;
+    persistence.enable = false;
 
     persistence = {
       directories = [
@@ -122,7 +124,9 @@ with lib; {
     duf
     jqp
     xh
-    python39
+    # python38
+    gimp
+    nyxt
   ];
 
   system.stateVersion = "22.11";
