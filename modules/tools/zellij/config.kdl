@@ -1,0 +1,73 @@
+// If you'd like to override the default keybindings completely, be sure to change "keybinds" to "keybinds clear-defaults=true"
+keybinds {
+    normal {
+		unbind "Ctrl p"
+		unbind "Ctrl o"
+		unbind "Ctrl b"
+		unbind "Ctrl q"
+        // uncomment this and adjust key if using copy_on_select=false
+        // bind "Alt c" { Copy; }
+    }
+    pane {
+        bind "Ctrl a" { SwitchToMode "Normal"; }
+		bind "h" "Left" { MoveFocus "Left"; SwitchToMode "Normal"; }
+		bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Normal"; }
+		bind "j" "Down" { MoveFocus "Down"; SwitchToMode "Normal"; }
+		bind "k" "Up" { MoveFocus "Up"; SwitchToMode "Normal"; }
+		bind "p" { SwitchFocus; SwitchToMode "Normal"; }
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
+        bind "f" { TogglePaneFrames; SwitchToMode "Normal"; }
+        unbind "w"
+        bind "Ctrl a" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "Normal"; }
+        unbind "c"
+        bind "r" { SwitchToMode "RenamePane"; PaneNameInput 0;}
+    }
+    tab {
+        bind "h" "Left" "Up" "k" { GoToPreviousTab; SwitchToMode "Normal"; }
+        bind "l" "Right" "Down" "j" { GoToNextTab; SwitchToMode "Normal"; }
+    }
+    scroll {
+        unbind "Ctrl c"
+        bind "G" { ScrollToBottom; SwitchToMode "Normal"; }
+    }
+    session {
+        unbind "Ctrl o"
+        bind "Ctrl x" { SwitchToMode "Normal"; }
+        bind "q" { Quit; }
+    }
+    shared_except "locked" {
+        unbind "Ctrl q"
+    }
+    shared_except "pane" "locked" {
+        bind "Ctrl a" { SwitchToMode "Pane"; }
+    }
+    shared_except "session" "locked" {
+        bind "Ctrl x" { SwitchToMode "Session"; }
+    }
+    shared_except "tmux" "locked" {
+        unbind "Ctrl b"
+    }
+}
+
+theme "custom"
+on_force_close "detach"
+simplified_ui true
+pane_frames false
+// scroll_buffer_size 10000
+
+themes {
+    custom {
+        fg 213 196 161
+        bg 50 50 50
+        black 60 56 54
+        red 204 36 29
+        green 152 151 26
+        yellow 215 153 33
+        blue 69 133 136
+        magenta 177 98 134
+        cyan 104 157 106
+        white 251 241 199
+        orange 214 93 14
+    }
+}

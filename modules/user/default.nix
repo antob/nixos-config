@@ -52,6 +52,7 @@ in
         exa = enabled;
         direnv = enabled;
         devenv = enabled;
+        zellij = enabled;
       };
 
       cli-apps = {
