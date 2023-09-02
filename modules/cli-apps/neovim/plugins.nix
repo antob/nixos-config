@@ -6,7 +6,17 @@ let cfg = config.antob.cli-apps.neovim;
 in {
   antob.home.extraOptions.programs.neovim.plugins = with pkgs.vimPlugins;
     mkIf cfg.enable [
-      onedark-nvim
+      {
+        plugin = onedark-nvim;
+        type = "lua";
+        config = # lua
+          ''
+            require('onedark').setup {
+              transparent = true
+            }
+            require('onedark').load()
+          '';
+      }
       {
         plugin = lualine-nvim;
         type = "lua";
