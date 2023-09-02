@@ -54,6 +54,12 @@ Create the root subvolume (this will be '/' on the final system)
 # btrfs subvolume create /mnt/@root
 ```
 
+Create the home subvolume
+
+```
+# btrfs subvolume create /mnt/@home
+```
+
 Create the nix directory subvolume (this will hold all NixOS data)
 
 ```
