@@ -1,20 +1,20 @@
 // If you'd like to override the default keybindings completely, be sure to change "keybinds" to "keybinds clear-defaults=true"
 keybinds {
     normal {
-		unbind "Ctrl p"
-		unbind "Ctrl o"
-		unbind "Ctrl b"
-		unbind "Ctrl q"
+	unbind "Ctrl p"
+	unbind "Ctrl o"
+	unbind "Ctrl b"
+	unbind "Ctrl q"
         // uncomment this and adjust key if using copy_on_select=false
         // bind "Alt c" { Copy; }
     }
     pane {
         bind "Ctrl a" { SwitchToMode "Normal"; }
-		bind "h" "Left" { MoveFocus "Left"; SwitchToMode "Normal"; }
-		bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Normal"; }
-		bind "j" "Down" { MoveFocus "Down"; SwitchToMode "Normal"; }
-		bind "k" "Up" { MoveFocus "Up"; SwitchToMode "Normal"; }
-		bind "p" { SwitchFocus; SwitchToMode "Normal"; }
+	bind "h" "Left" { MoveFocus "Left"; SwitchToMode "Normal"; }
+	bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Normal"; }
+	bind "j" "Down" { MoveFocus "Down"; SwitchToMode "Normal"; }
+	bind "k" "Up" { MoveFocus "Up"; SwitchToMode "Normal"; }
+	bind "p" { SwitchFocus; SwitchToMode "Normal"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
         bind "f" { TogglePaneFrames; SwitchToMode "Normal"; }
         unbind "w"
@@ -38,6 +38,8 @@ keybinds {
     }
     shared_except "locked" {
         unbind "Ctrl q"
+        bind "Alt f" { ToggleFocusFullscreen; }
+        bind "Alt `" { ToggleTab; }
     }
     shared_except "pane" "locked" {
         bind "Ctrl a" { SwitchToMode "Pane"; }
