@@ -24,6 +24,7 @@ keybinds {
         bind "r" { SwitchToMode "RenamePane"; PaneNameInput 0;}
     }
     tab {
+        bind "Ctrl t" { NewTab; SwitchToMode "Normal"; }
         bind "h" "Left" "Up" "k" { GoToPreviousTab; SwitchToMode "Normal"; }
         bind "l" "Right" "Down" "j" { GoToNextTab; SwitchToMode "Normal"; }
     }
@@ -39,7 +40,8 @@ keybinds {
     shared_except "locked" {
         unbind "Ctrl q"
         bind "Alt f" { ToggleFocusFullscreen; }
-        bind "Alt `" { ToggleTab; }
+        bind "Alt `" { GoToNextTab; }
+        bind "Alt \\" { NewPane; }
     }
     shared_except "pane" "locked" {
         bind "Ctrl a" { SwitchToMode "Pane"; }
