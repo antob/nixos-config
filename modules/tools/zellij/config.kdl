@@ -75,3 +75,10 @@ themes {
         orange 214 93 14
     }
 }
+
+ui {
+    pane_frames {
+        hide_session_name true
+    }
+}
+
