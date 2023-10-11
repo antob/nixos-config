@@ -13,7 +13,7 @@ in {
 
       programs.zellij = {
         enable = true;
-        enableZshIntegration = true;
+        # enableZshIntegration = true;
       };
 
       # Generate auto completion.

@@ -44,6 +44,9 @@ bind \\ split-window -h -c "#{pane_current_path}"
 # configure onedark theme
 set -g @onedark_widgets ""
 
+# configure catppuchin theme
+#set -g @catppuccin_flavour 'mocha' # or frappe, macchiato, latte
+#set -g @catppuccin_status_left_separator "█"
 
 set -g detach-on-destroy off  # don't exit from tmux when closing a session
 set -g escape-time 0          # zero-out escape time delay

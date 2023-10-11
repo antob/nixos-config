@@ -12,7 +12,8 @@ let
   external-ip = pkgs.callPackage ./scripts/external-ip.nix { };
   disk-usage = pkgs.callPackage ./scripts/disk-usage.nix { };
 
-in {
+in
+{
   options.antob.desktop.addons.polybar = with types; {
     enable = mkEnableOption "Whether or not to install and configure polybar.";
   };
@@ -38,7 +39,7 @@ in {
           exec = ${check-kbd-variant}/bin/check-kbd-variant
           interval = 2
           label-background = ''${colors.mb}
-          label-foreground = ''${colors.amshade4}
+          label-foreground = ''${colors.base09}
           format = <label>
           format-padding = 1
 
@@ -46,7 +47,7 @@ in {
           type = custom/script
           exec = ${check-vpn}/bin/check-vpn
           interval = 5
-          label-background = ''${colors.grshade4}
+          label-background = ''${colors.base0B}
           label-foreground = ''${colors.mb}
           format = <label>
           format-padding = 2
@@ -56,7 +57,7 @@ in {
           exec = ${external-ip}/bin/external-ip
           interval = 10
           format-background = ''${colors.mb}
-          format-foreground = ''${colors.cyshade4}
+          format-foreground = ''${colors.base0A}
           format =     <label>
 
           [module/disk_usage]
@@ -64,12 +65,12 @@ in {
           exec = ${disk-usage}/bin/disk-usage
           interval = 10
           format-background = ''${colors.mb}
-          format-foreground = ''${colors.blshade4}
+          format-foreground = ''${colors.base0D}
           format =     <label>
         '';
 
         script = ''
-          tray_output=eDP-1
+          tray_output=DP-4
 
           for m in $(polybar --list-monitors | ${pkgs.coreutils}/bin/cut -d":" -f1); do
               tray_pos=none

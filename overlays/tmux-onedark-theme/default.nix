@@ -6,8 +6,8 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "antob";
       repo = "tmux-onedark-theme";
-      rev = "7959af688cb0661532ea06398a78c2f886b92219";
-      sha256 = "sha256-THWqq8xyroC/PBPRX63dXo/55JXxaEFWQd1qy1pfH3Y=";
+      rev = "35ef429502f618765ea3800534a5a8c63ce7149f";
+      sha256 = "sha256-ZsrHW1MhbRDW8oYjPP4W7kY6RkMbafjggrEqgVq0Db0=";
     };
   });
 }

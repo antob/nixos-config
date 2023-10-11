@@ -10,6 +10,7 @@ let
     tmuxPlugins.tmux-fzf
     tmux-onedark-theme
     tmuxPlugins.yank
+    # tmuxPlugins.catppuccin
   ];
 in
 {

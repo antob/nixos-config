@@ -117,5 +117,6 @@ in {
       vim-fugitive
       vim-nix
       vim-sleuth
+      # catppuccin-nvim
     ];
 }

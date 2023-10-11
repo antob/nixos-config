@@ -54,7 +54,9 @@ keybinds {
     }
 }
 
-theme "custom"
+// theme "custom"
+//theme "catppuccin-mocha"
+theme "one-half-dark"
 on_force_close "detach"
 simplified_ui true
 pane_frames false
