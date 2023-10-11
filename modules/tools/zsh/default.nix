@@ -30,6 +30,11 @@ in {
           path = "$XDG_DATA_HOME/zsh/zsh_history";
         };
 
+        initExtraBeforeCompInit = ''
+          # Fix slow text paste
+          DISABLE_MAGIC_FUNCTIONS="true"
+        '';
+
         initExtra = ''
           # Use vim bindings.
           #set -o vi
