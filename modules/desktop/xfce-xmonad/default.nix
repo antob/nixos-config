@@ -233,6 +233,25 @@ in
             import qualified DBus as D
             import qualified DBus.Client as D
 
+            -- Color theme
+            -- base16 - OneDark
+            base00Color = "#282c34"
+            base01Color = "#353b45"
+            base02Color = "#3e4451"
+            base03Color = "#545862"
+            base04Color = "#565c64"
+            base05Color = "#ebdbb2" -- orgiginal base05Color is #abb2bf
+            base06Color = "#b6bdca"
+            base07Color = "#c8ccd4"
+            base08Color = "#e06c75"
+            base09Color = "#d19a66"
+            base0AColor = "#e5c07b"
+            base0BColor = "#98c379"
+            base0CColor = "#56b6c2"
+            base0DColor = "#61afef"
+            base0EColor = "#c678dd"
+            base0FColor = "#be5046"
+
             -- Settings
             myFont :: String
             myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
@@ -244,16 +263,16 @@ in
             myTerminal = "alacritty --working-directory `xcwd`"    -- Sets default terminal
 
             myBrowser :: String
-            myBrowser = "librewolf "      -- Sets librewolf as browser
+            myBrowser = "librewolf "    -- Sets librewolf as browser
 
             myBorderWidth :: Dimension
             myBorderWidth = 3           -- Border width for windows
 
             myNormColor :: String
-            myNormColor   = "#323232"   -- Border color of normal windows
+            myNormColor   = base01Color -- Border color of normal windows
 
             myFocusColor :: String
-            myFocusColor  = "#00897b"   -- Border color of focused windows
+            myFocusColor  = base0CColor -- Border color of focused windows
 
             main :: IO ()
             main = do
@@ -453,12 +472,12 @@ in
             myLogHook dbus =
               def
                 { ppOutput = dbusOutput dbus,
-                  ppCurrent = wrap "%{F#689d6a}%{o#689d6a}%{+o}" "%{-o}%{F-}",
-                  ppVisible = wrap "%{F#689d6a}" "%{F-}",
-                  ppUrgent = wrap "%{F#C45500}" "%{F-}",
-                  ppHidden = wrap "%{F#458588}" "%{F-}",
-                  ppLayout = wrap "%{F#fb4934}" "%{F-}",
-                  ppHiddenNoWindows = wrap "%{F#666666}" "%{F-}",
+                  ppCurrent = wrap ("%{F" ++ base0BColor ++ "}%{o" ++ base0BColor ++ "}%{+o}") "%{-o}%{F-}",
+                  ppVisible = wrap ("%{F" ++ base0BColor ++ "}") "%{F-}",
+                  ppUrgent = wrap ("%{F" ++ base09Color ++ "}") "%{F-}",
+                  ppHidden = wrap ("%{F" ++ base0CColor ++ "}") "%{F-}",
+                  ppLayout = wrap ("%{F" ++ base0FColor ++ "}") "%{F-}",
+                  ppHiddenNoWindows = wrap ("%{F" ++ base02Color ++ "}") "%{F-}",
                   ppTitle = const " ", -- shorten 55
                   ppWsSep = " ",
                   ppSep = "%{F#666666} |  %{F-}"

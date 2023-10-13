@@ -5,8 +5,8 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "antob";
       repo = "dmenu";
-      rev = "11d468b";
-      sha256 = "sha256-NLDwvaeyUqcFeGfMDdEIhSB1f9/MmlyYjaxbSrAAYPc=";
+      rev = "cd3f248";
+      sha256 = "sha256-OHvRuex2k72FJiVaMZkcmbpoKIgqpZzxrAImgg8XVeI=";
     };
   });
 }
