@@ -53,6 +53,7 @@ in
         direnv = enabled;
         devenv = enabled;
         zellij = enabled;
+        flameshot = enabled;
       };
 
       cli-apps = {
