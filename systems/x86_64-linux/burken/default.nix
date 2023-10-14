@@ -1,6 +1,8 @@
 { pkgs, config, lib, channel, inputs, ... }:
 
-with lib; {
+with lib;
+with lib.antob;
+{
   imports = [ ./hardware.nix ];
 
   # Bootloader.

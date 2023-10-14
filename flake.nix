@@ -41,10 +41,10 @@
       inherit inputs;
       src = ./.;
 
-      package-namespace = "antob";
+      snowfall.namespace = "antob";
 
       channels-config.allowUnfree = true;
 
-      systems.modules = with inputs; [ home-manager.nixosModules.home-manager ];
+      systems.nixos.modules = with inputs; [ home-manager.nixosModules.home-manager ];
     };
 }
