@@ -49,10 +49,13 @@ in {
         type = "lua";
         config = # lua
           ''
-            require('indent_blankline').setup {
-              show_trailing_blankline_indent = false
-            }
             vim.cmd [[highlight IndentBlanklineChar guifg=#3b3f4c gui=nocombine]]
+            require('ibl').setup {
+              indent = {
+                char = "▏",
+                highlight = { "IndentBlanklineChar" }
+              }
+            }
           '';
       }
       {
