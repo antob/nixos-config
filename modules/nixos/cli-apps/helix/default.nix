@@ -61,6 +61,37 @@ in {
             insert = { j = { k = "normal_mode"; }; };
           };
         };
+
+        languages = {
+          language = [
+            {
+              name = "ruby";
+              auto-format = true;
+              formatter = {
+                command = "standardrb";
+                args = [ "--stdin" "foo.rb" "--fix" "--stderr" ];
+              };
+              config = {
+                solargraph = {
+                  diagnostics = true;
+                  formatting = true;
+                };
+              };
+            }
+            {
+              name = "erb";
+              auto-pairs = {
+                "<" = ">";
+                "%" = "%";
+              };
+            }
+            {
+              name = "nix";
+              auto-format = true;
+              formatter.command = "nixpkgs-fmt";
+            }
+          ];
+        };
       };
     };
   };
