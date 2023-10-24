@@ -80,6 +80,8 @@ in {
             }
             {
               name = "erb";
+              auto-format = true;
+              formatter.command = "htmlbeautifier";
               auto-pairs = {
                 "<" = ">";
                 "%" = "%";
