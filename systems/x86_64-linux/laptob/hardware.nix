@@ -63,6 +63,7 @@ in {
       "/efi" = {
         device = "/dev/disk/by-partlabel/EFI";
         fsType = "vfat";
+        options = [ "dmask=0077" "fmask=0077" ];
         neededForBoot = true;
       };
     }
