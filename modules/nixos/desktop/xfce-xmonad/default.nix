@@ -17,6 +17,7 @@ in
   options.antob.desktop.xfce-xmonad = with types; {
     enable = mkEnableOption "Enable XMonad window manager.";
     dpi = mkOpt int 120 "DPI to add to xrdb.";
+    mainDisplay = mkOpt types.str "eDP-1" "The name of the main display.";
   };
 
   config = mkIf cfg.enable {
@@ -42,7 +43,10 @@ in
       gtk = enabled;
       keyring = enabled;
       xdg-portal = enabled;
-      polybar = enabled;
+      polybar = {
+        enable = true;
+        trayOutput = cfg.mainDisplay;
+      };
       volumeicon = enabled;
       udisks2 = enabled;
       autorandr = enabled;

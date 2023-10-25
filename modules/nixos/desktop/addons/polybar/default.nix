@@ -17,6 +17,7 @@ in
 {
   options.antob.desktop.addons.polybar = with types; {
     enable = mkEnableOption "Whether or not to install and configure polybar.";
+    trayOutput = mkOpt types.str "eDP-1" "The name of the monitor to display the tray.";
   };
 
   config = mkIf cfg.enable {
@@ -71,7 +72,7 @@ in
         '';
 
         script = ''
-          tray_output=DP-4
+          tray_output=${cfg.trayOutput}
 
           for m in $(polybar --list-monitors | ${pkgs.coreutils}/bin/cut -d":" -f1); do
               tray_pos=none

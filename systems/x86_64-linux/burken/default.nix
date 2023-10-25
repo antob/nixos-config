@@ -48,7 +48,10 @@ with lib.antob;
       autoLogin = true;
     };
 
-    desktop.xfce-xmonad = enabled;
+    desktop.xfce-xmonad = {
+      enable = true;
+      mainDisplay = "DP-4";
+    };
     # desktop.gnome = enabled;
 
     apps = {
