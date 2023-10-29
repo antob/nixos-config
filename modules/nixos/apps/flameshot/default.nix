@@ -2,9 +2,9 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.flameshot;
+let cfg = config.antob.apps.flameshot;
 in {
-  options.antob.tools.flameshot = with types; {
+  options.antob.apps.flameshot = with types; {
     enable = mkEnableOption "Whether or not to install and configure flameshot.";
   };
 
