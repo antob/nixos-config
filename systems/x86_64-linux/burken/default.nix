@@ -12,6 +12,7 @@ with lib.antob;
     };
 
     hardware.bluetooth = enabled;
+    hardware.zsa-voyager = enabled;
     desktop.xfce-xmonad.mainDisplay = "DP-4";
   };
 
