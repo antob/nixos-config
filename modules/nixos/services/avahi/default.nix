@@ -4,7 +4,8 @@ let
   cfg = config.antob.services.avahi;
 
   inherit (lib) types mkEnableOption mkIf;
-in {
+in
+{
   options.antob.services.avahi = with types; {
     enable = mkEnableOption "Avahi";
   };
@@ -13,6 +14,7 @@ in {
     services.avahi = {
       enable = true;
       nssmdns = true;
+      openFirewall = true;
     };
   };
 }

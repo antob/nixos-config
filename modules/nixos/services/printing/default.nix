@@ -11,7 +11,11 @@ in {
   config = mkIf cfg.enable {
     services.printing.enable = true;
 
-    environment.systemPackages = [ pkgs.system-config-printer ];
+    environment.systemPackages = with pkgs; [
+      pkgs.system-config-printer
+      hplip
+    ];
+
     antob.persistence.directories = [ "/etc/cups" ];
   };
 }
