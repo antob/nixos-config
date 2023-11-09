@@ -248,13 +248,13 @@ in
             base05Color = "#ebdbb2" -- orgiginal base05Color is #abb2bf
             base06Color = "#b6bdca"
             base07Color = "#c8ccd4"
-            base08Color = "#e06c75"
+            base08Color = "#be5046"
             base09Color = "#d19a66"
             base0AColor = "#e5c07b"
             base0BColor = "#98c379"
             base0CColor = "#56b6c2"
             base0DColor = "#61afef"
-            base0EColor = "#c678dd"
+            base0EColor = "#e06c75"
             base0FColor = "#be5046"
 
             -- Settings
