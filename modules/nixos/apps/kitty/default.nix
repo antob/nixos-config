@@ -23,7 +23,7 @@ in {
 
       settings = {
         cursor_shape = "beam";
-        enable_audio_bell = "yes";
+        enable_audio_bell = "no";
         window_padding_width = "4";
         tab_bar_style = "separator";
         tab_separator = " | ";
