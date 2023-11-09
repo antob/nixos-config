@@ -265,7 +265,8 @@ in
             myModMask = mod4Mask        -- Sets modkey to super/windows key
 
             myTerminal :: String
-            myTerminal = "alacritty --working-directory `xcwd`"    -- Sets default terminal
+            -- myTerminal = "alacritty --working-directory `xcwd`"    -- Sets default terminal
+            myTerminal = "kitty --working-directory `xcwd`"    -- Sets default terminal
 
             myBrowser :: String
             myBrowser = "librewolf "    -- Sets librewolf as browser

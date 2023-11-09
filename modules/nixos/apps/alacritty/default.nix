@@ -28,7 +28,7 @@ in {
             family = "Hack Nerd Font";
             style = "Regular";
           };
-          size = 11.0;
+          size = 11.5;
         };
 
         # colors = import ./themes/custom.nix;

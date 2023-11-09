@@ -16,7 +16,7 @@ in
       # desktop.gnome = enabled;
 
       apps = {
-        alacritty = enabled;
+        kitty = enabled;
         firefox = enabled;
         librewolf = enabled;
         vscodium = enabled;
