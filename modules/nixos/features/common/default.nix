@@ -109,6 +109,7 @@ in
       duf
       jqp
       xh
+      neofetch
     ];
 
     services = {
