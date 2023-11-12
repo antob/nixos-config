@@ -5,6 +5,7 @@ with lib.antob;
 let
   cfg = config.antob.desktop.xfce-xmonad;
   gtkCfg = config.antob.desktop.addons.gtk;
+  colors = config.antob.color-scheme.colors;
 
   dm-logout = pkgs.callPackage ./scripts/dm-logout.nix { };
   dm-vpn = pkgs.callPackage ./scripts/dm-vpn.nix { };
@@ -246,25 +247,6 @@ in
             import qualified DBus as D
             import qualified DBus.Client as D
 
-            -- Color theme
-            -- base16 - OneDark
-            base00Color = "#282c34"
-            base01Color = "#353b45"
-            base02Color = "#3e4451"
-            base03Color = "#545862"
-            base04Color = "#565c64"
-            base05Color = "#ebdbb2" -- orgiginal base05Color is #abb2bf
-            base06Color = "#b6bdca"
-            base07Color = "#c8ccd4"
-            base08Color = "#be5046"
-            base09Color = "#d19a66"
-            base0AColor = "#e5c07b"
-            base0BColor = "#98c379"
-            base0CColor = "#56b6c2"
-            base0DColor = "#61afef"
-            base0EColor = "#e06c75"
-            base0FColor = "#be5046"
-
             -- Settings
             myFont :: String
             myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
@@ -283,10 +265,10 @@ in
             myBorderWidth = 3           -- Border width for windows
 
             myNormColor :: String
-            myNormColor   = base01Color -- Border color of normal windows
+            myNormColor   = "#${colors.base12}" -- Border color of normal windows
 
             myFocusColor :: String
-            myFocusColor  = base0CColor -- Border color of focused windows
+            myFocusColor  = "#${colors.base0E}" -- Border color of focused windows
 
             main :: IO ()
             main = do
@@ -486,12 +468,12 @@ in
             myLogHook dbus =
               def
                 { ppOutput = dbusOutput dbus,
-                  ppCurrent = wrap ("%{F" ++ base0BColor ++ "}%{o" ++ base0BColor ++ "}%{+o}") "%{-o}%{F-}",
-                  ppVisible = wrap ("%{F" ++ base0BColor ++ "}") "%{F-}",
-                  ppUrgent = wrap ("%{F" ++ base09Color ++ "}") "%{F-}",
-                  ppHidden = wrap ("%{F" ++ base0CColor ++ "}") "%{F-}",
-                  ppLayout = wrap ("%{F" ++ base0FColor ++ "}") "%{F-}",
-                  ppHiddenNoWindows = wrap ("%{F" ++ base02Color ++ "}") "%{F-}",
+                  ppCurrent = wrap ("%{F" ++ "#${colors.base0A}" ++ "}%{o" ++ "#${colors.base0A}" ++ "}%{+o}") "%{-o}%{F-}",
+                  ppVisible = wrap ("%{F" ++ "#${colors.base0A}" ++ "}") "%{F-}",
+                  ppUrgent = wrap ("%{F" ++ "#${colors.base0B}" ++ "}") "%{F-}",
+                  ppHidden = wrap ("%{F" ++ "#${colors.base0E}" ++ "}") "%{F-}",
+                  ppLayout = wrap ("%{F" ++ "#${colors.base09}" ++ "}") "%{F-}",
+                  ppHiddenNoWindows = wrap ("%{F" ++ "#${colors.base12}" ++ "}") "%{F-}",
                   ppTitle = const " ", -- shorten 55
                   ppWsSep = " ",
                   ppSep = "%{F#666666} |  %{F-}"
