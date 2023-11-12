@@ -24,7 +24,12 @@ in
 
     # Desktop additions
     antob.desktop.addons.keyring = enabled;
-    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+
+    # Desktop portal
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    };
 
     # dconf and xfconf settings
     antob.home.extraOptions = {

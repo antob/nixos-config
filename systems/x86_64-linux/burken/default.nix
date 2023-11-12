@@ -11,6 +11,12 @@ with lib.antob;
       desktop = enabled;
     };
 
+    desktop.xfce-xmonad.enable = true;
+
+    apps = {
+      flameshot = enabled;
+    };
+
     hardware.bluetooth = enabled;
     hardware.zsa-voyager = enabled;
     desktop.xfce-xmonad.mainDisplay = "DP-4";

@@ -11,22 +11,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob = {
-      desktop.xfce-xmonad = enabled;
-      # desktop.gnome = enabled;
-
-      apps = {
-        kitty = enabled;
-        firefox = enabled;
-        librewolf = enabled;
-        vscodium = enabled;
-        slack = enabled;
-        flameshot = enabled;
-      };
-
-      services = {
-        redshift = enabled;
-      };
+    antob.apps = {
+      kitty = enabled;
+      firefox = enabled;
+      librewolf = enabled;
+      vscodium = enabled;
+      slack = enabled;
     };
 
     environment.systemPackages = with pkgs; [

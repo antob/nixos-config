@@ -11,6 +11,8 @@ with lib.antob;
       desktop = enabled;
     };
 
+    desktop.hyprland = enabled;
+
     hardware = {
       fingerprint = enabled;
       bluetooth = enabled;

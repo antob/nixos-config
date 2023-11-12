@@ -42,7 +42,6 @@ in
     antob.desktop.addons = {
       gtk = enabled;
       keyring = enabled;
-      xdg-portal = enabled;
       polybar = {
         enable = true;
         trayOutput = cfg.mainDisplay;
@@ -51,6 +50,15 @@ in
       udisks2 = enabled;
       autorandr = enabled;
       yubikey-touch-detector = enabled;
+    };
+
+    # Services
+    services.redshift = enabled;
+
+    # Desktop portal
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     };
 
     # dconf and xfconf settings
