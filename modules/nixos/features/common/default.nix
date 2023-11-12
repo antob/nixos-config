@@ -117,6 +117,11 @@ in
       dbus.enable = true;
     };
 
+    location = {
+      latitude = 57.7;
+      longitude = 11.8;
+    };
+
     # Bootloader.
     boot.loader = {
       systemd-boot = {

@@ -10,10 +10,5 @@ in {
 
   config = mkIf cfg.enable {
     services.redshift.enable = true;
-
-    location = {
-      latitude = 57.7;
-      longitude = 11.8;
-    };
   };
 }
