@@ -39,6 +39,7 @@ in {
         device = "/dev/mapper/system";
         fsType = "btrfs";
         options = [ "subvol=@home" "compress=zstd" ];
+        neededForBoot = true;
       };
 
       "/nix" = {
