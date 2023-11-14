@@ -4,6 +4,10 @@ with lib;
 with lib.antob;
 let
   cfg = config.antob.desktop.hyprland;
+  gtkCfg = config.antob.desktop.addons.gtk;
+
+  wcwd = pkgs.callPackage ./scripts/wcwd.nix { };
+  bm-logout = pkgs.callPackage ./scripts/bm-logout.nix { };
 in
 {
   options.antob.desktop.hyprland = with types; {
@@ -11,10 +15,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.hyprland = {
-      enable = true;
-      xwayland.enable = true;
-      enableNvidiaPatches = false;
+    programs = {
+      hyprland = {
+        enable = true;
+        xwayland.enable = true;
+        enableNvidiaPatches = false;
+      };
+
+      dconf.enable = true;
     };
 
     antob.home.extraOptions = {
@@ -33,7 +41,7 @@ in
               kb_layout = se
               kb_variant = us
               kb_model =
-              kb_options =
+              kb_options = caps:ctrl_modifier
               kb_rules =
 
               repeat_rate = 30
@@ -128,11 +136,12 @@ in
           bind = $mainMod, P, pseudo, # dwindle
           bind = $mainMod, J, togglesplit, # dwindle
           bind = $mainMod, F, fullscreen, 1
+          bind = $mainMod, X, exec, ${bm-logout}/bin/bm-logout
 
           # Apps
-          bind = $mainMod, RETURN, exec, kitty
+          bind = $mainMod, RETURN, exec, kitty --working-directory `${wcwd}/bin/wcwd`
           bind = $mainMod, W, exec, librewolf
-          bind = $mainMod, D, exec, bemenu-run -H 30 --ch 12 --cw 1 -p "" --fn "SFNS Display Bold 9" --hb "##56b6c2" --hf "##191919" --nf "##ebdbb2" --nb "##282c34" --ab "##282c34" --af "##ebdbb2" --fb "##282c34" --ff "##ebdbb2"
+          bind = $mainMod, D, exec, bemenu-run
 
           # Move focus with mainMod + left and right arrow
           bind = $mainMod, right, layoutmsg, cyclenext
@@ -148,6 +157,10 @@ in
 
           # Swap current window with master
           bind = $mainMod, BackSpace, layoutmsg, swapwithmaster auto
+
+          # Media keys
+          bind = , XF86MonBrightnessDown, exec, brightnessctl set 10%-
+          bind = , XF86MonBrightnessUp, exec, brightnessctl set +10%
 
           # Switch workspaces with mainMod + [1-9]
           bind = $mainMod, 1, workspace, 1
@@ -307,10 +320,11 @@ in
     };
 
     antob.system.env = {
+      BEMENU_OPTS = "-i -H 30 --ch 16 --cw 2 --hp 6 -p '' --fn 'SFNS Display Bold 9' --hb '#56b6c2' --hf '#191919' --nf '#ebdbb2' --nb '#282c34' --ab '#282c34' --af '#ebdbb2' --fb '#282c34' --ff '#ebdbb2' --tb '#56b6c2' --tf '#191919'";
       MOZ_ENABLE_WAYLAND = "1";
       NIXOS_OZONE_WL = "1";
       # POLKIT_AUTH_AGENT = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      # GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
+      GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
       XDG_SESSION_TYPE = "wayland";
       WLR_NO_HARDWARE_CURSORS = "1";
       XDG_CURRENT_DESKTOP = "Hyprland";
@@ -337,6 +351,8 @@ in
       # swayidle
       # swaylock
       xorg.xlsclients
+      brightnessctl
+      xcwd
     ];
 
     # Desktop additions
@@ -349,6 +365,15 @@ in
 
     antob.home.extraOptions = {
       xsession.enable = true;
+
+      dconf.settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          gtk-theme = gtkCfg.theme.name;
+          cursor-theme = gtkCfg.cursor.name;
+          cursor-size = gtkCfg.cursor.size;
+        };
+      };
     };
 
     services.gnome.at-spi2-core.enable = true;
@@ -359,9 +384,7 @@ in
 
       # Enable LightDm display manager.
       displayManager = {
-        lightdm = {
-          enable = true;
-        };
+        lightdm.enable = true;
         defaultSession = "hyprland";
         autoLogin = mkIf config.antob.user.autoLogin {
           enable = true;

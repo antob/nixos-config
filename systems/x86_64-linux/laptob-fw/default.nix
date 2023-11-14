@@ -19,8 +19,11 @@ with lib.antob;
     };
   };
 
+  antob.system.console.setFont = mkForce false;
+
   environment.systemPackages = with pkgs; [
     powertop
+    vulkan-tools
   ];
 
   services = {
