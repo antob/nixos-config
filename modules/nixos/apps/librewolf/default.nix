@@ -18,6 +18,7 @@ in {
           "browser.sessionstore.resume_from_crash" = true;
           "privacy.sanitize.sanitizeOnShutdown" = false;
           "webgl.disabled" = false;
+          "media.ffmpeg.vaapi.enabled" = true;
         };
       };
 
