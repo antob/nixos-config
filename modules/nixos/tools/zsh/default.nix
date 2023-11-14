@@ -48,6 +48,10 @@ in {
             printf "\x1b[\x36 q"
           }
           precmd_functions+=(restore_cursor)
+
+          # Customize ZSH highligh colors
+          typeset -A ZSH_HIGHLIGHT_STYLES
+          ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
         '';
 
         oh-my-zsh = {
