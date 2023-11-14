@@ -63,6 +63,7 @@ in
       base10 = "#282c34"; # Alt Black
       base11 = "#e5c07b"; # Alt Yellow
       base12 = "#353b45"; # Alt Grey
+      base13 = "#191919"; # Dark Grey
     };
   };
 }

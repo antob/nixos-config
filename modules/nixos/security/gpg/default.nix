@@ -5,6 +5,8 @@ with lib.antob;
 let
   cfg = config.antob.security.gpg;
 
+  colors = config.antob.color-scheme.colors;
+
   reload-yubikey = pkgs.writeShellScriptBin "reload-yubikey" ''
     ${pkgs.gnupg}/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
   '';
@@ -13,6 +15,9 @@ let
     if config.antob.desktop.gnome.enable then {
       path = "${pkgs.pinentry-gnome}/bin/pinentry-gnome";
       name = "gnome3";
+    } else if config.antob.desktop.hyprland.enable then {
+      path = "${pkgs.pinentry-bemenu}/bin/pinentry-bemenu";
+      name = null;
     } else {
       path = "${pkgs.antob.pinentry-dmenu}/bin/pinentry-dmenu";
       name = null;
@@ -38,6 +43,8 @@ in
     ];
 
     antob.home.extraOptions = {
+      systemd.user.services.gpg-agent.Service.Environment = [ "BEMENU_OPTS='-H 30 --fn \"SFNS Display Bold 9\" --hb \"#${colors.base06}\" --hf \"#${colors.base13}\" --nf \"#${colors.base07}\" --nb \"#${colors.base10}\" --fb \"#${colors.base10}\" --ff \"#${colors.base07}\" --tb \"#${colors.base10}\" --tf \"#${colors.base07}\"'" ];
+
       services.gpg-agent = {
         enable = true;
         enableSshSupport = true;
