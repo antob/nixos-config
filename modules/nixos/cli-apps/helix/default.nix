@@ -63,6 +63,13 @@ in {
         };
 
         languages = {
+          language-server = {
+            solargraph = {
+              diagnostics = true;
+              formatting = true;
+            };
+          };
+
           language = [
             {
               name = "ruby";
@@ -71,12 +78,9 @@ in {
                 command = "standardrb";
                 args = [ "--stdin" "foo.rb" "--fix" "--stderr" ];
               };
-              config = {
-                solargraph = {
-                  diagnostics = true;
-                  formatting = true;
-                };
-              };
+              language-servers = [
+                { name = "solargraph"; }
+              ];
             }
             {
               name = "erb";
