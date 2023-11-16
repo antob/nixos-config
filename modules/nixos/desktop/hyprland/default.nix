@@ -8,6 +8,7 @@ let
 
   wcwd = pkgs.callPackage ./scripts/wcwd.nix { };
   bm-logout = pkgs.callPackage ./scripts/bm-logout.nix { };
+  bm-vpn = pkgs.callPackage ./scripts/bm-vpn.nix { };
 in
 {
   options.antob.desktop.hyprland = with types; {
@@ -36,6 +37,8 @@ in
           
           exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
           exec-once = ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
+          exec-once = ${pkgs.networkmanagerapplet}/bin/nm-applet --indicator
+          exec-once = ${pkgs.blueman}/bin/blueman-applet
 
           input {
               kb_layout = se
@@ -137,6 +140,7 @@ in
           bind = $mainMod, J, togglesplit, # dwindle
           bind = $mainMod, F, fullscreen, 1
           bind = $mainMod, X, exec, ${bm-logout}/bin/bm-logout
+          bind = $mainMod, P, exec, ${bm-vpn}/bin/bm-vpn
 
           # Apps
           bind = $mainMod, RETURN, exec, kitty --working-directory `${wcwd}/bin/wcwd`
@@ -353,6 +357,7 @@ in
       xorg.xlsclients
       brightnessctl
       xcwd
+      dmidecode
     ];
 
     # Desktop additions
