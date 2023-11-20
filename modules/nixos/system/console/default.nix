@@ -12,7 +12,7 @@ in {
   config = mkIf cfg.enable {
     console = mkIf cfg.setFont {
       earlySetup = true;
-      font = "${pkgs.terminus_font}/share/consolefonts/ter-124n.psf.gz";
+      font = "ter-124b";
       packages = with pkgs; [ terminus_font ];
     };
 
