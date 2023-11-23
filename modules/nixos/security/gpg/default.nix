@@ -16,7 +16,7 @@ let
       path = "${pkgs.pinentry-gnome}/bin/pinentry-gnome";
       name = "gnome3";
     } else if config.antob.desktop.hyprland.enable then {
-      path = "${pkgs.pinentry-bemenu}/bin/pinentry-bemenu";
+      path = "${pkgs.antob.pinentry-tofi}/bin/pinentry-tofi";
       name = null;
     } else {
       path = "${pkgs.antob.pinentry-dmenu}/bin/pinentry-dmenu";
