@@ -16,7 +16,7 @@ in {
 
       font = {
         name = "Hack Nerd Font";
-        size = 11.5;
+        size = 12;
       };
 
       shellIntegration.enableZshIntegration = true;

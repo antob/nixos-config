@@ -1,9 +1,9 @@
 { pkgs, ... }:
 
-pkgs.writeShellScriptBin "bm-vpn" ''
-  # Script name: bm-vpn
+pkgs.writeShellScriptBin "dm-vpn" ''
+  # Script name: dm-vpn
   # Description: Activate and decativate VPN connections.
-  # Dependencies: bemenu, nmcli
+  # Dependencies: tofi, nmcli
   # Contributors: Tobias Lindholm
 
   set -E
@@ -84,7 +84,7 @@ pkgs.writeShellScriptBin "bm-vpn" ''
   }
 
   generate_menu(){
-      PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | ${pkgs.bemenu}/bin/bemenu -i -p "$MENU_TITLE")
+      PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | ${pkgs.tofi}/bin/tofi --prompt-text "$MENU_TITLE")
       return 0
   }
 

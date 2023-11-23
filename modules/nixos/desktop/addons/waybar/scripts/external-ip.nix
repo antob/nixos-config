@@ -8,8 +8,8 @@ pkgs.writeShellScriptBin "external-ip" ''
 
   ip=`${pkgs.dig}/bin/dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null`
   if [ $? -ne 0 ]; then
-      echo '{"text": " ", "tooltip": "No connection", "class": "disconnected"}'
+      echo "{\"text\": \" \", \"tooltip\": \"No connection\", \"class\": \"disconnected\"}"
   else
-      echo '{"text": " ", "tooltip": "External IP is $ip", "class": "connected"}'
+      echo "{\"text\": \" \", \"tooltip\": \"External IP is $ip\", \"class\": \"connected\"}"
   fi
 ''

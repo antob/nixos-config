@@ -110,6 +110,7 @@ in
       jqp
       xh
       neofetch
+      dmidecode
     ];
 
     services = {

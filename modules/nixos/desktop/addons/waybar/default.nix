@@ -37,6 +37,7 @@ in
               "cpu"
               "memory"
               "disk"
+              "custom/external-ip"
               "network#wlan0"
               "custom/vpn"
               "battery"
@@ -69,7 +70,7 @@ in
 
             memory = {
               interval = 5;
-              format = "  RAM {}%";
+              format = "   RAM {}%";
             };
 
             disk = {
@@ -81,6 +82,7 @@ in
               exec = "${external-ip}/bin/external-ip";
               interval = 30;
               format = "{}";
+              return-type = "json";
             };
 
             "network#wlan0" = {
@@ -95,7 +97,7 @@ in
               ];
               tooltip-format = "Connected to {essid} {signalStrength}% ({ipaddr})";
               tooltip-format-disconnected = "Not connected.";
-              format-wifi = "{icon}  {essid}";
+              format-wifi = "{icon}   {essid}";
               format-disconnected = "󰤮";
             };
 
@@ -112,8 +114,8 @@ in
                 warning = 30;
                 critical = 15;
               };
-              format = "{icon}  {capacity}%";
-              format-discharging = "{icon}  {capacity}% {power:.1f}W";
+              format = "{icon}    {capacity}%";
+              format-discharging = "{icon}    {capacity}% {power:.1f}W";
               format-charging = "󰂄 {capacity}%";
               format-plugged = "󱘖 {capacity}%";
               format-icons = [
@@ -233,6 +235,7 @@ in
 
           #custom-external-ip {
             color: #${colors.base0A};
+            padding: 4px 0px 4px 10px;
           }
           #custom-external-ip.diconnected {
             color: #${colors.base09};
@@ -240,7 +243,7 @@ in
 
           #network {
             color: #${colors.base0A};
-            padding: 4px 10px;
+            padding: 4px 10px 4px 0px;
           }
           #network.disabled,
           #network.diconnected {

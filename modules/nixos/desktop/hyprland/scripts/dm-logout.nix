@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-pkgs.writeShellScriptBin "bm-logout" ''
+pkgs.writeShellScriptBin "dm-logout" ''
   # An array of options to choose.
   declare -a options=(
   "Suspend"
@@ -11,9 +11,9 @@ pkgs.writeShellScriptBin "bm-logout" ''
   "Lock screen"
   )
 
-  # Piping the above array into bemenu.
+  # Piping the above array into tofi.
   # We use "printf '%s\n'" to format the array one item to a line.
-  choice=$(printf '%s\n' "''${options[@]}" | ${pkgs.bemenu}/bin/bemenu -i -p 'Shutdown menu:' "$@")
+  choice=$(printf '%s\n' "''${options[@]}" | ${pkgs.tofi}/bin/tofi --prompt-text 'Shutdown menu:')
 
 
   # What to do when/if we choose one of the options.
