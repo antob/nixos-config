@@ -66,16 +66,19 @@ in
             cpu = {
               interval = 5;
               format = "   CPU {usage}%";
+              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm bash -ci 'btm'";
             };
 
             memory = {
               interval = 5;
               format = "   RAM {}%";
+              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm bash -ci 'btm'";
             };
 
             disk = {
               format = "  {free}";
               path = "/";
+              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm bash -ci 'btm'";
             };
 
             "custom/external-ip" = {
@@ -134,8 +137,9 @@ in
             };
 
             clock = {
-              format = "{:  %H:%M    %a %e/%Om v.%W}";
-              tooltip = false;
+              format = "{:  %H:%M}";
+              tooltip = true;
+              tooltip-format = "{:  %H:%M      %A %e %B v.%W}";
             };
 
             tray = {
@@ -258,6 +262,12 @@ in
           #battery {
             color: #${colors.base0A};
             padding: 4px 10px;
+          }
+          #battery.warning {
+            color: #${colors.base0B};
+          }
+          #battery.critical {
+            color: #${colors.base09};
           }
 
           #clock {
