@@ -57,7 +57,8 @@ in
           xwayland.enable = true;
 
           extraConfig = ''
-            monitor=eDP-1,highres,auto,1.5
+            monitor=eDP-1,highres,0x0,1.5
+            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,-152x-1152,1.25
             monitor=,preferred,auto,auto
             
             exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
@@ -201,6 +202,16 @@ in
             bind = $mainMod SHIFT, 7, movetoworkspace, 7
             bind = $mainMod SHIFT, 8, movetoworkspace, 8
             bind = $mainMod SHIFT, 9, movetoworkspace, 9
+
+            # Focus monitor
+            bind = $mainMod, W, focusmonitor, 0
+            bind = $mainMod, E, focusmonitor, 1
+            bind = $mainMod, R, focusmonitor, 2
+
+            # Move current workspace to monitor
+            bind = $mainMod SHIFT, W, movecurrentworkspacetomonitor, 0
+            bind = $mainMod SHIFT, E, movecurrentworkspacetomonitor, 1
+            bind = $mainMod SHIFT, R, movecurrentworkspacetomonitor, 2
 
             # Move/resize windows with mainMod + LMB/RMB and dragging
             bindm = $mainMod, mouse:272, movewindow
