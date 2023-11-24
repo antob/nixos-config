@@ -37,6 +37,7 @@ in
       };
 
       tools.tofi = enabled;
+      services.gammastep = enabled;
 
       home.extraOptions = {
         xsession.enable = true;
