@@ -33,7 +33,7 @@ in
         waybar = enabled;
         keyring = enabled;
         udisks2 = enabled;
-        yubikey-touch-detector = enabled;
+        mako = enabled;
       };
 
       tools.tofi = enabled;
