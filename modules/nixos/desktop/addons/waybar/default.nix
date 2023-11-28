@@ -82,15 +82,15 @@ in
             };
 
             "custom/external-ip" = {
+              interval = 10;
               exec = "${external-ip}/bin/external-ip";
-              interval = 30;
               format = "{}";
               return-type = "json";
             };
 
             "network#wlan0" = {
-              interval = 5;
               interface = "wlan0";
+              interval = 5;
               format-icons = [
                 "󰤯"
                 "󰤟"
@@ -113,6 +113,7 @@ in
             };
 
             battery = {
+              interval = 5;
               states = {
                 warning = 30;
                 critical = 15;
@@ -241,7 +242,7 @@ in
             color: #${colors.base0A};
             padding: 4px 0px 4px 10px;
           }
-          #custom-external-ip.diconnected {
+          #custom-external-ip.disconnected {
             color: #${colors.base09};
           }
 
@@ -250,7 +251,7 @@ in
             padding: 4px 10px 4px 0px;
           }
           #network.disabled,
-          #network.diconnected {
+          #network.disconnected {
             color: #${colors.base09};
           }
 
