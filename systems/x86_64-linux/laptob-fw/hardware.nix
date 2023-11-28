@@ -21,7 +21,6 @@ in {
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
     kernelParams = [
-      # "mem_sleep_default=deep"
       "resume_offset=533760" # Value from `btrfs inspect-internal map-swapfile -r /mnt/swap/swapfile`
     ];
     resumeDevice = "/dev/mapper/system";
@@ -90,8 +89,11 @@ in {
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   hardware.enableRedistributableFirmware = true;
-  hardware.cpu.intel.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  # As of firmware v03.03, a bug in the EC causes the system to wake if AC is connected despite the lid being closed.
+  # The following works around this, with the trade-off that keyboard presses also no longer wake the system.
+  # See https://community.frame.work/t/tracking-framework-amd-ryzen-7040-series-lid-wakeup-behavior-feedback/39128/54
+  hardware.framework.amd-7040.preventWakeOnAC = true;
 
   # high-resolution display
   #hardware.video.hidpi.enable = true;
