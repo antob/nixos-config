@@ -66,6 +66,7 @@ in
             exec-once = ${pkgs.hyprpaper}/bin/hyprpaper
             exec-once = ${pkgs.networkmanagerapplet}/bin/nm-applet --indicator
             exec-once = ${pkgs.blueman}/bin/blueman-applet
+            exec-once = ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify
             exec-once = hyprctl setcursor ${gtkCfg.cursor.name} ${toString gtkCfg.cursor.size}
 
             input {

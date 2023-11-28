@@ -50,7 +50,6 @@ in
       volumeicon = enabled;
       udisks2 = enabled;
       autorandr = enabled;
-      yubikey-touch-detector = enabled;
     };
 
     # Services
@@ -294,6 +293,7 @@ in
             myStartupHook = do
               spawn "${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr"
               spawn "~/.fehbg"
+              spawn "${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify"
               setWMName "LG3D"
 
             myScratchPads :: [NamedScratchpad]
