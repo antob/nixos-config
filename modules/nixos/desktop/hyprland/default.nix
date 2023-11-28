@@ -162,6 +162,8 @@ in
             bind = $mainMod, RETURN, exec, kitty --working-directory `${wcwd}/bin/wcwd`
             bind = $mainMod, W, exec, librewolf
             bind = $mainMod, D, exec, ${pkgs.tofi}/bin/tofi-drun
+            bind = $mainMod, V, exec, ${pkgs.pavucontrol}/bin/pavucontrol
+            bind = $mainMod, E, exec, ${pkgs.xfce.thunar}/bin/thunar
 
             # Move focus with mainMod + left and right arrow
             bind = $mainMod, right, layoutmsg, cyclenext
