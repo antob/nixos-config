@@ -19,7 +19,7 @@ in
       services.mako = {
         enable = true;
         anchor = "top-right";
-        backgroundColor = "#${colors.base10}c0";
+        backgroundColor = "#${colors.base10}d0";
         borderColor = "#${colors.base08}";
         textColor = "#${colors.base07}";
         borderSize = 2;
