@@ -51,6 +51,14 @@ in
           };
         };
 
+        home.file.".config/swappy/config".text = ''
+          [Default]
+          save_dir=$HOME/Pictures/Screenshots
+          save_filename_format=Screenshot-%Y%m%d-%H%M%S.png
+          paint_mode=rectangle
+          early_exit=true
+        '';
+
         wayland.windowManager.hyprland = {
           enable = true;
           systemd.enable = true;
@@ -164,6 +172,7 @@ in
             bind = $mainMod, D, exec, ${pkgs.tofi}/bin/tofi-drun
             bind = $mainMod, V, exec, ${pkgs.pavucontrol}/bin/pavucontrol
             bind = $mainMod, E, exec, ${pkgs.xfce.thunar}/bin/thunar
+            bind = , Print, exec, ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.swappy}/bin/swappy -f -
 
             # Move focus with mainMod + left and right arrow
             bind = $mainMod, right, layoutmsg, cyclenext
