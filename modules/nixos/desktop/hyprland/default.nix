@@ -34,6 +34,7 @@ in
         keyring = enabled;
         udisks2 = enabled;
         mako = enabled;
+        swayosd = enabled;
       };
 
       tools.tofi = enabled;
@@ -189,10 +190,20 @@ in
             # Swap current window with master
             bind = $mainMod, BackSpace, layoutmsg, swapwithmaster auto
 
-            # Media keys
-            bind = , XF86MonBrightnessDown, exec, brightnessctl set 10%-
-            bind = , XF86MonBrightnessUp, exec, brightnessctl set +10%
+            # Brightness
+            bind = , XF86MonBrightnessUp, exec, swayosd --brightness raise
+            bind = , XF86MonBrightnessDown, exec, swayosd --brightness lower
 
+            # Speaker volume
+            bind = , XF86AudioRaiseVolume, exec, swayosd --output-volume raise
+            bind = , XF86AudioLowerVolume, exec, swayosd --output-volume lower
+            bind = , XF86AudioMute, exec, swayosd --output-volume mute-toggle
+
+            # Mic volume
+            bind = $mainMod, XF86AudioRaiseVolume, exec, swayosd --input-volume raise
+            bind = $mainMod, XF86AudioLowerVolume, exec, swayosd --input-volume lower
+            bind = $mainMod, XF86AudioMute, exec, swayosd --input-volume mute-toggle
+            
             # Switch workspaces with mainMod + [1-9]
             bind = $mainMod, 1, workspace, 1
             bind = $mainMod, 2, workspace, 2
@@ -255,12 +266,9 @@ in
     environment.systemPackages = with pkgs; [
       hyprpaper
       wl-clipboard
+      wlr-randr
       hyprland-protocols
       xorg.xlsclients
-      brightnessctl
-      # dunst
-      # libnotify
-      # rofi-wayland
       # hyprpicker
       # swayidle
       # swaylock
