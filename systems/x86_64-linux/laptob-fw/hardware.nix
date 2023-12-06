@@ -91,6 +91,10 @@ in {
     powertop.enable = true;
   };
 
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"
+  '';
+
   hardware.enableRedistributableFirmware = true;
 
   # As of firmware v03.03, a bug in the EC causes the system to wake if AC is connected despite the lid being closed.
