@@ -4,7 +4,6 @@ with lib;
 with lib.antob;
 let
   cfg = config.antob.desktop.addons.mako;
-  gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
 in
 {

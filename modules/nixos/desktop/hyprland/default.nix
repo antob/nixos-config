@@ -151,10 +151,16 @@ in
 
             # Floating windows
             windowrulev2 = float,title:Open File
-            windowrulev2 = move center,title:Open File
             windowrulev2 = size 900 500,title:Open File
+            windowrulev2 = move center,title:Open File
             windowrulev2 = noborder,title:Open File
 
+            windowrulev2 = float,title:Bluetooth Devices
+            windowrulev2 = size 900 500,title:Bluetooth Devices
+            windowrulev2 = move center,title:Bluetooth Devices
+
+            windowrulev2 = float,class:nm-connection-editor
+            
             # Opacity
             windowrulev2 = opacity 0.8 override 0.8 override, class:^(kitty)$
 
@@ -165,7 +171,9 @@ in
             bind = $mainMod, V, togglefloating, 
             bind = $mainMod, P, pseudo, # dwindle
             bind = $mainMod, J, togglesplit, # dwindle
-            bind = $mainMod, F, fullscreen, 1
+            bind = $mainMod, M, fullscreen, 1
+            bind = $mainMod, F, fullscreen
+            bind = $mainMod SHIFT, Space, togglefloating
             bind = $mainMod, X, exec, ${dm-logout}/bin/dm-logout
             bind = $mainMod, P, exec, ${dm-vpn}/bin/dm-vpn
             bind = $mainMod, L, exec, swaylock
@@ -185,6 +193,12 @@ in
             # Swap windows
             bind = $mainMod SHIFT, right, layoutmsg, swapnext
             bind = $mainMod SHIFT, left, layoutmsg, swapprev
+
+            # Resize windows
+            bind = $mainMod CTRL, Left, resizeactive, -40 0
+            bind = $mainMod CTRL, Right, resizeactive, 40 0
+            bind = $mainMod CTRL, Up, resizeactive, 0 -40
+            bind = $mainMod CTRL, Down, resizeactive, 0 40
 
             # Cycle workspaces
             bind = $mainMod, Tab, workspace, e+1
@@ -258,6 +272,10 @@ in
         XDG_SESSION_DESKTOP = "Hyprland";
         GTK_USE_PORTAL = "1";
         NIXOS_XDG_OPEN_USE_PORTAL = "1";
+        QT_QPA_PLATFORM = "wayland";
+        # QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+        # QT_QPA_PLATFORM = "wayland;xcb";
+        # QT_QPA_PLATFORMTHEME = "qt5ct";
       };
     };
 
