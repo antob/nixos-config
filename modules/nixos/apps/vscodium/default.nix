@@ -11,7 +11,7 @@ in {
   config = mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [ vscodium ];
-      shellAliases = { code = "codium"; };
+      shellAliases = { code = "LD_LIBRARY_PATH=$(nix build --print-out-paths --no-link nixpkgs#libGL)/lib codium"; };
     };
     antob.persistence.home.directories = [ ".config/VSCodium" ".vscode-oss" ];
   };
