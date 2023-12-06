@@ -35,6 +35,7 @@ in
         udisks2 = enabled;
         mako = enabled;
         swayosd = enabled;
+        swaylock = enabled;
       };
 
       tools.tofi = enabled;
@@ -77,6 +78,7 @@ in
             exec-once = ${pkgs.blueman}/bin/blueman-applet
             exec-once = ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify
             exec-once = hyprctl setcursor ${gtkCfg.cursor.name} ${toString gtkCfg.cursor.size}
+            exec-once = ${pkgs.swayidle}/bin/swayidle -w before-sleep swaylock lock swaylock
 
             input {
                 kb_layout = se
@@ -166,6 +168,7 @@ in
             bind = $mainMod, F, fullscreen, 1
             bind = $mainMod, X, exec, ${dm-logout}/bin/dm-logout
             bind = $mainMod, P, exec, ${dm-vpn}/bin/dm-vpn
+            bind = $mainMod, L, exec, swaylock
 
             # Apps
             bind = $mainMod, RETURN, exec, kitty --working-directory `${wcwd}/bin/wcwd`
