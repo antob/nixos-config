@@ -30,6 +30,7 @@ in
 
             modules-left = [
               "hyprland/workspaces"
+              "custom/monocle"
               "hyprland/window"
             ];
 
@@ -56,6 +57,10 @@ in
               persistent-workspaces = {
                 "*" = 5;
               };
+            };
+
+            "custom/monocle" = {
+              format = "M";
             };
 
             "hyprland/window" = {
@@ -221,6 +226,14 @@ in
             color: #${colors.base07};
             padding: 4px 10px;
             font-weight: normal;
+          }
+
+          #custom-monocle {
+            opacity: 0;
+          }
+          window#waybar.fullscreen #custom-monocle {
+            opacity: 1;
+            color: #${colors.base09};
           }
 
           #cpu {
