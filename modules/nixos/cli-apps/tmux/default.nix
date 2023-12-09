@@ -7,11 +7,12 @@ let
   configFiles = lib.snowfall.fs.get-files ./config;
 
   plugins = with pkgs; [
+    tmuxPlugins.sensible
     tmuxPlugins.vim-tmux-navigator
     tmuxPlugins.tmux-fzf
     tmux-onedark-theme
     tmuxPlugins.yank
-    # tmuxPlugins.catppuccin
+    tmuxPlugins.resurrect
   ];
 in
 {
