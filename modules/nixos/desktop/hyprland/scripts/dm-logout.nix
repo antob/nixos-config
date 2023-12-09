@@ -22,6 +22,7 @@ pkgs.writeShellScriptBin "dm-logout" ''
           ${pkgs.hyprland}/bin/hyprctl dispatch exit
           ;;
       'Lock screen')
+          swaylock
           ;;
       'Reboot')
           systemctl -i reboot 
@@ -31,11 +32,9 @@ pkgs.writeShellScriptBin "dm-logout" ''
           ;;
       'Suspend')
           systemctl -i suspend
-          # swaylock
           ;;
       'Hibernate')
-          systemctl -i suspend
-          # swaylock
+          systemctl -i hibernate
           ;;
       *)
           exit 0
