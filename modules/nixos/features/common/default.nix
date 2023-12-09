@@ -111,6 +111,8 @@ in
       xh
       neofetch
       dmidecode
+      usbutils
+      pciutils
     ];
 
     services = {
