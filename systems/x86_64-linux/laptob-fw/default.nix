@@ -28,10 +28,13 @@ with lib.antob;
 
   services = {
     fwupd.enable = true;
+
     logind = {
       lidSwitch = "suspend-then-hibernate";
       lidSwitchExternalPower = "suspend";
     };
+
+    chrony.enable = true;
   };
 
   system.stateVersion = "22.11";
