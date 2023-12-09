@@ -17,8 +17,12 @@ with lib.antob;
       flameshot = enabled;
     };
 
-    hardware.bluetooth = enabled;
-    hardware.zsa-voyager = enabled;
+    hardware = {
+      bluetooth = enabled;
+      zsa-voyager = enabled;
+      yubikey = enabled;
+    };
+
     desktop.xfce-xmonad.mainDisplay = "DP-4";
   };
 

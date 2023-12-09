@@ -16,6 +16,8 @@ with lib.antob;
     hardware = {
       fingerprint = enabled;
       bluetooth = enabled;
+      zsa-voyager = enabled;
+      yubikey = enabled;
     };
   };
 

@@ -5,10 +5,6 @@ with lib.antob;
 let
   cfg = config.antob.security.gpg;
 
-  reload-yubikey = pkgs.writeShellScriptBin "reload-yubikey" ''
-    ${pkgs.gnupg}/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
-  '';
-
   pinentry =
     if config.antob.desktop.gnome.enable then {
       path = "${pkgs.pinentry-gnome}/bin/pinentry-gnome";
@@ -30,14 +26,12 @@ in
   config = mkIf cfg.enable {
 
     services.pcscd.enable = true;
-    services.udev.packages = with pkgs; [ yubikey-personalization ];
 
     environment.systemPackages = with pkgs; [
       cryptsetup
       paperkey
       gnupg
       paperkey
-      reload-yubikey
     ];
 
     antob.home.extraOptions = {
