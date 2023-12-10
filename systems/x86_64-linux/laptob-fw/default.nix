@@ -33,7 +33,7 @@ with lib.antob;
 
     logind = {
       lidSwitch = "suspend-then-hibernate";
-      lidSwitchExternalPower = "suspend";
+      lidSwitchExternalPower = "ignore";
     };
 
     chrony.enable = true;

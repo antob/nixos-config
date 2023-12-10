@@ -8,6 +8,7 @@ let
   colors = config.antob.color-scheme.colors;
 
   wcwd = pkgs.callPackage ./scripts/wcwd.nix { };
+  toggle-laptop-display = pkgs.callPackage ./scripts/toggle-laptop-display.nix { };
   dm-logout = pkgs.callPackage ./scripts/dm-logout.nix { };
   dm-vpn = pkgs.callPackage ./scripts/dm-vpn.nix { };
   dm-librewolf-profile = pkgs.callPackage ./scripts/dm-librewolf-profile.nix { };
@@ -178,6 +179,7 @@ in
             bind = $mainMod, X, exec, ${dm-logout}/bin/dm-logout
             bind = $mainMod, P, exec, ${dm-vpn}/bin/dm-vpn
             bind = $mainMod, L, exec, swaylock
+            bind = $mainMod CTRL, M, exec, ${toggle-laptop-display}/bin/toggle-laptop-display
 
             # Apps
             bind = $mainMod, RETURN, exec, kitty --working-directory `${wcwd}/bin/wcwd`
