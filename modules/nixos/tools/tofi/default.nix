@@ -21,7 +21,7 @@ in
         hint-font = true
 
         text-color = #${colors.base07}
-        prompt-color = #${colors.base08}
+        prompt-color = #${colors.base0E}
         default-result-color = #${colors.base08}
         selection-color = #${colors.base07}
 
