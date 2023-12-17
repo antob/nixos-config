@@ -26,6 +26,11 @@ with lib.antob;
   environment.systemPackages = with pkgs; [
     powertop
     vulkan-tools
+    mpv
+    vlc
+    amdgpu_top
+    radeontop
+    glxinfo
   ];
 
   services = {
@@ -33,7 +38,7 @@ with lib.antob;
 
     logind = {
       lidSwitch = "suspend-then-hibernate";
-      lidSwitchExternalPower = "ignore";
+      lidSwitchExternalPower = "suspend";
     };
 
     chrony.enable = true;

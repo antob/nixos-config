@@ -70,7 +70,7 @@ in
 
           extraConfig = ''
             monitor=eDP-1,highres,0x0,1.5
-            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,-152x-1152,1.25
+            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,1500x-500,1.25
             monitor=,preferred,auto,auto
             
             exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
@@ -99,6 +99,10 @@ in
                 }
 
                 sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+            }
+
+            device:modern-mobile-mouse {
+              sensitivity = -0.5
             }
 
             general {
@@ -165,9 +169,13 @@ in
             
             # Opacity
             windowrulev2 = opacity 0.8 override 0.8 override, class:^(kitty)$
+            windowrulev2 = opacity 0.8 override 0.8 override, class:^(alacritty)$
+            windowrulev2 = opacity 0.8 override 0.8 override, class:^(org.wezfurlong.wezterm)$
 
             ## Key bindings
             $mainMod = SUPER
+            $altMod = ALT
+
             bind = $mainMod, Q, killactive, 
             bind = $mainMod, C, exit, 
             bind = $mainMod, V, togglefloating, 
@@ -248,14 +256,14 @@ in
             bind = $mainMod SHIFT, 9, movetoworkspace, 9
 
             # Focus monitor
-            bind = $mainMod, W, focusmonitor, 0
-            bind = $mainMod, E, focusmonitor, 1
-            bind = $mainMod, R, focusmonitor, 2
+            bind = $altMod, 1, focusmonitor, 0
+            bind = $altMod, 2, focusmonitor, 1
+            bind = $altMod, 3, focusmonitor, 2
 
             # Move current workspace to monitor
-            bind = $mainMod SHIFT, W, movecurrentworkspacetomonitor, 0
-            bind = $mainMod SHIFT, E, movecurrentworkspacetomonitor, 1
-            bind = $mainMod SHIFT, R, movecurrentworkspacetomonitor, 2
+            bind = $mainMod SHIFT, E, movecurrentworkspacetomonitor, 0
+            bind = $mainMod SHIFT, R, movecurrentworkspacetomonitor, 1
+            bind = $mainMod SHIFT, T, movecurrentworkspacetomonitor, 2
 
             # Move/resize windows with mainMod + LMB/RMB and dragging
             bindm = $mainMod, mouse:272, movewindow

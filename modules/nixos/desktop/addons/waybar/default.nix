@@ -126,7 +126,7 @@ in
               format = "{icon}    {capacity}%";
               format-discharging = "{icon}    {capacity}% {power:.1f}W";
               format-charging = "󰂄 {capacity}%";
-              format-plugged = "󱘖 {capacity}%";
+              format-plugged = "󱐋 {capacity}%";
               format-icons = [
                 " "
                 " "

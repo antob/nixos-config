@@ -11,6 +11,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ wally-cli ];
+    users.groups.plugdev = { };
     antob.user.extraGroups = [ "plugdev" ];
 
     services.udev.extraRules = ''
