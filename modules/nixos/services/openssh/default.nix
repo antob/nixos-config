@@ -31,26 +31,44 @@ in
       ports = [ 22 cfg.port ];
     };
 
-    antob.home.extraOptions.programs.ssh = {
-      enable = true;
-      forwardAgent = true;
-      serverAliveInterval = 5;
-      serverAliveCountMax = 1;
-      controlMaster = "auto";
-      controlPersist = "180";
-      extraOptionOverrides = {
-        Ciphers = "aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr";
+    antob = {
+      home.extraOptions.programs.ssh = {
+        enable = true;
+        forwardAgent = true;
+        serverAliveInterval = 5;
+        serverAliveCountMax = 1;
+        controlMaster = "auto";
+        controlPersist = "180";
+        extraOptionOverrides = {
+          Ciphers = "aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr";
+        };
+        extraConfig = ''
+          HostKeyAlgorithms +ssh-rsa
+          PubkeyAcceptedKeyTypes +ssh-rsa
+          User ${config.antob.user.name}
+        '';
+        matchBlocks = {
+          bender.hostname = "bender.local";
+          burken.hostname = "192.168.1.230";
+          hyllan = {
+            hostname = "hyllan.local";
+            user = "tobias";
+            port = 2212;
+          };
+          locals = {
+            host = "192.168.* *.local laptob*";
+            extraOptions = {
+              UserKnownHostsFile = "/dev/null";
+              StrictHostKeyChecking = "no";
+              LogLevel = "ERROR";
+            };
+          };
+        };
+        includes = [ "hosts" ];
       };
-      extraConfig = ''
-        HostKeyAlgorithms +ssh-rsa
-        PubkeyAcceptedKeyTypes +ssh-rsa
-        User ${config.antob.user.name}
-      '';
-      includes = [ "safe/hosts" ];
+
+      persistence.home.files = [ ".ssh/known_hosts" ];
+      user.extraOptions.openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
-
-    antob.persistence.home.files = [ ".ssh/known_hosts" ".ssh/known_hosts.old" ];
-
-    antob.user.extraOptions.openssh.authorizedKeys.keys = cfg.authorizedKeys;
   };
 }
