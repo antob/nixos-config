@@ -24,6 +24,7 @@ with lib.antob;
   ];
 
   services = {
+    fwupd.enable = true;
     logind = {
       lidSwitch = "suspend-then-hibernate";
       lidSwitchExternalPower = "suspend";
