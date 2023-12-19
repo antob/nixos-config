@@ -55,7 +55,7 @@ in
                 urgent = "<span size='175%'></span>";
               };
               persistent-workspaces = {
-                "*" = 5;
+                "*" = 8;
               };
             };
 
@@ -96,17 +96,10 @@ in
             "network#wlan0" = {
               interface = "wlan0";
               interval = 5;
-              format-icons = [
-                "󰤯"
-                "󰤟"
-                "󰤢"
-                "󰤥"
-                "󰤨"
-              ];
               tooltip-format = "Connected to {essid} {signalStrength}% ({ipaddr})";
               tooltip-format-disconnected = "Not connected.";
-              format-wifi = "{icon}   {essid}";
-              format-disconnected = "󰤮";
+              format-wifi = "󰖩   {essid} {signalStrength}%";
+              format-disconnected = "󰖪";
             };
 
             "custom/vpn" = {
@@ -187,10 +180,11 @@ in
 
           #workspaces button {
             color: #${colors.base0E};
+            padding: 4px 6px;
           }
 
           #workspaces button.empty {
-            color: #${colors.base12};
+            color: #${colors.base08};
           }
 
           #workspaces button.visible {
