@@ -69,8 +69,10 @@ in
           xwayland.enable = true;
 
           extraConfig = ''
-            monitor=eDP-1,highres,0x0,1.5
-            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,1500x-500,1.25
+            source = ~/.config/hypr/monitors.conf
+            source = ~/.config/hypr/workspaces.conf
+            # monitor=eDP-1,highres,0x0,1.5
+            # monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,1500x-500,1.25
             monitor=,preferred,auto,auto
             
             exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
@@ -166,7 +168,12 @@ in
             windowrulev2 = move center,title:Bluetooth Devices
 
             windowrulev2 = float,class:nm-connection-editor
+            windowrulev2 = float,class:pavucontrol
             
+            windowrulev2 = float,class:(nwg-displays)
+            windowrulev2 = size 965 715,class:(nwg-displays)
+            windowrulev2 = move center,class:(nwg-displays)
+
             # Opacity
             windowrulev2 = opacity 0.8 override 0.8 override, class:^(kitty)$
             windowrulev2 = opacity 0.8 override 0.8 override, class:^(alacritty)$
@@ -178,8 +185,7 @@ in
 
             bind = $mainMod, Q, killactive, 
             bind = $mainMod, C, exit, 
-            bind = $mainMod, V, togglefloating, 
-            bind = $mainMod, P, pseudo, # dwindle
+            # bind = $mainMod, P, pseudo, # dwindle
             bind = $mainMod, J, togglesplit, # dwindle
             bind = $mainMod, M, fullscreen, 1
             bind = $mainMod, F, fullscreen
@@ -196,6 +202,7 @@ in
             bind = $mainMod, D, exec, ${pkgs.tofi}/bin/tofi-drun
             bind = $mainMod, V, exec, ${pkgs.pavucontrol}/bin/pavucontrol
             bind = $mainMod, E, exec, ${pkgs.xfce.thunar}/bin/thunar
+            bind = $mainMod SHIFT, P, exec, ${pkgs.nwg-displays}/bin/nwg-displays
             bind = , Print, exec, ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.swappy}/bin/swappy -f -
 
             # Move focus with mainMod + left and right arrow
@@ -300,11 +307,11 @@ in
       hyprpaper
       wl-clipboard
       wlr-randr
+      nwg-displays
       hyprland-protocols
       xorg.xlsclients
       # hyprpicker
       # swayidle
-      # swaylock
     ];
 
     services.gnome.at-spi2-core.enable = true;
