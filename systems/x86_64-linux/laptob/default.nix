@@ -11,7 +11,11 @@ with lib.antob;
       desktop = enabled;
     };
 
-    desktop.hyprland = enabled;
+    desktop.xfce-xmonad.enable = true;
+
+    apps = {
+      flameshot = enabled;
+    };
 
     hardware = {
       fingerprint = enabled;
