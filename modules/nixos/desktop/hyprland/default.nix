@@ -268,9 +268,9 @@ in
             bind = $altMod, 3, focusmonitor, 2
 
             # Move current workspace to monitor
-            bind = $mainMod SHIFT, E, movecurrentworkspacetomonitor, 0
-            bind = $mainMod SHIFT, R, movecurrentworkspacetomonitor, 1
-            bind = $mainMod SHIFT, T, movecurrentworkspacetomonitor, 2
+            bind = $altMod SHIFT, 1, movecurrentworkspacetomonitor, 0
+            bind = $altMod SHIFT, 2, movecurrentworkspacetomonitor, 1
+            bind = $altMod SHIFT, 3, movecurrentworkspacetomonitor, 2
 
             # Move/resize windows with mainMod + LMB/RMB and dragging
             bindm = $mainMod, mouse:272, movewindow
