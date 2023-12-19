@@ -53,7 +53,7 @@ in
     };
 
     # Services
-    services.redshift = enabled;
+    antob.services.redshift = enabled;
 
     # Desktop portal
     xdg.portal = {

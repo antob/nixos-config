@@ -2,13 +2,22 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.services.redshift;
-in {
+let
+  cfg = config.antob.services.redshift;
+  lcfg = config.location;
+in
+{
   options.antob.services.redshift = with types; {
     enable = mkEnableOption "Whether or not to enable Redshift.";
   };
 
   config = mkIf cfg.enable {
-    services.redshift.enable = true;
+    antob.home.extraOptions.services.redshift = {
+      enable = true;
+      provider = "manual";
+      latitude = lcfg.latitude;
+      longitude = lcfg.longitude;
+    };
+
   };
 }
