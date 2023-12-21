@@ -42,6 +42,8 @@ in
               "network#wlan0"
               "custom/vpn"
               "battery"
+              "idle_inhibitor"
+              "custom/audio-idle-inhibitor"
               "clock"
               "tray"
             ];
@@ -133,6 +135,29 @@ in
                 " "
               ];
               on-click = "";
+            };
+
+            idle_inhibitor = {
+              format = "{icon}";
+              tooltip-format-activated = "Idle inhibitor activated.";
+              tooltip-format-deactivated = "Idle inhibitor deactivated.";
+              format-icons = {
+                activated = " ";
+                deactivated = " ";
+              };
+            };
+
+            "custom/audio-idle-inhibitor" = {
+              format = "{icon}";
+              exec = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit --dry-print-both-waybar";
+              tooltip = false;
+              return-type = "json";
+              format-icons = {
+                output = " ";
+                input = "";
+                output-input = " ";
+                none = "";
+              };
             };
 
             clock = {
@@ -278,9 +303,18 @@ in
             color: #${colors.base09};
           }
 
+          #idle_inhibitor {
+            color: #${colors.base0B};
+            padding: 4px 0px 4px 10px;
+          }
+          #custom-audio-idle-inhibitor {
+            color: #${colors.base0B};
+            padding: 4px 0px 4px 0px;
+          }
+
           #clock {
             color: #${colors.base07};
-            padding: 4px 10px;
+            padding: 4px 10px 4px 20px;
           }
 
           #tray {

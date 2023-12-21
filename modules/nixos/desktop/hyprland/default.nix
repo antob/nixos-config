@@ -8,6 +8,7 @@ let
   colors = config.antob.color-scheme.colors;
 
   wcwd = pkgs.callPackage ./scripts/wcwd.nix { };
+  sleep = pkgs.callPackage ./scripts/sleep.nix { };
   toggle-laptop-display = pkgs.callPackage ./scripts/toggle-laptop-display.nix { };
   dm-logout = pkgs.callPackage ./scripts/dm-logout.nix { };
   dm-vpn = pkgs.callPackage ./scripts/dm-vpn.nix { };
@@ -82,7 +83,8 @@ in
             exec-once = ${pkgs.blueman}/bin/blueman-applet
             exec-once = ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify
             exec-once = hyprctl setcursor ${gtkCfg.cursor.name} ${toString gtkCfg.cursor.size}
-            exec-once = ${pkgs.swayidle}/bin/swayidle -w before-sleep swaylock lock swaylock
+            exec-once = ${sleep}/bin/sleep
+            exec-once = ${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit
 
             input {
                 kb_layout = se
@@ -311,7 +313,6 @@ in
       hyprland-protocols
       xorg.xlsclients
       # hyprpicker
-      # swayidle
     ];
 
     services.gnome.at-spi2-core.enable = true;
