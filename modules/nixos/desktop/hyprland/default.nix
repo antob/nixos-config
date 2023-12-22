@@ -158,6 +158,7 @@ in
             # Workspaces
             windowrulev2 = workspace 2,class:^(firefox|librewolf)$
             windowrulev2 = workspace 3,class:^codium.*
+            windowrulev2 = workspace 5,class:^Slack$
 
             # Floating windows
             windowrulev2 = float,title:Open File
