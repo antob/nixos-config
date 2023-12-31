@@ -48,6 +48,7 @@ in
         hide-cursor = false
         text-cursor = true
         history = true
+        fuzzy-match = true
         require-match = true
         auto-accept-single = false
         hide-input = false
