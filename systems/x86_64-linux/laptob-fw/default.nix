@@ -3,7 +3,10 @@
 with lib;
 with lib.antob;
 {
-  imports = [ ./hardware.nix ];
+  imports = with inputs; [
+    ./hardware.nix
+    auto-cpufreq.nixosModules.default
+  ];
 
   antob = {
     features = {
@@ -43,6 +46,11 @@ with lib.antob;
 
     chrony.enable = true;
   };
+
+  # Power optimizer daemons. Choose one.
+  programs.auto-cpufreq.enable = false;
+  services.power-profiles-daemon.enable = true;
+  services.tlp.enable = false;
 
   system.stateVersion = "22.11";
 }
