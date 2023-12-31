@@ -16,6 +16,8 @@ with lib.antob;
 
     desktop.hyprland = enabled;
 
+    virtualisation.virt-manager = enabled;
+
     hardware = {
       fingerprint = enabled;
       bluetooth = enabled;
