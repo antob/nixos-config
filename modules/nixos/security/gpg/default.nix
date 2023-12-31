@@ -31,7 +31,6 @@ in
       cryptsetup
       paperkey
       gnupg
-      paperkey
     ];
 
     antob.home.extraOptions = {

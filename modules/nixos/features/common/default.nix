@@ -113,6 +113,7 @@ in
       dmidecode
       usbutils
       pciutils
+      tailspin
     ];
 
     services = {

@@ -29,8 +29,6 @@ with lib.antob;
   environment.systemPackages = with pkgs; [
     powertop
     vulkan-tools
-    mpv
-    vlc
     amdgpu_top
     radeontop
     glxinfo

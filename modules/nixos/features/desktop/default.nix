@@ -24,6 +24,10 @@ in
       chromium
       libreoffice-still
       gimp
+      mpv
+      vlc
+      v4l-utils
+      guvcview
     ];
   };
 }
