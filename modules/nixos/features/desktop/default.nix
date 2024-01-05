@@ -28,6 +28,7 @@ in
       vlc
       v4l-utils
       guvcview
+      gnome.gnome-calculator
     ];
   };
 }
