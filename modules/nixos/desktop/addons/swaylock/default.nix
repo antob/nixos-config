@@ -19,18 +19,18 @@ in
         enable = true;
         package = pkgs.swaylock-effects;
         settings = {
-          screenshots = true;
+          image = "${./lock-background.png}";
           clock = true;
           font = "SFNS Display 12";
           timestr = "%R";
           datestr = "%a, %e of %B";
           indicator = true;
           indicator-radius = 100;
-          indicator-thickness = 10;
+          indicator-thickness = 6;
           effect-blur = "7x5";
           effect-vignette = "0.5:0.5";
           grace = 2;
-          fade-in = 0.2;
+          fade-in = 1.0;
 
           key-hl-color = "00000066";
           separator-color = "00000000";
