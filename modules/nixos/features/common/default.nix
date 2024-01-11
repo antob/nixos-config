@@ -20,6 +20,7 @@ in
         direnv = enabled;
         devenv = enabled;
         zellij = enabled;
+        rustup = enabled;
       };
 
       cli-apps = {
