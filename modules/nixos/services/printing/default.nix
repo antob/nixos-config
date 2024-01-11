@@ -9,7 +9,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.printing.enable = true;
+    services.printing = {
+      enable = true;
+      extraConf = ''
+        ErrorPolicy retry-job
+        DefaultEncryption Never
+      '';
+    };
+
+    services.colord.enable = true;
 
     environment.systemPackages = with pkgs; [
       pkgs.system-config-printer
