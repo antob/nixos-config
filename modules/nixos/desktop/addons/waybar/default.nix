@@ -73,19 +73,19 @@ in
             cpu = {
               interval = 5;
               format = "   CPU {usage}%";
-              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm bash -ci 'btm'";
+              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm btm";
             };
 
             memory = {
               interval = 5;
               format = "   RAM {}%";
-              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm bash -ci 'btm'";
+              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm btm";
             };
 
             disk = {
               format = "  {free}";
               path = "/";
-              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm bash -ci 'btm'";
+              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm btm";
             };
 
             "custom/external-ip" = {
