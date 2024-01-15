@@ -24,7 +24,6 @@ in
       hyprland = {
         enable = true;
         xwayland.enable = true;
-        enableNvidiaPatches = false;
       };
 
       dconf.enable = true;
