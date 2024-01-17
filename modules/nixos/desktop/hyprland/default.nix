@@ -230,18 +230,18 @@ in
             bind = $mainMod, BackSpace, layoutmsg, swapwithmaster auto
 
             # Brightness
-            bind = , XF86MonBrightnessUp, exec, swayosd --brightness raise
-            bind = , XF86MonBrightnessDown, exec, swayosd --brightness lower
+            bind = , XF86MonBrightnessUp, exec, swayosd-client --brightness raise
+            bind = , XF86MonBrightnessDown, exec, swayosd-client --brightness lower
 
             # Speaker volume
-            bind = , XF86AudioRaiseVolume, exec, swayosd --output-volume raise
-            bind = , XF86AudioLowerVolume, exec, swayosd --output-volume lower
-            bind = , XF86AudioMute, exec, swayosd --output-volume mute-toggle
+            bind = , XF86AudioRaiseVolume, exec, swayosd-client --output-volume raise
+            bind = , XF86AudioLowerVolume, exec, swayosd-client --output-volume lower
+            bind = , XF86AudioMute, exec, swayosd-client --output-volume mute-toggle
 
             # Mic volume
-            bind = $mainMod, XF86AudioRaiseVolume, exec, swayosd --input-volume raise
-            bind = $mainMod, XF86AudioLowerVolume, exec, swayosd --input-volume lower
-            bind = $mainMod, XF86AudioMute, exec, swayosd --input-volume mute-toggle
+            bind = $mainMod, XF86AudioRaiseVolume, exec, swayosd-client --input-volume raise
+            bind = $mainMod, XF86AudioLowerVolume, exec, swayosd-client --input-volume lower
+            bind = $mainMod, XF86AudioMute, exec, swayosd-client --input-volume mute-toggle
             
             # Switch workspaces with mainMod + [1-9]
             bind = $mainMod, 1, workspace, 1

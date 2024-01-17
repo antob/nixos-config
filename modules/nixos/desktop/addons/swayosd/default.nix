@@ -9,7 +9,27 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.swayosd ];
+    antob.home.extraOptions = {
+      home.packages = [ pkgs.swayosd ];
+
+      systemd.user = {
+        services.swayosd = {
+          Unit = {
+            Description = "Volume/backlight OSD indicator";
+            PartOf = [ "graphical-session.target" ];
+            After = [ "graphical-session.target" ];
+          };
+
+          Service = {
+            Type = "simple";
+            ExecStart = "${pkgs.swayosd}/bin/swayosd-server";
+            Restart = "always";
+          };
+
+          Install = { WantedBy = [ "graphical-session.target" ]; };
+        };
+      };
+    };
 
     services.udev.extraRules = ''
       # Rules for SwayOSD brightness control
