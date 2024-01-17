@@ -49,7 +49,15 @@ with lib.antob;
 
   # Power optimizer daemons. Choose one.
   programs.auto-cpufreq.enable = false;
-  services.power-profiles-daemon.enable = true;
+
+  services.power-profiles-daemon = {
+    enable = true;
+    package = pkgs.power-profiles-daemon.overrideAttrs {
+      src = inputs.power-profiles-daemon;
+      version = inputs.power-profiles-daemon.rev;
+    };
+  };
+
   services.tlp.enable = false;
 
   system.stateVersion = "22.11";

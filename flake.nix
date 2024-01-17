@@ -40,6 +40,12 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # power-profiles-daemon (until version > 0.13)
+    power-profiles-daemon = {
+      flake = false;
+      url = "gitlab:upower/power-profiles-daemon?host=gitlab.freedesktop.org";
+    };
   };
 
   outputs = inputs:
