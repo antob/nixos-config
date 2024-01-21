@@ -21,6 +21,7 @@ in
         devenv = enabled;
         zellij = enabled;
         rustup = enabled;
+        mcfly = enabled;
       };
 
       cli-apps = {
