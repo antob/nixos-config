@@ -30,7 +30,8 @@ in
         tmux = enabled;
       };
 
-      virtualisation.podman = enabled;
+      # virtualisation.podman = enabled;
+      virtualisation.docker = enabled;
 
       hardware = {
         networking = enabled;
