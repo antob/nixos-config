@@ -12,7 +12,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.shellAliases = { code = "codium"; };
+    # environment.shellAliases = { code = "codium"; };
     antob.persistence.home.directories = [ ".config/VSCodium" ".vscode-oss" ];
 
     antob.home.extraOptions.home.file = {
@@ -43,7 +43,7 @@ in
         vscode = vscodium;
         vscodeExtensions = with vscode-extensions; [
           zhuangtongfa.material-theme
-          bungcip.better-toml
+          tamasfe.even-better-toml
           vadimcn.vscode-lldb
           jnoortheen.nix-ide
           rust-lang.rust-analyzer

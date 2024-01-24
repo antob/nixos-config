@@ -16,6 +16,7 @@ in
       firefox = enabled;
       librewolf = enabled;
       vscodium = enabled;
+      vscode = enabled;
       slack = enabled;
     };
 
