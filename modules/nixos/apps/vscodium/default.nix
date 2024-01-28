@@ -22,6 +22,7 @@ in
         editor.fontFamily = "'Hack Nerd Font', 'monospace', monospace";
         editor.formatOnSave = true;
         window.zoomLevel = 1;
+        window.confirmBeforeClose = "always";
         rust-analyzer.check.command = "clippy";
       };
 
@@ -79,6 +80,12 @@ in
             publisher = "vortizhe";
             version = "0.2.1";
             sha256 = "sha256-JZov46QWUHIewu4FZtlQL/wRV6rHpu6Kd9yuWdCL77w=";
+          }
+          {
+            name = "better-csv-syntax";
+            publisher = "jeff-hykin";
+            version = "0.0.2";
+            sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
           }
         ];
       })
