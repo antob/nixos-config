@@ -12,7 +12,7 @@ let
   toggle-laptop-display = pkgs.callPackage ./scripts/toggle-laptop-display.nix { };
   dm-logout = pkgs.callPackage ./scripts/dm-logout.nix { };
   dm-vpn = pkgs.callPackage ./scripts/dm-vpn.nix { };
-  dm-librewolf-profile = pkgs.callPackage ./scripts/dm-librewolf-profile.nix { };
+  dm-firefox-profile = pkgs.callPackage ./scripts/dm-firefox-profile.nix { };
 in
 {
   options.antob.desktop.hyprland = with types; {
@@ -201,8 +201,8 @@ in
 
             # Apps
             bind = $mainMod, RETURN, exec, kitty --working-directory `${wcwd}/bin/wcwd`
-            bind = $mainMod, W, exec, librewolf
-            bind = $mainMod SHIFT, W, exec, ${dm-librewolf-profile}/bin/dm-librewolf-profile
+            bind = $mainMod, W, exec, firefox
+            bind = $mainMod SHIFT, W, exec, ${dm-firefox-profile}/bin/dm-firefox-profile
             bind = $mainMod, D, exec, ${pkgs.tofi}/bin/tofi-drun
             bind = $mainMod, V, exec, ${pkgs.pavucontrol}/bin/pavucontrol
             bind = $mainMod, E, exec, ${pkgs.xfce.thunar}/bin/thunar

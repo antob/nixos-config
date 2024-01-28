@@ -46,6 +46,9 @@
       flake = false;
       url = "gitlab:upower/power-profiles-daemon?host=gitlab.freedesktop.org";
     };
+
+    # Nix User Repository (NUR)
+    nur.url = github:nix-community/NUR;
   };
 
   outputs = inputs:
@@ -57,6 +60,13 @@
 
       channels-config.allowUnfree = true;
 
-      systems.nixos.modules = with inputs; [ home-manager.nixosModules.home-manager ];
+      overlays = with inputs; [
+        nur.overlay
+      ];
+
+      systems.nixos.modules = with inputs; [
+        home-manager.nixosModules.home-manager
+        nur.nixosModules.nur
+      ];
     };
 }
