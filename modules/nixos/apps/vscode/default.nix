@@ -12,11 +12,18 @@ in
 
   config = mkIf cfg.enable {
     antob.persistence.home.directories = [ ".config/Code" ".vscode" ];
+    environment.shellAliases = { code = "code-insiders"; };
 
     antob.home.extraOptions.programs.vscode = {
       enable = true;
-      enableExtensionUpdateCheck = false;
-      enableUpdateCheck = false;
+
+      package = (pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
+        src = (builtins.fetchTarball {
+          url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
+          sha256 = "0z3gir3zkswcyxg9l12j5ldhdyb0gvhssvwgal286af63pwj9c66";
+        });
+        version = "latest";
+      });
 
       keybindings = [
         {
@@ -31,13 +38,30 @@ in
       ];
 
       userSettings = {
-        window.menuBarVisibility = "toggle";
-        window.confirmBeforeClose = "always";
-        workbench.colorTheme = "One Dark Pro";
-        editor.fontFamily = "'Hack Nerd Font', 'monospace', monospace";
-        editor.formatOnSave = true;
-        window.zoomLevel = 1;
-        window.titleBarStyle = "custom";
+        workbench = {
+          colorTheme = "One Dark Pro";
+          startupEditor = "none";
+        };
+
+        window = {
+          menuBarVisibility = "toggle";
+          confirmBeforeClose = "always";
+          zoomLevel = 1;
+        };
+
+        editor = {
+          fontFamily = "'Hack Nerd Font', 'monospace', monospace";
+          formatOnSave = true;
+        };
+
+        extensions = {
+          autoCheckUpdates = false;
+          ignoreRecommendations = true;
+          autoUpdate = false;
+        };
+
+        update.mode = "none";
+
         rust-analyzer.check.command = "clippy";
       };
 

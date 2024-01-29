@@ -17,12 +17,30 @@ in
 
     antob.home.extraOptions.home.file = {
       ".config/VSCodium/User/settings.json".source = jsonFormat.generate "vscode-user-settings" {
-        window.menuBarVisibility = "toggle";
-        workbench.colorTheme = "One Dark Pro";
-        editor.fontFamily = "'Hack Nerd Font', 'monospace', monospace";
-        editor.formatOnSave = true;
-        window.zoomLevel = 1;
-        window.confirmBeforeClose = "always";
+        workbench = {
+          colorTheme = "One Dark Pro";
+          startupEditor = "none";
+        };
+
+        window = {
+          menuBarVisibility = "toggle";
+          confirmBeforeClose = "always";
+          zoomLevel = 1;
+        };
+
+        editor = {
+          fontFamily = "'Hack Nerd Font', 'monospace', monospace";
+          formatOnSave = true;
+        };
+
+        extensions = {
+          autoCheckUpdates = false;
+          ignoreRecommendations = true;
+          autoUpdate = false;
+        };
+
+        update.mode = "none";
+
         rust-analyzer.check.command = "clippy";
       };
 
