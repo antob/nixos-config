@@ -85,7 +85,7 @@ in
             monitor=,preferred,auto,auto
 
             source = ~/.config/hypr/workspaces.conf
-            
+
             exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
             exec-once = ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
             exec-once = ${pkgs.hyprpaper}/bin/hyprpaper
@@ -155,6 +155,17 @@ in
                 no_gaps_when_only = 1
             }
 
+            group {
+              focus_removed_window = true
+
+              col.border_active = rgba(${colors.base0A}ff)
+              col.border_inactive = rgba(${colors.base08}aa)
+
+              groupbar {
+                enabled = false
+              }
+            }
+            
             gestures {
                 # See https://wiki.hyprland.org/Configuring/Variables/ for more
                 workspace_swipe = off
@@ -224,6 +235,18 @@ in
             # Move focus with mainMod + left and right arrow
             bind = $mainMod, right, layoutmsg, cyclenext
             bind = $mainMod, left, layoutmsg, cycleprev
+
+            # Layout orientation
+            bind = $mainMod, O, layoutmsg, orientationnext
+            bind = $mainMod SHIFT, O, layoutmsg, orientationprev
+            bind = $mainMod SHIFT, BackSpace, layoutmsg, rollnext
+
+            # Groups
+            bind = $mainMod, G, togglegroup
+            bind = $mainMod ALT, Right, changegroupactive, f
+            bind = $mainMod ALT, Left, changegroupactive, b
+            bind = $mainMod ALT SHIFT, Right, movewindoworgroup, r
+            bind = $mainMod ALT SHIFT, Left, movewindoworgroup, l
 
             # Swap windows
             bind = $mainMod SHIFT, right, layoutmsg, swapnext
