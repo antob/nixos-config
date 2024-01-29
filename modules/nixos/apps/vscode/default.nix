@@ -52,6 +52,7 @@ in
         editor = {
           fontFamily = "'Hack Nerd Font', 'monospace', monospace";
           formatOnSave = true;
+          stickyScroll.enabled = false;
         };
 
         extensions = {
