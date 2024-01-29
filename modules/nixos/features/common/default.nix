@@ -85,7 +85,8 @@ in
 
         password-store.enable = true;
 
-        tealdeer.enable = true;
+        # DNS lookup failure on update during boot
+        # tealdeer.enable = true;
       };
     };
 
@@ -117,6 +118,8 @@ in
       usbutils
       pciutils
       tailspin
+      gnumake
+      cifs-utils # Mount SMB shares
     ];
 
     services = {
