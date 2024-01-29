@@ -69,11 +69,22 @@ in
           xwayland.enable = true;
 
           extraConfig = ''
+            # Internal screen
+            monitor=desc:BOE 0x0BCA ,2256x1504@59.999001,1318x1152,1.57
+
+            # Home office extra screen
+            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144.005997,996x0,1.25
+
+            # OBIT ultra widemonitor
+            monitor=desc:Samsung Electric Company LS49A950U HNTW900886,5120x1440@119.999001,0x0,1.0
+
+            # Set by nwg-displays
             source = ~/.config/hypr/monitors.conf
-            source = ~/.config/hypr/workspaces.conf
-            # monitor=eDP-1,highres,0x0,1.5
-            # monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,1500x-500,1.25
+
+            # Default
             monitor=,preferred,auto,auto
+
+            source = ~/.config/hypr/workspaces.conf
             
             exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
             exec-once = ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
