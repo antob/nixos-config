@@ -48,7 +48,7 @@
     };
 
     # Nix User Repository (NUR)
-    nur.url = github:nix-community/NUR;
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs = inputs:
