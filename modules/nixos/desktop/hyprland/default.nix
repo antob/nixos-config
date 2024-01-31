@@ -70,13 +70,13 @@ in
 
           extraConfig = ''
             # Internal screen
-            monitor=desc:BOE 0x0BCA ,2256x1504@59.999001,1318x1152,1.57
+            monitor=eDP-1,highres@60,1318x1152,1.5
 
             # Home office extra screen
-            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144.005997,996x0,1.25
+            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,996x0,1.25
 
             # OBIT ultra widemonitor
-            monitor=desc:Samsung Electric Company LS49A950U HNTW900886,5120x1440@119.999001,0x0,1.0
+            monitor=desc:Samsung Electric Company LS49A950U HNTW900886,5120x1440@120,0x0,1.0
 
             # Set by nwg-displays
             source = ~/.config/hypr/monitors.conf
@@ -174,6 +174,10 @@ in
             misc {
               disable_hyprland_logo = true
               key_press_enables_dpms = true
+            }
+
+            debug {
+              disable_scale_checks = 1
             }
 
             ## Window rules
