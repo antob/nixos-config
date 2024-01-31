@@ -66,6 +66,7 @@ let
     ublock-origin
     proton-pass
     duckduckgo-privacy-essentials
+    multi-account-containers
   ];
 
 in
