@@ -60,6 +60,8 @@ let
       175;
     "toolkit.scrollbox.horizontalScrollDistance" = 6;
     "toolkit.scrollbox.verticalScrollDistance" = 6;
+
+    "media.ffmpeg.vaapi.enabled" = true;
   };
 
   commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
