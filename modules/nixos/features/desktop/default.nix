@@ -31,6 +31,7 @@ in
       guvcview
       gnome.gnome-calculator
       rustdesk
+      remmina
     ];
   };
 }
