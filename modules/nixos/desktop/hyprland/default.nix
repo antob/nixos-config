@@ -70,12 +70,13 @@ in
 
           extraConfig = ''
             # Internal screen
-            monitor=eDP-1,highres@60,1318x1152,1.5
+            monitor=eDP-1,highres@60,1767x1440,1.5
 
             # Home office extra screen
-            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,996x0,1.25
+            monitor=desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,1512x288,1.25
 
             # OBIT ultra widemonitor
+            monitor=desc:LG Electronics LG HDR DQHD 0x000320C3,5120x1440@60.0,0x0,1.0
             monitor=desc:Samsung Electric Company LS49A950U HNTW900886,5120x1440@120,0x0,1.0
 
             # Set by nwg-displays
