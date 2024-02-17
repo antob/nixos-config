@@ -52,10 +52,13 @@ with lib.antob;
 
   services.power-profiles-daemon = {
     enable = true;
-    package = pkgs.power-profiles-daemon.overrideAttrs {
+    package = pkgs.power-profiles-daemon.overrideAttrs (oldAttrs: {
       src = inputs.power-profiles-daemon;
       version = inputs.power-profiles-daemon.rev;
-    };
+      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dmanpage=disabled -Dpylint=disabled -Dtests=false" ];
+      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.python3.pkgs.cmake pkgs.python3.pkgs.shtab ];
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.bash-completion ];
+    });
   };
 
   services.tlp.enable = false;
