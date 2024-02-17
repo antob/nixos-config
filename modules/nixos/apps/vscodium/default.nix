@@ -31,6 +31,7 @@ in
         editor = {
           fontFamily = "'Hack Nerd Font', 'monospace', monospace";
           formatOnSave = true;
+          stickyScroll.enabled = false;
         };
 
         extensions = {
@@ -53,6 +54,26 @@ in
         {
           key = "ctrl+shift+d";
           command = "editor.action.duplicateSelection";
+        }
+        {
+          key = "alt+i";
+          command = "editor.action.revealDefinition";
+          when = "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor";
+        }
+        {
+          key = "f12";
+          command = "-editor.action.revealDefinition";
+          when = "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor";
+        }
+        {
+          key = "alt+o";
+          command = "workbench.action.navigateBack";
+          when = "canNavigateBack";
+        }
+        {
+          key = "ctrl+alt+-";
+          command = "-workbench.action.navigateBack";
+          when = "canNavigateBack";
         }
       ];
     };

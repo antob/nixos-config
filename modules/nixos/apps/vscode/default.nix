@@ -12,18 +12,9 @@ in
 
   config = mkIf cfg.enable {
     antob.persistence.home.directories = [ ".config/Code" ".vscode" ];
-    environment.shellAliases = { code = "code-insiders"; };
 
     antob.home.extraOptions.programs.vscode = {
       enable = true;
-
-      package = (pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
-        src = (builtins.fetchTarball {
-          url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
-          sha256 = "0z3gir3zkswcyxg9l12j5ldhdyb0gvhssvwgal286af63pwj9c66";
-        });
-        version = "latest";
-      });
 
       keybindings = [
         {
@@ -35,12 +26,33 @@ in
           key = "ctrl+shift+d";
           command = "editor.action.duplicateSelection";
         }
+        {
+          key = "alt+i";
+          command = "editor.action.revealDefinition";
+          when = "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor";
+        }
+        {
+          key = "f12";
+          command = "-editor.action.revealDefinition";
+          when = "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor";
+        }
+        {
+          key = "alt+o";
+          command = "workbench.action.navigateBack";
+          when = "canNavigateBack";
+        }
+        {
+          key = "ctrl+alt+-";
+          command = "-workbench.action.navigateBack";
+          when = "canNavigateBack";
+        }
       ];
 
       userSettings = {
         workbench = {
           colorTheme = "One Dark Pro";
           startupEditor = "none";
+          tree.enableStickyScroll = false;
         };
 
         window = {
@@ -63,7 +75,9 @@ in
 
         update.mode = "none";
 
+        # Plugin settings
         rust-analyzer.check.command = "clippy";
+        svelte.enable-ts-plugin = true;
       };
 
       extensions = with pkgs.vscode-extensions; [
