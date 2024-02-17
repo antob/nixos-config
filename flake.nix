@@ -44,7 +44,8 @@
     # power-profiles-daemon (until version > 0.13)
     power-profiles-daemon = {
       flake = false;
-      url = "gitlab:upower/power-profiles-daemon?host=gitlab.freedesktop.org";
+      url = "gitlab:upower/power-profiles-daemon?ref=b3df9190e7fc2cddfc987243bca405267cc1db85&host=gitlab.freedesktop.org";
+      # url = "gitlab:upower/power-profiles-daemon?ref=9a4229339b486c97b0c25e41211ea2152d9c414a&host=gitlab.freedesktop.org";
     };
 
     # Nix User Repository (NUR)
