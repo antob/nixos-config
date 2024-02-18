@@ -120,6 +120,7 @@ in
       tailspin
       gnumake
       cifs-utils # Mount SMB shares
+      deploy-rs
     ];
 
     services = {

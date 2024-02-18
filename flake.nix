@@ -50,15 +50,24 @@
 
     # Nix User Repository (NUR)
     nur.url = "github:nix-community/NUR";
+
+    # System Deployment
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
-    inputs.snowfall-lib.mkFlake {
-      inherit inputs;
-      src = ./.;
+    let
+      lib = inputs.snowfall-lib.mkLib {
+        inherit inputs;
+        src = ./.;
 
-      snowfall.namespace = "antob";
-
+        snowfall.namespace = "antob";
+      };
+    in
+    lib.mkFlake {
       channels-config.allowUnfree = true;
 
       overlays = with inputs; [
@@ -69,5 +78,14 @@
         home-manager.nixosModules.home-manager
         nur.nixosModules.nur
       ];
+
+
+      deploy = lib.mkDeploy { inherit (inputs) self; };
+
+      checks =
+        builtins.mapAttrs
+          (system: deploy-lib:
+            deploy-lib.deployChecks inputs.self.deploy)
+          inputs.deploy-rs.lib;
     };
 }
