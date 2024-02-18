@@ -142,9 +142,11 @@ in
       enable = true;
 
       # Configure keymap in X11
-      layout = "se,se";
-      xkbVariant = "us,";
-      xkbOptions = "caps:ctrl_modifier,grp:win_space_toggle";
+      xkb = {
+        layout = "se,se";
+        variant = "us,";
+        options = "caps:ctrl_modifier,grp:win_space_toggle";
+      };
 
       # Configure Set console typematic delay and rate in X11
       autoRepeatDelay = 200;
