@@ -13,13 +13,13 @@ in
   config = mkIf cfg.enable {
     antob = {
       tools = {
+        kitty = enabled;
         git = enabled;
         zsh = enabled;
         starship = enabled;
         eza = enabled;
         direnv = enabled;
         devenv = enabled;
-        zellij = enabled;
         rustup = enabled;
         mcfly = enabled;
       };
@@ -28,6 +28,7 @@ in
         neovim = enabled;
         helix = enabled;
         tmux = enabled;
+        zellij = enabled;
       };
 
       # virtualisation.podman = enabled;
@@ -41,8 +42,6 @@ in
       services = {
         openssh = enabled;
         avahi = enabled;
-        printing = enabled;
-        syncthing = enabled;
       };
 
       security.gpg = enabled;

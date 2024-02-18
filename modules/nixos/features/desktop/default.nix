@@ -11,13 +11,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob.apps = {
-      kitty = enabled;
-      firefox = enabled;
-      librewolf = enabled;
-      vscodium = enabled;
-      vscode = enabled;
-      slack = enabled;
+    antob = {
+      apps = {
+        firefox = enabled;
+        librewolf = enabled;
+        vscodium = enabled;
+        vscode = enabled;
+        slack = enabled;
+      };
+
+      services = {
+        printing = enabled;
+        syncthing = enabled;
+      };
     };
 
     environment.systemPackages = with pkgs; [

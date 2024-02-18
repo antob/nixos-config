@@ -2,9 +2,9 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.zellij;
+let cfg = config.antob.cli-apps.zellij;
 in {
-  options.antob.tools.zellij = with types; {
+  options.antob.cli-apps.zellij = with types; {
     enable = mkEnableOption "Whether or not to install and configure Zellij.";
   };
 

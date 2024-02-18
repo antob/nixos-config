@@ -2,9 +2,9 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.apps.kitty;
+let cfg = config.antob.tools.kitty;
 in {
-  options.antob.apps.kitty = with types; {
+  options.antob.tools.kitty = with types; {
     enable = mkEnableOption "Enable kitty";
   };
 

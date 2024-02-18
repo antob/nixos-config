@@ -2,9 +2,9 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.apps.alacritty;
+let cfg = config.antob.tools.alacritty;
 in {
-  options.antob.apps.alacritty = with types; {
+  options.antob.tools.alacritty = with types; {
     enable = mkEnableOption "Enable alacritty";
   };
 
