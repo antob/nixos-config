@@ -15,7 +15,7 @@ in
     enable = mkEnableOption "Enable Bind";
     dnsHostName = mkOpt str "hyllan" "The host name of the LAN DNS server.";
     dnsHostIp = mkOpt str "192.168.1.2" "The IP of the LAN DNS server.";
-    zoneName = mkOpt str "antob.lan" "The name of the LAN DNS zone.";
+    zoneName = mkOpt str "local" "The name of the LAN DNS zone.";
     zoneNetwork = mkOpt str "192.168.1/24" "The network class of the LAN DNS zone.";
   };
 
@@ -50,7 +50,7 @@ in
       '';
 
       zones = {
-        "antob.lan" = {
+        "${cfg.zoneName}" = {
           master = true;
           file = "/etc/bind/zones/${cfg.zoneName}.zone";
         };
