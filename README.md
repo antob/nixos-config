@@ -90,9 +90,10 @@ Remount the root subvolume with options. The compression here is optional, zstd 
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@root LABEL=system /mnt
 ```
 
-Mount the nix and persist subvolumes (same deal with options as previous step)
+Mount the home, nix and persist subvolumes (same deal with options as previous step)
 
 ```
+# mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@home LABEL=system /mnt/home
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@nix LABEL=system /mnt/nix
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@persist LABEL=system /mnt/persist
 ```
@@ -143,12 +144,29 @@ Activate the swap file:
 # swapon /mnt/swap/swapfile
 ```
 
+### ZFS
+
+Otionally setup ZFS.
+
+```
+$ sudo zpool create -O compression=on -O mountpoint=none -O acltype=posixacl -O xattr=sa -o ashift=12 tank raidz ata-TOSHIBA_HDWG440_14A0A017FZ0G ata-TOSHIBA_HDWG440_14A0A024FZ0G ata-TOSHIBA_HDWG440_Z3B0A06DFZ0G ata-TOSHIBA_HDWG440_Z3B0A0FLFZ0G
+
+# Let NixOS manage mounting datasets
+$ sudo zfs set mountpoint=legacy tank
+
+# Make a reservation since ZFS is copy on write and will explode
+# if we try to delete files after running out of space
+$ sudo zfs create -o refreservation=1G -o mountpoint=none tank/reserve
+
+$ sudo mount -o X-mount.mkdir -t zfs tank /mnt/tank
+```
+
 ### Generate config
 
 Install git.
 
 ```
-# nix-env -f '<nixpkgs>' -iA git
+$ nix-env -f '<nixpkgs>' -iA git
 ```
 
 Generate config for current machine.
