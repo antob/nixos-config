@@ -14,6 +14,7 @@ in
     services.avahi = {
       enable = true;
       nssmdns4 = true;
+      ipv6 = false;
       openFirewall = true;
     };
   };

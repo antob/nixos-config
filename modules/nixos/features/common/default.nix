@@ -41,7 +41,6 @@ in
 
       services = {
         openssh = enabled;
-        avahi = enabled;
       };
 
       security.gpg = enabled;
@@ -89,6 +88,11 @@ in
       };
     };
 
+    nix.settings = {
+      trusted-users = [ "root" config.antob.user.name ];
+      allowed-users = [ "root" config.antob.user.name ];
+    };
+
     environment.shellAliases = {
       cat = "bat -p";
       http = "xh";
@@ -125,6 +129,7 @@ in
     services = {
       upower.enable = true;
       dbus.enable = true;
+      tailscale.enable = true;
     };
 
     location = {

@@ -31,6 +31,8 @@ in
         pools = cfg.pools;
       };
 
+      trim.enable = true;
+
       autoSnapshot = mkIf cfg.auto-snapshot.enable {
         enable = true;
         flags = "-k -p --utc";

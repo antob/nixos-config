@@ -23,6 +23,7 @@ in
       services = {
         printing = enabled;
         syncthing = enabled;
+        avahi = enabled;
       };
     };
 
