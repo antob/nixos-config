@@ -31,6 +31,8 @@ in
       ports = [ 22 cfg.port ];
     };
 
+    networking.firewall.allowedTCPPorts = [ 22 cfg.port ];
+
     antob = {
       home.extraOptions.programs.ssh = {
         enable = true;
@@ -49,7 +51,6 @@ in
         '';
         matchBlocks = {
           bender.hostname = "bender.local";
-          burken.hostname = "192.168.1.230";
           hyllan = {
             hostname = "hyllan.local";
             user = "tobias";

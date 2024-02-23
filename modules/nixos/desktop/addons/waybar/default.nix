@@ -143,7 +143,7 @@ in
               tooltip-format-deactivated = "Idle inhibitor deactivated.";
               format-icons = {
                 activated = " ";
-                deactivated = " ";
+                deactivated = "";
               };
             };
 
