@@ -2,8 +2,16 @@
 
 with lib;
 with lib.antob;
+let
+  secrets = config.sops.secrets;
+  emailFrom = "home@antob.se";
+  emailTo = "tob@antob.se";
+in
 {
-  imports = [ ./hardware.nix ];
+  imports = with inputs; [
+    ./hardware.nix
+    sops-nix.nixosModules.sops
+  ];
 
   antob = {
     features = {
@@ -18,11 +26,33 @@ with lib.antob;
     };
 
     hardware.networking.enable = mkForce false;
+
     services.bind = enabled;
   };
 
   services = {
     fstrim.enable = lib.mkDefault true;
+
+    smartd = {
+      enable = true;
+      notifications = {
+        test = false;
+        mail = {
+          enable = true;
+          sender = emailFrom;
+          recipient = emailTo;
+        };
+      };
+    };
+
+    zfs.zed = {
+      enableMail = true;
+      settings = {
+        ZED_EMAIL_ADDR = [ emailTo ];
+        ZED_EMAIL_OPTS = "-a default @ADDRESS@";
+        ZED_NOTIFY_VERBOSE = true;
+      };
+    };
 
     # plex = {
     #   enable = true;
@@ -38,8 +68,35 @@ with lib.antob;
     # };
   };
 
-  # Networking
+  programs.msmtp = {
+    enable = true;
+    setSendmail = true;
+    defaults = {
+      aliases = builtins.toFile "aliases" ''
+        default: ${emailTo}
+      '';
+    };
+    accounts.default = {
+      auth = "plain";
+      tls = "on";
+      host = "smtp.protonmail.ch";
+      port = "587";
+      user = emailFrom;
+      passwordeval = "${pkgs.coreutils}/bin/cat ${secrets.proton_smtp_token.path}";
+      from = emailFrom;
+    };
+  };
+
+  # Sops secrets
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets.proton_smtp_token = { };
+  };
+
+  # Networking and firewall
   networking = {
+    firewall.enable = true;
+    nftables.enable = true;
     useDHCP = false;
     usePredictableInterfaceNames = false;
   };
