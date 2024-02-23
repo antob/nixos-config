@@ -3,9 +3,10 @@
 let
   cfg = config.antob.services.bind;
 
-  dnsHostIpLast = lib.lists.last (lib.strings.splitString "." cfg.dnsHostIp);
-  zoneNetworkBase = lib.lists.head (lib.strings.splitString "/" cfg.zoneNetwork);
-  zoneReverseNetwork = lib.strings.concatStringsSep "." (lib.lists.reverseList (lib.strings.splitString "." zoneNetworkBase));
+  internalIpLast = lib.lists.last (lib.strings.splitString "." cfg.internalIp);
+  hostFqdn = "${cfg.hostName}.${cfg.internalDomain}";
+  baseInternalNetwork = lib.lists.head (lib.strings.splitString "/" cfg.internalNetwork);
+  reverseBaseInternalNetwork = lib.strings.concatStringsSep "." (lib.lists.reverseList (lib.strings.splitString "." baseInternalNetwork));
 
   inherit (lib) types mkEnableOption mkIf mkForce;
   inherit (lib.antob) mkOpt;
@@ -13,10 +14,10 @@ in
 {
   options.antob.services.bind = with types; {
     enable = mkEnableOption "Enable Bind";
-    dnsHostName = mkOpt str "hyllan" "The host name of the LAN DNS server.";
-    dnsHostIp = mkOpt str "192.168.1.2" "The IP of the LAN DNS server.";
-    zoneName = mkOpt str "local" "The name of the LAN DNS zone.";
-    zoneNetwork = mkOpt str "192.168.1/24" "The network class of the LAN DNS zone.";
+    hostName = mkOpt str "hyllan" "The host name of the LAN DNS server.";
+    internalIp = mkOpt str "192.168.1.2" "The internal IP of the DNS server.";
+    internalDomain = mkOpt str "local" "The internal domain name.";
+    internalNetwork = mkOpt str "192.168.1/24" "The network class of the LAN DNS zone.";
   };
 
   config = mkIf cfg.enable {
@@ -28,7 +29,7 @@ in
       forwarders = [ ];
       cacheNetworks = [
         "localhost"
-        cfg.zoneNetwork
+        cfg.internalNetwork
       ];
 
       extraOptions = ''
@@ -50,14 +51,27 @@ in
       '';
 
       zones = {
-        "${cfg.zoneName}" = {
+        "${cfg.internalDomain}" = {
           master = true;
-          file = "/etc/bind/zones/${cfg.zoneName}.zone";
+          file = "/etc/bind/zones/${cfg.internalDomain}.zone";
+          extraConfig = ''
+            # allow-update { key rndc-key; };
+            update-policy {
+              grant rndc-key wildcard *.${cfg.internalDomain} A DHCID;
+            };
+          '';
         };
 
-        "${zoneReverseNetwork}.in-addr.arpa" = {
+        "${reverseBaseInternalNetwork}.in-addr.arpa" = {
           master = true;
-          file = "/etc/bind/zones/${zoneReverseNetwork}.rev";
+          file = "/etc/bind/zones/${reverseBaseInternalNetwork}.rev";
+          extraConfig = ''
+            # allow-update { key rndc-key; };
+            # update-policy {
+            #   grant rndc-key wildcard *.${reverseBaseInternalNetwork}.in-addr.arpa PTR DHCID;
+            # };
+            allow-update { ${cfg.internalIp}; };
+          '';
         };
       };
     };
@@ -69,7 +83,7 @@ in
       chown named:named /etc/bind/zones
     '';
 
-    environment.etc."bind/zones/${cfg.zoneName}.zone" = {
+    environment.etc."bind/zones/${cfg.internalDomain}.zone" = {
       enable = true;
       user = "named";
       group = "named";
@@ -77,21 +91,21 @@ in
       text = ''
         $ORIGIN .
         $TTL 907200     ; 1 week 3 days 12 hours
-        ${cfg.zoneName}             IN SOA  ${cfg.dnsHostName}.${cfg.zoneName}. webmaster.${cfg.zoneName}. (
+        ${cfg.internalDomain}           IN SOA  ${hostFqdn}. webmaster.${cfg.internalDomain}. (
                                         1263529355 ; serial
                                         10800      ; refresh (3 hours)
                                         3600       ; retry (1 hour)
                                         604800     ; expire (1 week)
                                         38400      ; minimum (10 hours 40 minutes)
                                         )
-                                NS      ${cfg.dnsHostName}.${cfg.zoneName}.
-        $ORIGIN ${cfg.zoneName}.
-        gateway              A       ${zoneNetworkBase}.1
-        ${cfg.dnsHostName}       A       ${cfg.dnsHostIp}
+                                NS      ${hostFqdn}.
+        $ORIGIN ${cfg.internalDomain}.
+        gateway                 A       ${baseInternalNetwork}.1
+        ${cfg.hostName}         A       ${cfg.internalIp}
       '';
     };
 
-    environment.etc."bind/zones/${zoneReverseNetwork}.rev" = {
+    environment.etc."bind/zones/${reverseBaseInternalNetwork}.rev" = {
       enable = true;
       user = "named";
       group = "named";
@@ -99,17 +113,17 @@ in
       text = ''
         $ORIGIN .
         $TTL 907200     ; 1 week 3 days 12 hours
-        ${zoneReverseNetwork}.in-addr.arpa   IN SOA  ${cfg.dnsHostName}.${cfg.zoneName}. webmaster.${cfg.zoneName}. (
+        ${reverseBaseInternalNetwork}.in-addr.arpa   IN SOA  ${hostFqdn}. webmaster.${cfg.internalDomain}. (
                                         1263189277 ; serial
                                         10800      ; refresh (3 hours)
                                         3600       ; retry (1 hour)
                                         604800     ; expire (1 week)
                                         38400      ; minimum (10 hours 40 minutes)
                                         )
-                                NS      ${cfg.dnsHostName}.${cfg.zoneName}.
-        $ORIGIN ${zoneReverseNetwork}.in-addr.arpa.
-        1                       PTR     gateway.${cfg.zoneName}.
-        ${dnsHostIpLast}        PTR     ${cfg.dnsHostName}.${cfg.zoneName}.
+                                NS      ${hostFqdn}.
+        $ORIGIN ${reverseBaseInternalNetwork}.in-addr.arpa.
+        1                       PTR     gateway.${cfg.internalDomain}.
+        ${internalIpLast}       PTR     ${hostFqdn}.
       '';
     };
   };
