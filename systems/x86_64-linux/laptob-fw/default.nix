@@ -34,6 +34,8 @@ with lib.antob;
     amdgpu_top
     radeontop
     glxinfo
+    deploy-rs
+    sops
   ];
 
   services = {

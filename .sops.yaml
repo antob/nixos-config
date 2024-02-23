@@ -1,0 +1,22 @@
+# To add a new server key
+# ```
+# # User ssh-to-pgp
+# $ nix shell nixpkgs#ssh-to-pgp
+# # Get server public key and fingerprint. Add fingerprint to this file.
+# $ ssh hyllan.local "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o hyllan.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
+# => 26ed358df14249befc3b72618ff9d36f72f3e498
+# # Import server public key
+# $ gpg --import hyllan.asc # 
+# $ exit
+# ```
+keys:
+  - &admin A5D2C0275BBB60F60770159EC457E72EEC222C29
+  - &laptob_fw c77129031f8a9816c85e351721d093c8d0b23661
+  - &hyllan 26ed358df14249befc3b72618ff9d36f72f3e498
+
+creation_rules:
+  - path_regex: systems/.*/hyllan/secrets.yaml$
+    key_groups:
+    - pgp:
+      - *admin
+      - *hyllan
