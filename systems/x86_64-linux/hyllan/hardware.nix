@@ -57,6 +57,11 @@ in {
       device = "zpool/tank";
       fsType = "zfs";
     };
+
+    "/mnt/tank/plex" = {
+      device = "zpool/plex";
+      fsType = "zfs";
+    };
   };
 
   swapDevices = [{ device = "/swap/swapfile"; }];

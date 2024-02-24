@@ -11,6 +11,7 @@ in
   imports = with inputs; [
     ./hardware.nix
     sops-nix.nixosModules.sops
+    ./plex.nix
   ];
 
   antob = {
@@ -27,7 +28,15 @@ in
 
     hardware.networking.enable = mkForce false;
 
-    services.bind = enabled;
+    services = {
+      bind = enabled;
+
+      dhcpd = {
+        enable = false;
+        internalIp = "192.168.2.2";
+        dnsIp = "192.168.1.20";
+      };
+    };
   };
 
   services = {
@@ -54,16 +63,11 @@ in
       };
     };
 
-    # plex = {
-    #   enable = true;
-    #   openFirewall = true;
-    # };
-
     # photoprism = {
     #   enable = true;
     # };
 
-    # gitea` = {
+    # gitea = {
     #   enable = true;
     # };
   };
