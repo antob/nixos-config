@@ -12,6 +12,8 @@ in
     ./hardware.nix
     sops-nix.nixosModules.sops
     ./plex.nix
+    ./mysql.nix
+    ./photoprism.nix
   ];
 
   antob = {
@@ -62,10 +64,6 @@ in
         ZED_NOTIFY_VERBOSE = true;
       };
     };
-
-    # photoprism = {
-    #   enable = true;
-    # };
 
     # gitea = {
     #   enable = true;
