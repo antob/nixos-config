@@ -12,9 +12,11 @@ in
     ./hardware.nix
     sops-nix.nixosModules.sops
     ./nginx.nix
+    ./podman.nix
     ./plex.nix
     ./mysql.nix
     ./photoprism.nix
+    ./yopass.nix
   ];
 
   antob = {
