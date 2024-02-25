@@ -11,6 +11,7 @@ in
   imports = with inputs; [
     ./hardware.nix
     sops-nix.nixosModules.sops
+    ./nginx.nix
     ./plex.nix
     ./mysql.nix
     ./photoprism.nix

@@ -1,6 +1,9 @@
-{ config, ... }:
+{ config, lib, ... }:
+
+with lib.antob;
 let
   secrets = config.sops.secrets;
+  siteDomain = "photos.antob.se";
   port = 2342;
 in
 {
@@ -10,7 +13,7 @@ in
       port = port;
       passwordFile = secrets.photoprism_admin_password.path;
       originalsPath = "/var/lib/private/photoprism/originals";
-      address = "0.0.0.0";
+      address = "127.0.0.1";
       settings = {
         PHOTOPRISM_ADMIN_USER = "admin";
         PHOTOPRISM_DEFAULT_LOCALE = "en";
@@ -18,8 +21,9 @@ in
         PHOTOPRISM_DATABASE_NAME = "photoprism";
         PHOTOPRISM_DATABASE_SERVER = "/run/mysqld/mysqld.sock";
         PHOTOPRISM_DATABASE_USER = "photoprism";
-        # PHOTOPRISM_SITE_URL = "http://sub.domain.tld:2342";
+        PHOTOPRISM_SITE_URL = "https://${siteDomain}";
         PHOTOPRISM_SITE_TITLE = "PhotoPrism";
+        # PHOTOPRISM_LOG_LEVEL = "trace";
       };
     };
 
@@ -32,6 +36,8 @@ in
         };
       }];
     };
+
+    nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}";
   };
 
   networking.firewall.allowedTCPPorts = [ port ];
