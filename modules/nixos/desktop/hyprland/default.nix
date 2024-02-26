@@ -190,10 +190,10 @@ in
             windowrulev2 = workspace 5,class:^Slack$
 
             # Floating windows
-            windowrulev2 = float,title:Open File
-            windowrulev2 = size 900 500,title:Open File
-            windowrulev2 = move center,title:Open File
-            windowrulev2 = noborder,title:Open File
+            windowrulev2 = float,class:^xdg-desktop-portal-gtk$
+            windowrulev2 = size 900 500,class:^xdg-desktop-portal-gtk$
+            windowrulev2 = move center,class:^xdg-desktop-portal-gtk$
+            windowrulev2 = noborder,class:^xdg-desktop-portal-gtk$
 
             windowrulev2 = float,title:Bluetooth Devices
             windowrulev2 = size 900 500,title:Bluetooth Devices
