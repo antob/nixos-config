@@ -42,7 +42,6 @@ in
 
   networking.firewall.allowedTCPPorts = [ port ];
 
-  # Sops secrets
   sops.secrets.photoprism_admin_password = { };
 
   fileSystems = {

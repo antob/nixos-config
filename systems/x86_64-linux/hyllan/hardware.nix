@@ -53,13 +53,19 @@ in {
       neededForBoot = true;
     };
 
+    # ZFS
     "/mnt/tank" = {
       device = "zpool/tank";
       fsType = "zfs";
     };
 
-    "/mnt/tank/plex" = {
-      device = "zpool/plex";
+    "/mnt/temp" = {
+      device = "zpool/temp";
+      fsType = "zfs";
+    };
+
+    "/mnt/archive" = {
+      device = "zpool/archive";
       fsType = "zfs";
     };
   };
