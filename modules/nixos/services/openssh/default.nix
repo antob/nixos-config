@@ -50,9 +50,14 @@ in
           User ${config.antob.user.name}
         '';
         matchBlocks = {
+          hyllan.hostname = "hyllan.local";
+          pikvm = {
+            hostname = "pikvm.local";
+            user = "root";
+          };
           bender.hostname = "bender.local";
-          hyllan = {
-            hostname = "hyllan.local";
+          hyllan-old = {
+            hostname = "192.168.1.231";
             user = "tobias";
             port = 2212;
           };
