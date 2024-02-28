@@ -1,16 +1,12 @@
-{ pkgs, config, lib, channel, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 
 with lib;
 with lib.antob;
-let
-  secrets = config.sops.secrets;
-  emailFrom = "home@antob.se";
-  emailTo = "tob@antob.se";
-in
 {
   imports = with inputs; [
     ./hardware.nix
     sops-nix.nixosModules.sops
+    ./msmtp.nix
     ./nginx.nix
     ./podman.nix
     ./plex.nix
@@ -32,20 +28,10 @@ in
     };
 
     hardware.networking.enable = mkForce false;
-
-    services = {
-      bind = enabled;
-
-      dhcpd = {
-        enable = false;
-        internalIp = "192.168.2.2";
-        dnsIp = "192.168.1.20";
-      };
-    };
   };
 
   services = {
-    fstrim.enable = lib.mkDefault true;
+    fstrim.enable = mkDefault true;
 
     smartd = {
       enable = true;
@@ -73,34 +59,12 @@ in
     # };
   };
 
-  programs.msmtp = {
-    enable = true;
-    setSendmail = true;
-    defaults = {
-      aliases = builtins.toFile "aliases" ''
-        default: ${emailTo}
-      '';
-    };
-    accounts.default = {
-      auth = "plain";
-      tls = "on";
-      host = "smtp.protonmail.ch";
-      port = "587";
-      user = emailFrom;
-      passwordeval = "${pkgs.coreutils}/bin/cat ${secrets.proton_smtp_token.path}";
-      from = emailFrom;
-    };
-  };
-
-  # Sops secrets
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    secrets.proton_smtp_token = { };
-  };
-
   # Networking and firewall
   networking = {
-    firewall.enable = true;
+    firewall = {
+      enable = true;
+      allowPing = true;
+    };
     nftables.enable = true;
     useDHCP = false;
     usePredictableInterfaceNames = false;
