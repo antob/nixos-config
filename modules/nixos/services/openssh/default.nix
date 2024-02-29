@@ -50,19 +50,19 @@ in
           User ${config.antob.user.name}
         '';
         matchBlocks = {
-          hyllan.hostname = "hyllan.local";
+          hyllan.hostname = "hyllan.lan";
           pikvm = {
-            hostname = "pikvm.local";
+            hostname = "pikvm.lan";
             user = "root";
           };
-          bender.hostname = "bender.local";
+          bender.hostname = "192.168.1.20";
           hyllan-old = {
             hostname = "192.168.1.231";
             user = "tobias";
             port = 2212;
           };
           locals = {
-            host = "192.168.* *.local laptob*";
+            host = "192.168.* *.lan laptob*";
             extraOptions = {
               UserKnownHostsFile = "/dev/null";
               StrictHostKeyChecking = "no";
