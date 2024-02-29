@@ -1,7 +1,13 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 with lib;
 with lib.antob;
+
+let
+  monCfg = config.antob.monitoring;
+  emailFrom = monCfg.emailFrom;
+  emailTo = monCfg.emailTo;
+in
 {
   imports = with inputs; [
     ./hardware.nix
@@ -13,6 +19,7 @@ with lib.antob;
     ./mysql.nix
     ./photoprism.nix
     ./yopass.nix
+    ./pihole.nix
   ];
 
   antob = {
@@ -27,7 +34,13 @@ with lib.antob;
       auto-snapshot.enable = false;
     };
 
+    # Use custom setup for networking
     hardware.networking.enable = mkForce false;
+
+    monitoring = {
+      emailFrom = "home@antob.se";
+      emailTo = "tob@antob.se";
+    };
   };
 
   services = {
@@ -75,7 +88,7 @@ with lib.antob;
     networks."10-lan" = {
       matchConfig.Name = "eth0";
       address = [ "192.168.1.2/24" ];
-      dns = [ "192.168.1.20" ];
+      dns = [ "192.168.1.2" "1.1.1.1" ];
       routes = [
         { routeConfig.Gateway = "192.168.1.1"; }
       ];

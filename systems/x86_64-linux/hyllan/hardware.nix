@@ -59,12 +59,12 @@ in {
       fsType = "zfs";
     };
 
-    "/mnt/temp" = {
+    "/mnt/tank/temp" = {
       device = "zpool/temp";
       fsType = "zfs";
     };
 
-    "/mnt/archive" = {
+    "/mnt/tank/archive" = {
       device = "zpool/archive";
       fsType = "zfs";
     };

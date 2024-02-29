@@ -2,8 +2,9 @@
 
 let
   secrets = config.sops.secrets;
-  emailFrom = "home@antob.se";
-  emailTo = "tob@antob.se";
+  monCfg = config.antob.monitoring;
+  emailFrom = monCfg.emailFrom;
+  emailTo = monCfg.emailTo;
 in
 {
   programs.msmtp = {
