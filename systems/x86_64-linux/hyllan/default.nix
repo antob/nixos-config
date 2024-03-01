@@ -20,6 +20,7 @@ in
     ./photoprism.nix
     ./yopass.nix
     ./pihole.nix
+    ./syncthing.nix
   ];
 
   antob = {
