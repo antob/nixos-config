@@ -21,6 +21,6 @@ with lib.antob;
   };
 
   system.activationScripts.plex-chown.text = ''
-    chown plex:plex /mnt/tank/plex
+    chown plex:media /mnt/tank/plex
   '';
 }

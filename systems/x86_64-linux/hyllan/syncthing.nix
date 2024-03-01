@@ -9,25 +9,26 @@ with lib.antob;
       openDefaultPorts = true;
       overrideDevices = false;
       overrideFolders = false;
-      # settings = {
-      #   devices = {
-      #     "laptob-fw" = { id = "6LOVNRB-YSW65OL-RRN4GXI-LMF5BD3-JIY3UBU-DDTR7T3-35VTT3Z-2I2U4AM"; };
-      #   };
-      #   folders = {
-      #     "Documents" = {
-      #       path = "/mnt/tank/syncthing/Documents";
-      #       devices = [ "laptob-fw" ];
-      #     };
-      #     "Projects" = {
-      #       path = "/mnt/tank/syncthing/Projects";
-      #       devices = [ "laptob-fw" ];
-      #     };
-      #     "Pictures" = {
-      #       path = "/mnt/tank/syncthing/Pictures";
-      #       devices = [ "laptob-fw" ];
-      #     };
-      #   };
-      # };
+      guiAddress = "0.0.0.0:8384";
+      settings = {
+        devices = {
+          "laptob-fw" = { id = "6LOVNRB-YSW65OL-RRN4GXI-LMF5BD3-JIY3UBU-DDTR7T3-35VTT3Z-2I2U4AM"; };
+        };
+        folders = {
+          "Documents" = {
+            path = "/mnt/tank/syncthing/Documents";
+            devices = [ "laptob-fw" ];
+          };
+          "Projects" = {
+            path = "/mnt/tank/syncthing/Projects";
+            devices = [ "laptob-fw" ];
+          };
+          "Pictures" = {
+            path = "/mnt/tank/syncthing/Pictures";
+            devices = [ "laptob-fw" ];
+          };
+        };
+      };
     };
   };
 
