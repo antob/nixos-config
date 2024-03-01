@@ -37,7 +37,7 @@ in
       v4l-utils
       guvcview
       gnome.gnome-calculator
-      rustdesk
+      # rustdesk
       remmina
     ];
   };
