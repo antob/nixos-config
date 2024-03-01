@@ -55,4 +55,8 @@ in
       options = [ "bind" ];
     };
   };
+
+  system.activationScripts.photoprism-chown.text = ''
+    chown photoprism:photoprism /mnt/tank/photoprism
+  '';
 }
