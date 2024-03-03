@@ -1,26 +1,30 @@
 { lib, ... }:
 
 with lib.antob;
+let
+  dataDir = "/mnt/tank/services/plex";
+  siteDomain = "plex.antob.se";
+in
 {
   services.plex = {
     enable = true;
     openFirewall = true;
     group = "media";
-    dataDir = "/mnt/tank/plex";
+    dataDir = dataDir;
   };
 
-  services.nginx.virtualHosts = mkSslProxy "plex.antob.se" "http://127.0.0.1:32400";
+  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:32400";
 
   users.groups.media = { };
 
   fileSystems = {
-    "/mnt/tank/plex" = {
+    "${dataDir}" = {
       device = "zpool/plex";
       fsType = "zfs";
     };
   };
 
-  system.activationScripts.plex-chown.text = ''
-    chown plex:media /mnt/tank/plex
+  system.activationScripts.plex-setup.text = ''
+    chown plex:media ${dataDir}
   '';
 }

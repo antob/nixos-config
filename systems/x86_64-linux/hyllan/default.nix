@@ -73,6 +73,11 @@ in
     # };
   };
 
+  # Ensure folders in ZFS pool
+  system.activationScripts.hyllan-zfs-setup.text = ''
+    mkdir -p /mnt/tank/services
+  '';
+
   # Networking and firewall
   networking = {
     firewall = {

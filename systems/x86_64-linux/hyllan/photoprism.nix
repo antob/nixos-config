@@ -5,6 +5,7 @@ let
   secrets = config.sops.secrets;
   siteDomain = "photos.antob.se";
   port = 2342;
+  dataDir = "/mnt/tank/services/photoprism";
 in
 {
   services = {
@@ -45,18 +46,18 @@ in
   sops.secrets.photoprism_admin_password = { };
 
   fileSystems = {
-    "/mnt/tank/photoprism" = {
+    "${dataDir}" = {
       device = "zpool/photoprism";
       fsType = "zfs";
     };
 
     "/var/lib/private/photoprism" = {
-      device = "/mnt/tank/photoprism";
+      device = dataDir;
       options = [ "bind" ];
     };
   };
 
-  system.activationScripts.photoprism-chown.text = ''
-    chown photoprism:photoprism /mnt/tank/photoprism
+  system.activationScripts.photoprism-setup.text = ''
+    chown photoprism:photoprism ${dataDir}
   '';
 }

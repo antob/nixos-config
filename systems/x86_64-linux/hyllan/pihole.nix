@@ -3,6 +3,8 @@
 with lib.antob;
 let
   secrets = config.sops.secrets;
+  dataDir = "/mnt/tank/services/docker/pihole";
+  port = 8080;
 in
 {
   virtualisation.oci-containers.containers = {
@@ -15,15 +17,15 @@ in
       ];
       environment = {
         TZ = "Europe/Stockholm";
-        WEB_PORT = "8080";
+        WEB_PORT = "${toString port}";
         FTLCONF_LOCAL_IPV4 = "192.168.1.2";
         VIRTUAL_HOST = "pihole.lan";
         DNSMASQ_USER = "root";
       };
       environmentFiles = [ secrets.pihole_env_file.path ];
       volumes = [
-        "/mnt/tank/docker/pihole/etc-pihole:/etc/pihole"
-        "/mnt/tank/docker/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
+        "${dataDir}/etc-pihole:/etc/pihole"
+        "${dataDir}/etc-dnsmasq.d:/etc/dnsmasq.d"
       ];
     };
   };
@@ -34,7 +36,7 @@ in
     "pihole.lan" = {
       serverAliases = [ "pihole" ];
       locations."/" = {
-        proxyPass = "http://127.0.0.1:8080";
+        proxyPass = "http://127.0.0.1:${toString port}";
         extraConfig = ''
           proxy_buffering off;
           proxy_headers_hash_max_size 512;
@@ -45,9 +47,13 @@ in
   };
 
   networking.firewall = {
-    allowedTCPPorts = [ 53 8080 ];
+    allowedTCPPorts = [ 53 port ];
     allowedUDPPorts = [ 53 67 ];
   };
 
   services.resolved.enable = false;
+
+  system.activationScripts.pihole-setup.text = ''
+    mkdir -p ${dataDir}
+  '';
 }

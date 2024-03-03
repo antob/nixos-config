@@ -1,8 +1,10 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 with lib;
+let
+  dataDir = "/mnt/tank/services/docker";
+in
 {
-
   antob = {
     virtualisation.podman.enable = true;
     virtualisation.docker.enable = mkForce false;
@@ -13,7 +15,7 @@ with lib;
   };
 
   fileSystems = {
-    "/mnt/tank/docker" = {
+    "${dataDir}" = {
       device = "zpool/docker";
       fsType = "zfs";
     };
