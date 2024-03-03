@@ -16,8 +16,4 @@ in
       fsType = "zfs";
     };
   };
-
-  system.activationScripts.mysql-setup.text = ''
-    chown myslq:mysql ${dataDir}
-  '';
 }

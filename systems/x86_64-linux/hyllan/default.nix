@@ -21,6 +21,7 @@ in
     ./yopass.nix
     ./pihole.nix
     ./syncthing.nix
+    ./homeassistant.nix
   ];
 
   antob = {
@@ -103,6 +104,7 @@ in
 
   environment.systemPackages = with pkgs; [
     libva # For hardware transcoding
+    mosquitto
   ];
 
   system.stateVersion = "22.11";
