@@ -20,6 +20,7 @@ in
         workbench = {
           colorTheme = "One Dark Pro";
           startupEditor = "none";
+          tree.enableStickyScroll = false;
         };
 
         window = {

@@ -80,3 +80,4 @@ in
   };
 
   sops.secrets.zigbee2mqtt = { };
+}

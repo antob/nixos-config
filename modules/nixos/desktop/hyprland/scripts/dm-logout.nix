@@ -9,6 +9,7 @@ pkgs.writeShellScriptBin "dm-logout" ''
   "Shutdown"
   "Logout"
   "Lock screen"
+  "Reboot to BIOS"
   )
 
   # Piping the above array into tofi.
@@ -35,6 +36,9 @@ pkgs.writeShellScriptBin "dm-logout" ''
           ;;
       'Hibernate')
           systemctl -i hibernate
+          ;;
+      'Reboot to BIOS')
+          systemctl -i reboot --firmware-setup
           ;;
       *)
           exit 0

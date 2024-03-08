@@ -14,6 +14,7 @@ in
   };
 
   services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:32400";
+  networking.firewall.allowedTCPPorts = [ 32400 ];
 
   users.groups.media = { };
 
