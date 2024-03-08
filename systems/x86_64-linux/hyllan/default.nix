@@ -22,6 +22,7 @@ in
     ./pihole.nix
     ./syncthing.nix
     ./homeassistant.nix
+    ./esphome.nix
   ];
 
   antob = {
