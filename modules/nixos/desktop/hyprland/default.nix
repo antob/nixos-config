@@ -116,7 +116,8 @@ in
                 sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
             }
 
-            device:modern-mobile-mouse {
+            device {
+              name = modern-mobile-mouse
               sensitivity = -0.5
             }
 
@@ -181,7 +182,7 @@ in
               disable_scale_checks = 1
             }
 
-            ## Window rules
+            # ### Window rules
             # Workspaces
             windowrulev2 = workspace 2,class:^(firefox|librewolf)$
             windowrulev2 = workspace 3,class:^codium.*
@@ -211,7 +212,7 @@ in
             windowrulev2 = opacity 0.8 override 0.8 override, class:^(alacritty)$
             windowrulev2 = opacity 0.8 override 0.8 override, class:^(org.wezfurlong.wezterm)$
 
-            ## Key bindings
+            # ### Key bindings
             $mainMod = SUPER
             $altMod = ALT
 
