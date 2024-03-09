@@ -14,6 +14,7 @@ in
       port = port;
       passwordFile = secrets.photoprism_admin_password.path;
       originalsPath = "/var/lib/private/photoprism/originals";
+      importPath = "/var/lib/private/photoprism/import";
       address = "127.0.0.1";
       settings = {
         PHOTOPRISM_ADMIN_USER = "admin";

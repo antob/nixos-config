@@ -26,9 +26,5 @@ in
     };
   };
 
-  # Sops secrets
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    secrets.proton_smtp_token = { };
-  };
+  sops.secrets.proton_smtp_token = { };
 }
