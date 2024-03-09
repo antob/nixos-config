@@ -36,6 +36,7 @@ with lib.antob;
     glxinfo
     deploy-rs
     sops
+    nfs-utils # Needed for mounting NFS shares
   ];
 
   services = {
@@ -48,6 +49,44 @@ with lib.antob;
 
     chrony.enable = true;
   };
+
+  # NFS shares
+  services.rpcbind.enable = true;
+  systemd.mounts = [
+    {
+      type = "nfs4";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "hyllan.lan:/mnt/tank/share/public";
+      where = "/mnt/share/public";
+    }
+    {
+      type = "nfs4";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "hyllan.lan:/mnt/tank/share/private";
+      where = "/mnt/share/private";
+    }
+  ];
+
+  systemd.automounts = [
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/share/public";
+    }
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/share/private";
+    }
+  ];
 
   # Power optimizer daemons. Choose one.
   programs.auto-cpufreq.enable = false;

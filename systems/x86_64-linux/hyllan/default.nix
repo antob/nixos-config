@@ -23,6 +23,7 @@ in
     ./syncthing.nix
     ./homeassistant.nix
     ./esphome.nix
+    ./nfsd.nix
   ];
 
   antob = {

@@ -68,11 +68,6 @@ in {
       device = "zpool/archive";
       fsType = "zfs";
     };
-
-    "/mnt/tank/share" = {
-      device = "zpool/share";
-      fsType = "zfs";
-    };
   };
 
   swapDevices = [{ device = "/swap/swapfile"; }];
