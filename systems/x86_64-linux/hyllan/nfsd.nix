@@ -10,12 +10,16 @@
 # $ sudo chown nobody:nogroup /mnt/tank/share/public
 #
 # Private share, specific user on specific host
-# $ sudo zfs create -o mountpoint=/mnt/tank/share/private zpool/private_share
-# $ sudo chown tob /mnt/tank/share/public
+# $ sudo zfs create -o mountpoint=/mnt/tank/share/private -o encryption=on -o keyformat=raw -o keylocation=file:///run/secrets/zfs_encryption_key zpool/private_share
+# $ sudo chown tob /mnt/tank/share/private
 # $ sudo zfs set sharenfs="rw=laptob,root_squash" zpool/private_share
 #
 # Check exported shares:
 # $ showmount -e <nfs-server>
+#
+# For some reason the datasets will be unavailable after boot.
+# For now, set property `canmount` to `noauto` and manually mount
+# the datasets after reboot. (`sudo zfs mount zpool/public_share`)
 
 let
   secrets = config.sops.secrets;

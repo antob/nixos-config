@@ -4,6 +4,7 @@ with lib;
 with lib.antob;
 
 let
+  secrets = config.sops.secrets;
   monCfg = config.antob.monitoring;
   emailFrom = monCfg.emailFrom;
   emailTo = monCfg.emailTo;
@@ -101,6 +102,12 @@ in
         { routeConfig.Gateway = "192.168.1.1"; }
       ];
     };
+  };
+
+  # Sops secrets
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets.zfs_encryption_key = { };
   };
 
   environment.systemPackages = with pkgs; [
