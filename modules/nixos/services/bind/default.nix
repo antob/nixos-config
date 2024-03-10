@@ -15,7 +15,7 @@ in
   options.antob.services.bind = with types; {
     enable = mkEnableOption "Enable Bind";
     hostName = mkOpt str "hyllan" "The host name of the LAN DNS server.";
-    internalIp = mkOpt str "192.168.1.2" "The internal IP of the DNS server.";
+    internalIp = mkOpt str "192.168.1.4" "The internal IP of the DNS server.";
     internalDomain = mkOpt str "local" "The internal domain name.";
     internalNetwork = mkOpt str "192.168.1/24" "The network class of the LAN DNS zone.";
   };

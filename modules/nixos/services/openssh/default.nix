@@ -55,12 +55,7 @@ in
             hostname = "pikvm.lan";
             user = "root";
           };
-          bender.hostname = "192.168.1.20";
-          hyllan-old = {
-            hostname = "192.168.1.231";
-            user = "tobias";
-            port = 2212;
-          };
+          pihole.hostname = "pihole.lan";
           locals = {
             host = "192.168.* *.lan laptob*";
             extraOptions = {

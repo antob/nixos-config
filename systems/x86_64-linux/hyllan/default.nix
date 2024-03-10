@@ -19,7 +19,6 @@ in
     ./mysql.nix
     ./photoprism.nix
     ./yopass.nix
-    ./pihole.nix
     ./syncthing.nix
     ./homeassistant.nix
     ./esphome.nix
@@ -97,7 +96,7 @@ in
     networks."10-lan" = {
       matchConfig.Name = "eth0";
       address = [ "192.168.1.2/24" ];
-      dns = [ "192.168.1.2" "1.1.1.1" ];
+      dns = [ "192.168.1.4" "1.1.1.1" ];
       routes = [
         { routeConfig.Gateway = "192.168.1.1"; }
       ];

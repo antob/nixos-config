@@ -13,10 +13,10 @@ in
 {
   options.antob.services.dhcpd = with types; {
     enable = mkEnableOption "Enable Kea DCHP server";
-    internalIp = mkOpt str "192.168.1.2" "The internal IP of the DHCP server.";
+    internalIp = mkOpt str "192.168.1.4" "The internal IP of the DHCP server.";
     internalDomain = mkOpt str "local" "The internal domain name.";
     interface = mkOpt str "eth0" "The network interface name.";
-    dnsIp = mkOpt str "192.168.1.2" "The IP of the DNS server.";
+    dnsIp = mkOpt str "192.168.1.4" "The IP of the DNS server.";
   };
 
   config = mkIf cfg.enable {
@@ -81,9 +81,9 @@ in
 
               reservations = [
                 {
-                  hostname = "bender";
-                  ip-address = "192.168.1.20";
-                  hw-address = "c0:3f:d5:6b:00:07";
+                  hostname = "hyllan";
+                  ip-address = "192.168.1.2";
+                  hw-address = "f0:2f:74:cb:69:40";
                 }
               ];
             }
