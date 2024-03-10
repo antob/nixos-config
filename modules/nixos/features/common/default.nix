@@ -94,6 +94,7 @@ in
     };
 
     environment.shellAliases = {
+      sudo = "sudo "; # Fixes missing alias doing `sudo`
       cat = "bat -p";
       http = "xh";
       https = "xhs";
