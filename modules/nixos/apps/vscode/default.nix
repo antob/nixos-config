@@ -75,6 +75,10 @@ in
 
         update.mode = "none";
 
+        search.exclude = {
+          "**/coverage" = true;
+        };
+
         # Plugin settings
         rust-analyzer.check.command = "clippy";
         svelte.enable-ts-plugin = true;

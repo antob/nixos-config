@@ -43,6 +43,10 @@ in
 
         update.mode = "none";
 
+        search.exclude = {
+          "**/coverage" = true;
+        };
+
         rust-analyzer.check.command = "clippy";
       };
 
