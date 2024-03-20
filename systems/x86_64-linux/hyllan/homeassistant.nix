@@ -25,12 +25,11 @@ in
     };
   };
 
-  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}";
-
   # Open ports
   networking.firewall.allowedTCPPorts = [
     port # Hass GUI port
     1400 # Sonos
+    8089 # Zigbee2MQTT frontend
   ];
 
   system.activationScripts.hass-setup.text = ''
@@ -59,8 +58,7 @@ in
 
   # zigbee2mqtt
   services.zigbee2mqtt = {
-    # enable = true;
-    enable = false;
+    enable = true;
     dataDir = "${dataDir}/zigbee2mqtt";
     settings = {
       homeassistant = true;
@@ -70,14 +68,37 @@ in
         server = "mqtt://localhost:1883";
       };
       serial = {
-        port = "/dev/ttyUSB0";
+        port = "/dev/serial/by-id/usb-Silicon_Labs_Sonoff_Zigbee_3.0_USB_Dongle_Plus_0001-if00-port0";
       };
       advanced = {
-        pan_id = "'!${secrets.zigbee2mqtt.path} pan_id'";
-        network_key = "'!${secrets.zigbee2mqtt.path} network_key'";
+        pan_id = 52088;
+        network_key = "!${secrets."zigbee2mqtt.yaml".path} network_key";
+      };
+      frontend = {
+        port = 8089;
+        host = "0.0.0.0";
+        # Optional, enables authentication, disabled by default, cleartext (no hashing required)
+        # auth_token = "your-secret-token";
+        # Optional, url on which the frontend can be reached, currently only used for the Home Assistant device configuration page
+        url = "http://zigbee.lan";
       };
     };
   };
 
-  sops.secrets.zigbee2mqtt = { };
+  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}" //
+    {
+      "zigbee.lan" = {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8089";
+        };
+        locations."/api" = {
+          proxyPass = "http://127.0.0.1:8089/api";
+          proxyWebsockets = true;
+        };
+      };
+    };
+
+  sops.secrets."zigbee2mqtt.yaml" = {
+    owner = "zigbee2mqtt";
+  };
 }

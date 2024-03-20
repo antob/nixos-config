@@ -58,7 +58,7 @@ in
     };
   };
 
-  system.activationScripts.photoprism-setup.text = ''
-    chown photoprism:photoprism ${dataDir}
-  '';
+  # system.activationScripts.photoprism-setup.text = ''
+  #   chown photoprism:photoprism ${dataDir}
+  # '';
 }
