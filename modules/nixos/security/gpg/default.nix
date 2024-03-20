@@ -41,7 +41,6 @@ in
         defaultCacheTtl = 60;
         maxCacheTtl = 120;
         # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
-        pinentryFlavor = pinentry.name;
         enableExtraSocket = true;
         extraConfig = ''
           pinentry-program ${pinentry.path}
