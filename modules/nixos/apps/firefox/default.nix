@@ -5,6 +5,7 @@ with lib.antob;
 let
   cfg = config.antob.apps.firefox;
 
+  # See https://restoreprivacy.com/firefox-privacy/
   commonSettings = {
     "browser.aboutwelcome.enabled" = false;
     "browser.meta_refresh_when_inactive.disabled" = true;
@@ -22,6 +23,10 @@ let
     "datareporting.healthreport.uploadEnabled" = false;
 
     "network.http.referer.disallowCrossSiteRelaxingDefault.top_navigation" = true;
+    "network.cookie.cookieBehavior" = 1;
+    "network.cookie.lifetimePolicy" = 2;
+    "network.dns.disablePrefetch" = true;
+    "network.prefetch-next" = false;
 
     "privacy.annotate_channels.strict_list.enabled" = true;
     "privacy.fingerprintingProtection" = true;
@@ -33,6 +38,13 @@ let
     "privacy.trackingprotection.socialtracking.enabled" = true;
     "privacy.donottrackheader.enabled" = true;
     "privacy.globalprivacycontrol.enabled" = true;
+    "privacy.resistFingerprinting" = true;
+    "privacy.trackingprotection.fingerprinting.enabled" = true;
+    "privacy.trackingprotection.cryptomining.enabled" = true;
+    # "privacy.firstparty.isolate" = true;
+
+    "geo.enabled" = false;
+    # "webgl.disabled" = true;
 
     "app.shield.optoutstudies.enabled" = false;
 
@@ -60,8 +72,12 @@ let
       175;
     "toolkit.scrollbox.horizontalScrollDistance" = 6;
     "toolkit.scrollbox.verticalScrollDistance" = 6;
+    "toolkit.telemetry.enabled" = false;
 
     "media.ffmpeg.vaapi.enabled" = true;
+    "media.navigator.enabled" = false;
+
+    "dom.event.clipboardevents.enabled" = false;
   };
 
   commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
