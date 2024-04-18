@@ -24,7 +24,7 @@ let
 
     "network.http.referer.disallowCrossSiteRelaxingDefault.top_navigation" = true;
     "network.cookie.cookieBehavior" = 1;
-    "network.cookie.lifetimePolicy" = 2;
+    "network.cookie.lifetimePolicy" = 0;
     "network.dns.disablePrefetch" = true;
     "network.prefetch-next" = false;
 
@@ -95,43 +95,51 @@ in
 
   config = mkIf cfg.enable {
     antob = {
-      home.extraOptions.programs.firefox = {
-        enable = true;
-        profiles = {
-          ${config.antob.user.name} = {
-            id = 0;
-            name = config.antob.user.name;
-            search = {
-              default = "DuckDuckGo";
-              force = true;
+      home.extraOptions = {
+        programs.firefox = {
+          enable = true;
+          profiles = {
+            ${config.antob.user.name} = {
+              id = 0;
+              name = config.antob.user.name;
+              search = {
+                default = "DuckDuckGo";
+                force = true;
+              };
+              settings = commonSettings;
+              extensions = commonExtensions;
             };
-            settings = commonSettings;
-            extensions = commonExtensions;
-          };
 
-          "HL" = {
-            id = 1;
-            name = "HL";
-            search = {
-              default = "DuckDuckGo";
-              force = true;
+            "HL" = {
+              id = 1;
+              name = "HL";
+              search = {
+                default = "DuckDuckGo";
+                force = true;
+              };
+              settings = commonSettings;
+              extensions = commonExtensions;
             };
-            settings = commonSettings;
-            extensions = commonExtensions;
-          };
 
-          "OBIT" = {
-            id = 2;
-            name = "OBIT";
-            search = {
-              default = "DuckDuckGo";
-              force = true;
+            "OBIT" = {
+              id = 2;
+              name = "OBIT";
+              search = {
+                default = "DuckDuckGo";
+                force = true;
+              };
+              settings = commonSettings;
+              extensions = commonExtensions;
             };
-            settings = commonSettings;
-            extensions = commonExtensions;
           };
         };
 
+        xdg.mimeApps.defaultApplications = {
+          "text/html" = [ "firefox.desktop" ];
+          "text/xml" = [ "firefox.desktop" ];
+          "x-scheme-handler/http" = [ "firefox.desktop" ];
+          "x-scheme-handler/https" = [ "firefox.desktop" ];
+        };
       };
 
       persistence.home.directories = [ ".mozilla/firefox" ];

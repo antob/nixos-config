@@ -16,6 +16,10 @@ in {
 
     services.blueman.enable = true;
 
+    antob.home.extraOptions.dconf.settings = {
+      "/org/blueman/general/plugin-list" = [ "!ConnectionNotifier" ];
+    };
+
     antob.persistence.directories = [ "/var/lib/bluetooth" ];
   };
 }

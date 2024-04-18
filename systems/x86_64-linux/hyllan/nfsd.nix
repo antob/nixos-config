@@ -19,7 +19,10 @@
 #
 # For some reason the datasets will be unavailable after boot.
 # For now, set property `canmount` to `noauto` and manually mount
-# the datasets after reboot. (`sudo zfs mount zpool/public_share`)
+# the datasets after reboot:
+# $ sudo zfs mount zpool/public_share
+# $ sudo zfs mount zpool/private_share
+# $ sudo zfs share -a
 
 let
   secrets = config.sops.secrets;

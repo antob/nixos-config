@@ -20,6 +20,7 @@ in {
       home.file = mkAliasDefinitions options.antob.home.file;
       xdg.enable = true;
       xdg.configFile = mkAliasDefinitions options.antob.home.configFile;
+      xdg.mimeApps.enable = true;
 
       # Nicely reload system units when changing configs
       systemd.user.startServices = "sd-switch";

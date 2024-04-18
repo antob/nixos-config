@@ -22,7 +22,6 @@ in {
     extraModulePackages = [ ];
     kernelParams = [
       "resume_offset=533760" # Value from `btrfs inspect-internal map-swapfile -r /mnt/swap/swapfile`
-      "amdgpu.sg_display=0"
     ];
     resumeDevice = "/dev/mapper/system";
   };

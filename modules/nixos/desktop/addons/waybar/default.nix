@@ -161,9 +161,9 @@ in
             };
 
             clock = {
-              format = "   {:%H:%M}";
-              tooltip = true;
-              tooltip-format = "   {:%H:%M      %A %e %B v.%W}";
+              format = "{:%Y-%m-%d %H:%M W%W}";
+              tooltip = false;
+              # tooltip-format = "   {:%H:%M      %A %e %B v.%W}";
             };
 
             tray = {

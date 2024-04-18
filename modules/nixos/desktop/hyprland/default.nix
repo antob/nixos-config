@@ -61,6 +61,9 @@ in
           save_filename_format=Screenshot-%Y%m%d-%H%M%S.png
           paint_mode=rectangle
           early_exit=true
+          line_size=2
+          text_size=12
+          paint_mode=rectangle
         '';
 
         wayland.windowManager.hyprland = {
@@ -96,6 +99,9 @@ in
             exec-once = hyprctl setcursor ${gtkCfg.cursor.name} ${toString gtkCfg.cursor.size}
             exec-once = ${sleep}/bin/sleep
             exec-once = ${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit
+
+            # Make default apps work with xdg-open
+            exec-once = systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service
 
             input {
                 kb_layout = se
@@ -155,6 +161,7 @@ in
                 new_on_top = true
                 mfact = 0.50
                 no_gaps_when_only = 1
+                always_center_master = true
             }
 
             group {
@@ -360,19 +367,20 @@ in
 
     services.gnome.at-spi2-core.enable = true;
 
+    services.displayManager = {
+      defaultSession = "hyprland";
+      autoLogin = mkIf config.antob.user.autoLogin {
+        enable = true;
+        user = config.antob.user.name;
+      };
+    };
+
     services.xserver = {
       # Enable the X11 windowing system.
       enable = true;
 
       # Enable LightDm display manager.
-      displayManager = {
-        lightdm.enable = true;
-        defaultSession = "hyprland";
-        autoLogin = mkIf config.antob.user.autoLogin {
-          enable = true;
-          user = config.antob.user.name;
-        };
-      };
+      displayManager.lightdm.enable = true;
     };
   };
 }
