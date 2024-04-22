@@ -7,7 +7,7 @@ let
 
   pinentry =
     if config.antob.desktop.gnome.enable then {
-      path = "${pkgs.pinentry-gnome}/bin/pinentry-gnome";
+      path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
       name = "gnome3";
     } else if config.antob.desktop.hyprland.enable then {
       path = "${pkgs.antob.pinentry-tofi}/bin/pinentry-tofi";

@@ -9,7 +9,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.gnome.gnome-keyring.enable = true;
+    services.gnome.gnome-keyring.enable = mkForce false;
+    antob.home.extraOptions.services.gnome-keyring = {
+      enable = true;
+      components = [ "pkcs11" "secrets" ];
+    };
 
     environment.systemPackages = with pkgs; [ gnome.seahorse ];
     antob.persistence.home.directories = [ ".local/share/keyrings" ];

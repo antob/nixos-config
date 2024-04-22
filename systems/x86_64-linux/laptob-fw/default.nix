@@ -14,7 +14,7 @@ with lib.antob;
       desktop = enabled;
     };
 
-    desktop.hyprland = enabled;
+    desktop.gnome = enabled;
 
     virtualisation.virt-manager = enabled;
 

@@ -137,6 +137,14 @@ in
 
     services.xbanish.enable = true;
 
+    services.displayManager = {
+      defaultSession = "xfce+xmonad";
+      autoLogin = mkIf config.antob.user.autoLogin {
+        enable = true;
+        user = config.antob.user.name;
+      };
+    };
+
     services.xserver = {
       # Enable the X11 windowing system.
       enable = true;
@@ -165,11 +173,6 @@ in
         lightdm = {
           enable = true;
           # background = lockBackground;
-        };
-        defaultSession = "xfce+xmonad";
-        autoLogin = mkIf config.antob.user.autoLogin {
-          enable = true;
-          user = config.antob.user.name;
         };
         sessionCommands = ''
           ${pkgs.xorg.xrdb}/bin/xrdb -merge <<EOF

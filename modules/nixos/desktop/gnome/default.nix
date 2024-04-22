@@ -5,6 +5,7 @@ with lib.antob;
 let
   cfg = config.antob.desktop.gnome;
   gtkCfg = config.antob.desktop.addons.gtk;
+  colors = config.antob.color-scheme.colors;
 in
 {
   options.antob.desktop.gnome = with types; {
@@ -14,6 +15,14 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       gnome.gnome-tweaks
+      gnome.adwaita-icon-theme
+      gnomeExtensions.appindicator
+      gnomeExtensions.paperwm
+      gnomeExtensions.switcher
+      gnomeExtensions.disable-workspace-switcher
+      antob.gnome-shell-extension-instantworkspaceswitcher
+      antob.gnome-shell-extension-expand-shutdown-menu
+      bibata-cursors
     ];
 
     services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
@@ -35,16 +44,116 @@ in
     antob.home.extraOptions = {
       # xsession.enable = true;
 
-      dconf.settings = {
+      dconf.settings = let inherit (lib.gvariant) mkTuple mkUint32 mkVariant; in {
+        "org/gnome/shell" = {
+          disable-user-extensions = false;
+
+          # `gnome-extensions list` for a list
+          enabled-extensions = [
+            "paperwm@paperwm.github.com"
+            "switcher@landau.fi"
+            "instantworkspaceswitcher@amalantony.net"
+            "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
+            "disable-workspace-switcher@jbradaric.me"
+            "appindicatorsupport@rgcjonas.gmail.com"
+            "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+            "no-overview@fthx"
+            "expand-shutdown-menu@antob.se"
+          ];
+        };
+        "org/gnome/shell/extensions/switcher" = {
+          fade-enable = true;
+          font-size = mkUint32 18;
+          icon-size = mkUint32 20;
+          matching = 1;
+          max-width-percentage = mkUint32 40;
+          show-switcher = [ "<Super>d" ];
+        };
+        "org/gnome/shell/extensions/paperwm" = {
+          gesture-enabled = false;
+          selection-border-size = 5;
+          show-focus-mode-icon = false;
+          show-window-position-bar = false;
+          show-workspace-indicator = false;
+          use-default-background = true;
+          vertical-margin = 10;
+          vertical-margin-bottom = 10;
+          disable-topbar-styling = true;
+          animation-time = 0;
+          winprops = [
+            ''
+              {"wm_class":"firefox","preferredWidth":"100%"}
+            ''
+            ''
+              {"wm_class":"VSCodium","preferredWidth":"100%"}
+            ''
+          ];
+        };
+        "org/gnome/shell/extensions/paperwm/keybindings" = {
+          close-window = [ "<Super>q" ];
+          new-window = [ "<Super>n" ];
+          switch-left = [ "" ];
+          switch-left-loop = [ "<Super>Left" ];
+          switch-right = [ "" ];
+          switch-right-loop = [ "<Super>Right" ];
+          switch-previous = [ "" ];
+          switch-next = [ "" ];
+          switch-up-workspace = [ "" ];
+          switch-down-workspace = [ "" ];
+          switch-up-workspace-from-all-monitors = [ "<Super>Page_Up" ];
+          switch-down-workspace-from-all-monitors = [ "<Super>Page_Down" ];
+        };
+        "org/gnome/shell/extensions/auto-move-windows" = {
+          application-list = [
+            "firefox.desktop:2"
+            "chromium-browser.desktop:2"
+            "codium.desktop:3"
+            "code.desktop:3"
+            "slack.desktop:5"
+          ];
+        };
+        "org/gnome/shell/keybindings" = {
+          # Remove the default hotkeys for opening favorited applications.
+          switch-to-application-1 = [ ];
+          switch-to-application-2 = [ ];
+          switch-to-application-3 = [ ];
+          switch-to-application-4 = [ ];
+          switch-to-application-5 = [ ];
+          switch-to-application-6 = [ ];
+          switch-to-application-7 = [ ];
+          switch-to-application-8 = [ ];
+          switch-to-application-9 = [ ];
+        };
+        "org/gnome/desktop/sound" = {
+          event-sounds = false;
+        };
+        "org/gnome/desktop/background" = {
+          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
+          picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-d.svg";
+          primary-color = "#241f31";
+        };
+        "org/gnome/desktop/screensaver" = {
+          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
+          primary-color = "#241f31";
+        };
+        "org/gnome/desktop/peripherals/keyboard" = {
+          delay = mkUint32 200;
+          repeat-interval = mkUint32 40;
+        };
+        "org/gnome/desktop/peripherals/touchpad" = {
+          tap-to-click = true;
+          two-finger-scrolling-enabled = true;
+        };
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           enable-hot-corners = false;
           show-battery-percentage = true;
+          cursor-size = 16;
         };
         "org/gnome/desktop/wm/preferences" = {
           workspace-names = [ "Main" ];
           button-layout = ":minimize,maximize,close";
-          num-workspaces = 10;
+          num-workspaces = 8;
         };
         "org/gnome/desktop/wm/keybindings" = {
           switch-to-workspace-1 = [ "<Super>1" ];
@@ -67,33 +176,26 @@ in
           move-to-workspace-8 = [ "<Shift><Super>8" ];
           move-to-workspace-9 = [ "<Shift><Super>9" ];
         };
-        "org/gnome/shell/keybindings" = {
-          # Remove the default hotkeys for opening favorited applications.
-          switch-to-application-1 = [ ];
-          switch-to-application-2 = [ ];
-          switch-to-application-3 = [ ];
-          switch-to-application-4 = [ ];
-          switch-to-application-5 = [ ];
-          switch-to-application-6 = [ ];
-          switch-to-application-7 = [ ];
-          switch-to-application-8 = [ ];
-          switch-to-application-9 = [ ];
-        };
         "org/gnome/settings-daemon/plugins/color" = {
           night-light-enabled = true;
         };
-        "org/gnome/desktop/background" = {
-          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/pixels-l.webp";
-          picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/pixels-d.webp";
-          primary-color = "#967864";
+        "org/gnome/settings-daemon/plugins/power" = {
+          ambient-enabled = false;
         };
-        "org/gnome/desktop/screensaver" = {
-          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/pixels-l.webp";
-          primary-color = "#967864";
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+          binding = "<Super>w";
+          command = "firefox";
+          name = "Firefox";
         };
-        "org/gnome/desktop/peripherals/keyboard" = {
-          delay = 200;
-          repeat-interval = 40;
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+          binding = "<Super>Return";
+          command = "kitty";
+          name = "Kitty";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+          binding = "<Super>comma";
+          command = "gnome-control-center";
+          name = "Settings";
         };
         "system/locale" = {
           region = "sv_SE.UTF-8";
@@ -103,6 +205,16 @@ in
           disable-disconnected-notifications = true;
         };
       };
+
+      # PaperWM style override
+      # See default styles: https://github.com/paperwm/PaperWM/blob/release/config/user.css
+      xdg.configFile."paperwm/user.css".text = ''
+        .paperwm-selection {
+          border-radius: 6px !important;
+          background-color: transparent;
+          border: 3px solid #${colors.base0E};
+        }
+      '';
     };
 
     services.xserver = {
@@ -110,9 +222,11 @@ in
       enable = true;
 
       # Configure keymap in X11
-      layout = "se,se";
-      xkbVariant = "us,";
-      xkbOptions = "caps:ctrl_modifier,grp:win_space_toggle";
+      xkb = {
+        layout = "se,se";
+        variant = "us,";
+        options = "caps:ctrl_modifier,grp:win_space_toggle";
+      };
 
       # Configure Set console typematic delay and rate in X11
       autoRepeatDelay = 200;
@@ -127,10 +241,6 @@ in
       };
 
       displayManager = {
-        autoLogin = mkIf config.antob.user.autoLogin {
-          enable = true;
-          user = config.antob.user.name;
-        };
         gdm = {
           enable = true;
           wayland = true;
@@ -138,6 +248,11 @@ in
         };
       };
       desktopManager.gnome.enable = true;
+    };
+
+    services.displayManager.autoLogin = mkIf config.antob.user.autoLogin {
+      enable = true;
+      user = config.antob.user.name;
     };
 
     systemd.services = mkIf config.antob.user.autoLogin {
@@ -154,10 +269,10 @@ in
     environment.gnome.excludePackages = (with pkgs; [
       gnome-photos
       gnome-tour
+      gedit # text editor
     ]) ++ (with pkgs.gnome; [
       cheese # webcam tool
       gnome-music
-      gedit # text editor
       epiphany # web browser
       geary # email reader
       gnome-characters

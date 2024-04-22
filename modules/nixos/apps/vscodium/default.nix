@@ -24,6 +24,7 @@ in
         };
 
         window = {
+          titleBarStyle = "custom";
           menuBarVisibility = "toggle";
           confirmBeforeClose = "always";
           zoomLevel = 1;

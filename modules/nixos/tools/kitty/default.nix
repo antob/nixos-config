@@ -28,24 +28,18 @@ in {
         tab_bar_style = "separator";
         tab_separator = " | ";
         enabled_layouts = "tall,stack";
+        hide_window_decorations = "yes";
+        background_opacity = "1.0";
       };
 
       extraConfig = ''
         include ${./themes/one-dark.conf}
       '';
 
-      # key_bindings = [
-      #   {
-      #     key = "Tab";
-      #     mods = "Control";
-      #     chars = "x1b[9;5u";
-      #   }
-      #   {
-      #     key = "Tab";
-      #     mods = "Control|Shift";
-      #     chars = "x1b[9;6u";
-      #   }
-      # ];
+      keybindings = {
+        "ctrl+shift+right" = "next_window";
+        "ctrl+shift+left" = "previous_window";
+      };
     };
   };
 }
