@@ -38,7 +38,8 @@ in
       guvcview
       gnome.gnome-calculator
       # rustdesk
-      remmina
+      # remmina # Remote Desktop Client
+      obsidian
     ];
   };
 }
