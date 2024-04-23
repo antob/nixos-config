@@ -49,6 +49,10 @@ in
         };
 
         rust-analyzer.check.command = "clippy";
+
+        "[json]" = {
+          editor.defaultFormatter = "vscode.json-language-features";
+        };
       };
 
       ".config/VSCodium/User/keybindings.json".source = jsonFormat.generate "vscode-keybindings" [
