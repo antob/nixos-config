@@ -19,6 +19,7 @@ in
       gnomeExtensions.appindicator
       gnomeExtensions.paperwm
       gnomeExtensions.switcher
+      gnomeExtensions.vitals
       gnomeExtensions.disable-workspace-switcher
       antob.gnome-shell-extension-instantworkspaceswitcher
       antob.gnome-shell-extension-expand-shutdown-menu
@@ -196,6 +197,11 @@ in
           binding = "<Super>comma";
           command = "gnome-control-center";
           name = "Settings";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+          binding = "<Super>e";
+          command = "nautilus";
+          name = "Files";
         };
         "system/locale" = {
           region = "sv_SE.UTF-8";
