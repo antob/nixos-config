@@ -31,7 +31,7 @@ in
     services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
 
     antob.system.env = {
-      MOZ_ENABLE_WAYLAND = "1";
+      MOZ_ENABLE_WAYLAND = "0";
     };
 
     # Desktop additions
