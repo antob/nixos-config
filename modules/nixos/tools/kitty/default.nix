@@ -39,6 +39,8 @@ in {
       keybindings = {
         "ctrl+shift+right" = "next_window";
         "ctrl+shift+left" = "previous_window";
+        "ctrl+shift+enter" = "new_window_with_cwd";
+        "ctrl+shift+tab" = "new_tab_with_cwd";
       };
     };
   };
