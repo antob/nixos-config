@@ -188,6 +188,8 @@ in
           enable-hot-corners = false;
           show-battery-percentage = true;
           cursor-size = 16;
+          text-scaling-factor = 1.25;
+          font-hinting = "medium";
         };
         "org/gnome/desktop/wm/preferences" = {
           workspace-names = [ "Main" ];
