@@ -128,6 +128,19 @@ in
           switch-down-workspace = [ "" ];
           switch-up-workspace-from-all-monitors = [ "<Super>Page_Up" ];
           switch-down-workspace-from-all-monitors = [ "<Super>Page_Down" ];
+
+          switch-monitor-above = [ "" ];
+          switch-monitor-below = [ "" ];
+          switch-monitor-left = [ "" ];
+          switch-monitor-right = [ "" ];
+
+          move-monitor-above = [ "<Control><Super>Up" ];
+          move-monitor-below = [ "<Control><Super>Down" ];
+
+          move-left = [ "<Shift><Super>Left" ];
+          move-right = [ "<Shift><Super>Right" ];
+          move-up = [ "<Shift><Super>Up" ];
+          move-down = [ "<Shift><Super>Down" ];
         };
         "org/gnome/shell/extensions/auto-move-windows" = {
           application-list = [
