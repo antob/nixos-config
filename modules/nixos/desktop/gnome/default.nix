@@ -45,6 +45,24 @@ in
       extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
     };
 
+    # GTK config (specific for Gnome)
+    antob.home.extraOptions.gtk = {
+      enable = true;
+      cursorTheme = {
+        name = "Bibata-Modern-Ice";
+        size = 16;
+        package = pkgs.bibata-cursors;
+      };
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+        gtk-error-bell = false;
+      };
+      gtk4.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+        gtk-error-bell = false;
+      };
+    };
+
     # dconf and xfconf settings
     antob.home.extraOptions = {
       # xsession.enable = true;
