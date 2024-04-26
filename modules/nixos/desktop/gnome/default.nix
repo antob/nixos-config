@@ -21,8 +21,10 @@ in
       gnomeExtensions.switcher
       gnomeExtensions.vitals
       gnomeExtensions.disable-workspace-switcher
+      # gnomeExtensions.move-clock
       antob.gnome-shell-extension-instantworkspaceswitcher
       antob.gnome-shell-extension-expand-shutdown-menu
+      antob.gnome-extension-remove-accessibility-menu
       bibata-cursors
     ];
 
@@ -33,7 +35,9 @@ in
     };
 
     # Desktop additions
-    antob.desktop.addons.keyring = enabled;
+    antob.desktop.addons = {
+      keyring = enabled;
+    };
 
     # Desktop portal
     xdg.portal = {
@@ -60,6 +64,9 @@ in
             "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
             "no-overview@fthx"
             "expand-shutdown-menu@antob.se"
+            "remove-accessibility-menu@antob.se"
+            "Vitals@CoreCoding.com"
+            "Move_Clock@rmy.pobox.com"
           ];
         };
         "org/gnome/shell/extensions/switcher" = {
