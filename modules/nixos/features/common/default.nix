@@ -28,7 +28,6 @@ in
         neovim = enabled;
         helix = enabled;
         tmux = enabled;
-        zellij = enabled;
       };
 
       # virtualisation.podman = enabled;
@@ -129,6 +128,7 @@ in
     services = {
       upower.enable = true;
       dbus.enable = true;
+      envfs.enable = true;
       tailscale.enable = true;
     };
 
