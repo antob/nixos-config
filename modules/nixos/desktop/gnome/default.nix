@@ -31,7 +31,8 @@ in
     services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
 
     antob.system.env = {
-      MOZ_ENABLE_WAYLAND = "0";
+      MOZ_ENABLE_WAYLAND = "1";
+      NIXOS_OZONE_WL = "1";
     };
 
     # Desktop additions
@@ -50,7 +51,7 @@ in
       enable = true;
       cursorTheme = {
         name = "Bibata-Modern-Ice";
-        size = 16;
+        size = 20;
         package = pkgs.bibata-cursors;
       };
       gtk3.extraConfig = {
@@ -76,7 +77,8 @@ in
             "paperwm@paperwm.github.com"
             "switcher@landau.fi"
             "instantworkspaceswitcher@amalantony.net"
-            "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
+            # Auto move windows does not work well with PaperWM
+            # "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "disable-workspace-switcher@jbradaric.me"
             "appindicatorsupport@rgcjonas.gmail.com"
             "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
@@ -133,9 +135,20 @@ in
           switch-monitor-below = [ "" ];
           switch-monitor-left = [ "" ];
           switch-monitor-right = [ "" ];
+          swap-monitor-above = [ "" ];
+          swap-monitor-below = [ "" ];
+          swap-monitor-right = [ "" ];
+          swap-monitor-left = [ "" ];
 
           move-monitor-above = [ "<Control><Super>Up" ];
           move-monitor-below = [ "<Control><Super>Down" ];
+          move-monitor-left = [ "<Control><Super>Left" ];
+          move-monitor-right = [ "<Control><Super>Right" ];
+
+          move-space-monitor-above = [ "<Alt><Super>Up" ];
+          move-space-monitor-below = [ "<Alt><Super>Down" ];
+          move-space-monitor-left = [ "<Alt><Super>Left" ];
+          move-space-monitor-right = [ "<Alt><Super>Right" ];
 
           move-left = [ "<Shift><Super>Left" ];
           move-right = [ "<Shift><Super>Right" ];
@@ -187,7 +200,7 @@ in
           color-scheme = "prefer-dark";
           enable-hot-corners = false;
           show-battery-percentage = true;
-          cursor-size = 16;
+          # cursor-size = 16;
           text-scaling-factor = 1.25;
           font-hinting = "medium";
         };
@@ -278,14 +291,6 @@ in
       autoRepeatDelay = 200;
       autoRepeatInterval = 40;
 
-      libinput = {
-        enable = true;
-        touchpad = {
-          disableWhileTyping = true;
-          naturalScrolling = true;
-        };
-      };
-
       displayManager = {
         gdm = {
           enable = true;
@@ -294,6 +299,14 @@ in
         };
       };
       desktopManager.gnome.enable = true;
+    };
+
+    services.libinput = {
+      enable = true;
+      touchpad = {
+        disableWhileTyping = true;
+        naturalScrolling = true;
+      };
     };
 
     services.displayManager.autoLogin = mkIf config.antob.user.autoLogin {
