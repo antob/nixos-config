@@ -17,7 +17,7 @@ in {
     services.blueman.enable = true;
 
     antob.home.extraOptions.dconf.settings = {
-      "/org/blueman/general" = {
+      "org/blueman/general" = {
         plugin-list = [ "!ConnectionNotifier" ];
       };
     };
