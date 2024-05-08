@@ -38,7 +38,7 @@ let
     "privacy.trackingprotection.socialtracking.enabled" = true;
     "privacy.donottrackheader.enabled" = true;
     "privacy.globalprivacycontrol.enabled" = true;
-    "privacy.resistFingerprinting" = true;
+    "privacy.resistFingerprinting" = false; # Disabled to make browser time correct
     "privacy.trackingprotection.fingerprinting.enabled" = true;
     "privacy.trackingprotection.cryptomining.enabled" = true;
     # "privacy.firstparty.isolate" = true;
