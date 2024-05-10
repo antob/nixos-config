@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-extension-remove-accessibility-menu";
-  version = "1";
+  version = "2";
 
   src = fetchFromGitHub {
     owner = "antob";
     repo = "gnome-extension-remove-accessibility-menu";
-    rev = "1e7559d";
-    sha256 = "sha256-K1rplWxbM2paWtk6YicygpXKO1GpNPazmbqhFVaVAmM=";
+    rev = "8d50b0c";
+    sha256 = "sha256-va5fFbrg6q3Y7ogzunYaUBcmXPnMsaXUH+RFm70iC4c=";
   };
 
   passthru = {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "This is a GNOME shell extension that removes the accessibility menu.";
   };
 }

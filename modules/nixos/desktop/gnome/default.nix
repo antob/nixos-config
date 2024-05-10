@@ -18,11 +18,13 @@ in
       gnome.adwaita-icon-theme
       gnomeExtensions.appindicator
       gnomeExtensions.paperwm
-      gnomeExtensions.switcher
+      # gnomeExtensions.switcher # Use custom package for now.
       gnomeExtensions.vitals
-      gnomeExtensions.disable-workspace-switcher
-      # gnomeExtensions.move-clock
-      antob.gnome-shell-extension-instantworkspaceswitcher
+      # gnomeExtensions.disable-workspace-switcher # Not compatible with Gnome 46
+      gnomeExtensions.move-clock
+      gnomeExtensions.caffeine
+      antob.gnome-shell-extension-switcher
+      # antob.gnome-shell-extension-instantworkspaceswitcher # Not compatible with Gnome 46
       antob.gnome-shell-extension-expand-shutdown-menu
       antob.gnome-extension-remove-accessibility-menu
       bibata-cursors
@@ -76,10 +78,10 @@ in
           enabled-extensions = [
             "paperwm@paperwm.github.com"
             "switcher@landau.fi"
-            "instantworkspaceswitcher@amalantony.net"
+            # "instantworkspaceswitcher@amalantony.net" # Not compatible with Gnome 46
             # Auto move windows does not work well with PaperWM
             # "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
-            "disable-workspace-switcher@jbradaric.me"
+            # "disable-workspace-switcher@jbradaric.me" # Not compatible with Gnome 46
             "appindicatorsupport@rgcjonas.gmail.com"
             "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
             "no-overview@fthx"
@@ -87,6 +89,7 @@ in
             "remove-accessibility-menu@antob.se"
             "Vitals@CoreCoding.com"
             "Move_Clock@rmy.pobox.com"
+            "caffeine@patapon.info"
           ];
         };
         "org/gnome/shell/extensions/switcher" = {
