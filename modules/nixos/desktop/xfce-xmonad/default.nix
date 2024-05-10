@@ -145,6 +145,14 @@ in
       };
     };
 
+    services.libinput = {
+      enable = true;
+      touchpad = {
+        disableWhileTyping = true;
+        naturalScrolling = true;
+      };
+    };
+
     services.xserver = {
       # Enable the X11 windowing system.
       enable = true;
@@ -159,14 +167,6 @@ in
       # Configure Set console typematic delay and rate in X11
       autoRepeatDelay = 200;
       autoRepeatInterval = 40;
-
-      libinput = {
-        enable = true;
-        touchpad = {
-          disableWhileTyping = true;
-          naturalScrolling = true;
-        };
-      };
 
       # Enable LightDm display manager.
       displayManager = {

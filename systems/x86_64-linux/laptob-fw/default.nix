@@ -8,6 +8,10 @@ with lib.antob;
     auto-cpufreq.nixosModules.default
   ];
 
+  # Temp fix for:
+  # https://github.com/gytis-ivaskevicius/flake-utils-plus/issues/145
+  nix.package = pkgs.nixVersions.latest;
+
   antob = {
     features = {
       common = enabled;
