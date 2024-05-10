@@ -5,10 +5,11 @@ stdenv.mkDerivation {
   version = "23";
 
   src = fetchFromGitHub {
-    owner = "amalantony";
+    # owner = "amalantony";
+    owner = "Dritzii"; # Forked for Gnome 46 compability.
     repo = "gnome-shell-extension-instant-workspace-switcher";
-    rev = "8b0c13d";
-    sha256 = "sha256-Ual7kAOeGPe3DF5XHf5eziscYeMLUnDktEGU41Yl4E4=";
+    rev = "171e310";
+    sha256 = "sha256-7nPpUz19ydHhrahMghxI0q+BJtGd7Ro+zQsBdN4bWyE=";
   };
 
   passthru = {
