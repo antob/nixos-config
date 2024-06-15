@@ -167,6 +167,10 @@ in
             "slack.desktop:5"
           ];
         };
+        "org/gnome/shell/extensions/caffeine" = {
+          show-indicator = "only-active";
+          toggle-shortcut = [ "<Super>u" ];
+        };
         "org/gnome/shell/keybindings" = {
           # Remove the default hotkeys for opening favorited applications.
           switch-to-application-1 = [ ];

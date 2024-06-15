@@ -2,8 +2,11 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.kitty;
-in {
+let
+  cfg = config.antob.tools.kitty;
+  colors = config.antob.color-scheme.colors;
+in
+{
   options.antob.tools.kitty = with types; {
     enable = mkEnableOption "Enable kitty";
   };
@@ -27,9 +30,12 @@ in {
         window_padding_width = "4";
         tab_bar_style = "separator";
         tab_separator = " | ";
-        enabled_layouts = "tall,stack";
+        enabled_layouts = "tall,vertical,horizontal,grid,stack";
         hide_window_decorations = "yes";
         background_opacity = "1.0";
+        active_border_color = "#${colors.base0E}";
+        inactive_border_color = "#${colors.base08}";
+        window_border_width = "1pt";
       };
 
       extraConfig = ''
@@ -41,6 +47,7 @@ in {
         "ctrl+shift+left" = "previous_window";
         "ctrl+shift+enter" = "new_window_with_cwd";
         "ctrl+shift+tab" = "new_tab_with_cwd";
+        "ctrl+shift+m" = "toggle_layout stack";
       };
     };
   };

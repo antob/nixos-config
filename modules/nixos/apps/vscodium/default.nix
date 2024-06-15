@@ -36,6 +36,10 @@ in
           stickyScroll.enabled = false;
         };
 
+        files = {
+          insertFinalNewline = true;
+        };
+
         extensions = {
           autoCheckUpdates = false;
           ignoreRecommendations = true;

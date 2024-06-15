@@ -40,6 +40,7 @@ in
       # rustdesk
       # remmina # Remote Desktop Client
       obsidian
+      discord
     ];
   };
 }
