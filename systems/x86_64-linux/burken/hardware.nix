@@ -95,9 +95,8 @@ in {
   # high-resolution display
   #hardware.video.hidpi.enable = true;
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
     extraPackages = with pkgs; [
       vaapiVdpau
     ];

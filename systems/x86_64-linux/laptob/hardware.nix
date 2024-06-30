@@ -95,10 +95,7 @@ in {
   # high-resolution display
   #hardware.video.hidpi.enable = true;
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-  };
+  hardware.graphics.enable = true;
 
   # Enable DHCP on the wireless link
   networking = {

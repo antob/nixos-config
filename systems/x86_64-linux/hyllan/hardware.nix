@@ -78,10 +78,7 @@ in {
   hardware.cpu.amd.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-  };
+  hardware.graphics.enable = true;
 
   # Derived from `head -c 8 /etc/machine-id`
   networking.hostId = "236689a3";
