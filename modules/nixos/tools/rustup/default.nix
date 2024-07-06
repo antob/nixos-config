@@ -15,6 +15,7 @@ in
       wasm-pack
       cargo-generate
       nodejs
+      bacon
       lldb
       llvmPackages.bintools
       openssl
