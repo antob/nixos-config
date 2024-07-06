@@ -41,6 +41,7 @@ in
       # remmina # Remote Desktop Client
       obsidian
       discord
+      antob.zed-editor
     ];
   };
 }
