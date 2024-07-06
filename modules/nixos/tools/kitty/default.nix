@@ -48,6 +48,11 @@ in
         "ctrl+shift+enter" = "new_window_with_cwd";
         "ctrl+shift+tab" = "new_tab_with_cwd";
         "ctrl+shift+m" = "toggle_layout stack";
+        "ctrl+left" = "resize_window narrower";
+        "ctrl+right" = "resize_window wider";
+        "ctrl+up" = "resize_window taller";
+        "ctrl+down" = "resize_window shorter 3";
+        "ctrl+home" = "resize_window reset";
       };
     };
   };
