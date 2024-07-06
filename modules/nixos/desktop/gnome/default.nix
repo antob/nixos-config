@@ -23,6 +23,8 @@ in
       antob.gnome-shell-extension-disable-workspace-switcher
       gnomeExtensions.move-clock
       gnomeExtensions.caffeine
+      gnomeExtensions.no-overview
+      gnomeExtensions.hide-cursor
       antob.gnome-shell-extension-switcher
       antob.gnome-shell-extension-instantworkspaceswitcher
       antob.gnome-shell-extension-expand-shutdown-menu
@@ -85,6 +87,7 @@ in
             "appindicatorsupport@rgcjonas.gmail.com"
             "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
             "no-overview@fthx"
+            "hide-cursor@elcste.com"
             "expand-shutdown-menu@antob.se"
             "remove-accessibility-menu@antob.se"
             "Vitals@CoreCoding.com"
@@ -134,8 +137,8 @@ in
           switch-up-workspace-from-all-monitors = [ "<Super>Page_Up" ];
           switch-down-workspace-from-all-monitors = [ "<Super>Page_Down" ];
 
-          switch-monitor-above = [ "" ];
-          switch-monitor-below = [ "" ];
+          switch-monitor-above = [ "<Alt>Up" ];
+          switch-monitor-below = [ "<Alt>Down" ];
           switch-monitor-left = [ "" ];
           switch-monitor-right = [ "" ];
           swap-monitor-above = [ "" ];
@@ -143,10 +146,10 @@ in
           swap-monitor-right = [ "" ];
           swap-monitor-left = [ "" ];
 
-          move-monitor-above = [ "<Control><Super>Up" ];
-          move-monitor-below = [ "<Control><Super>Down" ];
-          move-monitor-left = [ "<Control><Super>Left" ];
-          move-monitor-right = [ "<Control><Super>Right" ];
+          move-monitor-above = [ "<Shift><Alt>Up" ];
+          move-monitor-below = [ "<Shift><Alt>Down" ];
+          move-monitor-left = [ "" ];
+          move-monitor-right = [ "" ];
 
           move-space-monitor-above = [ "<Alt><Super>Up" ];
           move-space-monitor-below = [ "<Alt><Super>Down" ];
