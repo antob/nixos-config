@@ -14,8 +14,8 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      gnome.gnome-tweaks
-      gnome.adwaita-icon-theme
+      gnome-tweaks
+      adwaita-icon-theme
       gnomeExtensions.appindicator
       gnomeExtensions.paperwm
       # gnomeExtensions.switcher # Use custom package for now.
@@ -339,17 +339,17 @@ in
       gnome-photos
       gnome-tour
       gedit # text editor
-    ]) ++ (with pkgs.gnome; [
       cheese # webcam tool
-      gnome-music
       epiphany # web browser
       geary # email reader
+      yelp # Help view
+    ]) ++ (with pkgs.gnome; [
+      gnome-music
       gnome-characters
       tali # poker game
       iagno # go game
       hitori # sudoku game
       atomix # puzzle game
-      yelp # Help view
       gnome-contacts
       gnome-initial-setup
     ]);

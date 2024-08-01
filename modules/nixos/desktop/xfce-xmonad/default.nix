@@ -28,7 +28,7 @@ in
       feh
       dmenu
       j4-dmenu-desktop
-      gnome.gnome-calculator
+      gnome-calculator
       xcwd
       xdotool
       xclip

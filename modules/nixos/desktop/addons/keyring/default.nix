@@ -15,7 +15,7 @@ in {
       components = [ "pkcs11" "secrets" ];
     };
 
-    environment.systemPackages = with pkgs; [ gnome.seahorse ];
+    environment.systemPackages = with pkgs; [ seahorse ];
     antob.persistence.home.directories = [ ".local/share/keyrings" ];
   };
 }

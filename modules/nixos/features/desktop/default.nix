@@ -36,7 +36,7 @@ in
       vlc
       v4l-utils
       guvcview
-      gnome.gnome-calculator
+      gnome-calculator
       # rustdesk
       # remmina # Remote Desktop Client
       obsidian
