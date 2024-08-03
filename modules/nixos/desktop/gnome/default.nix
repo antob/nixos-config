@@ -70,6 +70,13 @@ in
 
     # dconf and xfconf settings
     antob.home.extraOptions = {
+      # Default mime apps
+      xdg.mimeApps.defaultApplications = {
+        "image/png" = [ "org.gnome.Loupe.desktop" ];
+        "image/jpeg" = [ "org.gnome.Loupe.desktop" ];
+        "application/pdf" = [ "org.gnome.Evince.desktop" ];
+      };
+
       # xsession.enable = true;
 
       dconf.settings = let inherit (lib.gvariant) mkTuple mkUint32 mkVariant; in {
