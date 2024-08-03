@@ -44,6 +44,9 @@ in
       keyring = enabled;
     };
 
+    # Apps
+    antob.apps.flameshot = enabled;
+
     # Desktop portal
     xdg.portal = {
       enable = true;
@@ -192,6 +195,7 @@ in
           switch-to-application-7 = [ ];
           switch-to-application-8 = [ ];
           switch-to-application-9 = [ ];
+          show-screenshot-ui = [ ];
         };
         "org/gnome/desktop/sound" = {
           event-sounds = false;
@@ -272,6 +276,11 @@ in
           binding = "<Super>e";
           command = "nautilus";
           name = "Files";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+          binding = "Print";
+          command = "flameshot-gui";
+          name = "Flameshot";
         };
         "system/locale" = {
           region = "sv_SE.UTF-8";

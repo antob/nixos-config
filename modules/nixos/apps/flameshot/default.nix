@@ -2,13 +2,18 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.apps.flameshot;
-in {
+let
+  cfg = config.antob.apps.flameshot;
+  flameshot-gui = pkgs.callPackage ./flameshot-gui.nix { };
+in
+{
   options.antob.apps.flameshot = with types; {
     enable = mkEnableOption "Whether or not to install and configure flameshot.";
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ flameshot-gui ];
+
     antob.home.extraOptions = {
       services.flameshot = {
         enable = true;
