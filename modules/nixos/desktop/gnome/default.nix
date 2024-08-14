@@ -114,6 +114,7 @@ in
           show-switcher = [ "<Super>d" ];
         };
         "org/gnome/shell/extensions/paperwm" = {
+          maximize-within-tiling = false;
           gesture-enabled = false;
           selection-border-size = 5;
           show-focus-mode-icon = false;
