@@ -9,8 +9,8 @@ with lib.antob;
   ];
 
   # Temp fix for:
-  # https://github.com/gytis-ivaskevicius/flake-utils-plus/issues/145
-  nix.package = pkgs.nixVersions.latest;
+  # https://github.com/cachix/devenv/issues/1364
+  nix.package = pkgs.nixVersions.nix_2_23;
 
   antob = {
     features = {
