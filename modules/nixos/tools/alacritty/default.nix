@@ -20,7 +20,7 @@ in {
             x = 8;
             y = 6;
           };
-          decorations = "full";
+          decorations = "None";
         };
 
         font = {
@@ -28,7 +28,7 @@ in {
             family = "Hack Nerd Font";
             style = "Regular";
           };
-          size = 11.5;
+          size = 14;
         };
 
         # colors = import ./themes/custom.nix;
@@ -37,7 +37,7 @@ in {
 
         cursor.style.shape = "Beam";
 
-        key_bindings = [
+        keyboard.bindings = [
           {
             key = "Tab";
             mods = "Control";
