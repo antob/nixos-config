@@ -36,6 +36,7 @@ in
         active_border_color = "#${colors.base0E}";
         inactive_border_color = "#${colors.base08}";
         window_border_width = "1pt";
+        scrollback_lines = 10000;
       };
 
       extraConfig = ''
