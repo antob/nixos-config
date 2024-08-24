@@ -82,6 +82,15 @@ in
 
       # xsession.enable = true;
 
+      # Fix for "org.freedesktop.systemd1.NoSuchUnit: Unit tray.target not found."
+      # when restarting home manager. See https://github.com/nix-community/home-manager/issues/2064
+      systemd.user.targets.tray = {
+        Unit = {
+          Description = "Home Manager System Tray";
+          Requires = [ "graphical-session-pre.target" ];
+        };
+      };
+
       dconf.settings = let inherit (lib.gvariant) mkTuple mkUint32 mkVariant; in {
         "org/gnome/shell" = {
           disable-user-extensions = false;
