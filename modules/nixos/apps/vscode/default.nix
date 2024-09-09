@@ -88,6 +88,8 @@ in
           editor.defaultFormatter = "vscode.json-language-features";
         };
 
+        diffEditor.ignoreTrimWhitespace = false;
+
         # Plugin settings
         rust-analyzer.check.command = "clippy";
         svelte.enable-ts-plugin = true;

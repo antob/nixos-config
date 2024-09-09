@@ -52,6 +52,8 @@ in
           "**/coverage" = true;
         };
 
+        diffEditor.ignoreTrimWhitespace = false;
+
         rust-analyzer.check.command = "clippy";
 
         "[json]" = {
