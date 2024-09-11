@@ -123,6 +123,7 @@ in
       tailspin
       gnumake
       cifs-utils # Mount SMB shares
+      quickemu
     ];
 
     services = {
