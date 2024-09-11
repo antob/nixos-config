@@ -32,7 +32,7 @@ in
       bibata-cursors
     ];
 
-    services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+    services.udev.packages = with pkgs; [ gnome-settings-daemon ];
 
     antob.system.env = {
       MOZ_ENABLE_WAYLAND = "1";
@@ -369,13 +369,8 @@ in
       epiphany # web browser
       geary # email reader
       yelp # Help view
-    ]) ++ (with pkgs.gnome; [
       gnome-music
       gnome-characters
-      tali # poker game
-      iagno # go game
-      hitori # sudoku game
-      atomix # puzzle game
       gnome-contacts
       gnome-initial-setup
     ]);
