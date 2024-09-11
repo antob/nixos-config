@@ -103,6 +103,7 @@ in
         rust-lang.rust-analyzer
         dotjoshjohnson.xml
         ms-dotnettools.csharp
+        csharpier.csharpier-vscode
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
           name = "vscode-standard-ruby";
