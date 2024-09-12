@@ -54,7 +54,9 @@ in
 
         diffEditor.ignoreTrimWhitespace = false;
 
+        # Installed extensions config
         rust-analyzer.check.command = "clippy";
+        redhat.telemetry.enabled = false;
 
         "[json]" = {
           editor.defaultFormatter = "vscode.json-language-features";
@@ -105,6 +107,7 @@ in
           rust-lang.rust-analyzer
           dotjoshjohnson.xml
           ms-dotnettools.csharp
+          redhat.vscode-yaml
         ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
             name = "vscode-standard-ruby";
@@ -141,6 +144,12 @@ in
             publisher = "jeff-hykin";
             version = "0.0.2";
             sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
+          }
+          {
+            name = "vscode-openapi";
+            publisher = "42crunch";
+            version = "4.27.0";
+            sha256 = "sha256-urXGyHpIDWQ0Bc+8LODC0DcEo6jQ5tA/QptyxCej9yU=";
           }
         ];
       })
