@@ -11,6 +11,8 @@ in
 
   config = mkIf cfg.enable {
     nix.settings = {
+      keep-outputs = true;
+      keep-derivations = true;
       substituters = [
         "https://devenv.cachix.org/"
       ];
