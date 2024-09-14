@@ -37,6 +37,7 @@ in
         inactive_border_color = "#${colors.base08}";
         window_border_width = "1pt";
         scrollback_lines = 10000;
+        term = "xterm-256color";
       };
 
       extraConfig = ''

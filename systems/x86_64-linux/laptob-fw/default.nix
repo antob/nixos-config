@@ -28,9 +28,9 @@ with lib.antob;
       zsa-voyager = enabled;
       yubikey = enabled;
     };
-  };
 
-  antob.system.console.setFont = mkForce false;
+    system.console.setFont = mkForce false;
+  };
 
   environment.systemPackages = with pkgs; [
     powertop
@@ -40,6 +40,7 @@ with lib.antob;
     glxinfo
     deploy-rs
     sops
+    quickemu
     nfs-utils # Needed for mounting NFS shares
   ];
 
@@ -52,6 +53,8 @@ with lib.antob;
     };
 
     chrony.enable = true;
+
+    tailscale.enable = true;
   };
 
   # NFS shares

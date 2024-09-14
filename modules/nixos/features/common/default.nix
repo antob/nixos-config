@@ -30,8 +30,8 @@ in
         tmux = enabled;
       };
 
-      # virtualisation.podman = enabled;
-      virtualisation.docker = enabled;
+      # virtualisation.podman = enable = mkDefault true;
+      virtualisation.docker.enable = mkDefault true;
 
       hardware = {
         networking = enabled;
@@ -123,14 +123,12 @@ in
       tailspin
       gnumake
       cifs-utils # Mount SMB shares
-      quickemu
     ];
 
     services = {
       upower.enable = true;
       dbus.enable = true;
       envfs.enable = true;
-      tailscale.enable = true;
     };
 
     location = {
