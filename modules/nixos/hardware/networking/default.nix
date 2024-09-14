@@ -42,6 +42,8 @@ in {
       enable = true;
       settings = {
         address = "/.test/127.0.0.1";
+        interface = "wlan0";
+        bind-interfaces = true;
       };
     };
 
