@@ -42,7 +42,7 @@ in {
       enable = true;
       settings = {
         address = "/.test/127.0.0.1";
-        interface = "wlan0";
+        listen-address = [ "::1" "127.0.0.1" ];
         bind-interfaces = true;
       };
     };
