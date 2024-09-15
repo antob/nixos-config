@@ -8,10 +8,6 @@ with lib.antob;
     ./hardware.nix
   ];
 
-  # Temp fix for:
-  # https://github.com/cachix/devenv/issues/1364
-  nix.package = pkgs.nixVersions.nix_2_23;
-
   antob = {
     features = {
       common = enabled;
