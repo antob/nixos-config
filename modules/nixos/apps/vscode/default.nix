@@ -102,6 +102,8 @@ in
         jnoortheen.nix-ide
         rust-lang.rust-analyzer
         dotjoshjohnson.xml
+        redhat.vscode-yaml
+        shd101wyy.markdown-preview-enhanced
         ms-dotnettools.csharp
         csharpier.csharpier-vscode
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [

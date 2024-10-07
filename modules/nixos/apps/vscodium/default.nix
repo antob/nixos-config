@@ -106,8 +106,8 @@ in
           jnoortheen.nix-ide
           rust-lang.rust-analyzer
           dotjoshjohnson.xml
-          ms-dotnettools.csharp
           redhat.vscode-yaml
+          shd101wyy.markdown-preview-enhanced
         ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
             name = "vscode-standard-ruby";
