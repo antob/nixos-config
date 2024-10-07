@@ -14,6 +14,7 @@ in
     antob = {
       tools = {
         kitty = enabled;
+        alacritty = enabled;
         git = enabled;
         zsh = enabled;
         starship = enabled;
@@ -28,6 +29,7 @@ in
         neovim = enabled;
         helix = enabled;
         tmux = enabled;
+        zellij = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;

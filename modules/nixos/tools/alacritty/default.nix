@@ -21,6 +21,7 @@ in {
             y = 6;
           };
           decorations = "None";
+          startup_mode = "Maximized";
         };
 
         font = {
@@ -31,11 +32,16 @@ in {
           size = 14;
         };
 
+        shell.program = mkIf config.antob.cli-apps.zellij.enable "zellij";
+
         # colors = import ./themes/custom.nix;
         # colors = import ./themes/catppuccin-mocha.nix;
         colors = import ./themes/one-dark.nix;
 
-        cursor.style.shape = "Beam";
+        cursor = {
+          style.shape = "Beam";
+          thickness = 0.2;
+        };
 
         keyboard.bindings = [
           {

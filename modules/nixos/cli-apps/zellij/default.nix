@@ -20,10 +20,8 @@ in {
       # Generate auto completion.
       # Include work around for issue https://github.com/zellij-org/zellij/issues/1933
       programs.zsh.initExtra = mkOrder 200 ''
-        if [[ -x "$(command -v zellij)" ]];
-        then
-            eval "$(zellij setup --generate-completion zsh | grep "^function")"
-        fi;
+        autoload -U +X compinit && compinit
+        . <( zellij setup --generate-completion zsh | sed -Ee 's/^(_(zellij) ).*/compdef \1\2/' )
       '';
     };
 
