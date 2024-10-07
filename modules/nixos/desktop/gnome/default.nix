@@ -100,11 +100,7 @@ in
             "paperwm@paperwm.github.com"
             "switcher@landau.fi"
             "instantworkspaceswitcher@amalantony.net"
-            # Auto move windows does not work well with PaperWM
-            # "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
             "disable-workspace-switcher@jbradaric.me"
-            "appindicatorsupport@rgcjonas.gmail.com"
-            "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
             "no-overview@fthx"
             "hide-cursor@elcste.com"
             "expand-shutdown-menu@antob.se"
@@ -126,13 +122,17 @@ in
           maximize-within-tiling = false;
           gesture-enabled = false;
           selection-border-size = 5;
+          selection-border-radius-bottom = 12;
           show-focus-mode-icon = false;
+          show-open-position-icon = false;
           show-window-position-bar = false;
           show-workspace-indicator = false;
           use-default-background = true;
           vertical-margin = 10;
           vertical-margin-bottom = 10;
           disable-topbar-styling = true;
+          disable-scratch-in-overview = true;
+          topbar-mouse-scroll-enable = false;
           animation-time = 0;
           winprops = [
             ''
@@ -194,6 +194,16 @@ in
           show-indicator = "only-active";
           toggle-shortcut = [ "<Super>u" ];
         };
+        "org/gnome/shell/extensions/vitals" = {
+          show-voltage = false;
+          show-fan = false;
+          show-battery = true;
+          hot-sensors = [
+            "_memory_usage_"
+            "_battery_rate_"
+            "_processor_usage_"
+          ];
+        };
         "org/gnome/shell/keybindings" = {
           # Remove the default hotkeys for opening favorited applications.
           switch-to-application-1 = [ ];
@@ -227,6 +237,14 @@ in
           tap-to-click = true;
           two-finger-scrolling-enabled = true;
         };
+        "org/gnome/desktop/peripherals/mouse" = {
+          speed = 0.25;
+        };
+        "org/gnome/desktop/input-sources" = {
+          sources = [
+            (mkTuple [ "xkb" "se+us" ])
+          ];
+        };
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           enable-hot-corners = false;
@@ -234,6 +252,8 @@ in
           # cursor-size = 16;
           text-scaling-factor = 1.25;
           font-hinting = "medium";
+          clock-show-weekday = true;
+          clock-show-weekdate = true;
         };
         "org/gnome/desktop/wm/preferences" = {
           workspace-names = [ "Main" ];
@@ -291,6 +311,11 @@ in
           binding = "Print";
           command = "flameshot-gui";
           name = "Flameshot";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
+          binding = "<Super><Shift>Return";
+          command = "alacritty";
+          name = "Alacritty";
         };
         "system/locale" = {
           region = "sv_SE.UTF-8";
@@ -374,5 +399,7 @@ in
       gnome-contacts
       gnome-initial-setup
     ]);
+
+    antob.persistence.home.files = [ ".config/monitors.xml" ];
   };
 }
