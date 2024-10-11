@@ -4,7 +4,6 @@ with lib;
 with lib.antob;
 let
   cfg = config.antob.desktop.gnome;
-  gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
 in
 {
@@ -16,20 +15,14 @@ in
     environment.systemPackages = with pkgs; [
       gnome-tweaks
       adwaita-icon-theme
-      gnomeExtensions.appindicator
-      gnomeExtensions.paperwm
-      # gnomeExtensions.switcher # Use custom package for now.
-      gnomeExtensions.vitals
-      antob.gnome-shell-extension-disable-workspace-switcher
-      gnomeExtensions.move-clock
-      gnomeExtensions.caffeine
-      gnomeExtensions.no-overview
-      gnomeExtensions.hide-cursor
-      antob.gnome-shell-extension-switcher
-      antob.gnome-shell-extension-instantworkspaceswitcher
-      antob.gnome-shell-extension-expand-shutdown-menu
-      antob.gnome-extension-remove-accessibility-menu
       bibata-cursors
+      gnomeExtensions.just-perfection
+      gnomeExtensions.paperwm
+      gnomeExtensions.switcher
+      gnomeExtensions.vitals
+      gnomeExtensions.caffeine
+      gnomeExtensions.hide-cursor
+      antob.gnome-shell-extension-expand-shutdown-menu
     ];
 
     services.udev.packages = with pkgs; [ gnome-settings-daemon ];
@@ -58,7 +51,7 @@ in
       enable = true;
       cursorTheme = {
         name = "Bibata-Modern-Ice";
-        size = 20;
+        size = 16;
         package = pkgs.bibata-cursors;
       };
       gtk3.extraConfig = {
@@ -98,18 +91,16 @@ in
           # `gnome-extensions list` for a list
           enabled-extensions = [
             "paperwm@paperwm.github.com"
+            "just-perfection-desktop@just-perfection"
             "switcher@landau.fi"
-            "instantworkspaceswitcher@amalantony.net"
-            "disable-workspace-switcher@jbradaric.me"
-            "no-overview@fthx"
             "hide-cursor@elcste.com"
             "expand-shutdown-menu@antob.se"
-            "remove-accessibility-menu@antob.se"
             "Vitals@CoreCoding.com"
-            "Move_Clock@rmy.pobox.com"
             "caffeine@patapon.info"
           ];
         };
+
+        ## Extensions configuration
         "org/gnome/shell/extensions/switcher" = {
           fade-enable = true;
           font-size = mkUint32 18;
@@ -181,15 +172,6 @@ in
           move-up = [ "<Shift><Super>Up" ];
           move-down = [ "<Shift><Super>Down" ];
         };
-        "org/gnome/shell/extensions/auto-move-windows" = {
-          application-list = [
-            "firefox.desktop:2"
-            "chromium-browser.desktop:2"
-            "codium.desktop:3"
-            "code.desktop:3"
-            "slack.desktop:5"
-          ];
-        };
         "org/gnome/shell/extensions/caffeine" = {
           show-indicator = "only-active";
           toggle-shortcut = [ "<Super>u" ];
@@ -204,6 +186,29 @@ in
             "_processor_usage_"
           ];
         };
+        "org/gnome/shell/extensions/just-perfection" = {
+          activities-button = true;
+          clock-menu = true;
+          keyboard-layout = false;
+          accessibility-menu = false;
+          world-clock = false;
+          weather = false;
+          calendar = true;
+          event-button = false;
+          dash = false;
+          workspace-popup = false;
+          workspaces-in-app-grid = false;
+          ripple-box = false;
+          window-demands-attention-focus = true;
+          window-maximized-on-create = false;
+          overlay-key = false;
+          switcher-popup-delay = false;
+          startup-status = 0; # 0 = Desktop, 1 = Overview
+          clock-menu-position = 0; # 0 = Center, 1 = Right, 2 = Left
+          animation = 0; # Animation speed 1 - 7
+        };
+
+        ## Gnome shell configuration
         "org/gnome/shell/keybindings" = {
           # Remove the default hotkeys for opening favorited applications.
           switch-to-application-1 = [ ];
@@ -216,6 +221,7 @@ in
           switch-to-application-8 = [ ];
           switch-to-application-9 = [ ];
           show-screenshot-ui = [ ];
+          toggle-overview = [ "<Shift><Super>d" ];
         };
         "org/gnome/desktop/sound" = {
           event-sounds = false;
@@ -249,16 +255,18 @@ in
           color-scheme = "prefer-dark";
           enable-hot-corners = false;
           show-battery-percentage = true;
-          # cursor-size = 16;
+          cursor-size = 16;
           text-scaling-factor = 1.25;
           font-hinting = "medium";
           clock-show-weekday = true;
           clock-show-weekdate = true;
+          enable-animations = false;
         };
         "org/gnome/desktop/wm/preferences" = {
           workspace-names = [ "Main" ];
-          button-layout = ":minimize,maximize,close";
+          button-layout = ":close";
           num-workspaces = 8;
+          mouse-button-modifier = "";
         };
         "org/gnome/desktop/wm/keybindings" = {
           switch-to-workspace-1 = [ "<Super>1" ];
