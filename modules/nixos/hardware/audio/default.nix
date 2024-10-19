@@ -23,7 +23,17 @@ in {
       # use the example session manager (no others are packaged yet so this is enabled by default,
       # no need to redefine it in your config for now)
       #media-session.enable = true;
-      wireplumber.enable = true;
+
+      # Supposed to fix webcam high power consumption
+      wireplumber.configPackages = [
+        (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-disable-webcam.conf" ''
+          wireplumber.profiles = {
+            main = {
+              monitor.libcamera = disabled
+            }
+          }
+        '')
+      ];
     };
 
     environment.systemPackages = with pkgs; [ pulsemixer pavucontrol ];

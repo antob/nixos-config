@@ -35,7 +35,7 @@ in
       mpv
       vlc
       v4l-utils
-      guvcview
+      guvcview # webcam tool
       gnome-calculator
       # rustdesk
       # remmina # Remote Desktop Client
