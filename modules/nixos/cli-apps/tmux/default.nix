@@ -8,7 +8,6 @@ let
 
   plugins = with pkgs; [
     tmuxPlugins.sensible
-    tmuxPlugins.vim-tmux-navigator
     tmuxPlugins.tmux-fzf
     tmux-onedark-theme
     tmuxPlugins.yank
@@ -21,13 +20,20 @@ in
   };
 
   config = mkIf cfg.enable {
+    # tmux attach -t $(tmux ls | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
+
+    environment.systemPackages = [
+      (pkgs.writeShellScriptBin "tmux-attach-unused" ''
+        tmux attach -t $(tmux ls | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
+      '')
+    ];
+
     antob.home.extraOptions = {
       programs.tmux = {
         enable = true;
         terminal = "screen-256color";
         clock24 = true;
-        historyLimit = 20000;
-        newSession = true;
+        historyLimit = 100000;
         extraConfig = builtins.concatStringsSep "\n"
           (builtins.map lib.strings.fileContents configFiles);
 

@@ -52,6 +52,11 @@ in {
           # Customize ZSH highligh colors
           typeset -A ZSH_HIGHLIGHT_STYLES
           ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
+
+          # Do not emit % when starting alacritty and tmux
+          setopt PROMPT_CR
+          setopt PROMPT_SP
+          export PROMPT_EOL_MARK=""
         '';
 
         oh-my-zsh = {

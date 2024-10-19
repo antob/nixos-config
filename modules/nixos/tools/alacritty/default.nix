@@ -17,8 +17,8 @@ in {
 
         window = {
           padding = {
-            x = 8;
-            y = 6;
+            x = 12;
+            y = 9;
           };
           decorations = "None";
           startup_mode = "Maximized";
@@ -32,7 +32,13 @@ in {
           size = 14;
         };
 
-        shell.program = mkIf config.antob.cli-apps.zellij.enable "zellij";
+        scrolling = {
+          history = 100000;
+        };
+
+        selection = {
+          save_to_clipboard = true;
+        };
 
         # colors = import ./themes/custom.nix;
         # colors = import ./themes/catppuccin-mocha.nix;
@@ -45,14 +51,56 @@ in {
 
         keyboard.bindings = [
           {
-            key = "Tab";
-            mods = "Control";
-            chars = "x1b[9;5u";
+            key = "+";
+            mods = "Control|Shift";
+            action = "IncreaseFontSize";
           }
           {
-            key = "Tab";
+            key = "_";
             mods = "Control|Shift";
-            chars = "x1b[9;6u";
+            action = "DecreaseFontSize";
+          }
+          {
+            key = ")";
+            mods = "Control|Shift";
+            action = "ResetFontSize";
+          }
+          ## Tmux shortcuts
+          # Cycle layout
+          {
+            key = "l";
+            mods = "Control|Shift";
+            chars = "\\uE000";
+          }
+          # Spawn new pane
+          {
+            key = "Return";
+            mods = "Control|Shift";
+            chars = "\\uE010";
+          }
+          # Toggle pane zoom
+          {
+            key = "m";
+            mods = "Control|Shift";
+            chars = "\\uE011";
+          }
+          # Spawn new window
+          {
+            key = "t";
+            mods = "Control|Shift";
+            chars = "\\uE020";
+          }
+          # Focus previous window
+          {
+            key = "{";
+            mods = "Control|Shift";
+            chars = "\\uE021";
+          }
+          # Focus next window
+          {
+            key = "}";
+            mods = "Control|Shift";
+            chars = "\\uE022";
           }
         ];
       };

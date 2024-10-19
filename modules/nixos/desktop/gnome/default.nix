@@ -302,8 +302,8 @@ in
         };
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
           binding = "<Super>Return";
-          command = "kitty";
-          name = "Kitty";
+          command = if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty";
+          name = "Alacritty";
         };
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
           binding = "<Super>comma";
