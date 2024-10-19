@@ -23,6 +23,15 @@ in {
         autoload -U +X compinit && compinit
         . <( zellij setup --generate-completion zsh | sed -Ee 's/^(_(zellij) ).*/compdef \1\2/' )
       '';
+
+      # Install plugins
+      home.file = {
+        # zellij-choose-tree
+        ".config/zellij/plugins/zellij-choose-tree.wasm".source = builtins.fetchurl {
+          url = "https://github.com/laperlej/zellij-choose-tree/releases/download/v0.4.0/zellij-choose-tree.wasm";
+          sha256 = "sha256:1v1xxsqn26y5qrv8726k18wym7ypd1hvdp8j4v6pabbkkhxqdy7i";
+        };
+      };
     };
 
     environment.shellAliases = {

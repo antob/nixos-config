@@ -29,7 +29,6 @@ in
         neovim = enabled;
         helix = enabled;
         tmux = enabled;
-        zellij = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;

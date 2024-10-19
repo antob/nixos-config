@@ -41,9 +41,20 @@ keybinds {
         unbind "Ctrl q"
         bind "Alt m" { ToggleFocusFullscreen; }
         bind "Alt `" { GoToNextTab; }
+        bind "Alt ]" { GoToNextTab; }
+        bind "Alt [" { GoToPreviousTab; }
+        bind "Alt l" { NextSwapLayout; }
         bind "Alt \\" { NewPane; }
         bind "Alt Left" { FocusPreviousPane; }
         bind "Alt Right" { FocusNextPane; }
+
+        bind "Alt s" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Normal"
+        }
     }
     shared_except "pane" "locked" {
         bind "Ctrl a" { SwitchToMode "Pane"; }
@@ -56,34 +67,36 @@ keybinds {
     }
 }
 
-// theme "custom"
-//theme "catppuccin-mocha"
-theme "one-half-dark"
+theme "custom"
+
 on_force_close "detach"
 simplified_ui true
 default_layout "compact"
 pane_frames false
-// scroll_buffer_size 10000
+copy_on_select true
+mouse_mode true
+scrollback_editor "hx"
+scroll_buffer_size 100000
 
 themes {
     custom {
-        fg 213 196 161
-        bg 50 50 50
-        black 60 56 54
-        red 204 36 29
-        green 152 151 26
-        yellow 215 153 33
-        blue 69 133 136
-        magenta 177 98 134
-        cyan 104 157 106
-        white 251 241 199
-        orange 214 93 14
+        fg 220 223 228
+        bg 70 74 82
+        black 27 29 35
+        red 227 63 76
+        green 152 195 121
+        yellow 229 192 123
+        blue 97 175 239
+        magenta 198 120 221
+        cyan 86 182 194
+        white 233 225 254
+        orange 216 133 76        
     }
 }
 
-ui {
-    pane_frames {
-        hide_session_name true
-    }
-}
+//ui {
+//    pane_frames {
+//        hide_session_name true
+//    }
+//}
 
