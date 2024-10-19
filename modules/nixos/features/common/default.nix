@@ -103,6 +103,10 @@ in
       ];
     };
 
+    environment.variables = {
+      EDITOR = if config.antob.cli-apps.helix.enable then "hx" else "vim";
+    };
+
     environment.shellAliases = {
       sudo = "sudo "; # Fixes missing alias doing `sudo`
       cat = "bat -p";

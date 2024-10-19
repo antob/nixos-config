@@ -19,8 +19,6 @@ in {
   ];
 
   config = mkIf cfg.enable {
-    environment.variables = { EDITOR = "vim"; };
-
     antob.home.extraOptions.programs.neovim = {
       enable = true;
       viAlias = true;
