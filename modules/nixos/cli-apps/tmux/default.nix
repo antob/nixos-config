@@ -20,12 +20,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    # tmux attach -t $(tmux ls | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
-
-    environment.systemPackages = [
-      (pkgs.writeShellScriptBin "tmux-attach-unused" ''
+    environment.systemPackages = with pkgs; [
+      (writeShellScriptBin "tmux-attach-unused" ''
         tmux attach -t $(tmux ls | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
       '')
+      sesh
     ];
 
     antob.home.extraOptions = {

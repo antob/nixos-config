@@ -21,6 +21,9 @@ set-option -g automatic-rename off
 # Configure status bar
 set -g status-right ''
 
+# Allow passthrough
+set -g allow-passthrough on
+
 ## Keybindings
 bind-key -T copy-mode-vi v send-keys -X begin-selection
 bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
@@ -48,11 +51,26 @@ bind -n \uE021 previous-window
 # Focus next window
 bind -n \uE022 next-window
 
+bind-key "C-a" run-shell "sesh connect \"$(
+	sesh list -t | fzf-tmux -p 55%,60% \
+		--no-sort --ansi --border-label ' Sessions ' --prompt '⚡  ' \
+		--header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
+		--bind 'tab:down,btab:up' \
+		--bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list)' \
+		--bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t)' \
+		--bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c)' \
+		--bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z)' \
+		--bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .cache -E .stfolder -E .Trash -E .Trash-1000 . ~/Projects)' \
+		--bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list -t)'
+)\""
+
 # Hooks
 set-hook -g after-new-session "select-layout main-vertical"
 set-hook -g after-new-window "select-layout main-vertical \; rename-window 'Tab'"
 #set-hook -g after-split-window "select-layout \; swap-pane -U"
 set-hook -g after-split-window "select-layout"
+set-hook -g after-kill-pane "select-layout"
+set-hook -g pane-exited "select-layout" 
 
 #set -g destroy-unattached on  # destroy orphaned sessions
 set -g detach-on-destroy on   # exit from tmux when closing a session
