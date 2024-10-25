@@ -29,18 +29,6 @@
     # Impermanence
     impermanence.url = "github:nix-community/impermanence";
 
-    # Devenv
-    devenv = {
-      url = "github:cachix/devenv/latest";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # auto-cpufreq
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Nix User Repository (NUR)
     nur.url = "github:nix-community/NUR";
 

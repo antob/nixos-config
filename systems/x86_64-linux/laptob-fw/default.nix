@@ -5,7 +5,6 @@ with lib.antob;
 {
   imports = with inputs; [
     ./hardware.nix
-    auto-cpufreq.nixosModules.default
   ];
 
   antob = {
@@ -92,7 +91,6 @@ with lib.antob;
   ];
 
   # Power optimizer daemons. Choose one.
-  programs.auto-cpufreq.enable = false;
   services.power-profiles-daemon.enable = true;
   services.tlp.enable = false;
 
