@@ -22,7 +22,7 @@ in
         direnv = enabled;
         devenv = enabled;
         rustup = enabled;
-        mcfly = enabled;
+        fzf = enabled;
       };
 
       cli-apps = {
@@ -78,7 +78,7 @@ in
 
         bat = {
           enable = true;
-          config.theme = "ansi";
+          config.theme = "TwoDark";
         };
 
         password-store.enable = true;

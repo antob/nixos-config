@@ -24,7 +24,6 @@ in
         enable = true;
         inherit (cfg) userName userEmail;
         lfs = enabled;
-        difftastic = enabled;
 
         signing = {
           key = cfg.signingKey;
@@ -42,14 +41,16 @@ in
             whitespace = "trailing-space,space-before-tab";
             editor = "vim";
             excludesfile = "~/.gitexcludes";
+            pager = "${pkgs.delta}/bin/delta";
           };
-          mergetool = {
-            "fugitive".cmd = "nvim -f -c 'Gvdiffsplit!' '$MERGED'";
-            keepBackup = false;
-            prompt = false;
+          interactive = {
+            diffFilter = "${pkgs.delta}/bin/delta --color-only";
+          };
+          delta = {
+            navigate = true;
+            side-by-side = true;
           };
           merge = {
-            tool = "fugitive";
             conflictstyle = "diff3";
           };
           credential = {
@@ -87,8 +88,13 @@ in
         ];
       };
 
+      programs.zsh.initExtra = mkIf config.antob.tools.fzf.enable (mkOrder 200 ''
+        source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
+      '');
+
       home.file = { ".gitexcludes".source = ./.gitexcludes; };
     };
+
     environment.shellAliases = { gh = "git hist"; };
   };
 }
