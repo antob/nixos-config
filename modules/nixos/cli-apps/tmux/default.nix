@@ -22,7 +22,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       (writeShellScriptBin "tmux-attach-unused" ''
-        tmux attach -t $(tmux ls | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
+        tmux attach 2> /dev/null -t $(tmux ls 2> /dev/null | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
       '')
       sesh
     ];
