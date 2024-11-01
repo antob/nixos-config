@@ -88,6 +88,14 @@ in
           editor.defaultFormatter = "vscode.json-language-features";
         };
 
+        "[csharp]" = {
+          editor.defaultFormatter = "csharpier.csharpier-vscode";
+        };
+
+        "[javascript]" = {
+          editor.defaultFormatter = "vscode.typescript-language-features";
+        };
+
         diffEditor.ignoreTrimWhitespace = false;
 
         # Plugin settings

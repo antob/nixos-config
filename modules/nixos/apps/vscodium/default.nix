@@ -61,6 +61,10 @@ in
         "[json]" = {
           editor.defaultFormatter = "vscode.json-language-features";
         };
+
+        "[javascript]" = {
+          editor.defaultFormatter = "vscode.typescript-language-features";
+        };
       };
 
       ".config/VSCodium/User/keybindings.json".source = jsonFormat.generate "vscode-keybindings" [
