@@ -17,7 +17,7 @@ in
       adwaita-icon-theme
       bibata-cursors
       gnomeExtensions.just-perfection
-      gnomeExtensions.paperwm
+      antob.gnome-extension-paperwm
       gnomeExtensions.switcher
       gnomeExtensions.vitals
       gnomeExtensions.caffeine
@@ -125,12 +125,29 @@ in
           disable-scratch-in-overview = true;
           topbar-mouse-scroll-enable = false;
           animation-time = 0;
+          minimap-scale = 0;
+
           winprops = [
             ''
-              {"wm_class":"firefox","preferredWidth":"100%"}
+              {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1,"focus":true}
             ''
             ''
-              {"wm_class":"VSCodium","preferredWidth":"100%"}
+              {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1,"focus":true}
+            ''
+            ''
+              {"wm_class":"codium-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
+            ''
+            ''
+              {"wm_class":"code-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
+            ''
+            ''
+              {"wm_class":"obsidian","preferredWidth":"100%","spaceIndex":4,"focus":true}
+            ''
+            ''
+              {"wm_class":"Slack","preferredWidth":"100%","spaceIndex":4,"focus":true}
+            ''
+            ''
+              {"wm_class":"discord","preferredWidth":"100%","spaceIndex":4,"focus":true}
             ''
           ];
         };
