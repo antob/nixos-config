@@ -16,6 +16,8 @@ in {
 
   config = {
     antob.home.extraOptions = {
+      imports = with inputs; [ nvchad4nix.homeManagerModule ];
+
       home.stateVersion = config.system.stateVersion;
       home.file = mkAliasDefinitions options.antob.home.file;
       xdg.enable = true;

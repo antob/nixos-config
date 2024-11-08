@@ -104,7 +104,7 @@ in
     };
 
     environment.variables = {
-      EDITOR = if config.antob.cli-apps.helix.enable then "hx" else "vim";
+      EDITOR = "nvim";
     };
 
     environment.shellAliases = {

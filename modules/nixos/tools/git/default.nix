@@ -39,7 +39,7 @@ in
           push = { autoSetupRemote = true; };
           core = {
             whitespace = "trailing-space,space-before-tab";
-            editor = "vim";
+            editor = "nvim";
             excludesfile = "~/.gitexcludes";
             pager = "${pkgs.delta}/bin/delta";
           };
