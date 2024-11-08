@@ -101,6 +101,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      nixpkgs-fmt
       (vscode-with-extensions.override {
         vscode = vscodium;
         vscodeExtensions = with vscode-extensions; [
