@@ -10,7 +10,6 @@ let
     tmuxPlugins.sensible
     tmuxPlugins.tmux-fzf
     tmux-onedark-theme
-    tmuxPlugins.yank
     tmuxPlugins.resurrect
   ];
 in
@@ -25,12 +24,13 @@ in
         tmux attach 2> /dev/null -t $(tmux ls 2> /dev/null | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
       '')
       sesh
+      wl-clipboard
     ];
 
     antob.home.extraOptions = {
       programs.tmux = {
         enable = true;
-        terminal = "screen-256color";
+        terminal = "xterm-256color";
         clock24 = true;
         historyLimit = 100000;
         extraConfig = builtins.concatStringsSep "\n"
