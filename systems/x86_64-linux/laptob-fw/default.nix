@@ -1,9 +1,11 @@
-{ pkgs, config, lib, channel, inputs, ... }:
-
-with lib;
-with lib.antob;
 {
-  imports = with inputs; [
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.antob; {
+  imports = [
     ./hardware.nix
   ];
 
@@ -75,14 +77,14 @@ with lib.antob;
 
   systemd.automounts = [
     {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       automountConfig = {
         TimeoutIdleSec = "600";
       };
       where = "/mnt/share/public";
     }
     {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       automountConfig = {
         TimeoutIdleSec = "600";
       };

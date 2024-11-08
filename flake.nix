@@ -55,6 +55,12 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # PaperWM
+    paperwm = {
+      url = "github:paperwm/PaperWM";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
@@ -77,7 +83,6 @@
         home-manager.nixosModules.home-manager
         nur.nixosModules.nur
       ];
-
 
       deploy = lib.mkDeploy { inherit (inputs) self; };
 

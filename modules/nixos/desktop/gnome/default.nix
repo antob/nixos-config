@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-
+{ config
+, lib
+, pkgs
+, inputs
+, ...
+}:
 with lib;
-with lib.antob;
-let
+with lib.antob; let
   cfg = config.antob.desktop.gnome;
   colors = config.antob.color-scheme.colors;
 in
@@ -17,7 +20,7 @@ in
       adwaita-icon-theme
       bibata-cursors
       gnomeExtensions.just-perfection
-      antob.gnome-extension-paperwm
+      inputs.paperwm.packages.${pkgs.system}.default
       gnomeExtensions.switcher
       gnomeExtensions.vitals
       gnomeExtensions.caffeine
@@ -84,272 +87,284 @@ in
         };
       };
 
-      dconf.settings = let inherit (lib.gvariant) mkTuple mkUint32 mkVariant; in {
-        "org/gnome/shell" = {
-          disable-user-extensions = false;
+      dconf.settings =
+        let
+          inherit (lib.gvariant) mkTuple mkUint32 mkVariant;
+        in
+        {
+          "org/gnome/shell" = {
+            disable-user-extensions = false;
 
-          # `gnome-extensions list` for a list
-          enabled-extensions = [
-            "paperwm@paperwm.github.com"
-            "just-perfection-desktop@just-perfection"
-            "switcher@landau.fi"
-            "hide-cursor@elcste.com"
-            "expand-shutdown-menu@antob.se"
-            "Vitals@CoreCoding.com"
-            "caffeine@patapon.info"
-          ];
-        };
+            # `gnome-extensions list` for a list
+            enabled-extensions = [
+              "paperwm@paperwm.github.com"
+              "just-perfection-desktop@just-perfection"
+              "switcher@landau.fi"
+              "hide-cursor@elcste.com"
+              "expand-shutdown-menu@antob.se"
+              "Vitals@CoreCoding.com"
+              "caffeine@patapon.info"
+            ];
+          };
 
-        ## Extensions configuration
-        "org/gnome/shell/extensions/switcher" = {
-          fade-enable = true;
-          font-size = mkUint32 18;
-          icon-size = mkUint32 20;
-          matching = 1;
-          max-width-percentage = mkUint32 40;
-          show-switcher = [ "<Super>d" ];
-        };
-        "org/gnome/shell/extensions/paperwm" = {
-          maximize-within-tiling = false;
-          gesture-enabled = false;
-          selection-border-size = 5;
-          selection-border-radius-bottom = 12;
-          show-focus-mode-icon = false;
-          show-open-position-icon = false;
-          show-window-position-bar = false;
-          show-workspace-indicator = false;
-          use-default-background = true;
-          vertical-margin = 10;
-          vertical-margin-bottom = 10;
-          disable-topbar-styling = true;
-          disable-scratch-in-overview = true;
-          topbar-mouse-scroll-enable = false;
-          animation-time = 0;
-          minimap-scale = 0;
+          ## Extensions configuration
+          "org/gnome/shell/extensions/switcher" = {
+            fade-enable = true;
+            font-size = mkUint32 18;
+            icon-size = mkUint32 20;
+            matching = 1;
+            max-width-percentage = mkUint32 40;
+            show-switcher = [ "<Super>d" ];
+          };
+          "org/gnome/shell/extensions/paperwm" = {
+            maximize-within-tiling = false;
+            gesture-enabled = false;
+            selection-border-size = 5;
+            selection-border-radius-bottom = 12;
+            show-focus-mode-icon = false;
+            show-open-position-icon = false;
+            show-window-position-bar = false;
+            show-workspace-indicator = false;
+            use-default-background = true;
+            vertical-margin = 10;
+            vertical-margin-bottom = 10;
+            disable-topbar-styling = true;
+            disable-scratch-in-overview = true;
+            topbar-mouse-scroll-enable = false;
+            animation-time = 0;
+            minimap-scale = 0.0;
+            edge-preview-enable = false;
+            edge-preview-click-enable = false;
 
-          winprops = [
-            ''
-              {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1,"focus":true}
-            ''
-            ''
-              {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1,"focus":true}
-            ''
-            ''
-              {"wm_class":"codium-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
-            ''
-            ''
-              {"wm_class":"code-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
-            ''
-            ''
-              {"wm_class":"obsidian","preferredWidth":"100%","spaceIndex":4,"focus":true}
-            ''
-            ''
-              {"wm_class":"Slack","preferredWidth":"100%","spaceIndex":4,"focus":true}
-            ''
-            ''
-              {"wm_class":"discord","preferredWidth":"100%","spaceIndex":4,"focus":true}
-            ''
-          ];
-        };
-        "org/gnome/shell/extensions/paperwm/keybindings" = {
-          close-window = [ "<Super>q" ];
-          new-window = [ "<Super>n" ];
-          switch-left = [ "" ];
-          switch-left-loop = [ "<Super>Left" ];
-          switch-right = [ "" ];
-          switch-right-loop = [ "<Super>Right" ];
-          switch-previous = [ "" ];
-          switch-next = [ "" ];
-          switch-up-workspace = [ "" ];
-          switch-down-workspace = [ "" ];
-          switch-up-workspace-from-all-monitors = [ "<Super>Page_Up" ];
-          switch-down-workspace-from-all-monitors = [ "<Super>Page_Down" ];
+            winprops = [
+              ''
+                {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1,"focus":true}
+              ''
+              ''
+                {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1,"focus":true}
+              ''
+              ''
+                {"wm_class":"codium-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
+              ''
+              ''
+                {"wm_class":"code-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
+              ''
+              ''
+                {"wm_class":"obsidian","preferredWidth":"100%","spaceIndex":4,"focus":true}
+              ''
+              ''
+                {"wm_class":"Slack","preferredWidth":"100%","spaceIndex":4,"focus":true}
+              ''
+              ''
+                {"wm_class":"discord","preferredWidth":"100%","spaceIndex":4,"focus":true}
+              ''
+            ];
+          };
+          "org/gnome/shell/extensions/paperwm/keybindings" = {
+            close-window = [ "<Super>q" ];
+            new-window = [ "<Super>n" ];
+            switch-left = [ "" ];
+            switch-left-loop = [ "<Super>Left" ];
+            switch-right = [ "" ];
+            switch-right-loop = [ "<Super>Right" ];
+            switch-previous = [ "" ];
+            switch-next = [ "" ];
+            switch-up-workspace = [ "" ];
+            switch-down-workspace = [ "" ];
+            switch-up-workspace-from-all-monitors = [ "<Super>Page_Up" ];
+            switch-down-workspace-from-all-monitors = [ "<Super>Page_Down" ];
 
-          switch-monitor-above = [ "<Alt>Up" ];
-          switch-monitor-below = [ "<Alt>Down" ];
-          switch-monitor-left = [ "" ];
-          switch-monitor-right = [ "" ];
-          swap-monitor-above = [ "" ];
-          swap-monitor-below = [ "" ];
-          swap-monitor-right = [ "" ];
-          swap-monitor-left = [ "" ];
+            switch-monitor-above = [ "<Alt>Up" ];
+            switch-monitor-below = [ "<Alt>Down" ];
+            switch-monitor-left = [ "" ];
+            switch-monitor-right = [ "" ];
+            swap-monitor-above = [ "" ];
+            swap-monitor-below = [ "" ];
+            swap-monitor-right = [ "" ];
+            swap-monitor-left = [ "" ];
 
-          move-monitor-above = [ "<Shift><Alt>Up" ];
-          move-monitor-below = [ "<Shift><Alt>Down" ];
-          move-monitor-left = [ "" ];
-          move-monitor-right = [ "" ];
+            move-monitor-above = [ "<Super><Shift>Up" ];
+            move-monitor-below = [ "<Super><Shift>Down" ];
+            move-monitor-left = [ "" ];
+            move-monitor-right = [ "" ];
 
-          move-space-monitor-above = [ "<Alt><Super>Up" ];
-          move-space-monitor-below = [ "<Alt><Super>Down" ];
-          move-space-monitor-left = [ "<Alt><Super>Left" ];
-          move-space-monitor-right = [ "<Alt><Super>Right" ];
+            move-space-monitor-above = [ "<Alt><Super>Up" ];
+            move-space-monitor-below = [ "<Alt><Super>Down" ];
+            move-space-monitor-left = [ "<Alt><Super>Left" ];
+            move-space-monitor-right = [ "<Alt><Super>Right" ];
 
-          move-left = [ "<Shift><Super>Left" ];
-          move-right = [ "<Shift><Super>Right" ];
-          move-up = [ "<Shift><Super>Up" ];
-          move-down = [ "<Shift><Super>Down" ];
-        };
-        "org/gnome/shell/extensions/caffeine" = {
-          show-indicator = "only-active";
-          toggle-shortcut = [ "<Super>u" ];
-        };
-        "org/gnome/shell/extensions/vitals" = {
-          show-voltage = false;
-          show-fan = false;
-          show-battery = true;
-          hot-sensors = [
-            "_memory_usage_"
-            "_battery_rate_"
-            "_processor_usage_"
-          ];
-        };
-        "org/gnome/shell/extensions/just-perfection" = {
-          activities-button = true;
-          clock-menu = true;
-          keyboard-layout = false;
-          accessibility-menu = false;
-          world-clock = false;
-          weather = false;
-          calendar = true;
-          event-button = false;
-          dash = false;
-          workspace-popup = false;
-          workspaces-in-app-grid = false;
-          ripple-box = false;
-          window-demands-attention-focus = true;
-          window-maximized-on-create = false;
-          overlay-key = false;
-          switcher-popup-delay = false;
-          startup-status = 0; # 0 = Desktop, 1 = Overview
-          clock-menu-position = 0; # 0 = Center, 1 = Right, 2 = Left
-          animation = 0; # Animation speed 1 - 7
-        };
+            move-left = [ "<Shift><Super>Left" ];
+            move-right = [ "<Shift><Super>Right" ];
+            move-up = [ "" ];
+            move-down = [ "" ];
+          };
+          "org/gnome/shell/extensions/caffeine" = {
+            show-indicator = "only-active";
+            toggle-shortcut = [ "<Super>u" ];
+          };
+          "org/gnome/shell/extensions/vitals" = {
+            show-voltage = false;
+            show-fan = false;
+            show-battery = true;
+            hot-sensors = [
+              "_memory_usage_"
+              "_battery_rate_"
+              "_processor_usage_"
+            ];
+          };
+          "org/gnome/shell/extensions/just-perfection" = {
+            activities-button = true;
+            clock-menu = true;
+            keyboard-layout = false;
+            accessibility-menu = false;
+            world-clock = false;
+            weather = false;
+            calendar = true;
+            event-button = false;
+            dash = false;
+            workspace-popup = false;
+            workspaces-in-app-grid = false;
+            ripple-box = false;
+            window-demands-attention-focus = true;
+            window-maximized-on-create = false;
+            overlay-key = false;
+            switcher-popup-delay = false;
+            startup-status = 0; # 0 = Desktop, 1 = Overview
+            clock-menu-position = 0; # 0 = Center, 1 = Right, 2 = Left
+            animation = 0; # Animation speed 1 - 7
+          };
 
-        ## Gnome shell configuration
-        "org/gnome/shell/keybindings" = {
-          # Remove the default hotkeys for opening favorited applications.
-          switch-to-application-1 = [ ];
-          switch-to-application-2 = [ ];
-          switch-to-application-3 = [ ];
-          switch-to-application-4 = [ ];
-          switch-to-application-5 = [ ];
-          switch-to-application-6 = [ ];
-          switch-to-application-7 = [ ];
-          switch-to-application-8 = [ ];
-          switch-to-application-9 = [ ];
-          show-screenshot-ui = [ ];
-          toggle-overview = [ "<Shift><Super>d" ];
-        };
-        "org/gnome/desktop/sound" = {
-          event-sounds = false;
-        };
-        "org/gnome/desktop/background" = {
-          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
-          picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-d.svg";
-          primary-color = "#241f31";
-        };
-        "org/gnome/desktop/screensaver" = {
-          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
-          primary-color = "#241f31";
-        };
-        "org/gnome/desktop/peripherals/keyboard" = {
-          delay = mkUint32 200;
-          repeat-interval = mkUint32 40;
-        };
-        "org/gnome/desktop/peripherals/touchpad" = {
-          tap-to-click = true;
-          two-finger-scrolling-enabled = true;
-        };
-        "org/gnome/desktop/peripherals/mouse" = {
-          speed = 0.25;
-        };
-        "org/gnome/desktop/input-sources" = {
-          sources = [
-            (mkTuple [ "xkb" "se+us" ])
-          ];
-        };
-        "org/gnome/desktop/interface" = {
-          color-scheme = "prefer-dark";
-          enable-hot-corners = false;
-          show-battery-percentage = true;
-          cursor-size = 16;
-          text-scaling-factor = 1.25;
-          font-hinting = "medium";
-          clock-show-weekday = true;
-          clock-show-weekdate = true;
-          enable-animations = false;
-        };
-        "org/gnome/desktop/wm/preferences" = {
-          workspace-names = [ "Main" ];
-          button-layout = ":close";
-          num-workspaces = 8;
-          mouse-button-modifier = "";
-        };
-        "org/gnome/desktop/wm/keybindings" = {
-          switch-to-workspace-1 = [ "<Super>1" ];
-          switch-to-workspace-2 = [ "<Super>2" ];
-          switch-to-workspace-3 = [ "<Super>3" ];
-          switch-to-workspace-4 = [ "<Super>4" ];
-          switch-to-workspace-5 = [ "<Super>5" ];
-          switch-to-workspace-6 = [ "<Super>6" ];
-          switch-to-workspace-7 = [ "<Super>7" ];
-          switch-to-workspace-8 = [ "<Super>8" ];
-          switch-to-workspace-9 = [ "<Super>9" ];
+          ## Gnome shell configuration
+          "org/gnome/shell/keybindings" = {
+            # Remove the default hotkeys for opening favorited applications.
+            switch-to-application-1 = [ ];
+            switch-to-application-2 = [ ];
+            switch-to-application-3 = [ ];
+            switch-to-application-4 = [ ];
+            switch-to-application-5 = [ ];
+            switch-to-application-6 = [ ];
+            switch-to-application-7 = [ ];
+            switch-to-application-8 = [ ];
+            switch-to-application-9 = [ ];
+            show-screenshot-ui = [ ];
+            toggle-overview = [ "<Shift><Super>d" ];
+          };
+          "org/gnome/desktop/sound" = {
+            event-sounds = false;
+          };
+          "org/gnome/desktop/background" = {
+            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
+            picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-d.svg";
+            primary-color = "#241f31";
+          };
+          "org/gnome/desktop/screensaver" = {
+            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
+            primary-color = "#241f31";
+          };
+          "org/gnome/desktop/peripherals/keyboard" = {
+            delay = mkUint32 200;
+            repeat-interval = mkUint32 40;
+          };
+          "org/gnome/desktop/peripherals/touchpad" = {
+            tap-to-click = true;
+            two-finger-scrolling-enabled = true;
+          };
+          "org/gnome/desktop/peripherals/mouse" = {
+            speed = 0.25;
+          };
+          "org/gnome/desktop/input-sources" = {
+            sources = [
+              (mkTuple [ "xkb" "se+us" ])
+            ];
+          };
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+            enable-hot-corners = false;
+            show-battery-percentage = true;
+            cursor-size = 16;
+            text-scaling-factor = 1.25;
+            font-hinting = "medium";
+            clock-show-weekday = true;
+            clock-show-weekdate = true;
+            enable-animations = false;
+          };
+          "org/gnome/shell/app-switcher" = {
+            current-workspace-only = true;
+          };
+          "org/gnome/desktop/wm/preferences" = {
+            workspace-names = [ "Main" ];
+            button-layout = ":close";
+            num-workspaces = 8;
+            mouse-button-modifier = "";
+          };
+          "org/gnome/desktop/wm/keybindings" = {
+            switch-to-workspace-1 = [ "<Super>1" ];
+            switch-to-workspace-2 = [ "<Super>2" ];
+            switch-to-workspace-3 = [ "<Super>3" ];
+            switch-to-workspace-4 = [ "<Super>4" ];
+            switch-to-workspace-5 = [ "<Super>5" ];
+            switch-to-workspace-6 = [ "<Super>6" ];
+            switch-to-workspace-7 = [ "<Super>7" ];
+            switch-to-workspace-8 = [ "<Super>8" ];
+            switch-to-workspace-9 = [ "<Super>9" ];
 
-          move-to-workspace-1 = [ "<Shift><Super>1" ];
-          move-to-workspace-2 = [ "<Shift><Super>2" ];
-          move-to-workspace-3 = [ "<Shift><Super>3" ];
-          move-to-workspace-4 = [ "<Shift><Super>4" ];
-          move-to-workspace-5 = [ "<Shift><Super>5" ];
-          move-to-workspace-6 = [ "<Shift><Super>6" ];
-          move-to-workspace-7 = [ "<Shift><Super>7" ];
-          move-to-workspace-8 = [ "<Shift><Super>8" ];
-          move-to-workspace-9 = [ "<Shift><Super>9" ];
+            move-to-workspace-1 = [ "<Shift><Super>1" ];
+            move-to-workspace-2 = [ "<Shift><Super>2" ];
+            move-to-workspace-3 = [ "<Shift><Super>3" ];
+            move-to-workspace-4 = [ "<Shift><Super>4" ];
+            move-to-workspace-5 = [ "<Shift><Super>5" ];
+            move-to-workspace-6 = [ "<Shift><Super>6" ];
+            move-to-workspace-7 = [ "<Shift><Super>7" ];
+            move-to-workspace-8 = [ "<Shift><Super>8" ];
+            move-to-workspace-9 = [ "<Shift><Super>9" ];
+          };
+          "org/gnome/settings-daemon/plugins/color" = {
+            night-light-enabled = true;
+          };
+          "org/gnome/settings-daemon/plugins/power" = {
+            ambient-enabled = false;
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+            binding = "<Super>w";
+            command = "firefox";
+            name = "Firefox";
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+            binding = "<Super>Return";
+            command =
+              if config.antob.cli-apps.tmux.enable
+              then "alacritty -e tmux-attach-unused"
+              else "alacritty";
+            name = "Alacritty";
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+            binding = "<Super>comma";
+            command = "gnome-control-center";
+            name = "Settings";
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+            binding = "<Super>e";
+            command = "nautilus";
+            name = "Files";
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+            binding = "Print";
+            command = "flameshot-gui";
+            name = "Flameshot";
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
+            binding = "<Super><Shift>Return";
+            command = "alacritty";
+            name = "Alacritty";
+          };
+          "system/locale" = {
+            region = "sv_SE.UTF-8";
+          };
+          "org/gnome/nm-applet" = {
+            disable-connected-notifications = true;
+            disable-disconnected-notifications = true;
+          };
         };
-        "org/gnome/settings-daemon/plugins/color" = {
-          night-light-enabled = true;
-        };
-        "org/gnome/settings-daemon/plugins/power" = {
-          ambient-enabled = false;
-        };
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-          binding = "<Super>w";
-          command = "firefox";
-          name = "Firefox";
-        };
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
-          binding = "<Super>Return";
-          command = if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty";
-          name = "Alacritty";
-        };
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
-          binding = "<Super>comma";
-          command = "gnome-control-center";
-          name = "Settings";
-        };
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
-          binding = "<Super>e";
-          command = "nautilus";
-          name = "Files";
-        };
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
-          binding = "Print";
-          command = "flameshot-gui";
-          name = "Flameshot";
-        };
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
-          binding = "<Super><Shift>Return";
-          command = "alacritty";
-          name = "Alacritty";
-        };
-        "system/locale" = {
-          region = "sv_SE.UTF-8";
-        };
-        "org/gnome/nm-applet" = {
-          disable-connected-notifications = true;
-          disable-disconnected-notifications = true;
-        };
-      };
 
       # PaperWM style override
       # See default styles: https://github.com/paperwm/PaperWM/blob/release/config/user.css
@@ -411,7 +426,7 @@ in
       tracker.enable = false;
     };
 
-    environment.gnome.excludePackages = (with pkgs; [
+    environment.gnome.excludePackages = with pkgs; [
       gnome-photos
       gnome-tour
       gedit # text editor
@@ -423,7 +438,7 @@ in
       gnome-characters
       gnome-contacts
       gnome-initial-setup
-    ]);
+    ];
 
     antob.persistence.home.files = [ ".config/monitors.xml" ];
   };
