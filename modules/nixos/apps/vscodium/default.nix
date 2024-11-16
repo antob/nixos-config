@@ -113,6 +113,8 @@ in
           dotjoshjohnson.xml
           redhat.vscode-yaml
           shd101wyy.markdown-preview-enhanced
+          shopify.ruby-lsp
+          formulahendry.auto-close-tag
         ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
             name = "vscode-standard-ruby";
@@ -133,12 +135,6 @@ in
             sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
           }
           {
-            name = "solargraph";
-            publisher = "castwide";
-            version = "0.24.1";
-            sha256 = "sha256-M96kGuCKo232rIwLovDU+C/rhEgZWT4s/zsR7CUYPnk=";
-          }
-          {
             name = "simple-ruby-erb";
             publisher = "vortizhe";
             version = "0.2.1";
@@ -149,12 +145,6 @@ in
             publisher = "jeff-hykin";
             version = "0.0.2";
             sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
-          }
-          {
-            name = "vscode-openapi";
-            publisher = "42crunch";
-            version = "4.27.0";
-            sha256 = "sha256-urXGyHpIDWQ0Bc+8LODC0DcEo6jQ5tA/QptyxCej9yU=";
           }
         ];
       })
