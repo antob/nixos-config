@@ -1,7 +1,11 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.apps.vscodium;
   jsonFormat = pkgs.formats.json { };
@@ -13,7 +17,10 @@ in
 
   config = mkIf cfg.enable {
     # environment.shellAliases = { code = "codium"; };
-    antob.persistence.home.directories = [ ".config/VSCodium" ".vscode-oss" ];
+    antob.persistence.home.directories = [
+      ".config/VSCodium"
+      ".vscode-oss"
+    ];
 
     antob.home.extraOptions.home.file = {
       ".config/VSCodium/User/settings.json".source = jsonFormat.generate "vscode-user-settings" {
@@ -54,16 +61,27 @@ in
 
         diffEditor.ignoreTrimWhitespace = false;
 
-        # Installed extensions config
-        rust-analyzer.check.command = "clippy";
-        redhat.telemetry.enabled = false;
-
         "[json]" = {
           editor.defaultFormatter = "vscode.json-language-features";
         };
 
         "[javascript]" = {
           editor.defaultFormatter = "vscode.typescript-language-features";
+        };
+
+        # Installed extensions config
+        rust-analyzer.check.command = "clippy";
+        redhat.telemetry.enabled = false;
+
+        nix = {
+          formatterPath = "nixfmt";
+          enableLanguageServer = true;
+          serverPath = "nixd";
+          serverSettings.nixd = {
+            formatting = {
+              command = "nixfmt";
+            };
+          };
         };
       };
 
@@ -101,52 +119,56 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      nixpkgs-fmt
+      nixfmt-rfc-style
+      nixd
       (vscode-with-extensions.override {
         vscode = vscodium;
-        vscodeExtensions = with vscode-extensions; [
-          zhuangtongfa.material-theme
-          tamasfe.even-better-toml
-          vadimcn.vscode-lldb
-          jnoortheen.nix-ide
-          rust-lang.rust-analyzer
-          dotjoshjohnson.xml
-          redhat.vscode-yaml
-          shd101wyy.markdown-preview-enhanced
-          shopify.ruby-lsp
-          formulahendry.auto-close-tag
-        ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "vscode-standard-ruby";
-            publisher = "testdouble";
-            version = "0.0.16";
-            sha256 = "sha256-XxL8rEmlI2pCw9YxqcgazUMbC1IL/C8d2zrAvy8tVbU=";
-          }
-          {
-            name = "vscode-erb-beautify";
-            publisher = "aliariff";
-            version = "0.4.1";
-            sha256 = "sha256-BH6sz/vKeYxjnoKum+jY+tzKfxWtHp8WkZn6xyYumvM=";
-          }
-          {
-            name = "vscode-fileutils";
-            publisher = "sleistner";
-            version = "3.10.3";
-            sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
-          }
-          {
-            name = "simple-ruby-erb";
-            publisher = "vortizhe";
-            version = "0.2.1";
-            sha256 = "sha256-JZov46QWUHIewu4FZtlQL/wRV6rHpu6Kd9yuWdCL77w=";
-          }
-          {
-            name = "better-csv-syntax";
-            publisher = "jeff-hykin";
-            version = "0.0.2";
-            sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
-          }
-        ];
+        vscodeExtensions =
+          with vscode-extensions;
+          [
+            zhuangtongfa.material-theme
+            tamasfe.even-better-toml
+            vadimcn.vscode-lldb
+            jnoortheen.nix-ide
+            rust-lang.rust-analyzer
+            dotjoshjohnson.xml
+            redhat.vscode-yaml
+            shd101wyy.markdown-preview-enhanced
+            shopify.ruby-lsp
+            formulahendry.auto-close-tag
+          ]
+          ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+            {
+              name = "vscode-standard-ruby";
+              publisher = "testdouble";
+              version = "0.0.16";
+              sha256 = "sha256-XxL8rEmlI2pCw9YxqcgazUMbC1IL/C8d2zrAvy8tVbU=";
+            }
+            {
+              name = "vscode-erb-beautify";
+              publisher = "aliariff";
+              version = "0.4.1";
+              sha256 = "sha256-BH6sz/vKeYxjnoKum+jY+tzKfxWtHp8WkZn6xyYumvM=";
+            }
+            {
+              name = "vscode-fileutils";
+              publisher = "sleistner";
+              version = "3.10.3";
+              sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
+            }
+            {
+              name = "simple-ruby-erb";
+              publisher = "vortizhe";
+              version = "0.2.1";
+              sha256 = "sha256-JZov46QWUHIewu4FZtlQL/wRV6rHpu6Kd9yuWdCL77w=";
+            }
+            {
+              name = "better-csv-syntax";
+              publisher = "jeff-hykin";
+              version = "0.0.2";
+              sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
+            }
+          ];
       })
     ];
   };
