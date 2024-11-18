@@ -1,64 +1,48 @@
-{ options
-, config
-, pkgs
-, lib
-, inputs
-, ...
+{
+  config,
+  lib,
+  inputs,
+  pkgs,
+  ...
 }:
 with lib;
-with lib.antob; let
+let
   cfg = config.antob.cli-apps.neovim;
-
-  insertTable = file:
-    builtins.concatStringsSep "\n"
-      [
-        "insert(P, (function()"
-        (lib.strings.fileContents file)
-        "end)())"
-      ];
-
-  extraConfig = builtins.concatStringsSep "\n"
-    (builtins.map lib.strings.fileContents (lib.snowfall.fs.get-files ./config));
-
-  extraPlugins = builtins.concatStringsSep "\n" (
-    [
-      "function insert(t1, t2) for _, v in ipairs(t2) do table.insert(t1, v) end end"
-      "P = {}"
-    ] ++
-    (builtins.map insertTable (lib.snowfall.fs.get-files ./plugins)) ++
-    [ "return P" ]
-  );
-
-  chadrcConfig = lib.strings.fileContents ./chad-config.lua;
 in
 {
   options.antob.cli-apps.neovim = with types; {
-    enable = mkEnableOption "Whether or not to enable neovim.";
+    enable = mkEnableOption "Whether or not to enable neovim (with neovim).";
   };
-
-  imports = [
-  ];
 
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
-      programs.nvchad = {
+      imports = [
+        inputs.nixvim.homeManagerModules.nixvim
+      ];
+
+      programs.nixvim = {
         enable = true;
-        backup = false;
-        extraPackages = with pkgs; [
-          nodePackages.bash-language-server
-          emmet-language-server
-          vscode-langservers-extracted
-          nixd
+        package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+
+        viAlias = true;
+        vimAlias = true;
+
+        imports = [
+          ./colorschemes.nix
+          ./options.nix
+          ./autocmd.nix
+          ./keymaps.nix
+          ./lua-config.nix
+          ./packages.nix
+          ./plugins/plugins.nix
+          ./plugins/telescope.nix
+          ./plugins/treesitter.nix
+          ./plugins/nvim-tree.nix
+          ./plugins/lsp.nix
+          ./plugins/cmp.nix
+          ./plugins/conform.nix
         ];
-
-        inherit chadrcConfig;
-        inherit extraConfig;
-        inherit extraPlugins;
       };
-    };
-
-    environment.shellAliases = {
-      vim = "nvim";
     };
 
     environment.systemPackages = with pkgs; [
