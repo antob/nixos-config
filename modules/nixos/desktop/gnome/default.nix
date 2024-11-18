@@ -219,6 +219,7 @@ in
             clock-menu = true;
             keyboard-layout = false;
             accessibility-menu = false;
+            quick-settings-dark-mode = false;
             world-clock = false;
             weather = false;
             calendar = true;
@@ -250,6 +251,7 @@ in
             switch-to-application-9 = [ ];
             show-screenshot-ui = [ ];
             toggle-overview = [ "<Shift><Super>d" ];
+            toggle-application-view = [ "<Super>d" ];
           };
           "org/gnome/desktop/sound" = {
             event-sounds = false;
@@ -276,7 +278,10 @@ in
           };
           "org/gnome/desktop/input-sources" = {
             sources = [
-              (mkTuple [ "xkb" "se+us" ])
+              (mkTuple [
+                "xkb"
+                "se+us"
+              ])
             ];
           };
           "org/gnome/desktop/interface" = {
@@ -334,9 +339,7 @@ in
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
             binding = "<Super>Return";
             command =
-              if config.antob.cli-apps.tmux.enable
-              then "alacritty -e tmux-attach-unused"
-              else "alacritty";
+              if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty";
             name = "Alacritty";
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
