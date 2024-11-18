@@ -29,7 +29,6 @@ in
       systemd.user.services.yubikey-touch-detector = {
         Unit = {
           Description = "Detects when your YubiKey is waiting for a touch";
-          # After = [ "tray.target" ];
         };
 
         Service = {
@@ -37,7 +36,13 @@ in
           EnvironmentFile = "-%E/yubikey-touch-detector/service.conf";
         };
 
-        Install = { WantedBy = [ "default.target" ]; };
+        # Install = { WantedBy = [ "default.target" ]; };
+      };
+
+      # Start the detector with a delay, otherwise it eats CPU for some reason..
+      systemd.user.timers.yubikey-touch-detector = {
+        Timer = { OnActiveSec = "30s"; };
+        Install = { WantedBy = [ "timers.target" ]; };
       };
     };
   };
