@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "gnome-extension-expand-shutdown-menu";
-  version = "2";
+  version = "3";
 
   src = fetchFromGitHub {
     owner = "antob";
     repo = "gnome-extension-expand-shutdown-menu";
-    rev = "c79d373";
-    sha256 = "sha256-545tKcN86xmTPMIJeYFt/gJ2AhGqblywBg6NbbG6ewE=";
+    rev = "25b98a1";
+    sha256 = "sha256-LWTg1MnQvTq5CZhq+jxd3IbzUNZ3MAHK0cutHlqGmD8=";
   };
 
   passthru = {

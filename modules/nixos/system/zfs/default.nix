@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.antob.system.zfs;
@@ -20,7 +24,6 @@ in
 
   config = mkIf cfg.enable {
     boot = {
-      kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
       supportedFilesystems = [ "zfs" ];
       zfs.forceImportRoot = false;
     };

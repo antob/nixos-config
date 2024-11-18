@@ -16,8 +16,6 @@ in {
 
   config = {
     antob.home.extraOptions = {
-      imports = with inputs; [ nvchad4nix.homeManagerModule ];
-
       home.stateVersion = config.system.stateVersion;
       home.file = mkAliasDefinitions options.antob.home.file;
       xdg.enable = true;
@@ -31,6 +29,7 @@ in {
     home-manager = {
       useUserPackages = true;
       useGlobalPkgs = true;
+      backupFileExtension = "backup";
 
       users.${config.antob.user.name} =
         mkAliasDefinitions options.antob.home.extraOptions;

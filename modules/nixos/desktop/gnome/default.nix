@@ -1,11 +1,13 @@
-{ config
-, lib
-, pkgs
-, inputs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
 }:
 with lib;
-with lib.antob; let
+with lib.antob;
+let
   cfg = config.antob.desktop.gnome;
   colors = config.antob.color-scheme.colors;
 in
@@ -99,7 +101,7 @@ in
             enabled-extensions = [
               "paperwm@paperwm.github.com"
               "just-perfection-desktop@just-perfection"
-              "switcher@landau.fi"
+              # "switcher@landau.fi"
               "hide-cursor@elcste.com"
               "expand-shutdown-menu@antob.se"
               "Vitals@CoreCoding.com"
@@ -422,8 +424,8 @@ in
 
     services.gnome = {
       games.enable = false;
-      tracker-miners.enable = false;
-      tracker.enable = false;
+      localsearch.enable = false;
+      tinysparql.enable = false;
     };
 
     environment.gnome.excludePackages = with pkgs; [
