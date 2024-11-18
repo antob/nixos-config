@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -12,14 +17,29 @@ in
     enable = mkEnableOption "Whether or not to install and configure git.";
     userName = mkOpt types.str user.fullName "The name to configure git with.";
     userEmail = mkOpt types.str user.email "The email to configure git with.";
-    signingKey =
-      mkOpt types.str "tobias.lindholm@antob.se" "The key ID to sign commits with.";
+    signingKey = mkOpt types.str "tobias.lindholm@antob.se" "The key ID to sign commits with.";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ git gitui lazygit ];
+    environment.systemPackages = with pkgs; [
+      git
+      gitui
+      lazygit
+    ];
 
     antob.home.extraOptions = {
+      xdg.configFile."lazygit/config.yml".text = ''
+        gui:
+          showFileTree: false
+          showRandomTip: false
+          showCommandLog: false
+          nerdFontsVersion: "3"
+          border: single
+          theme:
+            selectedLineBgColor:
+              - '#31353f'
+      '';
+
       programs.git = {
         enable = true;
         inherit (cfg) userName userEmail;
@@ -30,13 +50,18 @@ in
           signByDefault = mkIf config.antob.security.gpg.enable true;
         };
 
-        aliases.hist =
-          "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
+        aliases.hist = "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
 
         extraConfig = {
-          init = { defaultBranch = "main"; };
-          pull = { rebase = true; };
-          push = { autoSetupRemote = true; };
+          init = {
+            defaultBranch = "main";
+          };
+          pull = {
+            rebase = true;
+          };
+          push = {
+            autoSetupRemote = true;
+          };
           core = {
             whitespace = "trailing-space,space-before-tab";
             editor = "nvim";
@@ -88,13 +113,19 @@ in
         ];
       };
 
-      programs.zsh.initExtra = mkIf config.antob.tools.fzf.enable (mkOrder 200 ''
-        source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
-      '');
+      programs.zsh.initExtra = mkIf config.antob.tools.fzf.enable (
+        mkOrder 200 ''
+          source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
+        ''
+      );
 
-      home.file = { ".gitexcludes".source = ./.gitexcludes; };
+      home.file = {
+        ".gitexcludes".source = ./.gitexcludes;
+      };
     };
 
-    environment.shellAliases = { gh = "git hist"; };
+    environment.shellAliases = {
+      gh = "git hist";
+    };
   };
 }
