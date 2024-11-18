@@ -11,7 +11,11 @@ in
       image = "jhaals/yopass";
       autoStart = true;
       extraOptions = [ "--network=host" ];
-      cmd = [ "--memcached=127.0.0.1:11211" "--port=${toString port}" ];
+      cmd = [
+        "--memcached=127.0.0.1:11211"
+        "--port=${toString port}"
+        "--max-length 500000"
+      ];
     };
   };
 

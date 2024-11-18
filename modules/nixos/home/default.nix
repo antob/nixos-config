@@ -1,16 +1,25 @@
-{ options, config, pkgs, lib, inputs, ... }:
+{
+  options,
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.home;
-in {
+let
+  cfg = config.antob.home;
+in
+{
   # imports = with inputs; [ home-manager.nixosModules.home-manager ];
 
   options.antob.home = with types; {
-    file = mkOpt attrs { }
-      "A set of files to be managed by home-manager's <option>home.file</option>.";
-    configFile = mkOpt attrs { }
-      "A set of files to be managed by home-manager's <option>xdg.configFile</option>.";
+    file = mkOpt attrs { } "A set of files to be managed by home-manager's <option>home.file</option>.";
+    configFile =
+      mkOpt attrs { }
+        "A set of files to be managed by home-manager's <option>xdg.configFile</option>.";
     extraOptions = mkOpt attrs { } "Options to pass directly to home-manager.";
   };
 
@@ -31,8 +40,7 @@ in {
       useGlobalPkgs = true;
       backupFileExtension = "backup";
 
-      users.${config.antob.user.name} =
-        mkAliasDefinitions options.antob.home.extraOptions;
+      users.${config.antob.user.name} = mkAliasDefinitions options.antob.home.extraOptions;
     };
   };
 }

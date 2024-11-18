@@ -1,4 +1,9 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -95,8 +100,14 @@ in
       log-lines = 50;
       sandbox = "relaxed";
       auto-optimise-store = true;
-      trusted-users = [ "root" config.antob.user.name ];
-      allowed-users = [ "root" config.antob.user.name ];
+      trusted-users = [
+        "root"
+        config.antob.user.name
+      ];
+      allowed-users = [
+        "root"
+        config.antob.user.name
+      ];
       substituters = [ "https://cache.nixos.org/" ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="

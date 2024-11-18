@@ -1,8 +1,14 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.rustup;
+let
+  cfg = config.antob.tools.rustup;
 in
 {
   options.antob.tools.rustup = with types; {
