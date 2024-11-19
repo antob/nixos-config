@@ -1,4 +1,9 @@
-{ options, config, lib, ... }:
+{
+  options,
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -13,9 +18,7 @@ in
 {
   options.antob.color-scheme = {
     colors = mkOption {
-      type = with types; attrsOf (
-        coercedTo str (removePrefix "#") hexColorType
-      );
+      type = with types; attrsOf (coercedTo str (removePrefix "#") hexColorType);
       default = { };
       example = literalExpression ''
         {
@@ -64,6 +67,7 @@ in
       base11 = "#e5c07b"; # Alt Yellow
       base12 = "#353b45"; # Alt Grey
       base13 = "#191919"; # Dark Grey
+      base14 = "#1b1f27"; # Alt Black 2
     };
   };
 }

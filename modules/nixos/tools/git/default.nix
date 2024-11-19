@@ -11,6 +11,7 @@ let
   cfg = config.antob.tools.git;
   # gpg = config.antob.security.gpg;
   user = config.antob.user;
+  colors = config.antob.color-scheme.colors;
 in
 {
   options.antob.tools.git = with types; {
@@ -37,7 +38,9 @@ in
           border: single
           theme:
             selectedLineBgColor:
-              - '#31353f'
+              - '#${colors.base12}'
+            inactiveBorderColor:
+              - '#${colors.base12}'
       '';
 
       programs.git = {

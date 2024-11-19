@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  colors = config.antob.color-scheme.colors;
+in
 {
   plugins.telescope = {
     enable = true;
@@ -44,35 +48,23 @@
       fzf-native.enable = true;
     };
     luaConfig.post = ''
-      local colors = {
-        white = "#abb2bf",
-        darker_black = "#1b1f27",
-        black = "#1e222a", --  nvim bg
-        black2 = "#252931",
-        one_bg = "#282c34", -- real bg of onedark
-        red = "#e06c75",
-        green = "#98c379",
-        blue = "#61afef",
-        yellow = "#e7c787",
-      }
-
       local TelescopeColor = {
-        TelescopePromptPrefix = { fg = colors.red, bg = colors.black2 },
-        TelescopeNormal = { bg = colors.darker_black },
-        TelescopePreviewTitle = { fg = colors.black, bg = colors.green},
-        TelescopePromptTitle = { fg = colors.black, bg = colors.red },
-        TelescopeSelection = { fg = colors.white, bg = colors.black2 },
-        TelescopeResultsDiffAdd = { fg = colors.green },
-        TelescopeResultsDiffChange = { fg = colors.yellow },
-        TelescopeResultsDiffDelete = { fg = colors.red },
-        TelescopeMatching = { fg = colors.blue, bg = colors.one_bg },
-        TelescopeBorder = { fg = colors.darker_black, bg = colors.darker_black },
-        TelescopePromptBorder = { fg = colors.black2, bg = colors.black2 },
-        TelescopePreviewBorder = { fg = colors.black2, bg = colors.black2 },
-        TelescopeResultsBorder = { fg = colors.black2, bg = colors.black2 },
-        TelescopePromptNormal = { fg = colors.white, bg = colors.black2 },
-        TelescopeResultsTitle = { fg = colors.darker_black, bg = colors.darker_black },
-        TelescopePromptPrefix = { fg = colors.red, bg = colors.black2 },
+        TelescopePromptPrefix = { fg = '#${colors.base01}', bg = '#${colors.base10}' },
+        TelescopeNormal = { bg = '#${colors.base13}' },
+        TelescopePreviewTitle = { fg = '#${colors.base00}', bg = '#${colors.base02}'},
+        TelescopePromptTitle = { fg = '#${colors.base00}', bg = '#${colors.base01}' },
+        TelescopeSelection = { fg = '#${colors.base07}', bg = '#${colors.base12}' },
+        TelescopeResultsDiffAdd = { fg = '#${colors.base02}' },
+        TelescopeResultsDiffChange = { fg = '#${colors.base03}' },
+        TelescopeResultsDiffDelete = { fg = '#${colors.base01}' },
+        TelescopeMatching = { fg = '#${colors.base04}', bg = '#${colors.base10}' },
+        TelescopeBorder = { fg = '#${colors.base13}', bg = '#${colors.base14}' },
+        TelescopePromptBorder = { fg = '#${colors.base10}', bg = '#${colors.base10}' },
+        TelescopePreviewBorder = { fg = '#${colors.base10}', bg = '#${colors.base10}' },
+        TelescopeResultsBorder = { fg = '#${colors.base10}', bg = '#${colors.base10}' },
+        TelescopePromptNormal = { fg = '#${colors.base07}', bg = '#${colors.base10}' },
+        TelescopeResultsTitle = { fg = '#${colors.base13}', bg = '#${colors.base14}' },
+        TelescopePromptPrefix = { fg = '#${colors.base01}', bg = '#${colors.base10}' },
       }
 
       for hl, col in pairs(TelescopeColor) do

@@ -35,7 +35,7 @@ in
           ./lua-config.nix
           ./packages.nix
           ./plugins/plugins.nix
-          ./plugins/telescope.nix
+          (import ./plugins/telescope.nix { inherit config; })
           ./plugins/treesitter.nix
           ./plugins/nvim-tree.nix
           ./plugins/lsp.nix

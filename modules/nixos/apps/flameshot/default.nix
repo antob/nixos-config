@@ -1,10 +1,17 @@
-{ options, config, pkgs, lib, ... }:
+{
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
 let
   cfg = config.antob.apps.flameshot;
   flameshot-gui = pkgs.callPackage ./flameshot-gui.nix { };
+  colors = config.antob.color-scheme.colors;
 in
 {
   options.antob.apps.flameshot = with types; {
@@ -19,7 +26,7 @@ in
         enable = true;
         settings = {
           General = {
-            uiColor = "#61afef"; # One Dark Base 16 - base0D
+            uiColor = "#${colors.base0C}";
             disabledTrayIcon = true;
           };
         };
