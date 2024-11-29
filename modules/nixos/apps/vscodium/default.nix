@@ -134,7 +134,6 @@ in
             dotjoshjohnson.xml
             redhat.vscode-yaml
             shd101wyy.markdown-preview-enhanced
-            shopify.ruby-lsp
             formulahendry.auto-close-tag
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
@@ -167,6 +166,12 @@ in
               publisher = "jeff-hykin";
               version = "0.0.2";
               sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
+            }
+            {
+              name = "ruby-lsp";
+              publisher = "shopify";
+              version = "0.8.12";
+              sha256 = "sha256-Ab8mn93uA5enm8imD6pU8xMK0fgh2rYeblOhbkUhDrY=";
             }
           ];
       })
