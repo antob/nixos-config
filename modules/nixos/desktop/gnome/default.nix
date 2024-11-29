@@ -91,7 +91,7 @@ in
 
       dconf.settings =
         let
-          inherit (lib.gvariant) mkTuple mkUint32 mkVariant;
+          inherit (lib.gvariant) mkTuple mkUint32;
         in
         {
           "org/gnome/shell" = {
@@ -226,7 +226,7 @@ in
             event-button = false;
             dash = false;
             workspace-popup = false;
-            workspaces-in-app-grid = false;
+            workspaces-in-app-grid = true;
             ripple-box = false;
             window-demands-attention-focus = true;
             window-maximized-on-create = false;
@@ -289,7 +289,7 @@ in
             enable-hot-corners = false;
             show-battery-percentage = true;
             cursor-size = 16;
-            text-scaling-factor = 1.25;
+            text-scaling-factor = 1.0;
             font-hinting = "medium";
             clock-show-weekday = true;
             clock-show-weekdate = true;
