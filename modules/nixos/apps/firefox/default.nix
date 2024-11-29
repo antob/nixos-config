@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -66,10 +71,8 @@ let
     "layers.acceleration.force-enabled" = true;
     "mousewheel.min_line_scroll_amount" = 30;
     "mousewheel.system_scroll_override_on_root_content.enabled" = true;
-    "mousewheel.system_scroll_override_on_root_content.horizontal.factor" =
-      175;
-    "mousewheel.system_scroll_override_on_root_content.vertical.factor" =
-      175;
+    "mousewheel.system_scroll_override_on_root_content.horizontal.factor" = 175;
+    "mousewheel.system_scroll_override_on_root_content.vertical.factor" = 175;
     "mousewheel.with_control.action" = 1; # Scroll instead of zoom with ctrl+wheel
     "toolkit.scrollbox.horizontalScrollDistance" = 6;
     "toolkit.scrollbox.verticalScrollDistance" = 6;
@@ -86,6 +89,7 @@ let
     proton-pass
     duckduckgo-privacy-essentials
     multi-account-containers
+    linkhints
   ];
 
 in
