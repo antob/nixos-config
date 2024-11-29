@@ -1,9 +1,15 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.alacritty;
-in {
+let
+  cfg = config.antob.tools.alacritty;
+in
+{
   options.antob.tools.alacritty = with types; {
     enable = mkEnableOption "Enable alacritty";
   };
@@ -13,7 +19,9 @@ in {
       enable = true;
 
       settings = {
-        env = { TERM = "xterm-256color"; };
+        env = {
+          TERM = "xterm-256color";
+        };
 
         window = {
           padding = {
@@ -29,7 +37,8 @@ in {
             family = "Hack Nerd Font";
             style = "Regular";
           };
-          size = 14;
+          size = 12;
+          offset.y = 2;
         };
 
         scrolling = {
@@ -65,6 +74,7 @@ in {
             mods = "Control|Shift";
             action = "ResetFontSize";
           }
+
           ## Tmux shortcuts
           # Cycle layout
           {
