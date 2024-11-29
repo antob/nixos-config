@@ -13,5 +13,16 @@
       };
       desc = "Start vim with file finder";
     }
+    {
+      event = [ "TextYankPost" ];
+      callback = {
+        __raw = ''
+          function()
+            vim.highlight.on_yank()
+          end
+        '';
+      };
+      desc = "Highlight when yanking text";
+    }
   ];
 }

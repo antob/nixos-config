@@ -87,11 +87,13 @@
       mode = "n";
       key = "<leader>y";
       action = "\"+y";
+      options.desc = "Yank to system clipboard";
     }
     {
       mode = "v";
       key = "<leader>y";
       action = "\"+y";
+      options.desc = "Yank to system clipboard";
     }
 
     # Delete to void register
@@ -99,11 +101,13 @@
       mode = "n";
       key = "<leader>d";
       action = "\"_d";
+      options.desc = "Delete to void register";
     }
     {
       mode = "v";
       key = "<leader>d";
       action = "\"_d";
+      options.desc = "Delete to void register";
     }
 
     # Never press Q
@@ -138,82 +142,57 @@
       mode = "i";
       key = "<C-b>";
       action = "<ESC>^i";
-      options.desc = "move beginning of line";
+      options.desc = "Move to beginning of line";
     }
     {
       mode = "i";
       key = "<C-e>";
       action = "<End>";
-      options.desc = "move end of line";
+      options.desc = "Move to end of line";
     }
-    {
-      mode = "i";
-      key = "<C-h>";
-      action = "<Left>";
-      options.desc = "move left";
-    }
-    {
-      mode = "i";
-      key = "<C-l>";
-      action = "<Right>";
-      options.desc = "move right";
-    }
-    {
-      mode = "i";
-      key = "<C-j>";
-      action = "<Down>";
-      options.desc = "move down";
-    }
-    {
-      mode = "i";
-      key = "<C-k>";
-      action = "<Up>";
-      options.desc = "move up";
-    }
-
     {
       mode = "n";
       key = "<C-h>";
       action = "<C-w>h";
-      options.desc = "switch window left";
+      options.desc = "Switch window left";
     }
     {
       mode = "n";
       key = "<C-l>";
       action = "<C-w>l";
-      options.desc = "switch window right";
+      options.desc = "Switch window right";
     }
     {
       mode = "n";
       key = "<C-j>";
       action = "<C-w>j";
-      options.desc = "switch window down";
+      options.desc = "Switch window down";
     }
     {
       mode = "n";
       key = "<C-k>";
       action = "<C-w>k";
-      options.desc = "switch window up";
+      options.desc = "Switch window up";
     }
 
     {
       mode = "n";
       key = "<Esc>";
       action = "<cmd>noh<CR>";
-      options.desc = "general clear highlights";
+      options.desc = "Clear highlights";
     }
 
     {
       mode = "n";
       key = "<C-s>";
       action = "<cmd>w<CR>";
-      options.desc = "general save file";
+      options.desc = "Save file";
     }
     {
       mode = "n";
       key = "<C-c>";
       action = "<cmd>%y+<CR>";
-      options.desc = "general copy whole file";
+      options.desc = "Copy whole file";
     }
 
     # Buffer
@@ -275,12 +254,6 @@
     }
     {
       mode = "n";
-      key = "<tab>";
-      action = "<CMD>tabnext<CR>";
-      options.desc = "Next Tab";
-    }
-    {
-      mode = "n";
       key = "<leader><tab>c";
       action = "<CMD>tabclose<CR>";
       options.desc = "Close Tab";
@@ -288,12 +261,6 @@
     {
       mode = "n";
       key = "<leader><tab>[";
-      action = "<CMD>tabprevious<CR>";
-      options.desc = "Previous Tab";
-    }
-    {
-      mode = "n";
-      key = "<S-tab>";
       action = "<CMD>tabprevious<CR>";
       options.desc = "Previous Tab";
     }
@@ -332,6 +299,12 @@
     {
       mode = "n";
       key = "<leader>ff";
+      action = "<cmd>Telescope find_files<CR>";
+      options.desc = "Telescope find files";
+    }
+    {
+      mode = "n";
+      key = "<C-p>";
       action = "<cmd>Telescope find_files<CR>";
       options.desc = "Telescope find files";
     }

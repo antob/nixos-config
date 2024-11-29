@@ -33,6 +33,9 @@
     # Max number of entries in popups
     pumheight = 20;
 
+    # Show only one line in command line
+    cmdheight = 0;
+
     signcolumn = "yes";
     splitbelow = true;
     splitright = true;
@@ -51,11 +54,23 @@
     hlsearch = false;
     incsearch = true;
 
+    # Sets how neovim will display certain whitespace characters in the editor.
+    list = true;
+    listchars = {
+      tab = "» ";
+      trail = "·";
+      nbsp = "␣";
+    };
+
+    # Preview substitutions live, as you type!
+    inccommand = "split";
+
     # Misc
     completeopt = "menu,menuone,noselect";
     wrap = false;
     termguicolors = true;
     scrolloff = 8;
+    breakindent = true;
   };
 
   diagnostics = {

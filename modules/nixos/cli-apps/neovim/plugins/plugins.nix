@@ -75,12 +75,31 @@
       };
     };
 
+    bufferline = {
+      enable = true;
+      settings = {
+        options = {
+          diagnostics = "nvim_lsp";
+          offsets = [
+            {
+              filetype = "NvimTree";
+              highlight = "Directory";
+              text = "File Explorer";
+              text_align = "center";
+            }
+          ];
+        };
+      };
+    };
+
     comment.enable = true;
     nvim-autopairs.enable = true;
     nvim-colorizer.enable = true;
     render-markdown.enable = true;
     lazygit.enable = true;
     undotree.enable = true;
+    fidget.enable = true;
+    vim-surround.enable = true;
 
     which-key = {
       enable = true;
@@ -112,6 +131,14 @@
           {
             __unkeyed-1 = "<leader>d";
             group = "Diagnostics";
+          }
+          {
+            __unkeyed-1 = "<leader>w";
+            group = "Workspace";
+          }
+          {
+            __unkeyed-1 = "<leader>m";
+            group = "Marks";
           }
 
           # Keys with custom icons / labels

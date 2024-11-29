@@ -48,6 +48,8 @@
           args = [
             "exec"
             "htmlbeautifier"
+            "--keep-blank-lines"
+            "1"
           ];
         };
       };

@@ -22,7 +22,7 @@ in
 
       programs.nixvim = {
         enable = true;
-        package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        # package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
 
         viAlias = true;
         vimAlias = true;
