@@ -1,9 +1,11 @@
-{ pkgs
-, lib
-, ...
+{
+  pkgs,
+  lib,
+  ...
 }:
 with lib;
-with lib.antob; {
+with lib.antob;
+{
   imports = [
     ./hardware.nix
   ];
@@ -15,6 +17,7 @@ with lib.antob; {
     };
 
     desktop.gnome = enabled;
+    # desktop.cosmic = enabled;
 
     virtualisation.virt-manager = enabled;
 
@@ -35,6 +38,7 @@ with lib.antob; {
     radeontop
     glxinfo
     deploy-rs
+    nixos-anywhere
     sops
     quickemu
     nfs-utils # Needed for mounting NFS shares
