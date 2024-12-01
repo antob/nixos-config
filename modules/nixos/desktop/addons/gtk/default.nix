@@ -1,9 +1,16 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.desktop.addons.gtk;
-in {
+let
+  cfg = config.antob.desktop.addons.gtk;
+in
+{
   options.antob.desktop.addons.gtk = with types; {
     enable = mkEnableOption "Whether to customize GTK and apply themes.";
     theme = {
@@ -11,16 +18,13 @@ in {
       pkg = mkOpt (nullOr package) null "The package to use for the theme.";
     };
     cursor = {
-      name =
-        mkOpt str "Bibata-Modern-Ice" "The name of the cursor theme to apply.";
+      name = mkOpt str "Bibata-Modern-Ice" "The name of the cursor theme to apply.";
       size = mkOpt int 16 "Cursor size to apply.";
-      pkg = mkOpt (nullOr package) pkgs.bibata-cursors
-        "The package to use for the cursor theme.";
+      pkg = mkOpt (nullOr package) pkgs.bibata-cursors "The package to use for the cursor theme.";
     };
     icon = {
       name = mkOpt str "Papirus" "The name of the icon theme to apply.";
-      pkg = mkOpt package pkgs.papirus-icon-theme
-        "The package to use for the icon theme.";
+      pkg = mkOpt package pkgs.papirus-icon-theme "The package to use for the icon theme.";
     };
   };
 

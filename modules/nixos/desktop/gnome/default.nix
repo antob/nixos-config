@@ -10,6 +10,9 @@ with lib.antob;
 let
   cfg = config.antob.desktop.gnome;
   colors = config.antob.color-scheme.colors;
+
+  cursorTheme = "Bibata-Modern-Ice";
+  cursorSize = 16;
 in
 {
   options.antob.desktop.gnome = with types; {
@@ -35,6 +38,8 @@ in
     antob.system.env = {
       MOZ_ENABLE_WAYLAND = "1";
       NIXOS_OZONE_WL = "1";
+      XCURSOR_THEME = cursorTheme;
+      XCURSOR_SIZE = builtins.toString cursorSize;
     };
 
     # Desktop additions
@@ -55,8 +60,8 @@ in
     antob.home.extraOptions.gtk = {
       enable = true;
       cursorTheme = {
-        name = "Bibata-Modern-Ice";
-        size = 16;
+        name = cursorTheme;
+        size = cursorSize;
         package = pkgs.bibata-cursors;
       };
       gtk3.extraConfig = {
@@ -288,7 +293,7 @@ in
             color-scheme = "prefer-dark";
             enable-hot-corners = false;
             show-battery-percentage = true;
-            cursor-size = 16;
+            cursor-size = cursorSize;
             text-scaling-factor = 1.0;
             font-hinting = "medium";
             clock-show-weekday = true;
