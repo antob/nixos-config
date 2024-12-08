@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -24,6 +30,7 @@ in
     ./homeassistant.nix
     ./esphome.nix
     ./nfsd.nix
+    ./samba.nix
   ];
 
   antob = {
@@ -97,7 +104,10 @@ in
     networks."10-lan" = {
       matchConfig.Name = "eth0";
       address = [ "192.168.1.2/24" ];
-      dns = [ "192.168.1.4" "1.1.1.1" ];
+      dns = [
+        "192.168.1.4"
+        "1.1.1.1"
+      ];
       routes = [
         { Gateway = "192.168.1.1"; }
       ];
