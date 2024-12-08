@@ -154,7 +154,9 @@ in
     services = {
       upower.enable = true;
       dbus.enable = true;
-      envfs.enable = true;
+      # Disable for now to avoid failed systemd
+      # units (`bin.mount` and `usr-bin.mount`) on startup
+      # envfs.enable = true;
     };
 
     location = {
