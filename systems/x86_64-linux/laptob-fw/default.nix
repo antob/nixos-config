@@ -17,7 +17,6 @@ with lib.antob;
     };
 
     desktop.gnome = enabled;
-    # desktop.cosmic = enabled;
 
     virtualisation.virt-manager = enabled;
 

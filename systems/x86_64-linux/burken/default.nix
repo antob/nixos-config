@@ -28,7 +28,6 @@ with lib.antob;
 
   services = {
     fstrim.enable = lib.mkDefault true;
-    xserver.videoDrivers = lib.mkDefault [ "nvidia" ];
   };
 
   system.stateVersion = "22.11";

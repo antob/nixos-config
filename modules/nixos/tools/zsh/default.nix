@@ -64,11 +64,6 @@ in {
           plugins = [ "git" ] ++ cfg.extraOhMyZshPlugins;
         };
       };
-
-      programs.fzf = {
-        enable = true;
-        enableZshIntegration = true;
-      };
     };
 
     antob.persistence.safe.home.directories = [ ".local/share/zsh" ];

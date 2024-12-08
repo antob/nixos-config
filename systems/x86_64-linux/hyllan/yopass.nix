@@ -14,7 +14,6 @@ in
       cmd = [
         "--memcached=127.0.0.1:11211"
         "--port=${toString port}"
-        "--max-length 500000"
       ];
     };
   };
