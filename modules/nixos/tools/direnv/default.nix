@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.direnv;
+let
+  cfg = config.antob.tools.direnv;
 in
 {
   options.antob.tools.direnv = with types; {
@@ -10,23 +15,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob.home.extraOptions = {
-      programs.direnv = {
-        enable = true;
-        enableZshIntegration = true;
-        nix-direnv = enabled;
-      };
+
+    programs.direnv = {
+      enable = true;
+      silent = true;
+      nix-direnv.enable = true;
+      loadInNixShell = true;
+      enableZshIntegration = true;
     };
 
     nix.extraOptions = ''
       keep-outputs = true
       keep-derivations = true
     '';
-
-    # make `direnv` silent
-    antob.system.env = {
-      DIRENV_LOG_FORMAT = "";
-    };
 
     antob.persistence.home.directories = [ ".local/share/direnv" ];
   };
