@@ -83,7 +83,7 @@
       channels-config.allowUnfree = true;
 
       overlays = with inputs; [
-        nur.overlay
+        nur.overlays.default
       ];
 
       systems.nixos.modules = with inputs; [

@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.system.fonts;
-in {
+let
+  cfg = config.antob.system.fonts;
+in
+{
   options.antob.system.fonts = with types; {
     enable = mkBoolOpt false "Whether or not to manage fonts.";
     fonts = mkOpt (listOf package) [ ] "Custom font packages to install.";
@@ -17,13 +24,16 @@ in {
 
     environment.systemPackages = with pkgs; [ font-manager ];
 
-    fonts.packages = with pkgs;
+    fonts.packages =
+      with pkgs;
       [
         noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
         noto-fonts-emoji
-        (nerdfonts.override { fonts = [ "Hack" "SourceCodePro" ]; })
-      ] ++ cfg.fonts;
+        nerd-fonts.hack
+        nerd-fonts.fira-code
+      ]
+      ++ cfg.fonts;
   };
 }
