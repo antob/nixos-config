@@ -41,6 +41,7 @@ with lib.antob;
     sops
     quickemu
     nfs-utils # Needed for mounting NFS shares
+    rustdesk-flutter
   ];
 
   services = {
