@@ -135,6 +135,7 @@ in
             redhat.vscode-yaml
             shd101wyy.markdown-preview-enhanced
             formulahendry.auto-close-tag
+            github.copilot
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
@@ -172,6 +173,12 @@ in
               publisher = "shopify";
               version = "0.8.12";
               sha256 = "sha256-Ab8mn93uA5enm8imD6pU8xMK0fgh2rYeblOhbkUhDrY=";
+            }
+            {
+              name = "vscode-openapi";
+              publisher = "42Crunch";
+              version = "4.30.1";
+              sha256 = "sha256-8PtjJaTdrSJZFepIPNXcvyUWwLxgWUEo11DVuEzJHHA=";
             }
           ];
       })

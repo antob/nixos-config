@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -11,7 +16,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob.persistence.home.directories = [ ".config/Code" ".vscode" ];
+    antob.persistence.home.directories = [
+      ".config/Code"
+      ".vscode"
+    ];
 
     antob.home.extraOptions.programs.vscode = {
       enable = true;
@@ -103,55 +111,59 @@ in
         svelte.enable-ts-plugin = true;
       };
 
-      extensions = with pkgs.vscode-extensions; [
-        zhuangtongfa.material-theme
-        tamasfe.even-better-toml
-        vadimcn.vscode-lldb
-        jnoortheen.nix-ide
-        rust-lang.rust-analyzer
-        dotjoshjohnson.xml
-        redhat.vscode-yaml
-        shd101wyy.markdown-preview-enhanced
-        ms-dotnettools.csharp
-        csharpier.csharpier-vscode
-      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "vscode-standard-ruby";
-          publisher = "testdouble";
-          version = "0.0.16";
-          sha256 = "sha256-XxL8rEmlI2pCw9YxqcgazUMbC1IL/C8d2zrAvy8tVbU=";
-        }
-        {
-          name = "vscode-erb-beautify";
-          publisher = "aliariff";
-          version = "0.4.1";
-          sha256 = "sha256-BH6sz/vKeYxjnoKum+jY+tzKfxWtHp8WkZn6xyYumvM=";
-        }
-        {
-          name = "vscode-fileutils";
-          publisher = "sleistner";
-          version = "3.10.3";
-          sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
-        }
-        {
-          name = "solargraph";
-          publisher = "castwide";
-          version = "0.24.1";
-          sha256 = "sha256-M96kGuCKo232rIwLovDU+C/rhEgZWT4s/zsR7CUYPnk=";
-        }
-        {
-          name = "simple-ruby-erb";
-          publisher = "vortizhe";
-          version = "0.2.1";
-          sha256 = "sha256-JZov46QWUHIewu4FZtlQL/wRV6rHpu6Kd9yuWdCL77w=";
-        }
-        {
-          name = "better-csv-syntax";
-          publisher = "jeff-hykin";
-          version = "0.0.2";
-          sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
-        }
-      ];
+      extensions =
+        with pkgs.vscode-extensions;
+        [
+          zhuangtongfa.material-theme
+          tamasfe.even-better-toml
+          vadimcn.vscode-lldb
+          jnoortheen.nix-ide
+          rust-lang.rust-analyzer
+          dotjoshjohnson.xml
+          redhat.vscode-yaml
+          shd101wyy.markdown-preview-enhanced
+          ms-dotnettools.csharp
+          csharpier.csharpier-vscode
+          github.copilot
+        ]
+        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+          {
+            name = "vscode-standard-ruby";
+            publisher = "testdouble";
+            version = "0.0.16";
+            sha256 = "sha256-XxL8rEmlI2pCw9YxqcgazUMbC1IL/C8d2zrAvy8tVbU=";
+          }
+          {
+            name = "vscode-erb-beautify";
+            publisher = "aliariff";
+            version = "0.4.1";
+            sha256 = "sha256-BH6sz/vKeYxjnoKum+jY+tzKfxWtHp8WkZn6xyYumvM=";
+          }
+          {
+            name = "vscode-fileutils";
+            publisher = "sleistner";
+            version = "3.10.3";
+            sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
+          }
+          {
+            name = "solargraph";
+            publisher = "castwide";
+            version = "0.24.1";
+            sha256 = "sha256-M96kGuCKo232rIwLovDU+C/rhEgZWT4s/zsR7CUYPnk=";
+          }
+          {
+            name = "simple-ruby-erb";
+            publisher = "vortizhe";
+            version = "0.2.1";
+            sha256 = "sha256-JZov46QWUHIewu4FZtlQL/wRV6rHpu6Kd9yuWdCL77w=";
+          }
+          {
+            name = "better-csv-syntax";
+            publisher = "jeff-hykin";
+            version = "0.0.2";
+            sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
+          }
+        ];
     };
   };
 }
