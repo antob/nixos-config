@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.services.printing;
-in {
+let
+  cfg = config.antob.services.printing;
+in
+{
   options.antob.services.printing = with types; {
     enable = mkEnableOption "Whether or not to configure printing support.";
   };

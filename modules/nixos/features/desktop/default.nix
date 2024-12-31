@@ -1,4 +1,9 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -37,11 +42,9 @@ in
       v4l-utils
       guvcview # webcam tool
       gnome-calculator
-      # rustdesk
       # remmina # Remote Desktop Client
       obsidian
       discord
-      antob.zed-editor
     ];
   };
 }

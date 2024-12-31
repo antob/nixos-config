@@ -1,9 +1,9 @@
-{ pkgs, lib, stdenv, ... }:
+{ pkgs, ... }:
 
-pkgs.buildFHSUserEnv {
+pkgs.buildFHSEnv {
   name = "zed";
-  targetPkgs = pkgs:
-    with pkgs; [
+  targetPkgs =
+    pkgs: with pkgs; [
       zed-editor
     ];
   runScript = "zed";

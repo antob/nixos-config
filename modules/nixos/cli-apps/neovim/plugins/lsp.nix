@@ -126,6 +126,7 @@
         yamlls.enable = true;
         ruby_lsp = {
           enable = true;
+          package = null;
           cmd = [
             "bundle"
             "exec"

@@ -94,7 +94,7 @@
 
     comment.enable = true;
     nvim-autopairs.enable = true;
-    nvim-colorizer.enable = true;
+    colorizer.enable = true;
     render-markdown.enable = true;
     lazygit.enable = true;
     undotree.enable = true;
