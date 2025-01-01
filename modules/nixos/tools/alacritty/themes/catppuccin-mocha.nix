@@ -1,94 +1,85 @@
 {
   primary = {
-    background = "#1E1E2E"; # base
-    foreground = "#CDD6F4"; # text
-    # Bright and dim foreground colors
-    dim_foreground = "#CDD6F4"; # text
-    bright_foreground = "#CDD6F4"; # text
+    background = "#1e1e2e";
+    foreground = "#cdd6f4";
+    dim_foreground = "#7f849c";
+    bright_foreground = "#cdd6f4";
   };
 
-  # Cursor colors
   cursor = {
-    text = "#1E1E2E"; # base
-    cursor = "#F5E0DC"; # rosewater
-  };
-  vi_mode_cursor = {
-    text = "#1E1E2E"; # base
-    cursor = "#B4BEFE"; # lavender
+    text = "#1e1e2e";
+    cursor = "#f5e0dc";
   };
 
-  # Search colors
+  vi_mode_cursor = {
+    text = "#1e1e2e";
+    cursor = "#b4befe";
+  };
+
   search = {
     matches = {
-      foreground = "#1E1E2E"; # base
-      background = "#A6ADC8"; # subtext0
+      foreground = "#1e1e2e";
+      background = "#a6adc8";
     };
+
     focused_match = {
-      foreground = "#1E1E2E"; # base
-      background = "#A6E3A1"; # green
-    };
-    footer_bar = {
-      foreground = "#1E1E2E"; # base
-      background = "#A6ADC8"; # subtext0
+      foreground = "#1e1e2e";
+      background = "#a6e3a1";
     };
   };
 
-  # Keyboard regex hints
+  footer_bar = {
+    foreground = "#1e1e2e";
+    background = "#a6adc8";
+  };
+
   hints = {
     start = {
-      foreground = "#1E1E2E"; # base
-      background = "#F9E2AF"; # yellow
+      foreground = "#1e1e2e";
+      background = "#f9e2af";
     };
+
     end = {
-      foreground = "#1E1E2E"; # base
-      background = "#A6ADC8"; # subtext0
+      foreground = "#1e1e2e";
+      background = "#a6adc8";
     };
   };
 
-  # Selection colors
   selection = {
-    text = "#1E1E2E"; # base
-    background = "#F5E0DC"; # rosewater
+    text = "#1e1e2e";
+    background = "#f5e0dc";
   };
 
-  # Normal colors
   normal = {
-    black = "#45475A"; # surface1
-    red = "#F38BA8"; # red
-    green = "#A6E3A1"; # green
-    yellow = "#F9E2AF"; # yellow
-    blue = "#89B4FA"; # blue
-    magenta = "#F5C2E7"; # pink
-    cyan = "#94E2D5"; # teal
-    white = "#BAC2DE"; # subtext1
+    black = "#45475a";
+    red = "#f38ba8";
+    green = "#a6e3a1";
+    yellow = "#f9e2af";
+    blue = "#89b4fa";
+    magenta = "#f5c2e7";
+    cyan = "#94e2d5";
+    white = "#bac2de";
   };
 
-  # Bright colors
   bright = {
-    black = "#585B70"; # surface2
-    red = "#F38BA8"; # red
-    green = "#A6E3A1"; # green
-    yellow = "#F9E2AF"; # yellow
-    blue = "#89B4FA"; # blue
-    magenta = "#F5C2E7"; # pink
-    cyan = "#94E2D5"; # teal
-    white = "#A6ADC8"; # subtext0
-  };
-
-  # Dim colors
-  dim = {
-    black = "#45475A"; # surface1
-    red = "#F38BA8"; # red
-    green = "#A6E3A1"; # green
-    yellow = "#F9E2AF"; # yellow
-    blue = "#89B4FA"; # blue
-    magenta = "#F5C2E7"; # pink
-    cyan = "#94E2D5"; # teal
-    white = "#BAC2DE"; # subtext1
+    black = "#585b70";
+    red = "#f38ba8";
+    green = "#a6e3a1";
+    yellow = "#f9e2af";
+    blue = "#89b4fa";
+    magenta = "#f5c2e7";
+    cyan = "#94e2d5";
+    white = "#a6adc8";
   };
 
   indexed_colors = [
-    { index = 16; color = "#FAB387"; }
-    { index = 17; color = "#F5E0DC"; }
+    {
+      index = 16;
+      color = "#fab387";
+    }
+    {
+      index = 17;
+      color = "#f5e0dc";
+    }
   ];
 }

@@ -60,7 +60,7 @@
         options = {
           globalstatus = true;
           icons_enabled = true;
-          theme = "onedark";
+          theme = "catppuccin";
           component_separators = "|";
           section_separators = "";
         };
@@ -79,6 +79,7 @@
       enable = true;
       settings = {
         options = {
+          themable = true;
           diagnostics = "nvim_lsp";
           offsets = [
             {

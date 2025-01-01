@@ -49,9 +49,7 @@ in
           save_to_clipboard = true;
         };
 
-        # colors = import ./themes/custom.nix;
-        # colors = import ./themes/catppuccin-mocha.nix;
-        colors = import ./themes/one-dark.nix;
+        colors = import ./themes/catppuccin-mocha.nix;
 
         cursor = {
           style.shape = "Beam";

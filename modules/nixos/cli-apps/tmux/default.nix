@@ -1,4 +1,9 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -9,8 +14,15 @@ let
   plugins = with pkgs; [
     tmuxPlugins.sensible
     tmuxPlugins.tmux-fzf
-    tmux-onedark-theme
     tmuxPlugins.resurrect
+    {
+      plugin = tmuxPlugins.catppuccin;
+      extraConfig = ''
+        set -g @catppuccin_flavor "macchiato"
+        set -g @catppuccin_window_status_style "rounded"
+        set -g @catppuccin_pane_active_border_style "fg=#8bd5ca" # Teal
+      '';
+    }
   ];
 in
 {
@@ -33,8 +45,7 @@ in
         terminal = "xterm-256color";
         clock24 = true;
         historyLimit = 100000;
-        extraConfig = builtins.concatStringsSep "\n"
-          (builtins.map lib.strings.fileContents configFiles);
+        extraConfig = builtins.concatStringsSep "\n" (builtins.map lib.strings.fileContents configFiles);
 
         inherit plugins;
       };

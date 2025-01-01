@@ -27,10 +27,11 @@
       foreground = "#24273A"; # base
       background = "#A6DA95"; # green
     };
-    footer_bar = {
-      foreground = "#24273A"; # base
-      background = "#A5ADCB"; # subtext0
-    };
+  };
+
+  footer_bar = {
+    foreground = "#24273A"; # base
+    background = "#A5ADCB"; # subtext0
   };
 
   # Keyboard regex hints
@@ -88,7 +89,13 @@
   };
 
   indexed_colors = [
-    { index = 16; color = "#F5A97F"; }
-    { index = 17; color = "#F4DBD6"; }
+    {
+      index = 16;
+      color = "#F5A97F";
+    }
+    {
+      index = 17;
+      color = "#F4DBD6";
+    }
   ];
 }
