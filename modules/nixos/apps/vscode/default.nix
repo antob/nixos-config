@@ -106,15 +106,27 @@ in
 
         diffEditor.ignoreTrimWhitespace = false;
 
-        # Plugin settings
+        # Installed extensions config
         rust-analyzer.check.command = "clippy";
+        redhat.telemetry.enabled = false;
         svelte.enable-ts-plugin = true;
+
+        nix = {
+          formatterPath = "nixfmt";
+          enableLanguageServer = true;
+          serverPath = "nixd";
+          serverSettings.nixd = {
+            formatting = {
+              command = "nixfmt";
+            };
+          };
+        };
       };
 
       extensions =
         with pkgs.vscode-extensions;
         [
-          zhuangtongfa.material-theme
+          zhuangtongfa.material-theme # One Dark Pro
           tamasfe.even-better-toml
           vadimcn.vscode-lldb
           jnoortheen.nix-ide
@@ -122,6 +134,7 @@ in
           dotjoshjohnson.xml
           redhat.vscode-yaml
           shd101wyy.markdown-preview-enhanced
+          formulahendry.auto-close-tag
           ms-dotnettools.csharp
           csharpier.csharpier-vscode
           github.copilot
@@ -146,12 +159,6 @@ in
             sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
           }
           {
-            name = "solargraph";
-            publisher = "castwide";
-            version = "0.24.1";
-            sha256 = "sha256-M96kGuCKo232rIwLovDU+C/rhEgZWT4s/zsR7CUYPnk=";
-          }
-          {
             name = "simple-ruby-erb";
             publisher = "vortizhe";
             version = "0.2.1";
@@ -163,7 +170,18 @@ in
             version = "0.0.2";
             sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
           }
+          {
+            name = "ruby-lsp";
+            publisher = "shopify";
+            version = "0.8.12";
+            sha256 = "sha256-Ab8mn93uA5enm8imD6pU8xMK0fgh2rYeblOhbkUhDrY=";
+          }
         ];
     };
+
+    environment.systemPackages = with pkgs; [
+      nixfmt-rfc-style
+      nixd
+    ];
   };
 }
