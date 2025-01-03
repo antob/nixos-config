@@ -2,7 +2,7 @@
   globals = {
     localleader = " ";
     mapleader = " ";
-    markdown_folding = true;
+    markdown_folding = false;
   };
 
   opts = {
@@ -11,7 +11,7 @@
 
     clipboard = "unnamedplus";
     cursorline = true;
-    cursorlineopt = "number";
+    cursorlineopt = "line,number";
 
     # Indenting
     expandtab = true;

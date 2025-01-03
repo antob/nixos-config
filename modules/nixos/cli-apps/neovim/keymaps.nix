@@ -292,7 +292,7 @@
     }
     {
       mode = "n";
-      key = "<leader>ma";
+      key = "<leader>fm";
       action = "<cmd>Telescope marks<CR>";
       options.desc = "Telescope find marks";
     }
@@ -356,7 +356,7 @@
     # Conform
     {
       mode = "n";
-      key = "<leader>fm";
+      key = "<leader>=";
       action = "<cmd>Format<CR>";
       options.desc = "Format file";
     }
@@ -365,7 +365,11 @@
     {
       mode = "n";
       key = "<leader>gg";
-      action = "<CMD>LazyGit<CR>";
+      action.__raw = ''
+        function()
+          Snacks.lazygit()
+        end
+      '';
       options.desc = "LazyGit";
     }
 
@@ -389,6 +393,14 @@
       key = "<C-b>";
       action = "<CMD>NvimTreeToggle<CR>";
       options.desc = "NvimTree Toggle";
+    }
+
+    # MarkdownPreview
+    {
+      mode = "n";
+      key = "<leader>mp";
+      action = "<CMD>MarkdownPreviewToggle<CR>";
+      options.desc = "Toggle markdown preview";
     }
   ];
 }

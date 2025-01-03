@@ -97,10 +97,30 @@
     nvim-autopairs.enable = true;
     colorizer.enable = true;
     render-markdown.enable = true;
-    lazygit.enable = true;
+    markdown-preview.enable = true;
     undotree.enable = true;
-    fidget.enable = true;
     vim-surround.enable = true;
+    rainbow-delimiters.enable = true;
+
+    copilot-vim = {
+      enable = true;
+      settings = {
+        no_tab_map = true;
+        assume_mapped = true;
+      };
+    };
+
+    snacks = {
+      enable = true;
+      settings = {
+        bigfile.enabled = true;
+        notifier.enabled = true;
+        quickfile.enabled = true;
+        statuscolumn.enabled = true;
+        lazygit.enabled = true;
+        words.enabled = true;
+      };
+    };
 
     which-key = {
       enable = true;
@@ -139,7 +159,7 @@
           }
           {
             __unkeyed-1 = "<leader>m";
-            group = "Marks";
+            group = "Markdown";
           }
 
           # Keys with custom icons / labels
@@ -155,7 +175,7 @@
 
   extraPlugins = [
     (pkgs.vimUtils.buildVimPlugin {
-      name = "my-plugin";
+      name = "vim-rails";
       src = pkgs.fetchFromGitHub {
         owner = "tpope";
         repo = "vim-rails";

@@ -12,5 +12,8 @@
     -- UndoTree config
     vim.g.undotree_WindowLayout = 2
     vim.g.undotree_SplitWidth = 40
+
+    -- Copilot kemaps
+    vim.api.nvim_set_keymap('i', '<Right>', 'copilot#Accept("<Right>")', { expr=true, noremap = true, silent = true })
   '';
 }
