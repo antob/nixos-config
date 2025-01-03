@@ -77,9 +77,6 @@ in
         window = {
           completion = {
             border = "solid";
-            # winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None";
-            # winhighlight = "Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None";
-            winhighlight = "Normal:Normal,FloatBorder:TelescopePromptBorder,CursorLine:Visual,Search:None";
             zindex = 1001;
             scrolloff = 0;
             colOffset = -3;
@@ -88,9 +85,6 @@ in
           };
           documentation = {
             border = "solid";
-            # winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None";
-            # winhighlight = "Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None";
-            winhighlight = "Normal:Normal,FloatBorder:TelescopePromptBorder,CursorLine:Visual,Search:None";
             zindex = 1001;
             maxHeight = 20;
           };

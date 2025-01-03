@@ -10,6 +10,7 @@ with lib.antob;
 let
   cfg = config.antob.cli-apps.tmux;
   configFiles = lib.snowfall.fs.get-files ./config;
+  colors = config.antob.color-scheme.colors;
 
   plugins = with pkgs; [
     tmuxPlugins.sensible
@@ -19,8 +20,9 @@ let
       plugin = tmuxPlugins.catppuccin;
       extraConfig = ''
         set -g @catppuccin_flavor "macchiato"
-        set -g @catppuccin_window_status_style "rounded"
-        set -g @catppuccin_pane_active_border_style "fg=#8bd5ca" # Teal
+        set -g @catppuccin_status_left_separator "█"
+        set -g @catppuccin_status_modules_right "session"
+        set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
       '';
     }
   ];

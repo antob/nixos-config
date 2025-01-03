@@ -42,7 +42,7 @@ in
 
   config = {
     antob.color-scheme = {
-      colors = import ./catppuccin-mocha.nix // {
+      colors = import ./tokyonight-night.nix // {
         base10 = "#282c34"; # Alt Black
         base11 = "#e5c07b"; # Alt Yellow
         base12 = "#353b45"; # Alt Grey

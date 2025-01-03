@@ -18,13 +18,6 @@ set-window-option -g mode-keys vi
 # do not auto-rename windows
 set-option -g automatic-rename off
 
-# Configure status bar
-#set -g status-right ''
-
-# Make the status line more pleasant.
-set -g status-left ""
-set -g status-right '#[fg=#{@thm_crust},bg=#{@thm_teal}] Session: #S '
-
 # Ensure that everything on the right side of the status line
 # is included.
 set -g status-right-length 100

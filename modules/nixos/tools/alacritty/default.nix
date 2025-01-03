@@ -49,7 +49,7 @@ in
           save_to_clipboard = true;
         };
 
-        colors = import ./themes/catppuccin-mocha.nix;
+        colors = import ./themes/tokyonight-night.nix;
 
         cursor = {
           style.shape = "Beam";

@@ -26,11 +26,14 @@ in
       bibata-cursors
       gnomeExtensions.just-perfection
       inputs.paperwm.packages.${pkgs.system}.default
+      # gnomeExtensions.tactile
       gnomeExtensions.switcher
       gnomeExtensions.vitals
       gnomeExtensions.caffeine
       gnomeExtensions.hide-cursor
       antob.gnome-shell-extension-expand-shutdown-menu
+      # ulauncher
+      # inputs.ulauncher.packages.${pkgs.system}.default
     ];
 
     services.udev.packages = with pkgs; [ gnome-settings-daemon ];
@@ -106,6 +109,7 @@ in
             enabled-extensions = [
               "paperwm@paperwm.github.com"
               "just-perfection-desktop@just-perfection"
+              # "tactile@lundal.io"
               # "switcher@landau.fi"
               "hide-cursor@elcste.com"
               "expand-shutdown-menu@antob.se"
@@ -301,6 +305,13 @@ in
             clock-show-weekdate = true;
             enable-animations = false;
           };
+          # "org/gnome/mutter" = {
+          #   workspaces-only-on-primary = true;
+          # };
+          # "org/gnome/mutter/keybindings" = {
+          #   toggle-tiled-left = [ ];
+          #   toggle-tiled-right = [ ];
+          # };
           "org/gnome/shell/app-switcher" = {
             current-workspace-only = true;
           };
@@ -330,6 +341,12 @@ in
             move-to-workspace-7 = [ "<Shift><Super>7" ];
             move-to-workspace-8 = [ "<Shift><Super>8" ];
             move-to-workspace-9 = [ "<Shift><Super>9" ];
+
+            # cycle-windows = [ "<Super>Right" ];
+            # cycle-windows-backward = [ "<Super>Left" ];
+
+            # toggle-fullscreen = [ "<Super>f" ];
+            # close = [ "<Super>q" ];
           };
           "org/gnome/settings-daemon/plugins/color" = {
             night-light-enabled = true;
@@ -395,7 +412,7 @@ in
         .paperwm-selection {
           border-radius: 6px !important;
           background-color: transparent;
-          border: 3px solid #${colors.base0E};
+          border: 3px solid #${colors.base0C};
         }
       '';
     };
