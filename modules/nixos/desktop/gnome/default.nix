@@ -295,7 +295,7 @@ in
           };
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
-            accent-color = "teal";
+            accent-color = "blue";
             enable-hot-corners = false;
             show-battery-percentage = true;
             cursor-size = cursorSize;
