@@ -76,17 +76,19 @@ in
         };
         window = {
           completion = {
-            border = "solid";
+            border = "single";
             zindex = 1001;
             scrolloff = 0;
             colOffset = -3;
             sidePadding = 0;
             scrollbar = true;
+            winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
           };
           documentation = {
-            border = "solid";
+            border = "single";
             zindex = 1001;
             maxHeight = 20;
+            winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
           };
         };
 

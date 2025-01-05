@@ -80,7 +80,7 @@
     };
     underline = true;
     float = {
-      border = "solid";
+      border = "single";
     };
   };
 }

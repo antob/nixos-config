@@ -113,6 +113,13 @@
     snacks = {
       enable = true;
       settings = {
+        styles = {
+          blame_line.border = "single";
+          input.border = "single";
+          notification.border = "single";
+          notification_history.border = "single";
+          scratch.border = "single";
+        };
         bigfile.enabled = true;
         notifier.enabled = true;
         quickfile.enabled = true;

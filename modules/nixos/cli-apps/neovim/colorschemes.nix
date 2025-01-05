@@ -90,6 +90,9 @@
 
               -- CursorLine
               CursorLine = { bg = c.base },
+
+              -- Floating windows
+              FloatBorder = { fg = c.surface0 },
             }
           end
         '';

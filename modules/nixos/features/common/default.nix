@@ -83,7 +83,16 @@ in
 
         bat = {
           enable = true;
-          config.theme = "TwoDark";
+          config.theme = "catppuccin";
+          themes = {
+            catppuccin = {
+              src = builtins.fetchurl {
+                url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
+                sha256 = "sha256:1algv6hb3sz02cy6y3hnxpa61qi3nanqg39gsgmjys62yc3xngj6";
+                name = "catppuccin.tmTheme";
+              };
+            };
+          };
         };
 
         password-store.enable = true;
