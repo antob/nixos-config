@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.zsh;
-in {
+let
+  cfg = config.antob.tools.zsh;
+in
+{
   options.antob.tools.zsh = with types; {
     enable = mkEnableOption "Whether or not to install and configure zsh.";
     extraOhMyZshPlugins = mkOpt (listOf str) [ ] "Extra plugins for OhMyZsh.";
@@ -42,6 +49,10 @@ in {
 
           # Improved vim bindings.
           #source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+          # ZSH Widget bindings
+          bindkey "^b" backward-word
+          bindkey "^f" forward-word
 
           # Fix cursor changing to block style
           function restore_cursor(){
