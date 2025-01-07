@@ -79,14 +79,14 @@
           function(c)
             return {
               -- Telescope
-              TelescopeSelection = { bg = c.base },
-              TelescopeNormal = { bg = c.crust, fg = c.subtext0 },
-              TelescopeBorder = { bg = c.crust, fg = c.crust },
+              TelescopeSelection = { bg = c.surface0 },
+              TelescopeNormal = { bg = c.base, fg = c.subtext0 },
+              TelescopeBorder = { bg = c.base, fg = c.base },
               TelescopePromptNormal = { bg = c.base },
               TelescopePromptBorder = { bg = c.base, fg = c.base },
               TelescopePromptTitle = { bg = c.base, fg = c.base },
-              TelescopePreviewTitle = { bg = c.crust, fg = c.crust },
-              TelescopeResultsTitle = { bg = c.crust, fg = c.crust },
+              TelescopePreviewTitle = { bg = c.base, fg = c.base },
+              TelescopeResultsTitle = { bg = c.base, fg = c.base },
 
               -- CursorLine
               CursorLine = { bg = c.base },

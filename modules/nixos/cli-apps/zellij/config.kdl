@@ -75,7 +75,7 @@ default_layout "compact"
 pane_frames false
 copy_on_select true
 mouse_mode true
-scrollback_editor "hx"
+scrollback_editor "vim"
 scroll_buffer_size 100000
 
 themes {
@@ -90,7 +90,7 @@ themes {
         magenta 198 120 221
         cyan 86 182 194
         white 233 225 254
-        orange 216 133 76        
+        orange 216 133 76
     }
 }
 
@@ -99,4 +99,3 @@ themes {
 //        hide_session_name true
 //    }
 //}
-

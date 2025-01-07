@@ -101,6 +101,7 @@
     undotree.enable = true;
     vim-surround.enable = true;
     rainbow-delimiters.enable = true;
+    tmux-navigator.enable = true;
 
     copilot-vim = {
       enable = true;

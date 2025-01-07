@@ -195,6 +195,20 @@
       options.desc = "Copy whole file";
     }
 
+    # Splits
+    {
+      mode = "n";
+      key = "--";
+      action = "<CMD>split<CR>";
+      options.desc = "Split window horizontally";
+    }
+    {
+      mode = "n";
+      key = "\\\\";
+      action = "<CMD>vsplit<CR>";
+      options.desc = "Split window vertically";
+    }
+
     # Buffer
     {
       mode = "n";
@@ -217,8 +231,32 @@
     {
       mode = "n";
       key = "<leader>bd";
-      action = "<CMD>bd<CR>";
-      options.desc = "Delete Buffer and Window";
+      action.__raw = ''
+        function()
+          Snacks.bufdelete()
+        end
+      '';
+      options.desc = "Delete Buffer";
+    }
+    {
+      mode = "n";
+      key = "<leader>bD";
+      action.__raw = ''
+        function()
+          Snacks.bufdelete.all()
+        end
+      '';
+      options.desc = "Delete all Buffers";
+    }
+    {
+      mode = "n";
+      key = "<leader>bo";
+      action.__raw = ''
+        function()
+          Snacks.bufdelete.other()
+        end
+      '';
+      options.desc = "Delete other Buffers";
     }
 
     # Tabs
@@ -334,6 +372,12 @@
     }
     {
       mode = "n";
+      key = "<leader>gf";
+      action = "<cmd>Telescope git_bcommits<CR>";
+      options.desc = "Telescope current file git commits";
+    }
+    {
+      mode = "n";
       key = "<leader>gs";
       action = "<cmd>Telescope git_status<CR>";
       options.desc = "Telescope git status";
@@ -371,6 +415,16 @@
         end
       '';
       options.desc = "LazyGit";
+    }
+    {
+      mode = "n";
+      key = "<leader>gb";
+      action.__raw = ''
+        function()
+          Snacks.git.blame_line()
+        end
+      '';
+      options.desc = "Git Blame Line";
     }
 
     # Undotree

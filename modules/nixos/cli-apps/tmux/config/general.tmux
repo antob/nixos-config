@@ -88,7 +88,7 @@ bind -n \uE021 previous-window
 # Focus next window
 bind -n \uE022 next-window
 
-bind-key "C-a" run-shell "sesh connect \"$(
+bind-key "C-s" run-shell "sesh connect \"$(
 	sesh list -t | fzf-tmux -p 55%,60% \
 		--no-sort --ansi --border-label ' Sessions ' --prompt '⚡  ' \
 		--header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
@@ -107,7 +107,7 @@ set-hook -g after-new-window "select-layout main-vertical \; rename-window 'Tab'
 #set-hook -g after-split-window "select-layout \; swap-pane -U"
 set-hook -g after-split-window "select-layout"
 set-hook -g after-kill-pane "select-layout"
-set-hook -g pane-exited "select-layout" 
+set-hook -g pane-exited "select-layout"
 
 #set -g destroy-unattached on  # destroy orphaned sessions
 set -g detach-on-destroy on   # exit from tmux when closing a session
