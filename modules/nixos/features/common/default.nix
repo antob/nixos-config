@@ -132,6 +132,7 @@ in
       cat = "bat -p";
       http = "xh";
       https = "xhs";
+      speedtest = "speedtest-rs";
     };
 
     environment.systemPackages = with pkgs; [
@@ -158,6 +159,7 @@ in
       tailspin
       gnumake
       cifs-utils # Mount SMB shares
+      speedtest-rs
     ];
 
     services = {
