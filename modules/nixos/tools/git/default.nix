@@ -69,14 +69,6 @@ in
             whitespace = "trailing-space,space-before-tab";
             editor = "nvim";
             excludesfile = "~/.gitexcludes";
-            pager = "${pkgs.delta}/bin/delta";
-          };
-          interactive = {
-            diffFilter = "${pkgs.delta}/bin/delta --color-only";
-          };
-          delta = {
-            navigate = true;
-            side-by-side = true;
           };
           merge = {
             conflictstyle = "diff3";
