@@ -89,6 +89,9 @@ in
 
         files = {
           insertFinalNewline = true;
+          associations = {
+            "*.env*" = "plaintext";
+          };
         };
 
         extensions = {

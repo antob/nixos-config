@@ -108,6 +108,12 @@
       settings = {
         no_tab_map = true;
         assume_mapped = true;
+        filetypes = {
+          "*" = true;
+          yaml = false;
+          text = false;
+          markdown = false;
+        };
       };
     };
 

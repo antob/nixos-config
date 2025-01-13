@@ -1,5 +1,13 @@
 {
   extraConfigLua = ''
+    -- add secret files as text filetype
+    -- which will not be sent to Copilot
+    vim.filetype.add({
+      pattern = {
+        ['%.env.*'] = { 'text', { priority = math.huge } },
+      },
+    })
+
     -- disable nvim intro
     vim.opt.shortmess:append "sI"
 
