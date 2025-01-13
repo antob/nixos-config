@@ -67,6 +67,9 @@
       url = "github:paperwm/PaperWM";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Nix VSCode Extensions
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
   outputs =

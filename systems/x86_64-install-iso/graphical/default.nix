@@ -10,7 +10,7 @@ with lib.antob;
   antob = {
     apps = {
       firefox = enabled;
-      vscodium = enabled;
+      vscode = enabled;
     };
 
     tools = {

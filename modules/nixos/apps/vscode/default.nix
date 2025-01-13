@@ -2,6 +2,8 @@
   config,
   pkgs,
   lib,
+  inputs,
+  system,
   ...
 }:
 
@@ -9,6 +11,7 @@ with lib;
 with lib.antob;
 let
   cfg = config.antob.apps.vscode;
+  extensions = inputs.nix-vscode-extensions.extensions.${system};
 in
 {
   options.antob.apps.vscode = with types; {
@@ -118,6 +121,14 @@ in
           editor.defaultFormatter = "vscode.typescript-language-features";
         };
 
+        "[jsonc]" = {
+          editor.defaultFormatter = "vscode.json-language-features";
+        };
+
+        "[ruby]" = {
+          editor.defaultFormatter = "testdouble.vscode-standard-ruby";
+        };
+
         diffEditor.ignoreTrimWhitespace = false;
 
         # Installed extensions config
@@ -135,62 +146,36 @@ in
             };
           };
         };
+
+        rubyLsp = {
+          formatter = "standard";
+          rubyVersionManager = {
+            identifier = "none";
+          };
+        };
       };
 
-      extensions =
-        with pkgs.vscode-extensions;
-        [
-          zhuangtongfa.material-theme # One Dark Pro
-          tamasfe.even-better-toml
-          vadimcn.vscode-lldb
-          jnoortheen.nix-ide
-          rust-lang.rust-analyzer
-          dotjoshjohnson.xml
-          redhat.vscode-yaml
-          shd101wyy.markdown-preview-enhanced
-          formulahendry.auto-close-tag
-          ms-dotnettools.csharp
-          csharpier.csharpier-vscode
-          github.copilot
-        ]
-        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "vscode-standard-ruby";
-            publisher = "testdouble";
-            version = "0.0.16";
-            sha256 = "sha256-XxL8rEmlI2pCw9YxqcgazUMbC1IL/C8d2zrAvy8tVbU=";
-          }
-          {
-            name = "vscode-erb-beautify";
-            publisher = "aliariff";
-            version = "0.4.1";
-            sha256 = "sha256-BH6sz/vKeYxjnoKum+jY+tzKfxWtHp8WkZn6xyYumvM=";
-          }
-          {
-            name = "vscode-fileutils";
-            publisher = "sleistner";
-            version = "3.10.3";
-            sha256 = "sha256-v9oyoqqBcbFSOOyhPa4dUXjA2IVXlCTORs4nrFGSHzE=";
-          }
-          {
-            name = "simple-ruby-erb";
-            publisher = "vortizhe";
-            version = "0.2.1";
-            sha256 = "sha256-JZov46QWUHIewu4FZtlQL/wRV6rHpu6Kd9yuWdCL77w=";
-          }
-          {
-            name = "better-csv-syntax";
-            publisher = "jeff-hykin";
-            version = "0.0.2";
-            sha256 = "sha256-lNOESQgMwtjM7eTD8KQLWATktF2wjZzdpTng45i05LI=";
-          }
-          {
-            name = "ruby-lsp";
-            publisher = "shopify";
-            version = "0.8.12";
-            sha256 = "sha256-Ab8mn93uA5enm8imD6pU8xMK0fgh2rYeblOhbkUhDrY=";
-          }
-        ];
+      extensions = with extensions.vscode-marketplace; [
+        zhuangtongfa.material-theme # One Dark Pro
+        tamasfe.even-better-toml
+        vadimcn.vscode-lldb
+        jnoortheen.nix-ide
+        rust-lang.rust-analyzer
+        dotjoshjohnson.xml
+        redhat.vscode-yaml
+        shd101wyy.markdown-preview-enhanced
+        formulahendry.auto-close-tag
+        ms-dotnettools.csharp
+        csharpier.csharpier-vscode
+        github.copilot
+        eamodio.gitlens
+        testdouble.vscode-standard-ruby
+        aliariff.vscode-erb-beautify
+        sleistner.vscode-fileutils
+        vortizhe.simple-ruby-erb
+        jeff-hykin.better-csv-syntax
+        shopify.ruby-lsp
+      ];
     };
 
     environment.systemPackages = with pkgs; [
