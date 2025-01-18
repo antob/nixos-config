@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -6,16 +11,21 @@ let
   cfg = config.antob.security.gpg;
 
   pinentry =
-    if config.antob.desktop.gnome.enable then {
-      path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
-      name = "gnome3";
-    } else if config.antob.desktop.hyprland.enable then {
-      path = "${pkgs.antob.pinentry-tofi}/bin/pinentry-tofi";
-      name = null;
-    } else {
-      path = "${pkgs.antob.pinentry-dmenu}/bin/pinentry-dmenu";
-      name = null;
-    };
+    if config.antob.desktop.gnome.enable then
+      {
+        path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
+        name = "gnome3";
+      }
+    else if config.antob.desktop.hyprland.enable then
+      {
+        path = "${pkgs.antob.pinentry-tofi}/bin/pinentry-tofi";
+        name = null;
+      }
+    else
+      {
+        path = "${pkgs.antob.pinentry-dmenu}/bin/pinentry-dmenu";
+        name = null;
+      };
 
 in
 {
@@ -63,8 +73,12 @@ in
 
           gpg = {
             enable = true;
-            scdaemonSettings = { disable-ccid = true; };
-            settings = { trust-model = "tofu+pgp"; };
+            scdaemonSettings = {
+              disable-ccid = true;
+            };
+            settings = {
+              trust-model = "tofu+pgp";
+            };
             # publicKeys = [{
             #   source = ../../pgp.asc;
             #   trust = 5;
@@ -74,10 +88,15 @@ in
             # See https://github.com/NixOS/nixpkgs/pull/308884
             package = pkgs.gnupg.override {
               pcsclite = pkgs.pcsclite.overrideAttrs (old: {
-                postPatch = old.postPatch + (lib.optionalString (!(lib.strings.hasInfix ''--replace-fail "libpcsclite_real.so.1"'' old.postPatch)) ''
-                  substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
-                    --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
-                '');
+                postPatch =
+                  old.postPatch
+                  + (lib.optionalString
+                    (!(lib.strings.hasInfix ''--replace-fail "libpcsclite_real.so.1"'' old.postPatch))
+                    ''
+                      substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
+                        --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
+                    ''
+                  );
               });
             };
           };

@@ -1,13 +1,19 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.hardware.networking;
-in {
+let
+  cfg = config.antob.hardware.networking;
+in
+{
   options.antob.hardware.networking = with types; {
     enable = mkBoolOpt false "Whether or not to enable networking support";
-    hosts = mkOpt attrs { }
-      "An attribute set to merge with <option>networking.hosts</option>";
+    hosts = mkOpt attrs { } "An attribute set to merge with <option>networking.hosts</option>";
   };
 
   config = mkIf cfg.enable {
@@ -29,7 +35,10 @@ in {
       networkmanager = {
         enable = true;
         dhcp = "internal";
-        plugins = with pkgs; [ networkmanager-openvpn networkmanager-l2tp ];
+        plugins = with pkgs; [
+          networkmanager-openvpn
+          networkmanager-l2tp
+        ];
       };
     };
 
@@ -42,7 +51,10 @@ in {
       enable = true;
       settings = {
         address = "/.test/127.0.0.1";
-        listen-address = [ "::1" "127.0.0.1" ];
+        listen-address = [
+          "::1"
+          "127.0.0.1"
+        ];
         bind-interfaces = true;
       };
     };

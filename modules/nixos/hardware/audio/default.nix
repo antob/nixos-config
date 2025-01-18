@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.hardware.audio;
-in {
+let
+  cfg = config.antob.hardware.audio;
+in
+{
   options.antob.hardware.audio = with types; {
     enable = mkEnableOption "Whether or not to enable audio support";
   };
@@ -36,7 +43,10 @@ in {
       ];
     };
 
-    environment.systemPackages = with pkgs; [ pulsemixer pavucontrol ];
+    environment.systemPackages = with pkgs; [
+      pulsemixer
+      pavucontrol
+    ];
     antob.persistence.home.directories = [ ".local/state/wireplumber" ];
   };
 }

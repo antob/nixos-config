@@ -10,7 +10,6 @@ with lib;
 with lib.antob;
 
 let
-  secrets = config.sops.secrets;
   monCfg = config.antob.monitoring;
   emailFrom = monCfg.emailFrom;
   emailTo = monCfg.emailTo;
