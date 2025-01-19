@@ -47,6 +47,8 @@ in
               "file-encoding"
             ];
 
+            lsp.display-progress-messages = true;
+
             file-picker.hidden = false;
 
             whitespace.render = {
