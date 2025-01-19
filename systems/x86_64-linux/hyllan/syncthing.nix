@@ -1,6 +1,5 @@
-{ lib, ... }:
+{ ... }:
 
-with lib.antob;
 let
   siteDomain = "syncthing.lan";
   port = 8384;
@@ -17,7 +16,9 @@ in
       guiAddress = "0.0.0.0:${toString port}";
       settings = {
         devices = {
-          "laptob-fw" = { id = "6LOVNRB-YSW65OL-RRN4GXI-LMF5BD3-JIY3UBU-DDTR7T3-35VTT3Z-2I2U4AM"; };
+          "laptob-fw" = {
+            id = "6LOVNRB-YSW65OL-RRN4GXI-LMF5BD3-JIY3UBU-DDTR7T3-35VTT3Z-2I2U4AM";
+          };
         };
         folders = {
           "Documents" = {

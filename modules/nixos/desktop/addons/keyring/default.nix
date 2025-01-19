@@ -1,9 +1,16 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.desktop.addons.keyring;
-in {
+let
+  cfg = config.antob.desktop.addons.keyring;
+in
+{
   options.antob.desktop.addons.keyring = with types; {
     enable = mkEnableOption "Whether to enable the gnome keyring.";
   };
@@ -12,7 +19,10 @@ in {
     services.gnome.gnome-keyring.enable = mkForce false;
     antob.home.extraOptions.services.gnome-keyring = {
       enable = true;
-      components = [ "pkcs11" "secrets" ];
+      components = [
+        "pkcs11"
+        "secrets"
+      ];
     };
 
     environment.systemPackages = with pkgs; [ seahorse ];

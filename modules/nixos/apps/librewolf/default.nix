@@ -1,9 +1,15 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.apps.librewolf;
-in {
+let
+  cfg = config.antob.apps.librewolf;
+in
+{
   options.antob.apps.librewolf = with types; {
     enable = mkEnableOption "Enable Librewolf";
   };

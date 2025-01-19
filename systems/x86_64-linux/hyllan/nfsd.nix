@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 # Share needs ZFS managed mountpoint:
 # $ sudo zfs create -o mountpoint=/mnt/tank/share/public zpool/public_share
@@ -24,9 +24,6 @@
 # $ sudo zfs mount zpool/private_share
 # $ sudo zfs share -a
 
-let
-  secrets = config.sops.secrets;
-in
 {
   services.nfs.server = {
     enable = true;
@@ -37,7 +34,21 @@ in
   };
 
   networking.firewall = {
-    allowedTCPPorts = [ 111 2049 4000 4001 4002 20048 ];
-    allowedUDPPorts = [ 111 2049 4000 4001 4002 20048 ];
+    allowedTCPPorts = [
+      111
+      2049
+      4000
+      4001
+      4002
+      20048
+    ];
+    allowedUDPPorts = [
+      111
+      2049
+      4000
+      4001
+      4002
+      20048
+    ];
   };
 }

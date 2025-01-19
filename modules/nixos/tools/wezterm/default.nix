@@ -2,8 +2,10 @@
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.wezterm;
-in {
+let
+  cfg = config.antob.tools.wezterm;
+in
+{
   options.antob.tools.wezterm = with types; {
     enable = mkEnableOption "Enable wezterm";
   };

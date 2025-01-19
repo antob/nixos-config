@@ -1,9 +1,15 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.system.locale;
-in {
+let
+  cfg = config.antob.system.locale;
+in
+{
   options.antob.system.locale = with types; {
     enable = mkEnableOption "Whether or not to manage locale settings.";
   };
@@ -25,7 +31,8 @@ in {
       };
     };
 
-    console = { keyMap = mkForce "us"; };
-    # console = { keyMap = mkForce "sv-latin1"; };
+    console = {
+      keyMap = mkForce "us";
+    };
   };
 }

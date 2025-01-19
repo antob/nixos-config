@@ -1,4 +1,8 @@
-{ lib, config, options, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.antob.services.bind;
@@ -6,9 +10,16 @@ let
   internalIpLast = lib.lists.last (lib.strings.splitString "." cfg.internalIp);
   hostFqdn = "${cfg.hostName}.${cfg.internalDomain}";
   baseInternalNetwork = lib.lists.head (lib.strings.splitString "/" cfg.internalNetwork);
-  reverseBaseInternalNetwork = lib.strings.concatStringsSep "." (lib.lists.reverseList (lib.strings.splitString "." baseInternalNetwork));
+  reverseBaseInternalNetwork = lib.strings.concatStringsSep "." (
+    lib.lists.reverseList (lib.strings.splitString "." baseInternalNetwork)
+  );
 
-  inherit (lib) types mkEnableOption mkIf mkForce;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkIf
+    mkForce
+    ;
   inherit (lib.antob) mkOpt;
 in
 {

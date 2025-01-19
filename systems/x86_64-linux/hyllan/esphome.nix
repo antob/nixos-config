@@ -1,8 +1,7 @@
-{ config, lib, ... }:
+{ ... }:
 
-with lib.antob;
 let
-  secrets = config.sops.secrets;
+  # secrets = config.sops.secrets;
   siteDomain = "esphome.lan";
   port = 6052;
   dataDir = "/mnt/tank/services/esphome";
@@ -18,7 +17,7 @@ in
 
     nginx.virtualHosts = {
       "${siteDomain}" = {
-        basicAuthFile = secrets.esphome_admin_password.path;
+        # basicAuthFile = secrets.esphome_admin_password.path;
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString port}";
           extraConfig = ''

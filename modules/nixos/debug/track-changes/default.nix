@@ -1,9 +1,15 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.debug.trackChanges;
-in {
+let
+  cfg = config.antob.debug.trackChanges;
+in
+{
   options.antob.debug.trackChanges = with types; {
     enable = mkEnableOption "Track .config changes using git";
   };

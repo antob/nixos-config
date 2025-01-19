@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, inputs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -12,26 +17,34 @@ in
 
   options.antob.persistence = with types; {
     enable = mkEnableOption "Enable persistence using impermanence.";
-    files = mkOpt (listOf (either str attrs)) [ ]
-      "A list of files to be managed by impermanence's <option>files</option>.";
-    directories = mkOpt (listOf (either str attrs)) [ ]
-      "A list of directories to be managed by impermanence's <option>directories</option>.";
+    files = mkOpt (listOf (
+      either str attrs
+    )) [ ] "A list of files to be managed by impermanence's <option>files</option>.";
+    directories = mkOpt (listOf (
+      either str attrs
+    )) [ ] "A list of directories to be managed by impermanence's <option>directories</option>.";
     home = {
-      files = mkOpt (listOf (either str attrs)) [ ]
-        "A list of files to be managed by impermanence's home-manager <option>files</option>.";
-      directories = mkOpt (listOf (either str attrs)) [ ]
-        "A list of directories to be managed by impermanence's home-manager <option>directories</option>.";
+      files = mkOpt (listOf (
+        either str attrs
+      )) [ ] "A list of files to be managed by impermanence's home-manager <option>files</option>.";
+      directories =
+        mkOpt (listOf (either str attrs)) [ ]
+          "A list of directories to be managed by impermanence's home-manager <option>directories</option>.";
     };
     safe = {
-      files = mkOpt (listOf (either str attrs)) [ ]
-        "A list of backed up files to be managed by impermanence's <option>files</option>.";
-      directories = mkOpt (listOf (either str attrs)) [ ]
-        "A list of backed up directories to be managed by impermanence's <option>directories</option>.";
+      files = mkOpt (listOf (
+        either str attrs
+      )) [ ] "A list of backed up files to be managed by impermanence's <option>files</option>.";
+      directories =
+        mkOpt (listOf (either str attrs)) [ ]
+          "A list of backed up directories to be managed by impermanence's <option>directories</option>.";
       home = {
-        files = mkOpt (listOf (either str attrs)) [ ]
-          "A list of backed up files to be managed by impermanence's home-manager <option>files</option>.";
-        directories = mkOpt (listOf (either str attrs)) [ ]
-          "A list of backed up directories to be managed by impermanence's home-manager <option>directories</option>.";
+        files =
+          mkOpt (listOf (either str attrs)) [ ]
+            "A list of backed up files to be managed by impermanence's home-manager <option>files</option>.";
+        directories =
+          mkOpt (listOf (either str attrs)) [ ]
+            "A list of backed up directories to be managed by impermanence's home-manager <option>directories</option>.";
       };
     };
   };

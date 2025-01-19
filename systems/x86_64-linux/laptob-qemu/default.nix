@@ -1,4 +1,9 @@
-{ pkgs, config, lib, channel, inputs, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 with lib;
 with lib.antob;

@@ -1,4 +1,8 @@
-{ pkgs, lib, stdenv, ... }:
+{
+  pkgs,
+  stdenv,
+  ...
+}:
 let
   pname = "pinentry-dmenu";
 in

@@ -1,9 +1,15 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.virtualisation.virt-manager;
-in {
+let
+  cfg = config.antob.virtualisation.virt-manager;
+in
+{
   options.antob.virtualisation.virt-manager = with types; {
     enable = mkEnableOption "Whether or not to enable virt-manager.";
   };

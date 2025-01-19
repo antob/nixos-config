@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.mcfly;
-in {
+let
+  cfg = config.antob.tools.mcfly;
+in
+{
   options.antob.tools.mcfly = with types; {
     enable = mkEnableOption "Whether or not to install and configure McFly.";
   };
@@ -22,5 +29,7 @@ in {
         eval "$(${getExe pkgs.mcfly-fzf} init zsh)"
       '';
     };
+
+    antob.persistence.home.files = [ ".local/share/mcfly/history.db" ];
   };
 }

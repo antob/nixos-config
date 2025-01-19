@@ -35,7 +35,6 @@ in
   antob = {
     features = {
       common = enabled;
-      server = enabled;
     };
 
     system.zfs = {

@@ -1,9 +1,15 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.hardware.bluetooth;
-in {
+let
+  cfg = config.antob.hardware.bluetooth;
+in
+{
   options.antob.hardware.bluetooth = with types; {
     enable = mkBoolOpt false "Whether or not to enable bluetooth support.";
   };

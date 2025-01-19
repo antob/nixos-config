@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -9,8 +14,7 @@ let
 
   dm-logout = pkgs.callPackage ./scripts/dm-logout.nix { };
   dm-vpn = pkgs.callPackage ./scripts/dm-vpn.nix { };
-  dm-librewolf-profile =
-    pkgs.callPackage ./scripts/dm-librewolf-profile.nix { };
+  dm-librewolf-profile = pkgs.callPackage ./scripts/dm-librewolf-profile.nix { };
   toggle-kbd-variant = pkgs.callPackage ./scripts/toggle-kbd-variant.nix { };
 
 in
@@ -34,10 +38,12 @@ in
       xclip
     ];
 
-    antob.persistence.home.directories = [{
-      directory = ".config/xfce4";
-      method = "symlink";
-    }];
+    antob.persistence.home.directories = [
+      {
+        directory = ".config/xfce4";
+        method = "symlink";
+      }
+    ];
 
     # Desktop additions
     antob.desktop.addons = {

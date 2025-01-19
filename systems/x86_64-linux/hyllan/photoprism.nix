@@ -31,12 +31,14 @@ in
 
     mysql = {
       ensureDatabases = [ "photoprism" ];
-      ensureUsers = [{
-        name = "photoprism";
-        ensurePermissions = {
-          "photoprism.*" = "ALL PRIVILEGES";
-        };
-      }];
+      ensureUsers = [
+        {
+          name = "photoprism";
+          ensurePermissions = {
+            "photoprism.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}";

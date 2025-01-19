@@ -1,8 +1,14 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.services.tailscale;
+let
+  cfg = config.antob.services.tailscale;
 in
 {
   options.antob.services.tailscale = with types; {
@@ -42,8 +48,14 @@ in
       description = "Automatic connection to Tailscale";
 
       # Make sure tailscale is running before trying to connect to tailscale
-      after = [ "network-pre.target" "tailscale.service" ];
-      wants = [ "network-pre.target" "tailscale.service" ];
+      after = [
+        "network-pre.target"
+        "tailscale.service"
+      ];
+      wants = [
+        "network-pre.target"
+        "tailscale.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       # Set this service as a oneshot job

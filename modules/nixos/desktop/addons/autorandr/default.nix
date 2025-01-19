@@ -1,9 +1,16 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.desktop.addons.autorandr;
-in {
+let
+  cfg = config.antob.desktop.addons.autorandr;
+in
+{
   options.antob.desktop.addons.autorandr = with types; {
     enable = mkEnableOption "Whether to enable autorandr.";
   };

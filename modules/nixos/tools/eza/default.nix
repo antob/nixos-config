@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.eza;
-in {
+let
+  cfg = config.antob.tools.eza;
+in
+{
   options.antob.tools.eza = with types; {
     enable = mkEnableOption "Whether or not to install and configure eza.";
   };
@@ -11,8 +18,10 @@ in {
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
       home.shellAliases =
-        let treeIgnore = "'cache|log|logs|node_modules|vendor|.git'";
-        in {
+        let
+          treeIgnore = "'cache|log|logs|node_modules|vendor|.git'";
+        in
+        {
           ".." = "cd ..";
           ls = "${pkgs.eza}/bin/eza --group-directories-first";
           la = "ls -a";

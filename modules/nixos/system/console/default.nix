@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.system.console;
-in {
+let
+  cfg = config.antob.system.console;
+in
+{
   options.antob.system.console = with types; {
     enable = mkEnableOption "Whether or not to manage console settings.";
     setFont = mkBoolOpt true "Whether or not to set custom console font.";

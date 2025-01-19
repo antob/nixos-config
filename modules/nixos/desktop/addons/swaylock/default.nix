@@ -1,10 +1,14 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
 let
   cfg = config.antob.desktop.addons.swaylock;
-  colors = config.antob.color-scheme.colors;
 in
 {
   options.antob.desktop.addons.swaylock = with types; {

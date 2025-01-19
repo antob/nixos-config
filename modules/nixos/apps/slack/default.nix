@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.apps.slack;
-in {
+let
+  cfg = config.antob.apps.slack;
+in
+{
   options.antob.apps.slack = with types; {
     enable = mkEnableOption "Enable Slack";
   };

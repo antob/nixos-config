@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -174,7 +179,7 @@ in
                 enabled = false
               }
             }
-            
+
             gestures {
                 # See https://wiki.hyprland.org/Configuring/Variables/ for more
                 workspace_swipe = off
@@ -209,7 +214,7 @@ in
 
             windowrulev2 = float,class:nm-connection-editor
             windowrulev2 = float,class:pavucontrol
-            
+
             windowrulev2 = float,class:(nwg-displays)
             windowrulev2 = size 965 715,class:(nwg-displays)
             windowrulev2 = move center,class:(nwg-displays)
@@ -291,7 +296,7 @@ in
             bind = $mainMod, XF86AudioRaiseVolume, exec, swayosd-client --input-volume raise
             bind = $mainMod, XF86AudioLowerVolume, exec, swayosd-client --input-volume lower
             bind = $mainMod, XF86AudioMute, exec, swayosd-client --input-volume mute-toggle
-            
+
             # Switch workspaces with mainMod + [1-9]
             bind = $mainMod, 1, workspace, 1
             bind = $mainMod, 2, workspace, 2

@@ -1,12 +1,16 @@
-{ lib, config, options, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.antob.services.avahi;
 
-  inherit (lib) types mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.antob.services.avahi = with types; {
+  options.antob.services.avahi = {
     enable = mkEnableOption "Avahi";
   };
 

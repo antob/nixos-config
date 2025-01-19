@@ -1,4 +1,8 @@
-{ pkgs, lib, stdenv, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 
 pkgs.buildGoModule rec {
   pname = "devbox";

@@ -1,4 +1,8 @@
-{ lib, config, options, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.antob.services.dhcpd;

@@ -1,9 +1,16 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.apps.teams;
-in {
+let
+  cfg = config.antob.apps.teams;
+in
+{
   options.antob.apps.teams = with types; {
     enable = mkEnableOption "Enable Teams";
   };

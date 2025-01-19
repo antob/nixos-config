@@ -1,9 +1,16 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.virtualisation.docker;
-in {
+let
+  cfg = config.antob.virtualisation.docker;
+in
+{
   options.antob.virtualisation.docker = with types; {
     enable = mkEnableOption "Whether or not to enable docker.";
   };

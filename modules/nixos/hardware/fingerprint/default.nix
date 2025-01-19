@@ -1,8 +1,13 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.hardware.fingerprint;
+let
+  cfg = config.antob.hardware.fingerprint;
 in
 {
   options.antob.hardware.fingerprint = with types; {

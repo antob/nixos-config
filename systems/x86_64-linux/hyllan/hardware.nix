@@ -1,15 +1,25 @@
-{ config, lib, pkgs, modulesPath, inputs, ... }:
+{
+  config,
+  lib,
+  modulesPath,
+  ...
+}:
 
-let inherit (inputs) nixos-hardware;
-in {
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
   boot = {
     initrd = {
-      availableKernelModules =
-        [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
       kernelModules = [ ];
       luks.devices."system".device = "/dev/disk/by-partlabel/cryptsystem";
     };
@@ -25,31 +35,48 @@ in {
     "/" = {
       device = "/dev/mapper/system";
       fsType = "btrfs";
-      options = [ "subvol=@root" "compress=zstd" ];
+      options = [
+        "subvol=@root"
+        "compress=zstd"
+      ];
     };
 
     "/home" = {
       device = "/dev/mapper/system";
       fsType = "btrfs";
-      options = [ "subvol=@home" "compress=zstd" ];
+      options = [
+        "subvol=@home"
+        "compress=zstd"
+      ];
     };
 
     "/nix" = {
       device = "/dev/mapper/system";
       fsType = "btrfs";
-      options = [ "subvol=@nix" "compress=zstd" "noatime" ];
+      options = [
+        "subvol=@nix"
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/swap" = {
       device = "/dev/mapper/system";
       fsType = "btrfs";
-      options = [ "subvol=@swap" "compress=none" "noatime" ];
+      options = [
+        "subvol=@swap"
+        "compress=none"
+        "noatime"
+      ];
     };
 
     "/efi" = {
       device = "/dev/disk/by-partlabel/EFI";
       fsType = "vfat";
-      options = [ "dmask=0077" "fmask=0077" ];
+      options = [
+        "dmask=0077"
+        "fmask=0077"
+      ];
       neededForBoot = true;
     };
 
@@ -70,13 +97,12 @@ in {
     };
   };
 
-  swapDevices = [{ device = "/swap/swapfile"; }];
+  swapDevices = [ { device = "/swap/swapfile"; } ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware.enableRedistributableFirmware = true;
-  hardware.cpu.amd.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   hardware.graphics.enable = true;
 

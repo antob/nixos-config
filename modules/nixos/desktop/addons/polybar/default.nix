@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -6,8 +11,6 @@ let
   cfg = config.antob.desktop.addons.polybar;
 
   colors = config.antob.color-scheme.colors;
-  colBG = "181818";
-  colFG = "A0A0AB";
   colMB = "282c34";
 
   check-kbd-variant = pkgs.callPackage ./scripts/check-kbd-variant.nix { };

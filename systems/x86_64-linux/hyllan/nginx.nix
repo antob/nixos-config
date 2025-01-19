@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   services.nginx = {
@@ -15,5 +15,8 @@
     defaults.email = "tob@antob.se";
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }

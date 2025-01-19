@@ -1,4 +1,8 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -15,7 +19,9 @@ in
     antob.home.extraOptions.programs.kitty = {
       enable = true;
 
-      environment = { TERM = "xterm-256color"; };
+      environment = {
+        TERM = "xterm-256color";
+      };
 
       font = {
         name = "Hack Nerd Font";

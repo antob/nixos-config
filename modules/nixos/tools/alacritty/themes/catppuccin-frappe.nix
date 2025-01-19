@@ -89,7 +89,13 @@
   };
 
   indexed_colors = [
-    { index = 16; color = "#EF9F76"; }
-    { index = 17; color = "#F2D5CF"; }
+    {
+      index = 16;
+      color = "#EF9F76";
+    }
+    {
+      index = 17;
+      color = "#F2D5CF";
+    }
   ];
 }

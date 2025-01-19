@@ -85,18 +85,17 @@ in
     };
   };
 
-  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}" //
-    {
-      "zigbee.lan" = {
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8089";
-        };
-        locations."/api" = {
-          proxyPass = "http://127.0.0.1:8089/api";
-          proxyWebsockets = true;
-        };
+  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}" // {
+    "zigbee.lan" = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:8089";
+      };
+      locations."/api" = {
+        proxyPass = "http://127.0.0.1:8089/api";
+        proxyWebsockets = true;
       };
     };
+  };
 
   sops.secrets."zigbee2mqtt.yaml" = {
     owner = "zigbee2mqtt";

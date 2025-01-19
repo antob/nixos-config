@@ -1,6 +1,8 @@
-{ pkgs, lib, config, ... }:
+{
+  config,
+  ...
+}:
 
-with lib.antob;
 let
   secrets = config.sops.secrets;
   dataDir = "/mnt/tank/services/docker/pihole";
@@ -47,8 +49,14 @@ in
   };
 
   networking.firewall = {
-    allowedTCPPorts = [ 53 port ];
-    allowedUDPPorts = [ 53 67 ];
+    allowedTCPPorts = [
+      53
+      port
+    ];
+    allowedUDPPorts = [
+      53
+      67
+    ];
   };
 
   services.resolved.enable = false;

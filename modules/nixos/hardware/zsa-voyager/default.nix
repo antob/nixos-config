@@ -1,8 +1,14 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.hardware.zsa-voyager;
+let
+  cfg = config.antob.hardware.zsa-voyager;
 in
 {
   options.antob.hardware.zsa-voyager = with types; {

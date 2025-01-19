@@ -1,9 +1,16 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.desktop.addons.swayosd;
-in {
+let
+  cfg = config.antob.desktop.addons.swayosd;
+in
+{
   options.antob.desktop.addons.swayosd = with types; {
     enable = mkEnableOption "Whether to enable swayosd.";
   };
@@ -26,7 +33,9 @@ in {
             Restart = "always";
           };
 
-          Install = { WantedBy = [ "graphical-session.target" ]; };
+          Install = {
+            WantedBy = [ "graphical-session.target" ];
+          };
         };
       };
     };

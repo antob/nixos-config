@@ -1,4 +1,9 @@
-{ options, config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 with lib.antob;
@@ -16,7 +21,7 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = with pkgs; [ yubikey-personalization ];
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = [
       reload-yubikey
     ];
 
@@ -41,8 +46,12 @@ in
 
       # Start the detector with a delay, otherwise it eats CPU for some reason..
       systemd.user.timers.yubikey-touch-detector = {
-        Timer = { OnActiveSec = "30s"; };
-        Install = { WantedBy = [ "timers.target" ]; };
+        Timer = {
+          OnActiveSec = "30s";
+        };
+        Install = {
+          WantedBy = [ "timers.target" ];
+        };
       };
     };
   };

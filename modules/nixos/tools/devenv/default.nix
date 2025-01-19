@@ -1,8 +1,14 @@
-{ options, config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.antob;
-let cfg = config.antob.tools.devenv;
+let
+  cfg = config.antob.tools.devenv;
 in
 {
   options.antob.tools.devenv = with types; {
@@ -21,6 +27,9 @@ in
       ];
     };
 
-    environment.systemPackages = with pkgs; [ cachix devenv ];
+    environment.systemPackages = with pkgs; [
+      cachix
+      devenv
+    ];
   };
 }
