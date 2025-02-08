@@ -132,6 +132,11 @@ in
 
         diffEditor.ignoreTrimWhitespace = false;
 
+        html.format = {
+          wrapAttributes = "preserve";
+          templating = true;
+        };
+
         # Installed extensions config
         rust-analyzer.check.command = "clippy";
         redhat.telemetry.enabled = false;
@@ -143,7 +148,7 @@ in
           serverPath = "nixd";
           serverSettings.nixd = {
             formatting = {
-              command = "nixfmt";
+              command = ["nixfmt"];
             };
           };
         };
@@ -156,42 +161,30 @@ in
         };
       };
 
-      extensions =
-        with extensions.vscode-marketplace;
-        [
-          zhuangtongfa.material-theme # One Dark Pro
-          tamasfe.even-better-toml
-          vadimcn.vscode-lldb
-          jnoortheen.nix-ide
-          rust-lang.rust-analyzer
-          dotjoshjohnson.xml
-          redhat.vscode-yaml
-          shd101wyy.markdown-preview-enhanced
-          formulahendry.auto-close-tag
-          ms-dotnettools.csharp
-          # csharpier.csharpier-vscode
-          github.copilot
-          eamodio.gitlens
-          testdouble.vscode-standard-ruby
-          aliariff.vscode-erb-beautify
-          sleistner.vscode-fileutils
-          vortizhe.simple-ruby-erb
-          jeff-hykin.better-csv-syntax
-          shopify.ruby-lsp
-          ms-dotnettools.vscode-dotnet-runtime
-          esbenp.prettier-vscode
-          svelte.svelte-vscode
-        ]
-        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          # Pin csharpier to 1.7.2 to fix problem with different formatting
-          # compared to dotnet-csharpier.
-          {
-            name = "csharpier-vscode";
-            publisher = "csharpier";
-            version = "1.7.2";
-            sha256 = "sha256-MLvxTs4sfX0gtXrdf0zDJe8lvrR0leekiDLsCi6h+Ws=";
-          }
-        ];
+      extensions = with extensions.vscode-marketplace; [
+        zhuangtongfa.material-theme # One Dark Pro
+        tamasfe.even-better-toml
+        vadimcn.vscode-lldb
+        jnoortheen.nix-ide
+        rust-lang.rust-analyzer
+        dotjoshjohnson.xml
+        redhat.vscode-yaml
+        shd101wyy.markdown-preview-enhanced
+        formulahendry.auto-close-tag
+        ms-dotnettools.csharp
+        csharpier.csharpier-vscode
+        github.copilot
+        eamodio.gitlens
+        testdouble.vscode-standard-ruby
+        aliariff.vscode-erb-beautify
+        sleistner.vscode-fileutils
+        vortizhe.simple-ruby-erb
+        jeff-hykin.better-csv-syntax
+        shopify.ruby-lsp
+        ms-dotnettools.vscode-dotnet-runtime
+        esbenp.prettier-vscode
+        svelte.svelte-vscode
+      ];
     };
 
     environment.systemPackages = with pkgs; [
