@@ -266,13 +266,13 @@ in
             event-sounds = false;
           };
           "org/gnome/desktop/background" = {
-            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
-            picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-d.svg";
-            primary-color = "#241f31";
+            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/glass-chip-l.jxl";
+            picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/glass-chip-d.jxl";
+            primary-color = "#26a269";
           };
           "org/gnome/desktop/screensaver" = {
-            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/blobs-l.svg";
-            primary-color = "#241f31";
+            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/glass-chip-l.jxl";
+            primary-color = "#26a269";
           };
           "org/gnome/desktop/peripherals/keyboard" = {
             delay = mkUint32 200;
