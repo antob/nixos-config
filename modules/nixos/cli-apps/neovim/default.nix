@@ -25,6 +25,7 @@ in
 
         viAlias = true;
         vimAlias = true;
+        nixpkgs.config.allowUnfree = true;
 
         imports = [
           ./colorschemes.nix

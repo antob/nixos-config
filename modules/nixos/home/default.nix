@@ -1,20 +1,13 @@
 {
   options,
   config,
-  pkgs,
   lib,
-  inputs,
   ...
 }:
 
 with lib;
 with lib.antob;
-let
-  cfg = config.antob.home;
-in
 {
-  # imports = with inputs; [ home-manager.nixosModules.home-manager ];
-
   options.antob.home = with types; {
     file = mkOpt attrs { } "A set of files to be managed by home-manager's <option>home.file</option>.";
     configFile =

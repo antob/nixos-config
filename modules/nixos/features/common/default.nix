@@ -18,7 +18,6 @@ in
   config = mkIf cfg.enable {
     antob = {
       tools = {
-        kitty = enabled;
         alacritty = enabled;
         git = enabled;
         zsh = enabled;
