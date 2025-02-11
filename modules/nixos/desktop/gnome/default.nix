@@ -155,10 +155,10 @@ in
                 {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1,"focus":true}
               ''
               ''
-                {"wm_class":"codium-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
+                {"wm_class":"codium","preferredWidth":"100%","spaceIndex":2,"focus":true}
               ''
               ''
-                {"wm_class":"code-url-handler","preferredWidth":"100%","spaceIndex":2,"focus":true}
+                {"wm_class":"code","preferredWidth":"100%","spaceIndex":2,"focus":true}
               ''
               ''
                 {"wm_class":"obsidian","preferredWidth":"100%","spaceIndex":4,"focus":true}
