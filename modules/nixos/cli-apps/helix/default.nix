@@ -47,7 +47,10 @@ in
               "file-encoding"
             ];
 
-            lsp.display-progress-messages = true;
+            lsp = {
+              display-progress-messages = true;
+              display-inlay-hints = true;
+            };
 
             file-picker.hidden = false;
 
