@@ -133,8 +133,10 @@ in
         diffEditor.ignoreTrimWhitespace = false;
 
         html.format = {
-          wrapAttributes = "preserve";
+          wrapAttributes = "preserve-aligned";
           templating = true;
+          maxPreserveNewLines = 2;
+          wrapLineLength = 120;
         };
 
         # Installed extensions config
@@ -148,7 +150,7 @@ in
           serverPath = "nixd";
           serverSettings.nixd = {
             formatting = {
-              command = ["nixfmt"];
+              command = [ "nixfmt" ];
             };
           };
         };
