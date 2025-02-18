@@ -89,6 +89,8 @@ in
           fontFamily = "'Hack Nerd Font', 'monospace', monospace";
           formatOnSave = true;
           stickyScroll.enabled = false;
+          inlineSuggest.enabled = true;
+          acceptSuggestionOnCommitCharacter = false;
         };
 
         files = {
@@ -139,9 +141,13 @@ in
           wrapLineLength = 120;
         };
 
+        telemetry.telemetryLevel = "off";
+
         # Installed extensions config
         rust-analyzer.check.command = "clippy";
         redhat.telemetry.enabled = false;
+        gitlens.telemetry.enabled = false;
+        dotnetAcquisitionExtension.enableTelemetry = false;
         svelte.enable-ts-plugin = true;
 
         nix = {
@@ -159,6 +165,18 @@ in
           formatter = "standard";
           rubyVersionManager = {
             identifier = "none";
+          };
+        };
+
+        gitlens.launchpad.indicator.enabled = false;
+
+        github.copilot = {
+          enable = {
+            "*" = true;
+            plaintext = false;
+            yaml = false;
+            markdown = false;
+            scminput = false;
           };
         };
       };
