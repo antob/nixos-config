@@ -15,7 +15,13 @@ let
   plugins = with pkgs; [
     tmuxPlugins.sensible
     tmuxPlugins.tmux-fzf
-    tmuxPlugins.resurrect
+    {
+      plugin = tmuxPlugins.resurrect;
+      extraConfig = ''
+        set -g @resurrect-save 'S'
+        set -g @resurrect-restore 'R'
+      '';
+    }
     {
       plugin = tmuxPlugins.catppuccin;
       extraConfig = ''

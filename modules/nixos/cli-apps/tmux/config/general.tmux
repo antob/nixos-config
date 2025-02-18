@@ -70,7 +70,7 @@ bind '|' split-window -v -c "#{pane_current_path}"
 bind \\ split-window -h -c "#{pane_current_path}"
 
 # Reload config file
-bind r source-file ~/.config/tmux/tmux.conf
+bind C-r source-file ~/.config/tmux/tmux.conf
 # Cycle layout
 bind -n \uE000 next-layout
 # Spawn new pane
