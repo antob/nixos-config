@@ -112,7 +112,7 @@ in
                 force = true;
               };
               settings = commonSettings;
-              extensions = commonExtensions;
+              extensions.packages = commonExtensions;
             };
 
             "HL" = {
@@ -123,7 +123,7 @@ in
                 force = true;
               };
               settings = commonSettings;
-              extensions = commonExtensions;
+              extensions.packages = commonExtensions;
             };
 
             "OBIT" = {
@@ -134,7 +134,7 @@ in
                 force = true;
               };
               settings = commonSettings;
-              extensions = commonExtensions;
+              extensions.packages = commonExtensions;
             };
           };
         };

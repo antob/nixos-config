@@ -19,7 +19,6 @@ in
     antob = {
       apps = {
         firefox = enabled;
-        librewolf = enabled;
         vscode = enabled;
         slack = enabled;
       };
