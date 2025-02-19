@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "betterfox": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1736524287,
+        "narHash": "sha256-V7nZSvgH98ZoeE+wtyXSABv6z7syrERdNsE26gXRO/Q=",
+        "owner": "HeitorAugustoLN",
+        "repo": "betterfox-nix",
+        "rev": "703d400a087c700d3cc0aa0fe8c079d5bf5840f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "HeitorAugustoLN",
+        "repo": "betterfox-nix",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -693,6 +713,7 @@
     },
     "root": {
       "inputs": {
+        "betterfox": "betterfox",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "home-manager": "home-manager",

@@ -41,6 +41,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Betterfox
+    betterfox = {
+      url = "github:HeitorAugustoLN/betterfox-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Sops
     sops-nix = {
       url = "github:Mic92/sops-nix";
