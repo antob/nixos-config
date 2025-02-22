@@ -179,6 +179,8 @@ in
             scminput = false;
           };
         };
+
+        vs64.showWelcome = false;
       };
 
       extensions = with extensions.vscode-marketplace; [
@@ -204,6 +206,7 @@ in
         ms-dotnettools.vscode-dotnet-runtime
         esbenp.prettier-vscode
         svelte.svelte-vscode
+        rosc.vs64
       ];
     };
 
