@@ -16,7 +16,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ antob.devbox ];
+    environment.systemPackages = with pkgs; [ devbox ];
     antob.persistence.home.directories = [ ".local/state/devbox" ];
   };
 }

@@ -224,7 +224,7 @@ in
             ];
           };
           "org/gnome/shell/extensions/just-perfection" = {
-            activities-button = true;
+            activities-button = false; # Show workspaces-indicator-by-open-apps instead
             clock-menu = true;
             keyboard-layout = false;
             accessibility-menu = false;
