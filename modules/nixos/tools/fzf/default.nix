@@ -21,12 +21,16 @@ in
         enable = true;
         enableZshIntegration = true;
 
-        defaultOptions = import ./themes/tokyonight-night.nix;
+        defaultOptions = import ./themes/tokyonight-night.nix ++ [
+          "--tmux 80%"
+        ];
 
         defaultCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
 
         fileWidgetCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
-        fileWidgetOptions = [ "--preview '${pkgs.bat}/bin/bat -n --color=always --line-range :500 {}'" ];
+        fileWidgetOptions = [
+          "--tmux 90% --preview '${pkgs.bat}/bin/bat -n --color=always --line-range :500 {}'"
+        ];
 
         changeDirWidgetCommand = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
         changeDirWidgetOptions = [ "--preview '${pkgs.eza}/bin/eza --tree --color=always {} | head -200'" ];
@@ -56,10 +60,6 @@ in
           esac
         }
       '';
-    };
-
-    environment.sessionVariables = {
-      FZF_COMPLETION_TRIGGER = "?";
     };
   };
 }
