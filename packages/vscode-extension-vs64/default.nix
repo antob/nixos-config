@@ -6,15 +6,22 @@
 let
   pname = "vscode-extension-vs64";
   version = "2.5.19";
+  vscodeExtPublisher = "antob";
+  vscodeExtName = "vs64";
+  vscodeExtUniqueId = "antob.vs64";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "antob";
-    repo = "vs64";
+    owner = vscodeExtPublisher;
+    repo = vscodeExtName;
     rev = "25ab67b";
-    sha256 = "sha256-W253LCtAQgHKsf6JgOKEaj/Upztt0YBwd/7O8/nIQ6U=";
+    sha256 = "sha256-29RTnQ/NebFJ/fAQAQJDM/eMC56G/x+l53Gpp4frtFk=";
+  };
+
+  passthru = {
+    inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
   };
 
   buildInputs = with pkgs; [
@@ -26,8 +33,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/vscode/extensions/antob.vs64
-    unzip -d $out/share/vscode/extensions/antob.vs64 vs64-${version}.vsix
+    mkdir -p $out/share/vscode/extensions
+    unzip vs64-${version}.vsix
+    mv extension $out/share/vscode/extensions/${vscodeExtUniqueId}
     runHook postInstall
   '';
 

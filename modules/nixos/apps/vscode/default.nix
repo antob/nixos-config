@@ -206,7 +206,8 @@ in
         ms-dotnettools.vscode-dotnet-runtime
         esbenp.prettier-vscode
         svelte.svelte-vscode
-        rosc.vs64
+        # Forked rosc.vs64 to change comments from ";" to "//" for KickAssembler
+        pkgs.antob.vscode-extension-vs64
       ];
     };
 
