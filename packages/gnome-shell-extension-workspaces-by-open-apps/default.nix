@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "antob";
     repo = "workspaces-by-open-apps";
-    rev = "7134a3b";
-    sha256 = "";
+    rev = "a88912b";
+    sha256 = "sha256-SppTtTjKPF+h7qzLDJKKLQSlmP0BhnJnEo8bIoeoDiw=";
   };
 
   passthru = {

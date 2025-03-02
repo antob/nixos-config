@@ -31,9 +31,8 @@ in
       gnomeExtensions.vitals
       gnomeExtensions.caffeine
       gnomeExtensions.hide-cursor
+      antob.gnome-shell-extension-workspaces-by-open-apps
       antob.gnome-shell-extension-expand-shutdown-menu
-      # ulauncher
-      # inputs.ulauncher.packages.${pkgs.system}.default
     ];
 
     services.udev.packages = with pkgs; [ gnome-settings-daemon ];
@@ -115,6 +114,7 @@ in
               "expand-shutdown-menu@antob.se"
               "Vitals@CoreCoding.com"
               "caffeine@patapon.info"
+              "workspaces-by-open-apps@favo02.github.com"
             ];
           };
 
@@ -244,6 +244,24 @@ in
             startup-status = 0; # 0 = Desktop, 1 = Overview
             clock-menu-position = 0; # 0 = Center, 1 = Right, 2 = Left
             animation = 0; # Animation speed 1 - 7
+          };
+          "org/gnome/shell/extensions/workspaces-indicator-by-open-apps" = {
+            scroll-enable = false;
+            scroll-wraparound = false;
+            middle-click-close-app = false;
+            click-on-focus-minimize = false;
+            indicator-round-borders = false;
+            indicator-show-focused-app = false;
+            icons-group = "GROUP WITHOUT COUNT";
+            icons-limit = 3;
+            apps-inactive-effect = "NOTHING";
+            apps-minimized-effect = "NOTHING";
+            apps-all-desaturate = false;
+            size-app-icon = 16;
+            size-labels = 14;
+            spacing-label-left = 3;
+            spacing-label-bottom = 1;
+            hide-activities-button = true;
           };
 
           ## Gnome shell configuration
