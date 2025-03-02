@@ -54,6 +54,7 @@ let
     "accessibility.force_disabled" = 1; # disable Accessibility features
     "security.cert_pinning.enforcement_level" = 2; # strict public key pinning
     "privacy.userContext.enabled" = true; # enable container tabs
+    "browser.formfill.enable" = false; # remember form field entries
 
     # make Strict ETP less aggressive
     "browser.contentblocking.features.strict" =
@@ -101,7 +102,7 @@ let
     "network.trr.mode" = 2; # enable TRR (with System fallback)
     "network.trr.max-fails" = 5; # lower max attempts to use DoH
     "geo.provider.use_geoclue" = false; # [LINUX]
-    "pdfjs.defaultZoomValue" = "page-width"; # PDF zoom level
+    "pdfjs.defaultZoomValue" = "page-actual"; # PDF zoom level
 
     "browser.startup.page" = 3; # Resume the previous browser session
     "network.http.referer.disallowCrossSiteRelaxingDefault.top_navigation" = true;
@@ -120,6 +121,7 @@ let
     "general.smoothScroll.other.durationMinMS" = 125;
     "general.smoothScroll.pages.durationMaxMS" = 125;
     "general.smoothScroll.pages.durationMinMS" = 125;
+    "apz.gtk.pangesture.page_delta_mode_multiplier" = 0.1; # Make touchpad scrolling less sensitive
     "layers.acceleration.force-enabled" = true;
     "mousewheel.min_line_scroll_amount" = 30;
     "mousewheel.system_scroll_override_on_root_content.enabled" = true;
