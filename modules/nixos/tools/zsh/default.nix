@@ -50,6 +50,11 @@ in
           # Improved vim bindings.
           #source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
+          # zsh-window-title plugin.
+          export DISABLE_AUTO_TITLE="true" # Disable oh-my-zsh auto title
+          export ZSH_WINDOW_TITLE_DIRECTORY_DEPTH=1
+          source ${pkgs.antob.zsh-window-title}/share/zsh-window-title/zsh-window-title.plugin.zsh
+
           # ZSH Widget bindings
           bindkey "^b" backward-word
           bindkey "^f" forward-word
