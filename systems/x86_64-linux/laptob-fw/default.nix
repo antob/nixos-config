@@ -47,6 +47,7 @@ with lib.antob;
     quickemu
     nfs-utils # Needed for mounting NFS shares
     rustdesk-flutter
+    iio-sensor-proxy # To enable automatic brightness in Gnome
   ];
 
   services = {
