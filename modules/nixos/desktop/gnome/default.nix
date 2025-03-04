@@ -42,6 +42,7 @@ in
       NIXOS_OZONE_WL = "1";
       XCURSOR_THEME = cursorTheme;
       XCURSOR_SIZE = builtins.toString cursorSize;
+      GTK_THEME = "Adwaita-dark";
     };
 
     # Desktop additions
@@ -71,7 +72,6 @@ in
         gtk-error-bell = false;
       };
       gtk4.extraConfig = {
-        gtk-application-prefer-dark-theme = 1;
         gtk-error-bell = false;
       };
     };

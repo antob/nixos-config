@@ -62,7 +62,6 @@ in
           gtk-error-bell = false;
         };
         gtk4.extraConfig = {
-          gtk-application-prefer-dark-theme = 1;
           gtk-error-bell = false;
         };
       };
