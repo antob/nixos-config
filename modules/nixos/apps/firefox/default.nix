@@ -133,7 +133,6 @@ let
     "toolkit.telemetry.enabled" = false;
     "media.ffmpeg.vaapi.enabled" = true;
     "media.navigator.enabled" = false;
-    "dom.event.clipboardevents.enabled" = false;
     "layout.spellcheckDefault" = 0;
   };
 
