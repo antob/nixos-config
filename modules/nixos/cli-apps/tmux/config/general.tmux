@@ -18,9 +18,11 @@ set-window-option -g mode-keys vi
 # do not auto-rename windows
 set-option -g automatic-rename off
 
-# Ensure that everything on the right side of the status line
-# is included.
+# Make the status line pretty and add some modules
 set -g status-right-length 100
+set -g status-left-length 100
+set -g status-left ""
+set -g status-right "#{E:@catppuccin_status_session}"
 
 # Allow passthrough
 set -g allow-passthrough on

@@ -27,7 +27,6 @@ let
       extraConfig = ''
         set -g @catppuccin_flavor "macchiato"
         set -g @catppuccin_status_left_separator "█"
-        set -g @catppuccin_status_modules_right "session"
         set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
       '';
     }
