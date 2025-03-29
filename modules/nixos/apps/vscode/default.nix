@@ -59,17 +59,6 @@ in
             command = "-workbench.action.navigateBack";
             when = "canNavigateBack";
           }
-          # Use right arrow to accept inline suggestions
-          {
-            key = "right";
-            command = "editor.action.inlineSuggest.commit";
-            when = "inlineEditIsVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible";
-          }
-          {
-            key = "tab";
-            command = "-editor.action.inlineSuggest.commit";
-            when = "inlineEditIsVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible";
-          }
         ];
 
         userSettings = {
@@ -92,6 +81,10 @@ in
             stickyScroll.enabled = false;
             inlineSuggest.enabled = true;
             acceptSuggestionOnCommitCharacter = false;
+          };
+
+          chat = {
+            experimental.statusIndicator.enabled = true;
           };
 
           files = {
@@ -136,7 +129,7 @@ in
           diffEditor.ignoreTrimWhitespace = false;
 
           html.format = {
-            wrapAttributes = "preserve-aligned";
+            wrapAttributes = "force-expand-multiline";
             templating = true;
             maxPreserveNewLines = 2;
             wrapLineLength = 120;
@@ -150,6 +143,7 @@ in
           gitlens.telemetry.enabled = false;
           dotnetAcquisitionExtension.enableTelemetry = false;
           svelte.enable-ts-plugin = true;
+          git.suggestSmartCommit = false;
 
           nix = {
             formatterPath = "nixfmt";
@@ -179,6 +173,7 @@ in
               markdown = false;
               scminput = false;
             };
+            nextEditSuggestions.enabled = true;
           };
 
           vs64.showWelcome = false;
@@ -196,7 +191,7 @@ in
           formulahendry.auto-close-tag
           # ms-dotnettools.csharp
           csharpier.csharpier-vscode
-          github.copilot
+          # github.copilot
           # github.copilot-chat
           eamodio.gitlens
           testdouble.vscode-standard-ruby
@@ -207,9 +202,9 @@ in
           shopify.ruby-lsp
           # ms-dotnettools.vscode-dotnet-runtime
           esbenp.prettier-vscode
-          svelte.svelte-vscode
           # Forked rosc.vs64 to change comments from ";" to "//" for KickAssembler
           pkgs.antob.vscode-extension-vs64
+          mquandalle.graphql
         ];
       };
     };
