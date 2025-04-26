@@ -104,6 +104,8 @@ in
 
           search.exclude = {
             "**/coverage" = true;
+            "**/.devenv" = true;
+            "**/.direnv" = true;
           };
 
           "[json]" = {
