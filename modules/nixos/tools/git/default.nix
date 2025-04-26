@@ -108,7 +108,7 @@ in
         ];
       };
 
-      programs.zsh.initExtra = mkIf config.antob.tools.fzf.enable (
+      programs.zsh.initContent = mkIf config.antob.tools.fzf.enable (
         mkOrder 200 ''
           source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
         ''

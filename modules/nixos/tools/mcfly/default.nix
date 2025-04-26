@@ -25,7 +25,7 @@ in
       };
 
       home.packages = [ pkgs.mcfly-fzf ];
-      programs.zsh.initExtra = ''
+      programs.zsh.initContent = ''
         eval "$(${getExe pkgs.mcfly-fzf} init zsh)"
       '';
     };

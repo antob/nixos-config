@@ -36,7 +36,7 @@ in
         changeDirWidgetOptions = [ "--preview '${pkgs.eza}/bin/eza --tree --color=always {} | head -200'" ];
       };
 
-      programs.zsh.initExtra = mkOrder 200 ''
+      programs.zsh.initContent = mkOrder 200 ''
         # Use fd for listing path candidates.
         _fzf_compgen_path() {
           fd --hidden --exclude ".git" . "$1"
