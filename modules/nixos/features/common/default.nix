@@ -155,10 +155,11 @@ in
       dmidecode
       usbutils
       pciutils
-      tailspin
       gnumake
       cifs-utils # Mount SMB shares
       speedtest-rs
+      file
+      nvd
     ];
 
     services = {

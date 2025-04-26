@@ -32,7 +32,7 @@ in
 
     environment.systemPackages = with pkgs; [
       arandr
-      chromium
+      ungoogled-chromium
       libreoffice-still
       gimp
       mpv
