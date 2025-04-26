@@ -217,6 +217,7 @@ in
             show-voltage = false;
             show-fan = false;
             show-battery = true;
+            include-public-ip = true;
             hot-sensors = [
               "_memory_usage_"
               "_battery_rate_"
@@ -226,6 +227,8 @@ in
           "org/gnome/shell/extensions/just-perfection" = {
             activities-button = false; # Show workspaces-indicator-by-open-apps instead
             clock-menu = true;
+            clock-menu-position = 1; # 0 = Center, 1 = Right, 2 = Left
+            clock-menu-position-offset = 8;
             keyboard-layout = false;
             accessibility-menu = false;
             quick-settings-dark-mode = false;
@@ -242,7 +245,6 @@ in
             overlay-key = false;
             switcher-popup-delay = false;
             startup-status = 0; # 0 = Desktop, 1 = Overview
-            clock-menu-position = 0; # 0 = Center, 1 = Right, 2 = Left
             animation = 0; # Animation speed 1 - 7
           };
           "org/gnome/shell/extensions/workspaces-indicator-by-open-apps" = {
@@ -313,7 +315,7 @@ in
           };
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
-            accent-color = "blue";
+            accent-color = "teal";
             enable-hot-corners = false;
             show-battery-percentage = true;
             cursor-size = cursorSize;
@@ -479,6 +481,10 @@ in
     };
 
     services.gnome = {
+      core-os-services.enable = true;
+      core-shell.enable = true;
+      core-utilities.enable = true;
+      core-developer-tools.enable = true;
       games.enable = false;
       localsearch.enable = false;
       tinysparql.enable = false;
