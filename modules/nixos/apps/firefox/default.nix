@@ -165,7 +165,8 @@ in
               id = 0;
               name = config.antob.user.name;
               search = {
-                default = "DuckDuckGo";
+                default = "ddg";
+                privateDefault = "ddg";
                 force = true;
               };
               settings = commonSettings;
@@ -177,7 +178,8 @@ in
               id = 1;
               name = "HL";
               search = {
-                default = "DuckDuckGo";
+                default = "ddg";
+                privateDefault = "ddg";
                 force = true;
               };
               settings = commonSettings;
@@ -189,7 +191,8 @@ in
               id = 2;
               name = "OBIT";
               search = {
-                default = "DuckDuckGo";
+                default = "ddg";
+                privateDefault = "ddg";
                 force = true;
               };
               settings = commonSettings;
