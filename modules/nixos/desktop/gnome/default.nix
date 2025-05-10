@@ -286,12 +286,12 @@ in
             event-sounds = false;
           };
           "org/gnome/desktop/background" = {
-            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/glass-chip-l.jxl";
-            picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/glass-chip-d.jxl";
+            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/geometrics-l.jxl";
+            picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/geometrics-d.jxl";
             primary-color = "#26a269";
           };
           "org/gnome/desktop/screensaver" = {
-            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/glass-chip-l.jxl";
+            picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/geometrics-l.jxl";
             primary-color = "#26a269";
           };
           "org/gnome/desktop/peripherals/keyboard" = {

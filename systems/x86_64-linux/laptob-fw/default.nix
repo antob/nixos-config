@@ -50,6 +50,7 @@ with lib.antob;
     iio-sensor-proxy # To enable automatic brightness in Gnome
     brave
     calibre
+    tor-browser-bundle-bin
   ];
 
   services = {
