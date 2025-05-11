@@ -204,8 +204,6 @@ in
           shopify.ruby-lsp
           # ms-dotnettools.vscode-dotnet-runtime
           esbenp.prettier-vscode
-          # Forked rosc.vs64 to change comments from ";" to "//" for KickAssembler
-          pkgs.antob.vscode-extension-vs64
           mquandalle.graphql
         ];
       };
