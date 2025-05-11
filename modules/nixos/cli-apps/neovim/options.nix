@@ -73,7 +73,7 @@
     breakindent = true;
   };
 
-  diagnostics = {
+  diagnostic.settings = {
     severity_sort = true;
     virtual_text = {
       prefix = "";
