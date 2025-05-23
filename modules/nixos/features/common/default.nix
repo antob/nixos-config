@@ -33,6 +33,7 @@ in
         neovim = enabled;
         helix = enabled;
         tmux = enabled;
+        yazi = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;
