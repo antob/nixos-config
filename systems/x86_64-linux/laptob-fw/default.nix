@@ -66,6 +66,9 @@ with lib.antob;
     tailscale.enable = true;
   };
 
+  # To be able to access ESP32 devices through the serial port
+  antob.user.extraGroups = [ "dialout" ];
+
   # NFS shares
   services.rpcbind.enable = true;
   systemd.mounts = [
