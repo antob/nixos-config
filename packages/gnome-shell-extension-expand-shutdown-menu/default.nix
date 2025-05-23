@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "antob";
     repo = "gnome-extension-expand-shutdown-menu";
-    rev = "25b98a1";
-    sha256 = "sha256-LWTg1MnQvTq5CZhq+jxd3IbzUNZ3MAHK0cutHlqGmD8=";
+    rev = "6f47101";
+    sha256 = "sha256-0nUXZcTsXJkB1+TWxxHYltk5Pui5g+/8WsPH1fYeKo8=";
   };
 
   passthru = {

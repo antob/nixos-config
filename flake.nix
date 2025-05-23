@@ -53,11 +53,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Cosmic Desktop
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-    };
-
     # Disko
     disko = {
       url = "github:nix-community/disko";

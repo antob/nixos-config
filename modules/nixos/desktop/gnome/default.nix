@@ -27,11 +27,10 @@ in
       gnomeExtensions.just-perfection
       inputs.paperwm.packages.${pkgs.system}.default
       # gnomeExtensions.tactile
-      gnomeExtensions.switcher
       gnomeExtensions.vitals
       gnomeExtensions.caffeine
       gnomeExtensions.hide-cursor
-      antob.gnome-shell-extension-workspaces-by-open-apps
+      gnomeExtensions.workspaces-indicator-by-open-apps
       antob.gnome-shell-extension-expand-shutdown-menu
     ];
 
@@ -109,7 +108,6 @@ in
               "paperwm@paperwm.github.com"
               "just-perfection-desktop@just-perfection"
               # "tactile@lundal.io"
-              # "switcher@landau.fi"
               "hide-cursor@elcste.com"
               "expand-shutdown-menu@antob.se"
               "Vitals@CoreCoding.com"
@@ -119,14 +117,6 @@ in
           };
 
           ## Extensions configuration
-          "org/gnome/shell/extensions/switcher" = {
-            fade-enable = true;
-            font-size = mkUint32 18;
-            icon-size = mkUint32 20;
-            matching = 1;
-            max-width-percentage = mkUint32 40;
-            show-switcher = [ "<Super>d" ];
-          };
           "org/gnome/shell/extensions/paperwm" = {
             maximize-within-tiling = false;
             gesture-enabled = false;
@@ -483,7 +473,7 @@ in
     services.gnome = {
       core-os-services.enable = true;
       core-shell.enable = true;
-      core-utilities.enable = true;
+      core-apps.enable = true;
       core-developer-tools.enable = true;
       games.enable = false;
       localsearch.enable = false;
