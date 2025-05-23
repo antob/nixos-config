@@ -30,6 +30,7 @@ in
     ./esphome.nix
     ./nfsd.nix
     ./samba.nix
+    ./fail2ban.nix
   ];
 
   antob = {
