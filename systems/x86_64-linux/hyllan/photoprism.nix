@@ -60,7 +60,7 @@ in
     };
   };
 
-  # system.activationScripts.photoprism-setup.text = ''
-  #   chown photoprism:photoprism ${dataDir}
-  # '';
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0755 photoprism photoprism -"
+  ];
 }

@@ -32,10 +32,10 @@ in
     8089 # Zigbee2MQTT frontend
   ];
 
-  system.activationScripts.hass-setup.text = ''
-    mkdir -p ${dataDir}/config
-    mkdir -p ${dataDir}/zigbee2mqtt
-  '';
+  systemd.tmpfiles.rules = [
+    "d ${dataDir}/config 0755 root root -"
+    "d ${dataDir}/zigbee2mqtt 0755 root root -"
+  ];
 
   fileSystems = {
     "${dataDir}" = {

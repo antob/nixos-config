@@ -25,7 +25,7 @@ in
     };
   };
 
-  system.activationScripts.plex-setup.text = ''
-    chown plex:media ${dataDir}
-  '';
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0750 plex media -"
+  ];
 }

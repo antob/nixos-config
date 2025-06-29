@@ -41,7 +41,7 @@ in
     };
   };
 
-  system.activationScripts.esphome-setup.text = ''
-    mkdir -p ${dataDir}
-  '';
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0750 esphome esphome -"
+  ];
 }

@@ -61,7 +61,7 @@ in
 
   services.resolved.enable = false;
 
-  system.activationScripts.pihole-setup.text = ''
-    mkdir -p ${dataDir}
-  '';
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0755 root root -"
+  ];
 }

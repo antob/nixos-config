@@ -83,9 +83,9 @@ in
   };
 
   # Ensure folders in ZFS pool
-  system.activationScripts.hyllan-zfs-setup.text = ''
-    mkdir -p /mnt/tank/services
-  '';
+  systemd.tmpfiles.rules = [
+    "d /mnt/tank/services 0755 root root -"
+  ];
 
   # Networking and firewall
   networking = {

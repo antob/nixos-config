@@ -45,9 +45,9 @@ in
     };
   };
 
-  system.activationScripts.syncthing-setup.text = ''
-    chown syncthing:syncthing ${dataDir}
-  '';
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0700 syncthing syncthing -"
+  ];
 
   services.nginx.virtualHosts = {
     "${siteDomain}" = {

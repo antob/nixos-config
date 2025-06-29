@@ -16,4 +16,8 @@ in
       fsType = "zfs";
     };
   };
+
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0755 mysql mysql -"
+  ];
 }
