@@ -441,15 +441,13 @@ in
       # Configure Set console typematic delay and rate in X11
       autoRepeatDelay = 200;
       autoRepeatInterval = 40;
+    };
 
-      displayManager = {
-        gdm = {
-          enable = true;
-          wayland = true;
-          autoSuspend = true;
-        };
-      };
-      desktopManager.gnome.enable = true;
+    services.desktopManager.gnome.enable = true;
+    services.displayManager.gdm = {
+      enable = true;
+      autoSuspend = true;
+      wayland = true;
     };
 
     services.libinput = {
