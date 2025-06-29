@@ -2,19 +2,23 @@
 
 {
   mkSslProxy = domain: target: {
-    "${domain}" = {
-      forceSSL = true;
-      enableACME = true;
-      http2 = true;
-      locations."/" = {
-        proxyPass = target;
-        proxyWebsockets = true;
-        extraConfig = ''
-          proxy_buffering off;
-          proxy_headers_hash_max_size 512;
-          proxy_headers_hash_bucket_size 128; 
-        '';
-      };
-    };
+    "${domain}".extraConfig = ''
+      import deny_external_access
+
+      tls {
+        dns digitalocean {$DO_AUTH_TOKEN}
+      }
+
+      reverse_proxy ${target}
+    '';
+  };
+
+  mkProxy = domain: target: {
+    "${domain}".extraConfig = ''
+      import deny_external_access
+
+      tls internal
+      reverse_proxy ${target}
+    '';
   };
 }

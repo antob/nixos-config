@@ -1,7 +1,7 @@
 { ... }:
 
 let
-  siteDomain = "syncthing.lan";
+  subdomain = "syncthing";
   port = 8384;
   dataDir = "/mnt/tank/services/syncthing";
 in
@@ -49,18 +49,9 @@ in
     "d ${dataDir} 0700 syncthing syncthing -"
   ];
 
-  services.nginx.virtualHosts = {
-    "${siteDomain}" = {
-      serverAliases = [ "syncthing" ];
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString port}";
-        extraConfig = ''
-          proxy_buffering off;
-          proxy_headers_hash_max_size 512;
-          proxy_headers_hash_bucket_size 128; 
-        '';
-      };
-    };
+  services.caddy.antobProxies."${subdomain}" = {
+    hostName = "127.0.0.1";
+    port = port;
   };
 
   # Syncthing ports: 8384 for remote access to GUI

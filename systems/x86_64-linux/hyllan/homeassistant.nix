@@ -1,10 +1,10 @@
-{ config, lib, ... }:
+{ config, ... }:
 
-with lib.antob;
 let
   secrets = config.sops.secrets;
-  siteDomain = "ha.antob.se";
+  subdomain = "ha";
   port = 8123;
+  zigbeePort = 8089; # Port for zigbee2mqtt frontend
   dataDir = "/mnt/tank/services/hass";
 in
 {
@@ -29,7 +29,7 @@ in
   networking.firewall.allowedTCPPorts = [
     port # Hass GUI port
     1400 # Sonos
-    8089 # Zigbee2MQTT frontend
+    zigbeePort # Zigbee2MQTT frontend
   ];
 
   systemd.tmpfiles.rules = [
@@ -75,25 +75,28 @@ in
         network_key = "!${secrets."zigbee2mqtt.yaml".path} network_key";
       };
       frontend = {
-        port = 8089;
-        host = "0.0.0.0";
-        # Optional, enables authentication, disabled by default, cleartext (no hashing required)
-        # auth_token = "your-secret-token";
+        port = zigbeePort;
+        host = "127.0.0.1";
         # Optional, url on which the frontend can be reached, currently only used for the Home Assistant device configuration page
-        url = "http://zigbee.lan";
+        url = "https://zigbee.antob.net";
       };
     };
   };
 
-  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}" // {
-    "zigbee.lan" = {
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:8089";
-      };
-      locations."/api" = {
-        proxyPass = "http://127.0.0.1:8089/api";
-        proxyWebsockets = true;
-      };
+  services.caddy.antobProxies = {
+    "${subdomain}" = {
+      hostName = "127.0.0.1";
+      port = port;
+    };
+
+    "zigbee" = {
+      hostName = "127.0.0.1";
+      port = zigbeePort;
+      extraHandleConfig = ''
+        basic_auth {
+          admin {$ZIGBEE_ADMIN_PASSWORD}
+        }
+      '';
     };
   };
 

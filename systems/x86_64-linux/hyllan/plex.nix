@@ -1,19 +1,25 @@
-{ lib, ... }:
+{ ... }:
 
-with lib.antob;
 let
   dataDir = "/mnt/tank/services/plex";
-  siteDomain = "plex.antob.se";
+  subdomain = "plex";
+  port = 32400;
 in
 {
-  services.plex = {
-    enable = true;
-    openFirewall = true;
-    group = "media";
-    dataDir = dataDir;
+  services = {
+    plex = {
+      enable = true;
+      openFirewall = true;
+      group = "media";
+      dataDir = dataDir;
+    };
+
+    caddy.antobProxies."${subdomain}" = {
+      hostName = "127.0.0.1";
+      port = port;
+    };
   };
 
-  services.nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:32400";
   networking.firewall.allowedTCPPorts = [ 32400 ];
 
   users.groups.media = { };

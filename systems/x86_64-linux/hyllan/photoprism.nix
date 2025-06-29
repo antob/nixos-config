@@ -1,9 +1,8 @@
-{ config, lib, ... }:
+{ config, ... }:
 
-with lib.antob;
 let
   secrets = config.sops.secrets;
-  siteDomain = "photos.antob.se";
+  subdomain = "photos";
   port = 2342;
   dataDir = "/mnt/tank/services/photoprism";
 in
@@ -23,7 +22,7 @@ in
         PHOTOPRISM_DATABASE_NAME = "photoprism";
         PHOTOPRISM_DATABASE_SERVER = "/run/mysqld/mysqld.sock";
         PHOTOPRISM_DATABASE_USER = "photoprism";
-        PHOTOPRISM_SITE_URL = "https://${siteDomain}";
+        PHOTOPRISM_SITE_URL = "https://${subdomain}.antob.net";
         PHOTOPRISM_SITE_TITLE = "PhotoPrism";
         # PHOTOPRISM_LOG_LEVEL = "trace";
       };
@@ -41,7 +40,10 @@ in
       ];
     };
 
-    nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}";
+    caddy.antobProxies."${subdomain}" = {
+      hostName = "127.0.0.1";
+      port = port;
+    };
   };
 
   networking.firewall.allowedTCPPorts = [ port ];

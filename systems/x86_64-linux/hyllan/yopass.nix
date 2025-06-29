@@ -1,6 +1,5 @@
-{ pkgs, lib, ... }:
+{ ... }:
 
-with lib.antob;
 let
   siteDomain = "secrets.antob.se";
   port = 8090;
@@ -20,6 +19,8 @@ in
 
   services = {
     memcached.enable = true;
-    nginx.virtualHosts = mkSslProxy siteDomain "http://127.0.0.1:${toString port}";
+    caddy.virtualHosts."${siteDomain}".extraConfig = ''
+      reverse_proxy 127.0.0.1:${toString port}
+    '';
   };
 }

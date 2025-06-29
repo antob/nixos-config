@@ -1,8 +1,7 @@
 { ... }:
 
 let
-  # secrets = config.sops.secrets;
-  siteDomain = "esphome.lan";
+  subdomain = "esphome";
   port = 6052;
   dataDir = "/mnt/tank/services/esphome";
 in
@@ -15,23 +14,15 @@ in
       openFirewall = false;
     };
 
-    nginx.virtualHosts = {
-      "${siteDomain}" = {
-        # basicAuthFile = secrets.esphome_admin_password.path;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString port}";
-          extraConfig = ''
-            proxy_buffering off;
-            proxy_headers_hash_max_size 512;
-            proxy_headers_hash_bucket_size 128; 
-          '';
-        };
-      };
+    caddy.antobProxies."${subdomain}" = {
+      hostName = "127.0.0.1";
+      port = port;
+      extraHandleConfig = ''
+        basic_auth {
+          admin {$ESPHOME_ADMIN_PASSWORD}
+        }
+      '';
     };
-  };
-
-  sops.secrets.esphome_admin_password = {
-    owner = "nginx";
   };
 
   fileSystems = {

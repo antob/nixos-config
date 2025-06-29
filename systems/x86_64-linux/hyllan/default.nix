@@ -19,18 +19,20 @@ in
     ./hardware.nix
     sops-nix.nixosModules.sops
     ./msmtp.nix
-    ./nginx.nix
+    ./caddy.nix
     ./podman.nix
     ./plex.nix
     ./mysql.nix
+    ./postgresql.nix
     ./photoprism.nix
-    ./yopass.nix
     ./syncthing.nix
     ./homeassistant.nix
     ./esphome.nix
     ./nfsd.nix
     ./samba.nix
     ./fail2ban.nix
+    ./miniflux.nix
+    ./headscale.nix
   ];
 
   antob = {
@@ -77,9 +79,13 @@ in
       };
     };
 
-    # gitea = {
-    #   enable = true;
-    # };
+    caddy.antobProxies.pihole = {
+      hostName = "192.168.1.4";
+      port = 80;
+      extraHandleConfig = ''
+        rewrite / /admin
+      '';
+    };
   };
 
   # Ensure folders in ZFS pool
@@ -96,6 +102,11 @@ in
     nftables.enable = true;
     useDHCP = false;
     usePredictableInterfaceNames = false;
+  };
+
+  # Enable IP forwarding
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.all.forwarding" = true;
   };
 
   systemd.network = {

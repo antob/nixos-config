@@ -1,7 +1,7 @@
 { config, ... }:
 
 let
-  siteDomain = "news.hyllan.lan";
+  subdomain = "news";
   port = 8850;
   secrets = config.sops.secrets;
 in
@@ -12,21 +12,13 @@ in
       adminCredentialsFile = secrets.miniflux_admin_credentials.path;
       config = {
         LISTEN_ADDR = "localhost:${toString port}";
-        BASE_URL = "http://${siteDomain}";
+        BASE_URL = "https://${subdomain}.antob.net";
       };
     };
 
-    nginx.virtualHosts = {
-      "${siteDomain}" = {
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString port}";
-          extraConfig = ''
-            proxy_buffering off;
-            proxy_headers_hash_max_size 512;
-            proxy_headers_hash_bucket_size 128; 
-          '';
-        };
-      };
+    caddy.antobProxies."${subdomain}" = {
+      hostName = "127.0.0.1";
+      port = port;
     };
   };
 
