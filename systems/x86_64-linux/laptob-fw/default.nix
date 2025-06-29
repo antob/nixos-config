@@ -1,13 +1,19 @@
 {
   pkgs,
   lib,
+  config,
+  inputs,
   ...
 }:
 with lib;
 with lib.antob;
+let
+  secrets = config.sops.secrets;
+in
 {
-  imports = [
+  imports = with inputs; [
     ./hardware.nix
+    sops-nix.nixosModules.sops
   ];
 
   antob = {
@@ -23,6 +29,11 @@ with lib.antob;
     tools.easyeffects = {
       enable = true;
       preset = "fw13";
+    };
+
+    services.tailscale = {
+      enable = true;
+      keyfile = secrets.tailscale_auth_key.path;
     };
 
     hardware = {
@@ -62,8 +73,12 @@ with lib.antob;
     };
 
     chrony.enable = true;
+  };
 
-    tailscale.enable = true;
+  # Sops secrets
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets.tailscale_auth_key = { };
   };
 
   # To be able to access ESP32 devices through the serial port
