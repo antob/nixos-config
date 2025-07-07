@@ -11,7 +11,7 @@ with lib;
     disko.nixosModules.disko
     nur.modules.nixos.default
     ./hardware.nix
-    ../../modules/nixos
+    ../../modules
   ];
 
   antob = {

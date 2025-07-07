@@ -15,7 +15,7 @@ in
 {
   imports = with inputs; [
     ./hardware.nix
-    ../../modules/nixos
+    ../../modules
     sops-nix.nixosModules.sops
     ./msmtp.nix
     ./caddy.nix

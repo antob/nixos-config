@@ -12,7 +12,7 @@ in
 {
   imports = with inputs; [
     ./hardware.nix
-    ../../modules/nixos
+    ../../modules
     nur.modules.nixos.default
     sops-nix.nixosModules.sops
   ];
