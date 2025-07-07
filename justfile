@@ -2,21 +2,40 @@
 default:
   @just --list
 
-# Deploy to laptob
-laptob mode="switch":
-  nixos-rebuild {{mode}} --flake .#laptob-fw --sudo
+###################################
+# Various `nixos-rebuild` commands
+###################################
 
-# Deploy to hyllan
-hyllan mode="switch":
-  nixos-rebuild {{mode}} --flake .#hyllan --target-host hyllan.lan --sudo
+# Build flake
+build flake="laptob-fw": (_nixos-rebuild "build" flake)
+
+# Switch flake
+switch flake="laptob-fw": (_nixos-rebuild "switch" flake)
+
+# Boot flake
+boot flake="laptob-fw": (_nixos-rebuild "boot" flake)
+
+# Test flake
+test flake="laptob-fw": (_nixos-rebuild "test" flake)
+
+# Deploy flake to remote host
+deploy flake mode="switch": (_nixos-rebuild mode flake flake + ".lan")
+
+###################################
+# Various install commands
+###################################
 
 # Build install ISO
-iso:
-  nix build .#nixosConfigurations.install-iso.config.system.build.isoImage
+iso type="install":
+  nix build .#nixosConfigurations.{{type}}-iso.config.system.build.isoImage
 
-# Build minimal install ISO
-minimal-iso:
-  nix build .#nixosConfigurations.minimal-iso.config.system.build.isoImage
+# Install flake to remote host
+install host flake="laptob-fw":
+  nixos-anywhere --flake .#{{flake}} {{host}}
+
+###################################
+# Various flake commands
+###################################
 
 # Update all the flake inputs
 up:
@@ -71,3 +90,11 @@ verify-store:
 # Repair Nix Store Objects
 repair-store *paths:
   nix store repair {{paths}}
+
+###################################
+# Internal recipes
+###################################
+
+# generic nixos-rebuild
+_nixos-rebuild mode flake host="":
+  nixos-rebuild {{mode}} --flake .#{{flake}} --sudo {{ if host == "" { "" } else { "--target-host " + host } }}
