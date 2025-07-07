@@ -7,7 +7,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.apps.firefox;
 

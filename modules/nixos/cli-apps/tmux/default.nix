@@ -6,10 +6,9 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.cli-apps.tmux;
-  configFiles = lib.snowfall.fs.get-files ./config;
+  configFiles = getFiles ./config;
   colors = config.antob.color-scheme.colors;
 
   plugins = with pkgs; [

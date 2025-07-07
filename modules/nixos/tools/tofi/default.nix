@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.tools.tofi;
   colors = config.antob.color-scheme.colors;
@@ -19,7 +18,7 @@ in
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
       home.file.".config/tofi/config".text = ''
-        font = "${pkgs.antob.sfns-display-font}/share/fonts/truetype/System San Francisco Display Bold.ttf"
+        font = "${pkgs.sfns-display-font}/share/fonts/truetype/System San Francisco Display Bold.ttf"
         font-size = 11
         font-features = ""
         font-variations = ""

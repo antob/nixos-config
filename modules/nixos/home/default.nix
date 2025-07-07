@@ -1,4 +1,5 @@
 {
+  inputs,
   options,
   config,
   lib,
@@ -6,8 +7,11 @@
 }:
 
 with lib;
-with lib.antob;
 {
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
   options.antob.home = with types; {
     file = mkOpt attrs { } "A set of files to be managed by home-manager's <option>home.file</option>.";
     configFile =
@@ -32,6 +36,7 @@ with lib.antob;
       useUserPackages = true;
       useGlobalPkgs = true;
       backupFileExtension = "backup";
+      extraSpecialArgs = { inherit inputs outputs; };
 
       users.${config.antob.user.name} = mkAliasDefinitions options.antob.home.extraOptions;
     };

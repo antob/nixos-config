@@ -7,8 +7,6 @@
 }:
 
 with lib;
-with lib.antob;
-
 let
   monCfg = config.antob.monitoring;
   emailFrom = monCfg.emailFrom;
@@ -17,6 +15,7 @@ in
 {
   imports = with inputs; [
     ./hardware.nix
+    ../../modules/nixos
     sops-nix.nixosModules.sops
     ./msmtp.nix
     ./caddy.nix
@@ -121,6 +120,21 @@ in
       routes = [
         { Gateway = "192.168.1.1"; }
       ];
+    };
+  };
+
+  # Bootloader.
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "max";
+      configurationLimit = 5;
+      editor = false;
+    };
+
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/efi";
     };
   };
 

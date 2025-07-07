@@ -11,8 +11,12 @@ let
   baseInternalIp = lib.strings.concatStringsSep "." baseInternalIpList;
   reverseBaseInternalIp = lib.strings.concatStringsSep "." (lib.lists.reverseList baseInternalIpList);
 
-  inherit (lib) types mkEnableOption mkIf;
-  inherit (lib.antob) mkOpt;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkIf
+    mkOpt
+    ;
 in
 {
   options.antob.services.dhcpd = with types; {

@@ -3,15 +3,13 @@
   pkgs,
   lib,
   inputs,
-  system,
   ...
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.apps.vscode;
-  extensions = inputs.nix-vscode-extensions.extensions.${system};
+  extensions = inputs.nix-vscode-extensions.extensions.${pkgs.system};
 in
 {
   options.antob.apps.vscode = with types; {

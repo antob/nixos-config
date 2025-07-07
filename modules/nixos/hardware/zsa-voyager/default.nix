@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.hardware.zsa-voyager;
 in

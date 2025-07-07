@@ -6,13 +6,14 @@
   ...
 }:
 with lib;
-with lib.antob;
 let
   secrets = config.sops.secrets;
 in
 {
   imports = with inputs; [
     ./hardware.nix
+    ../../modules/nixos
+    nur.modules.nixos.default
     sops-nix.nixosModules.sops
   ];
 
@@ -52,7 +53,7 @@ in
     amdgpu_top
     radeontop
     glxinfo
-    deploy-rs
+    just
     nixos-anywhere
     sops
     quickemu
@@ -73,6 +74,21 @@ in
     };
 
     chrony.enable = true;
+  };
+
+  # Bootloader.
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "max";
+      configurationLimit = 5;
+      editor = false;
+    };
+
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/efi";
+    };
   };
 
   # Sops secrets

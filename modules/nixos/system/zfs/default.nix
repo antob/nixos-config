@@ -7,8 +7,12 @@
 let
   cfg = config.antob.system.zfs;
 
-  inherit (lib) mkEnableOption mkIf mkDefault;
-  inherit (lib.antob) mkOpt enabled;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkDefault
+    mkOpt
+    ;
   inherit (lib.types) listOf str;
 in
 {

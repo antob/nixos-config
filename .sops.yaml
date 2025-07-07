@@ -15,12 +15,12 @@ keys:
   - &hyllan 26ed358df14249befc3b72618ff9d36f72f3e498
 
 creation_rules:
-  - path_regex: systems/.*/hyllan/secrets.yaml$
+  - path_regex: hosts/hyllan/secrets.yaml$
     key_groups:
     - pgp:
       - *admin
       - *hyllan
-  - path_regex: systems/.*/laptob-fw/secrets.yaml$
+  - path_regex: hosts/laptob-fw/secrets.yaml$
     key_groups:
     - pgp:
       - *admin

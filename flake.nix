@@ -17,27 +17,12 @@
     # Hardware Configuration
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    # Generate System Images
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Snowfall Lib
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Impermanence
     impermanence.url = "github:nix-community/impermanence";
 
     # Nix User Repository (NUR)
-    nur.url = "github:nix-community/NUR";
-
-    # System Deployment
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
+    nur = {
+      url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -76,31 +61,74 @@
   };
 
   outputs =
-    inputs:
+    {
+      self,
+      nixpkgs,
+      ...
+    }@inputs:
     let
-      lib = inputs.snowfall-lib.mkLib {
-        inherit inputs;
-        src = ./.;
+      inherit (self) outputs;
+      lib = import ./lib { inherit (nixpkgs) lib; };
 
-        snowfall.namespace = "antob";
-      };
+      systems = [
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+
+      forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
+      pkgsFor = lib.genAttrs systems (
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+      );
     in
-    lib.mkFlake {
-      channels-config.allowUnfree = true;
+    {
+      overlays = import ./overlays { inherit inputs; };
+      packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
+      formatter = forEachSystem (pkgs: pkgs.alejandra);
 
-      overlays = with inputs; [
-        nur.overlays.default
-      ];
+      nixosConfigurations = {
+        laptob-fw = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          modules = [
+            ./hosts/laptob-fw
+          ];
+        };
 
-      systems.nixos.modules = with inputs; [
-        home-manager.nixosModules.home-manager
-        nur.nixosModules.nur
-      ];
+        hyllan = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          modules = [
+            ./hosts/hyllan
+          ];
+        };
 
-      deploy = lib.mkDeploy { inherit (inputs) self; };
+        install-iso = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/install-iso
+          ];
+        };
 
-      checks = builtins.mapAttrs (
-        system: deploy-lib: deploy-lib.deployChecks inputs.self.deploy
-      ) inputs.deploy-rs.lib;
+        minimal-iso = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/minimal-iso
+          ];
+        };
+
+        laptob-qemu = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          modules = [
+            ./hosts/laptob-qemu
+          ];
+        };
+      };
     };
 }

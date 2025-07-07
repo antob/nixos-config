@@ -1,29 +1,36 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 
 with lib;
-with lib.antob;
 {
+  imports = [
+    (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
+    ../../modules/nixos
+  ];
+
   # `install-iso` adds wireless support that
   # is incompatible with networkmanager.
   networking.wireless.enable = mkForce false;
 
-  antob = {
-    apps = {
-      firefox = enabled;
-      vscode = enabled;
-    };
+  # Enable dconf to manage settings
+  programs.dconf.enable = true;
 
+  antob = {
     tools = {
-      kitty = enabled;
+      alacritty = enabled;
       git = enabled;
       zsh = enabled;
       starship = enabled;
       eza = enabled;
+      fzf = enabled;
     };
 
     cli-apps = {
       neovim = enabled;
-      helix = enabled;
       tmux = enabled;
     };
 
@@ -31,14 +38,10 @@ with lib.antob;
       bluetooth = enabled;
       yubikey = enabled;
       networking = enabled;
-      audio = enabled;
     };
-
-    desktop.gnome = enabled;
 
     services = {
       openssh = enabled;
-      printing = enabled;
     };
 
     security.gpg = enabled;
@@ -54,9 +57,43 @@ with lib.antob;
     virtualisation.podman.enable = false;
   };
 
+  services = {
+    upower.enable = true;
+    dbus.enable = true;
+  };
+
+  location = {
+    latitude = 57.7;
+    longitude = 11.8;
+  };
+
+  environment.variables = {
+    EDITOR = "nvim";
+  };
+
+  environment.shellAliases = {
+    sudo = "sudo "; # Fixes missing alias doing `sudo`
+    cat = "bat -p";
+  };
+
   environment.systemPackages = with pkgs; [
-    chromium
-    gnome-calculator
+    htop
+    wget
+    bottom
+    ripgrep
+    fd
+    inetutils
+    procs
+    unzip
+    fwupd
+    killall
+    dogdns
+    dmidecode
+    usbutils
+    pciutils
+    gnumake
+    cifs-utils # Mount SMB shares
+    file
   ];
 
   system.stateVersion = "22.11";

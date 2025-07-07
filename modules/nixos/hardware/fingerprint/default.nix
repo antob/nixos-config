@@ -5,7 +5,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.hardware.fingerprint;
 in

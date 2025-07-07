@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.hardware.networking;
 in
@@ -37,7 +36,7 @@ in
         dhcp = "internal";
         plugins = with pkgs; [
           networkmanager-openvpn
-          networkmanager-l2tp
+          pkgs.stable.networkmanager-l2tp
         ];
       };
     };

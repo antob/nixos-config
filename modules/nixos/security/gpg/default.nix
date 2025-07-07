@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.security.gpg;
 
@@ -18,12 +17,12 @@ let
       }
     else if config.antob.desktop.hyprland.enable then
       {
-        path = "${pkgs.antob.pinentry-tofi}/bin/pinentry-tofi";
+        path = "${pkgs.pinentry-tofi}/bin/pinentry-tofi";
         name = null;
       }
     else
       {
-        path = "${pkgs.antob.pinentry-dmenu}/bin/pinentry-dmenu";
+        path = "${pkgs.pinentry-dmenu}/bin/pinentry-dmenu";
         name = null;
       };
 
@@ -103,7 +102,6 @@ in
         };
     };
 
-    antob.persistence.safe.home.directories =
-      mkIf config.antob.persistence.enable [ ".gnupg" ];
+    antob.persistence.safe.home.directories = [ ".gnupg" ];
   };
 }

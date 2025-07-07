@@ -6,11 +6,12 @@
 }:
 
 with lib;
-with lib.antob;
 {
   imports = with inputs; [
     disko.nixosModules.disko
+    nur.modules.nixos.default
     ./hardware.nix
+    ../../modules/nixos
   ];
 
   antob = {
@@ -20,6 +21,8 @@ with lib.antob;
     };
 
     desktop.gnome = enabled;
+
+    # persistence = enabled;
 
     virtualisation.virt-manager.enable = false;
     virtualisation.docker.enable = false;
@@ -37,6 +40,21 @@ with lib.antob;
   };
 
   services.tlp.enable = false;
+
+  # Bootloader.
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "max";
+      configurationLimit = 5;
+      editor = false;
+    };
+
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/efi";
+    };
+  };
 
   system.stateVersion = "22.11";
 }

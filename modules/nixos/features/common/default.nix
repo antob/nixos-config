@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.features.common;
 in
@@ -57,22 +56,7 @@ in
         console = enabled;
       };
 
-      persistence.enable = false;
-      persistence = {
-        directories = [
-          "/var/log"
-          "/var/lib/nixos"
-          "/var/lib/systemd/coredump"
-          "/var/lib/systemd/backlight"
-        ];
-        files = [
-          "/etc/machine-id"
-          "/etc/ssh/ssh_host_rsa_key"
-          "/etc/ssh/ssh_host_rsa_key.pub"
-          "/etc/ssh/ssh_host_ed25519_key"
-          "/etc/ssh/ssh_host_ed25519_key.pub"
-        ];
-      };
+      persistence.enable = mkDefault false;
 
       home.extraOptions.programs = {
         zoxide = {
@@ -101,32 +85,6 @@ in
         # tealdeer.enable = true;
       };
     };
-
-    nix.settings = {
-      experimental-features = "nix-command flakes";
-      http-connections = 50;
-      warn-dirty = false;
-      log-lines = 50;
-      sandbox = "relaxed";
-      auto-optimise-store = true;
-      trusted-users = [
-        "root"
-        config.antob.user.name
-      ];
-      allowed-users = [
-        "root"
-        config.antob.user.name
-      ];
-      substituters = [
-        "https://cache.nixos.org/"
-      ];
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      ];
-    };
-
-    # Enable nixos-rebuild-ng, a full rewrite of nixos-rebuild in Python. Available for testing.
-    system.rebuild.enableNg = true;
 
     environment.variables = {
       EDITOR = "nvim";
@@ -180,28 +138,5 @@ in
       latitude = 57.7;
       longitude = 11.8;
     };
-
-    # Bootloader.
-    boot.loader = {
-      systemd-boot = {
-        enable = true;
-        consoleMode = "max";
-        configurationLimit = 5;
-        # https://github.com/NixOS/nixpkgs/blob/c32c39d6f3b1fe6514598fa40ad2cf9ce22c3fb7/nixos/modules/system/boot/loader/systemd-boot/systemd-boot.nix#L66
-        editor = false;
-      };
-
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/efi";
-      };
-    };
-
-    systemd.tmpfiles.rules = lib.mkIf (config.antob.persistence.enable) [
-      "d /persist/var/log 0755 root root -"
-      "d /persist/var/lib/nixos 0755 root root -"
-      "d /persist/var/lib/systemd/coredump 0755 root root -"
-      "d /mnt 0755 root root -"
-    ];
   };
 }

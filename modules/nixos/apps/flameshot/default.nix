@@ -1,5 +1,4 @@
 {
-  options,
   config,
   pkgs,
   lib,
@@ -7,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.apps.flameshot;
   flameshot-gui = pkgs.callPackage ./flameshot-gui.nix { };

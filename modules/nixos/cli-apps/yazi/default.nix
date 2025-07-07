@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.cli-apps.yazi;
   yazi-flavors = pkgs.fetchFromGitHub {

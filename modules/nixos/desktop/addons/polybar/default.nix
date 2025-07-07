@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.desktop.addons.polybar;
 
@@ -26,7 +25,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob.system.fonts.fonts = with pkgs; [ antob.sfns-display-font ];
+    antob.system.fonts.fonts = [ pkgs.sfns-display-font ];
 
     antob.home.extraOptions = {
       services.polybar = {

@@ -6,7 +6,6 @@
 }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.tools.zsh;
 in
@@ -53,7 +52,7 @@ in
             # zsh-window-title plugin.
             export DISABLE_AUTO_TITLE="true" # Disable oh-my-zsh auto title
             export ZSH_WINDOW_TITLE_DIRECTORY_DEPTH=1
-            source ${pkgs.antob.zsh-window-title}/share/zsh-window-title/zsh-window-title.plugin.zsh
+            source ${pkgs.zsh-window-title}/share/zsh-window-title/zsh-window-title.plugin.zsh
 
             # ZSH Widget bindings
             bindkey "^b" backward-word

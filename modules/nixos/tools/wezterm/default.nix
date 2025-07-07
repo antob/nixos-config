@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 with lib;
-with lib.antob;
 let
   cfg = config.antob.tools.wezterm;
 in

@@ -19,8 +19,8 @@ let
     mkEnableOption
     mkIf
     mkForce
+    mkOpt
     ;
-  inherit (lib.antob) mkOpt;
 in
 {
   options.antob.services.bind = with types; {

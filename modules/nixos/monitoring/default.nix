@@ -1,7 +1,6 @@
-{ options, lib, ... }:
+{ lib, ... }:
 
 with lib;
-with lib.antob;
 {
   options.antob.monitoring = with types; {
     emailFrom = mkOpt str "home@antob.se" "Monitoring email from address.";

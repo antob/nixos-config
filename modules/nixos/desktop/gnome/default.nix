@@ -6,7 +6,6 @@
   ...
 }:
 with lib;
-with lib.antob;
 let
   cfg = config.antob.desktop.gnome;
   colors = config.antob.color-scheme.colors;
@@ -31,7 +30,7 @@ in
       gnomeExtensions.caffeine
       gnomeExtensions.hide-cursor
       gnomeExtensions.workspaces-indicator-by-open-apps
-      antob.gnome-shell-extension-expand-shutdown-menu
+      gnome-shell-extension-expand-shutdown-menu
     ];
 
     services.udev.packages = with pkgs; [ gnome-settings-daemon ];
