@@ -48,7 +48,10 @@ with lib;
     desktop.gnome = enabled;
 
     services = {
-      openssh = enabled;
+      openssh = {
+        enable = true;
+        permitRootLogin = true;
+      };
       printing = enabled;
     };
 

@@ -40,8 +40,9 @@ with lib;
       networking = enabled;
     };
 
-    services = {
-      openssh = enabled;
+    services.openssh = {
+      enable = true;
+      permitRootLogin = true;
     };
 
     security.gpg = enabled;
