@@ -182,7 +182,7 @@ in
         extensions = with extensions.vscode-marketplace; [
           zhuangtongfa.material-theme # One Dark Pro
           tamasfe.even-better-toml
-          vadimcn.vscode-lldb
+          # vadimcn.vscode-lldb
           jnoortheen.nix-ide
           rust-lang.rust-analyzer
           dotjoshjohnson.xml
