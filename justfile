@@ -19,7 +19,7 @@ boot flake="laptob-fw": (_nixos-rebuild "boot" flake)
 test flake="laptob-fw": (_nixos-rebuild "test" flake)
 
 # Deploy flake to remote host
-deploy flake mode="switch": (_nixos-rebuild mode flake flake + ".lan")
+deploy flake host mode="switch": (_nixos-rebuild mode flake host)
 
 ###################################
 # Various install commands
@@ -30,8 +30,8 @@ iso type="install":
   nix build .#nixosConfigurations.{{type}}-iso.config.system.build.isoImage
 
 # Install flake to remote host
-install host flake="laptob-fw":
-  nixos-anywhere --flake .#{{flake}} {{host}}
+install host flake="laptob-fw" *ARGS:
+  nixos-anywhere --flake .#{{flake}} {{host}} {{ARGS}}
 
 ###################################
 # Various flake commands
