@@ -76,7 +76,7 @@ in
         includes = [ "hosts" ];
       };
 
-      persistence.home.files = [ ".ssh/known_hosts" ];
+      persistence.safe.home.directories = [ ".ssh" ];
       user.extraOptions.openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
   };

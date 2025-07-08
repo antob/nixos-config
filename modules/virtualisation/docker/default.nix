@@ -23,8 +23,12 @@ in
     antob = {
       user.extraGroups = [ "docker" ];
       tools.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
+      persistence.directories = [
+        "/var/lib/docker"
+        "/run/docker"
+      ];
     };
 
-    environment.systemPackages = with pkgs; [ docker-compose ];
+    environment.systemPackages = [ pkgs.docker-compose ];
   };
 }

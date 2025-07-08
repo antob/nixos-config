@@ -8,11 +8,10 @@
 with lib;
 let
   cfg = config.antob.persistence;
-  user = config.users.users.${config.antob.user.name};
-
+  userName = config.antob.user.name;
 in
 {
-  imports = with inputs; [ impermanence.nixosModules.impermanence ];
+  imports = [ inputs.impermanence.nixosModules.impermanence ];
 
   options.antob.persistence = with types; {
     enable = mkEnableOption "Enable persistence using impermanence.";
@@ -50,35 +49,40 @@ in
 
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
-      "d /persist/safe 0755 root root -"
-      "d /persist/safe/home 0755 ${user.name} ${user.group} -"
-      "d /persist/home 0755 ${user.name} ${user.group} -"
+      "d /nix/persist/safe 0755 root root -"
+      "d /nix/persist/var/log 0755 root root -"
+      "d /nix/persist/var/lib/nixos 0755 root root -"
+      "d /nix/persist/var/lib/systemd/coredump 0755 root root -"
     ];
 
     # Necessary for user-specific impermanence
-    programs.fuse.userAllowOther = true;
+    # programs.fuse.userAllowOther = true;
 
-    environment.persistence."/persist" = {
+    environment.persistence."/nix/persist" = {
       hideMounts = true;
-      inherit (cfg) files directories;
+      directories = cfg.directories ++ [
+        "/var/log"
+        "/var/lib/nixos"
+        "/var/lib/systemd/coredump"
+        "/var/lib/systemd/backlight"
+      ];
+      files = cfg.files ++ [
+        "/etc/machine-id"
+        "/etc/ssh/ssh_host_rsa_key"
+        "/etc/ssh/ssh_host_rsa_key.pub"
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
+      ];
+      users."${userName}" = {
+        inherit (cfg.home) files directories;
+      };
     };
 
-    environment.persistence."/persist/safe" = {
+    environment.persistence."/nix/persist/safe" = {
       hideMounts = true;
       inherit (cfg.safe) files directories;
-    };
-
-    antob.home.extraOptions = {
-      imports = [ inputs.impermanence.nixosModules.home-manager.impermanence ];
-
-      home.persistence."/persist/home/${config.antob.user.name}" = {
-        inherit (cfg.home) files directories;
-        allowOther = true;
-      };
-
-      home.persistence."/persist/safe/home/${config.antob.user.name}" = {
+      users."${userName}" = {
         inherit (cfg.safe.home) files directories;
-        allowOther = true;
       };
     };
   };

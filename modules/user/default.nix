@@ -41,6 +41,7 @@ in
 {
   options.antob.user = with types; {
     name = mkOpt str "tob" "The name to use for the user account.";
+    group = mkOpt str "users" "The group to use for the user account.";
     fullName = mkOpt str "Tobias Lindholm" "The full name of the user.";
     email = mkOpt str "tobias.lindholm@antob.se" "The email of the user.";
     icon = mkOpt (nullOr package) defaultIcon "The profile picture to use for the user.";
@@ -72,18 +73,14 @@ in
 
         safe.home = {
           directories = [
-            ".ssh/safe"
             ".local/share/password-store"
+            "Projects"
+            "Documents"
+            "Pictures"
+            "Videos"
+            "Music"
           ];
         };
-
-        safe.directories = [
-          "/home/${cfg.name}/Projects"
-          "/home/${cfg.name}/Documents"
-          "/home/${cfg.name}/Pictures"
-          "/home/${cfg.name}/Videos"
-          "/home/${cfg.name}/Music"
-        ];
       };
     };
 
@@ -100,7 +97,7 @@ in
         inherit (cfg) name hashedPassword;
 
         home = "/home/${cfg.name}";
-        group = "users";
+        group = cfg.group;
 
         shell = mkIf config.antob.tools.zsh.enable pkgs.zsh;
 
