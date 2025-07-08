@@ -235,6 +235,7 @@ in
             switcher-popup-delay = false;
             startup-status = 0; # 0 = Desktop, 1 = Overview
             animation = 0; # Animation speed 1 - 7
+            support-notifier-type = 0; # 0 = Never, 1 = New version
           };
           "org/gnome/shell/extensions/workspaces-indicator-by-open-apps" = {
             scroll-enable = false;
