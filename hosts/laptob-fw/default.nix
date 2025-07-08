@@ -11,10 +11,11 @@ let
 in
 {
   imports = with inputs; [
-    ./hardware.nix
-    ../../modules
+    disko.nixosModules.disko
     nur.modules.nixos.default
     sops-nix.nixosModules.sops
+    ./hardware.nix
+    ../../modules
   ];
 
   antob = {

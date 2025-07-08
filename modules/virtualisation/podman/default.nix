@@ -25,7 +25,6 @@ in
 
     virtualisation.containers.storage.settings = {
       storage = {
-        driver = "btrfs";
         # graphroot = lib.mkIf config.antob.persistence.enable "/nix/persist/var/lib/containers/storage";
         graphroot = "/var/lib/containers/storage";
         runroot = "/run/containers/storage";

@@ -15,10 +15,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker = {
-      enable = true;
-      storageDriver = "btrfs";
-    };
+    virtualisation.docker.enable = true;
 
     antob = {
       user.extraGroups = [ "docker" ];
