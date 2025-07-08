@@ -95,6 +95,8 @@ with lib;
     gnumake
     cifs-utils # Mount SMB shares
     file
+    btrfs-progs
+    parted
   ];
 
   system.stateVersion = "22.11";

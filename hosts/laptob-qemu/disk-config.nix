@@ -6,7 +6,7 @@
         fsType = "tmpfs";
         mountOptions = [
           "defaults"
-          "size=1G"
+          "size=25%"
           "mode=755"
         ];
       };
@@ -21,6 +21,7 @@
             ESP = {
               size = "1G";
               type = "EF00";
+              label = "EFI";
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -34,10 +35,11 @@
 
             root = lib.mkIf (!config.antob.persistence.enable) {
               size = "100%";
+              label = "root";
               content = {
                 # LUKS passphrase will be prompted interactively only
                 type = "luks";
-                name = "crypted";
+                name = "cryptroot";
                 settings = {
                   allowDiscards = true;
                 };
@@ -51,10 +53,11 @@
 
             nix = lib.mkIf config.antob.persistence.enable {
               size = "100%";
+              label = "root";
               content = {
                 # LUKS passphrase will be prompted interactively only
                 type = "luks";
-                name = "crypted";
+                name = "cryptroot";
                 settings = {
                   allowDiscards = true;
                 };
@@ -69,7 +72,7 @@
 
             encryptedSwap = {
               size = "2G";
-              name = "crypted-swap";
+              name = "cryptswap";
               content = {
                 type = "swap";
                 randomEncryption = true;
@@ -82,8 +85,6 @@
     };
   };
 
-  # fileSystems."/efi".neededForBoot = true;
-  # fileSystems."/nix".neededForBoot = true;
   fileSystems = lib.mkIf config.antob.persistence.enable {
     "/nix".neededForBoot = true;
   };
