@@ -27,9 +27,12 @@ in
 
     virtualisation.virt-manager = enabled;
 
-    tools.easyeffects = {
-      enable = true;
-      preset = "fw13";
+    tools = {
+      fhs = enabled;
+      easyeffects = {
+        enable = true;
+        preset = "fw13";
+      };
     };
 
     services.tailscale = {
