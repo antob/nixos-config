@@ -1,7 +1,10 @@
 { lib, config, ... }:
+let
+  impermanence = config.antob.persistence.enable;
+in
 {
   disko.devices = {
-    nodev = lib.mkIf config.antob.persistence.enable {
+    nodev = lib.mkIf impermanence {
       "/" = {
         fsType = "tmpfs";
         mountOptions = [
@@ -19,6 +22,7 @@
           type = "gpt";
           partitions = {
             ESP = {
+              priority = 1;
               size = "1G";
               type = "EF00";
               label = "EFI";
@@ -33,31 +37,14 @@
               };
             };
 
-            root = lib.mkIf (!config.antob.persistence.enable) {
-              size = "100%";
-              label = "root";
+            nix = {
+              priority = 2;
+              size = "1000G";
+              label = "nix";
               content = {
                 # LUKS passphrase will be prompted interactively only
                 type = "luks";
-                name = "cryptroot";
-                settings = {
-                  allowDiscards = true;
-                };
-                content = {
-                  type = "filesystem";
-                  format = "ext4";
-                  mountpoint = "/";
-                };
-              };
-            };
-
-            nix = lib.mkIf config.antob.persistence.enable {
-              size = "100%";
-              label = "root";
-              content = {
-                # LUKS passphrase will be prompted interactively only
-                type = "luks";
-                name = "cryptroot";
+                name = "cryptnix";
                 settings = {
                   allowDiscards = true;
                 };
@@ -65,13 +52,31 @@
                   type = "filesystem";
                   format = "ext4";
                   mountpoint = "/nix";
-                  postMountHook = "mkdir -p /nix/persist";
+                };
+              };
+            };
+
+            root = {
+              priority = 3;
+              size = "500G";
+              label = "root";
+              content = {
+                # LUKS passphrase will be prompted interactively only
+                type = "luks";
+                name = "cryptroot";
+                settings = {
+                  allowDiscards = true;
+                };
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = if impermanence then "/mnt/old_root" else "/";
                 };
               };
             };
 
             encryptedSwap = {
-              size = "2G";
+              size = "70G";
               name = "cryptswap";
               content = {
                 type = "swap";
@@ -85,7 +90,7 @@
     };
   };
 
-  fileSystems = lib.mkIf config.antob.persistence.enable {
+  fileSystems = lib.mkIf impermanence {
     "/nix".neededForBoot = true;
   };
 }
