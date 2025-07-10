@@ -37,12 +37,15 @@ in
       xclip
     ];
 
-    antob.persistence.home.directories = [
-      {
-        directory = ".config/xfce4";
-        method = "symlink";
-      }
-    ];
+    antob.persistence.home = {
+      directories = [
+        {
+          directory = ".config/xfce4";
+          method = "symlink";
+        }
+      ];
+      files = [ ".fehbg" ];
+    };
 
     # Desktop additions
     antob.desktop.addons = {

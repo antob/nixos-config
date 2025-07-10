@@ -43,5 +43,11 @@ in
       obsidian
       discord
     ];
+
+    antob.persistence.home.directories = [
+      ".config/discord"
+      ".config/irb"
+      ".config/obsidian"
+    ];
   };
 }

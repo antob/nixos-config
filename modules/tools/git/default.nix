@@ -118,6 +118,8 @@ in
       };
     };
 
+    antob.persistence.home.directories = [ ".local/state/lazygit" ];
+
     environment.shellAliases = {
       gh = "git hist";
     };

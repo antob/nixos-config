@@ -55,6 +55,8 @@ in
 
   # Enable DHCP on the wireless link
   networking = {
+    hostName = "laptob-fw";
+
     # Derived from `head -c 8 /etc/machine-id`
     hostId = "6278643e";
 

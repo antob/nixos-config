@@ -17,6 +17,7 @@ let
     {
       plugin = tmuxPlugins.resurrect;
       extraConfig = ''
+        set -g @resurrect-dir '~/.local/share/tmux/resurrect'
         set -g @resurrect-save 'S'
         set -g @resurrect-restore 'R'
       '';
@@ -56,5 +57,7 @@ in
         inherit plugins;
       };
     };
+
+    antob.persistence.home.directories = [ ".local/share/tmux" ];
   };
 }

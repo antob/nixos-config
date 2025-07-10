@@ -25,7 +25,6 @@ in
     };
 
     desktop.gnome = enabled;
-
     virtualisation.virt-manager = enabled;
 
     tools = {
@@ -49,6 +48,20 @@ in
     };
 
     system.console.setFont = mkForce false;
+
+    persistence = {
+      enable = true;
+      home.directories = [
+        ".config/rustdesk"
+        ".config/vice"
+        ".RetroDebugger"
+        ".C64Debugger"
+        ".nuget"
+        ".microsoft"
+        ".dotnet"
+        ".aws"
+      ];
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -85,7 +98,7 @@ in
     systemd-boot = {
       enable = true;
       consoleMode = "max";
-      configurationLimit = 5;
+      configurationLimit = 10;
       editor = false;
     };
 

@@ -20,10 +20,15 @@ in
     antob = {
       user.extraGroups = [ "docker" ];
       tools.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
-      persistence.directories = [
-        "/var/lib/docker"
-        "/run/docker"
-      ];
+      persistence = {
+        directories = [
+          "/var/lib/docker"
+          "/run/docker"
+        ];
+        home.directories = [
+          ".docker"
+        ];
+      };
     };
 
     environment.systemPackages = [ pkgs.docker-compose ];
