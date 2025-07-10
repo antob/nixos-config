@@ -166,7 +166,7 @@ $ sudo mount -o X-mount.mkdir -t zfs tank /mnt/tank
 Install git.
 
 ```
-$ nix-env -f '<nixpkgs>' -iA git
+$ nix shell nixpkgs#git
 ```
 
 Generate config for current machine.
