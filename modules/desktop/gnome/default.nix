@@ -205,12 +205,13 @@ in
           "org/gnome/shell/extensions/vitals" = {
             show-voltage = false;
             show-fan = false;
-            show-battery = true;
+            show-battery = false;
             include-public-ip = true;
             hot-sensors = [
               "_memory_usage_"
-              "_battery_rate_"
               "_processor_usage_"
+              "_network_wifi_link quality_"
+              "_storage_free_"
             ];
           };
           "org/gnome/shell/extensions/just-perfection" = {
@@ -302,6 +303,7 @@ in
                 "se+us"
               ])
             ];
+            xkb-options = [ "caps:ctrl_modifier" ];
           };
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
@@ -314,6 +316,13 @@ in
             clock-show-weekday = true;
             clock-show-weekdate = true;
             enable-animations = false;
+          };
+          "org/gnome/desktop/calendar" = {
+            show-weekdate = true;
+          };
+          "org/gnome/mutter" = {
+            experimental-features = [ "scale-monitor-framebuffer" ];
+            dynamic-workspaces = false;
           };
           # "org/gnome/mutter" = {
           #   workspaces-only-on-primary = true;
@@ -351,6 +360,8 @@ in
             move-to-workspace-7 = [ "<Shift><Super>7" ];
             move-to-workspace-8 = [ "<Shift><Super>8" ];
             move-to-workspace-9 = [ "<Shift><Super>9" ];
+
+            toggle-maximized = [ "<Super>m" ];
 
             # cycle-windows = [ "<Super>Right" ];
             # cycle-windows-backward = [ "<Super>Left" ];
