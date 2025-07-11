@@ -48,6 +48,7 @@ in
       ".config/discord"
       ".config/irb"
       ".config/obsidian"
+      ".config/chromium"
     ];
   };
 }
