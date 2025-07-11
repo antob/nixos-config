@@ -73,7 +73,7 @@
         dataDir = dataDir;
         package = pkgs.caddy.withPlugins {
           plugins = [ "github.com/caddy-dns/digitalocean@v0.0.0-20250606074528-04bde2867106" ];
-          hash = "sha256-7X4U6vHCMMZz71oDOS2zntVBRwHicm4Igfwu0xdPu58=";
+          hash = "sha256-s+Zy9LDW9b5CLIp3aazu0V4COrug4JgawTcZ9cFWzgk=";
         };
         environmentFile = secrets.caddy_env_variables.path;
         extraConfig = ''
