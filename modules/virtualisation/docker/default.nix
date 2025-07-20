@@ -20,13 +20,15 @@ in
     antob = {
       user.extraGroups = [ "docker" ];
       tools.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
+      system.env.DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
+
       persistence = {
         directories = [
           "/var/lib/docker"
           "/run/docker"
         ];
         home.directories = [
-          ".docker"
+          ".config/docker"
         ];
       };
     };

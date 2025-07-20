@@ -68,7 +68,6 @@ in
             "Downloads"
             "persist"
           ];
-          files = [ ".fehbg" ];
         };
 
         safe.home = {
