@@ -227,6 +227,5 @@ sudo nixos-rebuild switch --flake '.#laptob'
 As an alternativ, installation can be made using `disko-install` which combines disk partitioning and nixos-install. Eg:
 
 ```
-disko-install --flake .#laptob --disk main /dev/nvme0n1
-
+$ sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake .#laptob --disk main /dev/nvme0n1
 ```
