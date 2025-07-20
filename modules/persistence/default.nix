@@ -65,6 +65,8 @@ in
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/backlight"
+        "/var/lib/boltd"
+        "/var/cache"
       ];
       files = cfg.files ++ [
         "/etc/machine-id"
@@ -72,6 +74,7 @@ in
         "/etc/ssh/ssh_host_rsa_key.pub"
         "/etc/ssh/ssh_host_ed25519_key"
         "/etc/ssh/ssh_host_ed25519_key.pub"
+        "/var/lib/logrotate.status"
       ];
       users."${userName}" = {
         inherit (cfg.home) files directories;

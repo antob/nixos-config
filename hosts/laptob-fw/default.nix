@@ -51,6 +51,10 @@ in
 
     persistence = {
       enable = true;
+      directories = [
+        "/var/lib/powertop"
+        "/var/lib/chrony"
+      ];
       home.directories = [
         ".config/rustdesk"
         ".config/vice"

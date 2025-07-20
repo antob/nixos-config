@@ -21,5 +21,7 @@ in
       ipv6 = false;
       openFirewall = true;
     };
+
+    antob.persistence.directories = [ "/etc/avahi/services" ];
   };
 }
