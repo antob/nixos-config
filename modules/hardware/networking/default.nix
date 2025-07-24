@@ -20,6 +20,7 @@ in
       user.extraGroups = [ "networkmanager" ];
       persistence = {
         directories = [ "/etc/NetworkManager/system-connections" ];
+        files = [ "/etc/ipsec.d/ipsec.nm-l2tp.secrets" ];
         home.directories = [ ".cert" ];
       };
     };
@@ -36,7 +37,8 @@ in
         dhcp = "internal";
         plugins = with pkgs; [
           networkmanager-openvpn
-          pkgs.stable.networkmanager-l2tp
+          networkmanager-l2tp
+          networkmanager_strongswan
         ];
       };
     };
@@ -45,6 +47,13 @@ in
       enable = true;
       secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
     };
+
+    # Workaround to fix l2tp. See https://github.com/NixOS/nixpkgs/issues/375352
+    environment.etc."strongswan.conf".text = "";
+
+    systemd.tmpfiles.rules = [
+      "d /etc/ipsec.d 0700 root root -"
+    ];
 
     services.dnsmasq = {
       enable = true;
