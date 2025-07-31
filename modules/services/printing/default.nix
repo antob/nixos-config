@@ -1,3 +1,4 @@
+# Add printer with: `$ lpadmin -p HP -E -v "ipp://192.168.1.120/ipp/print" -m everywhere`
 {
   config,
   pkgs,
