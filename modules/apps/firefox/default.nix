@@ -88,6 +88,7 @@ let
     "layout.word_select.eat_space_to_next_word" = false; # do not select the space next to a word when selecting a word
     # "browser.tabs.loadInBackground" = false; # CTRL+SHIFT+CLICK for background tabs; Settings>General>Tabs>When you open a link, image or media in a new tab, switch to it immediately
     "browser.tabs.loadBookmarksInTabs" = true; # force bookmarks to open in a new tab, not the current tab
+    "browser.tabs.insertAfterCurrent" = true; # open new tab next to current tab, not at the end
     "ui.key.menuAccessKey" = 0; # remove underlined characters from various settings
     "general.autoScroll" = false; # disable unintentional behavior for middle click
     "ui.SpellCheckerUnderlineStyle" = 1; # dots for spell check errors
