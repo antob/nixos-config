@@ -32,6 +32,7 @@ in
     ./fail2ban.nix
     ./miniflux.nix
     ./headscale.nix
+    ./ollama.nix
   ];
 
   antob = {
@@ -52,6 +53,13 @@ in
       emailFrom = "home@antob.se";
       emailTo = "tob@antob.se";
     };
+  };
+
+  nixpkgs.config = {
+    allowUnfree = true;
+    nvidia.acceptLicense = true;
+    cudaSupport = true;
+    cudnnSupport = true;
   };
 
   services = {
