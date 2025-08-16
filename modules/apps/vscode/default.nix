@@ -20,6 +20,7 @@ in
     antob.persistence.home.directories = [
       ".config/Code"
       ".vscode"
+      ".continue" # Config for vscode extension `continue`
     ];
 
     antob.home.extraOptions.programs.vscode = {
@@ -144,6 +145,7 @@ in
           dotnetAcquisitionExtension.enableTelemetry = false;
           svelte.enable-ts-plugin = true;
           git.suggestSmartCommit = false;
+          continue.telemetryEnabled = false;
 
           nix = {
             formatterPath = "nixfmt";
@@ -165,17 +167,6 @@ in
 
           gitlens.launchpad.indicator.enabled = false;
 
-          github.copilot = {
-            enable = {
-              "*" = true;
-              plaintext = false;
-              yaml = false;
-              markdown = false;
-              scminput = false;
-            };
-            nextEditSuggestions.enabled = true;
-          };
-
           vs64.showWelcome = false;
         };
 
@@ -191,8 +182,6 @@ in
           formulahendry.auto-close-tag
           # ms-dotnettools.csharp
           csharpier.csharpier-vscode
-          # github.copilot
-          # github.copilot-chat
           eamodio.gitlens
           testdouble.vscode-standard-ruby
           aliariff.vscode-erb-beautify
@@ -203,6 +192,7 @@ in
           # ms-dotnettools.vscode-dotnet-runtime
           esbenp.prettier-vscode
           mquandalle.graphql
+          continue.continue
         ];
       };
     };
