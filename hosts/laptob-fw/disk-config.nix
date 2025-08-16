@@ -9,7 +9,7 @@ in
         fsType = "tmpfs";
         mountOptions = [
           "defaults"
-          "size=10%"
+          "size=25%"
           "mode=755"
         ];
       };
