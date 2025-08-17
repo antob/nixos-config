@@ -3,6 +3,7 @@
 let
   subdomain = "ollama";
   port = 11434;
+  dataDir = "/mnt/tank/services/ollama";
 in
 {
   services = {
@@ -21,8 +22,6 @@ in
       ];
 
       environmentVariables = {
-        # CUDA_VISIBLE_DEVICES = "0";
-        # NVIDIA_VISIBLE_DEVICES = "all";
         OLLAMA_ORIGINS = "*";
       };
     };
@@ -35,4 +34,15 @@ in
       '';
     };
   };
+
+  fileSystems = {
+    "/var/lib/private/ollama" = {
+      device = dataDir;
+      options = [ "bind" ];
+    };
+  };
+
+  systemd.tmpfiles.rules = [
+    "d ${dataDir} 0750 nobody nobody -"
+  ];
 }
