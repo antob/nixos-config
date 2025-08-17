@@ -146,6 +146,11 @@ in
           svelte.enable-ts-plugin = true;
           git.suggestSmartCommit = false;
           continue.telemetryEnabled = false;
+          "yaml.schemas" = {
+            "/home/${config.antob.user.name}/.vscode/extensions/continue.continue/config-yaml-schema.json" = [
+              ".continue/**/*.yaml"
+            ];
+          };
 
           nix = {
             formatterPath = "nixfmt";
