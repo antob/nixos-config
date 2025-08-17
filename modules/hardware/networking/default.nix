@@ -72,5 +72,8 @@ in
     # Fixes an issue that normally causes nixos-rebuild to fail.
     # https://github.com/NixOS/nixpkgs/issues/180175
     systemd.services.NetworkManager-wait-online.enable = false;
+
+    # Stop wpa_supplicant service spamming logs with "CTRL-EVENT-SIGNAL-CHANGE" messages.
+    systemd.services.wpa_supplicant.serviceConfig.LogLevelMax = "warning"; # 2;
   };
 }
