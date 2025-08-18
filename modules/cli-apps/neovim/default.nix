@@ -17,7 +17,7 @@ in
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
       imports = [
-        inputs.nixvim.homeManagerModules.nixvim
+        inputs.nixvim.homeModules.nixvim
       ];
 
       programs.nixvim = {

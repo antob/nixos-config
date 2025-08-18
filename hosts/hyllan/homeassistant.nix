@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 let
   secrets = config.sops.secrets;
@@ -34,7 +34,7 @@ in
 
   systemd.tmpfiles.rules = [
     "d ${dataDir}/config 0755 root root -"
-    "d ${dataDir}/zigbee2mqtt 0755 root root -"
+    "d ${dataDir}/zigbee2mqtt 0755 zigbee2mqtt zigbee2mqtt -"
   ];
 
   fileSystems = {
@@ -61,7 +61,7 @@ in
     enable = true;
     dataDir = "${dataDir}/zigbee2mqtt";
     settings = {
-      homeassistant = true;
+      homeassistant = lib.mkForce true;
       permit_join = false;
       mqtt = {
         base_topic = "zigbee2mqtt";
@@ -69,6 +69,7 @@ in
       };
       serial = {
         port = "/dev/serial/by-id/usb-Silicon_Labs_Sonoff_Zigbee_3.0_USB_Dongle_Plus_0001-if00-port0";
+        adapter = "zstack";
       };
       advanced = {
         pan_id = 52088;

@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
   dataDir = "/mnt/tank/services/plex";
@@ -12,6 +12,9 @@ in
       openFirewall = true;
       group = "media";
       dataDir = dataDir;
+      # Unstable plex cannot be built for now
+      # (404 when fetching the code)
+      package = pkgs.stable.plex;
     };
 
     caddy.antobProxies."${subdomain}" = {

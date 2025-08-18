@@ -16,9 +16,14 @@
     ) inputs;
   };
 
-  # Adds pkgs.stable == inputs.nixpkgs-stable.legacyPackages.${pkgs.system}
   stable = final: _: {
-    stable = inputs.nixpkgs-stable.legacyPackages.${final.system};
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config = {
+        allowUnfreePredicate = (pkg: true);
+        allowUnfree = true;
+      };
+    };
   };
 
   # Adds my custom packages

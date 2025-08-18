@@ -138,25 +138,25 @@ in
 
             winprops = [
               ''
-                {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1,"focus":true}
+                {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1,"focus":false}
               ''
               ''
-                {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1,"focus":true}
+                {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1}
               ''
               ''
-                {"wm_class":"codium","preferredWidth":"100%","spaceIndex":2,"focus":true}
+                {"wm_class":"codium","preferredWidth":"100%","spaceIndex":2}
               ''
               ''
-                {"wm_class":"code","preferredWidth":"100%","spaceIndex":2,"focus":true}
+                {"wm_class":"code","preferredWidth":"100%","spaceIndex":2}
               ''
               ''
-                {"wm_class":"obsidian","preferredWidth":"100%","spaceIndex":4,"focus":true}
+                {"wm_class":"obsidian","preferredWidth":"100%","spaceIndex":4}
               ''
               ''
-                {"wm_class":"Slack","preferredWidth":"100%","spaceIndex":4,"focus":true}
+                {"wm_class":"Slack","preferredWidth":"100%","spaceIndex":4}
               ''
               ''
-                {"wm_class":"discord","preferredWidth":"100%","spaceIndex":4,"focus":true}
+                {"wm_class":"discord","preferredWidth":"100%","spaceIndex":4}
               ''
             ];
           };

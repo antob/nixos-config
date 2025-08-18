@@ -2,37 +2,39 @@
   plugins = {
     nvim-tree = {
       enable = true;
-      disableNetrw = true;
-      hijackCursor = true;
-      syncRootWithCwd = true;
+      settings = {
+        disableNetrw = true;
+        hijackCursor = true;
+        syncRootWithCwd = true;
 
-      filters.dotfiles = false;
-      updateFocusedFile = {
-        enable = true;
-        updateRoot = false;
-      };
-      view = {
-        width = 40;
-        preserveWindowProportions = true;
-      };
-      renderer = {
-        rootFolderLabel = false;
-        highlightGit = true;
-        indentMarkers = {
+        filters.dotfiles = false;
+        updateFocusedFile = {
           enable = true;
+          updateRoot = false;
         };
-        icons = {
-          glyphs = {
-            default = "󰈚";
-            folder = {
-              default = "";
-              empty = "";
-              emptyOpen = "";
-              open = "";
-              symlink = "";
-            };
-            git = {
-              unmerged = "";
+        view = {
+          width = 40;
+          preserveWindowProportions = true;
+        };
+        renderer = {
+          rootFolderLabel = false;
+          highlightGit = true;
+          indentMarkers = {
+            enable = true;
+          };
+          icons = {
+            glyphs = {
+              default = "󰈚";
+              folder = {
+                default = "";
+                empty = "";
+                emptyOpen = "";
+                open = "";
+                symlink = "";
+              };
+              git = {
+                unmerged = "";
+              };
             };
           };
         };

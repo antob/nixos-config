@@ -24,7 +24,7 @@ in
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
         defaultKeymap = "emacs";
-        dotDir = ".config/zsh";
+        dotDir = "/home/${config.antob.user.name}/.config/zsh";
 
         historySubstringSearch = {
           enable = true;
