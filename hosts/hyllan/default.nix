@@ -33,6 +33,7 @@ in
     ./miniflux.nix
     ./headscale.nix
     ./ollama.nix
+    ./open-webui.nix
   ];
 
   antob = {
