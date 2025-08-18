@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 with lib;
@@ -24,8 +23,7 @@ in
       adwaita-icon-theme
       bibata-cursors
       gnomeExtensions.just-perfection
-      inputs.paperwm.packages.${pkgs.system}.default
-      # gnomeExtensions.tactile
+      pkgs.inputs.paperwm.default
       gnomeExtensions.vitals
       gnomeExtensions.caffeine
       gnomeExtensions.hide-cursor
@@ -106,7 +104,6 @@ in
             enabled-extensions = [
               "paperwm@paperwm.github.com"
               "just-perfection-desktop@just-perfection"
-              # "tactile@lundal.io"
               "hide-cursor@elcste.com"
               "expand-shutdown-menu@antob.se"
               "Vitals@CoreCoding.com"
@@ -138,7 +135,7 @@ in
 
             winprops = [
               ''
-                {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1,"focus":false}
+                {"wm_class":"firefox","preferredWidth":"100%","spaceIndex":1}
               ''
               ''
                 {"wm_class":"chromium-browser","preferredWidth":"100%","spaceIndex":1}
