@@ -136,7 +136,10 @@ in
             wrapLineLength = 120;
           };
 
-          telemetry.telemetryLevel = "off";
+          telemetry = {
+            telemetryLevel = "off";
+            feedback.enabled = false;
+          };
 
           # Installed extensions config
           rust-analyzer.check.command = "clippy";
