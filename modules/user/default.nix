@@ -64,6 +64,7 @@ in
         home = {
           directories = [
             ".cache"
+            ".local/share/Trash"
             ".local/share/zoxide"
             "Downloads"
             "persist"
@@ -101,7 +102,8 @@ in
         shell = mkIf config.antob.tools.zsh.enable pkgs.zsh;
 
         extraGroups = [ "wheel" ] ++ cfg.extraGroups;
-      } // cfg.extraOptions;
+      }
+      // cfg.extraOptions;
     };
   };
 }
