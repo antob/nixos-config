@@ -107,6 +107,13 @@
           ];
         };
 
+        wiggum = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          modules = [
+            ./hosts/wiggum
+          ];
+        };
+
         install-iso = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
           system = "x86_64-linux";

@@ -12,6 +12,7 @@ in
 {
   options.antob.services.tailscale = with types; {
     enable = mkBoolOpt false "Whether or not to configure Tailscale";
+    extraUpFlags = mkOpt (listOf str) [ ] "List of flags to pass to tailscale up command.";
     keyfile = mkOpt str "" "File with authentication key to use";
   };
 
@@ -25,7 +26,8 @@ in
       extraUpFlags = [
         "--login-server=https://hs.antob.se:443"
         "--accept-routes"
-      ];
+      ]
+      ++ cfg.extraUpFlags;
     };
 
     networking = {
