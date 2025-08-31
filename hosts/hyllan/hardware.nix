@@ -140,6 +140,9 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Derived from `head -c 8 /etc/machine-id`
-  networking.hostId = "236689a3";
+  networking = {
+    # Derived from `head -c 8 /etc/machine-id`
+    hostId = "236689a3";
+    hostName = "hyllan";
+  };
 }

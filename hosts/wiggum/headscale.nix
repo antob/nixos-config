@@ -85,7 +85,7 @@ in
       useRoutingFeatures = "both";
       extraUpFlags = [
         "--login-server=${config.services.headscale.settings.server_url}"
-        "--advertise-routes=192.168.1.0/24"
+        "--advertise-exit-node"
         "--accept-routes"
       ];
     };

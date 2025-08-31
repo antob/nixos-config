@@ -11,6 +11,7 @@ let
   monCfg = config.antob.monitoring;
   emailFrom = monCfg.emailFrom;
   emailTo = monCfg.emailTo;
+  secrets = config.sops.secrets;
 in
 {
   imports = with inputs; [
@@ -31,7 +32,6 @@ in
     ./samba.nix
     ./fail2ban.nix
     ./miniflux.nix
-    ./headscale.nix
     ./ollama.nix
     ./open-webui.nix
   ];
@@ -53,6 +53,14 @@ in
     monitoring = {
       emailFrom = "home@antob.se";
       emailTo = "tob@antob.se";
+    };
+
+    services.tailscale = {
+      enable = true;
+      keyfile = secrets.tailscale_auth_key.path;
+      extraUpFlags = [
+        "--advertise-routes=192.168.1.0/24"
+      ];
     };
   };
 
@@ -93,6 +101,19 @@ in
       extraHandleConfig = ''
         rewrite / /admin
       '';
+    };
+
+    # Configure UDP GRO forwarding
+    # See https://tailscale.com/s/ethtool-config-udp-gro
+    networkd-dispatcher = {
+      enable = true;
+      rules."50-tailscale" = {
+        onState = [ "routable" ];
+        script = ''
+          NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")
+          ${pkgs.ethtool}/bin/ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
+        '';
+      };
     };
   };
 
@@ -152,7 +173,10 @@ in
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    secrets.zfs_encryption_key = { };
+    secrets = {
+      zfs_encryption_key = { };
+      tailscale_auth_key = { };
+    };
   };
 
   environment.systemPackages = with pkgs; [

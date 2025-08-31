@@ -34,6 +34,7 @@
 
   # Enable DHCP on the wireless link
   networking = {
+    hostName = "wiggum";
     useDHCP = lib.mkDefault true;
   };
 }

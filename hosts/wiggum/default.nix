@@ -1,21 +1,18 @@
 {
-  pkgs,
   lib,
-  config,
   inputs,
   ...
 }:
 
 with lib;
-let
-  secrets = config.sops.secrets;
-in
 {
   imports = with inputs; [
     disko.nixosModules.disko
     sops-nix.nixosModules.sops
     ./hardware.nix
     ../../modules
+    ./caddy.nix
+    ./headscale.nix
   ];
 
   antob = {
@@ -28,14 +25,6 @@ in
     };
 
     system.console.setFont = mkForce false;
-
-    services.tailscale = {
-      enable = true;
-      keyfile = secrets.tailscale_auth_key.path;
-      extraUpFlags = [
-        "--advertise-exit-node"
-      ];
-    };
   };
 
   nixpkgs.config = {
@@ -77,7 +66,6 @@ in
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    secrets.tailscale_auth_key = { };
   };
 
   system.stateVersion = "22.11";
