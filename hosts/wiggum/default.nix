@@ -11,6 +11,7 @@ with lib;
     sops-nix.nixosModules.sops
     ./hardware.nix
     ../../modules
+    ./fail2ban.nix
     ./caddy.nix
     ./headscale.nix
   ];

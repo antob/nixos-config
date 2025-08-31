@@ -30,7 +30,6 @@ in
     ./esphome.nix
     ./nfsd.nix
     ./samba.nix
-    ./fail2ban.nix
     ./miniflux.nix
     ./ollama.nix
     ./open-webui.nix
