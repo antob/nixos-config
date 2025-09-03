@@ -90,6 +90,9 @@ in
       EDITOR = "nvim";
     };
 
+    # Make hosts file writeable
+    environment.etc.hosts.mode = "0644";
+
     environment.shellAliases = {
       sudo = "sudo "; # Fixes missing alias doing `sudo`
       cat = "bat -p";
