@@ -78,12 +78,13 @@ in
             fontFamily = "'Hack Nerd Font', 'monospace', monospace";
             formatOnSave = true;
             stickyScroll.enabled = false;
-            inlineSuggest.enabled = true;
+            inlineSuggest.enabled = false;
             acceptSuggestionOnCommitCharacter = false;
           };
 
           chat = {
             experimental.statusIndicator.enabled = true;
+            agent.enabled = false;
           };
 
           files = {
