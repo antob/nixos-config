@@ -58,6 +58,12 @@
 
     # Nix VSCode Extensions
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+
+    # Simple NixOS Mailserver
+    simple-nixos-mailserver = {
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

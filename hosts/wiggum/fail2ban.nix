@@ -12,9 +12,9 @@
     bantime = "24h";
 
     jails = {
-      sshd.settings = {
-        enabled = true;
-      };
+      sshd.settings.enabled = true;
+      dovecot.settings.enabled = true;
+      postfix.settings.enabled = true;
       caddy-access.settings = {
         enabled = true;
         filter = "caddy-access";

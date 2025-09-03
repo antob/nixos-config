@@ -9,11 +9,14 @@ with lib;
   imports = with inputs; [
     disko.nixosModules.disko
     sops-nix.nixosModules.sops
+    simple-nixos-mailserver.nixosModule
     ./hardware.nix
     ../../modules
     ./fail2ban.nix
     ./caddy.nix
     ./headscale.nix
+    ./mailserver.nix
+    ./webmail.nix
   ];
 
   antob = {
