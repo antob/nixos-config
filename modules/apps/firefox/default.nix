@@ -53,7 +53,7 @@ let
     "accessibility.force_disabled" = 1; # disable Accessibility features
     "security.cert_pinning.enforcement_level" = 2; # strict public key pinning
     "privacy.userContext.enabled" = true; # enable container tabs
-    "browser.formfill.enable" = false; # remember form field entries
+    "browser.formfill.enable" = lib.mkForce true; # remember form field entries
 
     # make Strict ETP less aggressive
     "browser.contentblocking.features.strict" =
