@@ -128,6 +128,10 @@ in
             editor.defaultFormatter = "testdouble.vscode-standard-ruby";
           };
 
+          "[python]" = {
+            editor.defaultFormatter = "ms-python.black-formatter";
+          };
+
           diffEditor.ignoreTrimWhitespace = false;
 
           html.format = {
@@ -181,6 +185,8 @@ in
           gitlens.launchpad.indicator.enabled = false;
 
           vs64.showWelcome = false;
+
+          python.experiments.enabled = false;
         };
 
         extensions = with extensions.vscode-marketplace; [
@@ -206,6 +212,8 @@ in
           esbenp.prettier-vscode
           mquandalle.graphql
           continue.continue
+          ms-python.python
+          ms-python.black-formatter
         ];
       };
     };
