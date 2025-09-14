@@ -21,23 +21,35 @@ in
 
       services.mako = {
         enable = true;
-        anchor = "top-right";
-        backgroundColor = "#${colors.base10}d0";
-        borderColor = "#${colors.base08}";
-        textColor = "#${colors.base07}";
-        borderSize = 2;
-        borderRadius = 10;
-        font = "SFNS Display 12";
-        icons = true;
-        layer = "overlay";
-        margin = "10";
-        padding = "15";
-        maxIconSize = 48;
-        maxVisible = 5;
-        sort = "-time";
-        defaultTimeout = 5000;
+        settings = {
+          anchor = "top-right";
+          background-color = "#${colors.base10}d0";
+          border-color = "#${colors.base0B}";
+          text-color = "#${colors.base07}";
+          border-size = 2;
+          width = 420;
+          height = 110;
+          padding = 10;
+          outer-margin = 20;
+          default-timeout = 5000;
+          max-icon-size = 32;
+          border-radius = 4;
+          font = "SFNS Display 12";
+          # margin = 10;
+
+          "mode=do-not-disturb" = {
+            invisible = true;
+          };
+
+          "mode=do-not-disturb app-name=notify-send" = {
+            invisible = false;
+          };
+
+          "urgency=critical" = {
+            default-timeout = 0;
+          };
+        };
       };
     };
-
   };
 }

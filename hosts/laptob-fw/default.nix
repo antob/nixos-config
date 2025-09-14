@@ -24,7 +24,7 @@ in
       desktop = enabled;
     };
 
-    desktop.gnome = enabled;
+    desktop.hyprland = enabled;
     virtualisation.virt-manager = enabled;
 
     tools = {
@@ -74,6 +74,8 @@ in
     amdgpu_top
     radeontop
     glxinfo
+    acpi
+    s-tui
     just
     nixos-anywhere
     sops

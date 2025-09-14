@@ -1,0 +1,19 @@
+{ pkgs }:
+''
+  # Only display the OSD on the currently focused monitor
+  $osdclient = ${pkgs.swayosd}/bin/swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"
+
+  # Laptop multimedia keys for volume and LCD brightness (with OSD)
+  bindeld = ,XF86AudioRaiseVolume, Volume up, exec, $osdclient --output-volume raise
+  bindeld = ,XF86AudioLowerVolume, Volume down, exec, $osdclient --output-volume lower
+  bindeld = ,XF86AudioMute, Mute, exec, $osdclient --output-volume mute-toggle
+  bindeld = ,XF86AudioMicMute, Mute microphone, exec, $osdclient --input-volume mute-toggle
+  bindeld = ,XF86MonBrightnessUp, Brightness up, exec, $osdclient --brightness raise
+  bindeld = ,XF86MonBrightnessDown, Brightness down, exec, $osdclient --brightness lower
+
+  # Precise 1% multimedia adjustments with Alt modifier
+  bindeld = ALT, XF86AudioRaiseVolume, Volume up precise, exec, $osdclient --output-volume +1
+  bindeld = ALT, XF86AudioLowerVolume, Volume down precise, exec, $osdclient --output-volume -1
+  bindeld = ALT, XF86MonBrightnessUp, Brightness up precise, exec, $osdclient --brightness +1
+  bindeld = ALT, XF86MonBrightnessDown, Brightness down precise, exec, $osdclient --brightness -1
+''

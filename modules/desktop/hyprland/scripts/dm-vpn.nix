@@ -3,7 +3,7 @@
 pkgs.writeShellScriptBin "dm-vpn" ''
   # Script name: dm-vpn
   # Description: Activate and decativate VPN connections.
-  # Dependencies: tofi, nmcli
+  # Dependencies: walker, nmcli
   # Contributors: Tobias Lindholm
 
   set -E
@@ -70,21 +70,21 @@ pkgs.writeShellScriptBin "dm-vpn" ''
 
   determine_menu_title(){
       if [[ -z $CONNECTION_LIST ]]; then
-          MENU_TITLE="No VPN connections configured"
+          MENU_TITLE="No VPN found"
           return 0
       fi
 
       if [[ $CONNECTION_STATE == true ]]; then
-          MENU_TITLE="VPN connections - Active"
+          MENU_TITLE="VPN - Active"
           return 0
       else
-          MENU_TITLE="VPN connections - Inactive"
+          MENU_TITLE="VPN - Inactive"
           return 0
       fi
   }
 
   generate_menu(){
-      PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | ${pkgs.tofi}/bin/tofi --prompt-text "$MENU_TITLE")
+      PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | walker --dmenu --theme dmenu_250 -p "$MENU_TITLE…")
       return 0
   }
 

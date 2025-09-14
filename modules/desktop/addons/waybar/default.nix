@@ -9,11 +9,13 @@ with lib;
 let
   cfg = config.antob.desktop.addons.waybar;
   colors = config.antob.color-scheme.colors;
-  external-ip = pkgs.callPackage ./scripts/external-ip.nix { };
+  external-ip = lib.getExe (pkgs.callPackage ./scripts/external-ip.nix { });
+  mic-cam-usage = lib.getExe (pkgs.callPackage ./scripts/mic-cam-usage.nix { });
 in
 {
   options.antob.desktop.addons.waybar = with types; {
-    enable = mkEnableOption "Whether or not to install and configure waybar.";
+    enable = mkEnableOption "Whether or not to install and configure Waybar.";
+    enableSystemd = mkBoolOpt true "Whether to enable Waybar systemd integration.";
   };
 
   config = mkIf cfg.enable {
@@ -22,90 +24,180 @@ in
     antob.home.extraOptions = {
       programs.waybar = {
         enable = true;
-        systemd.enable = true;
-        package = pkgs.waybar.overrideAttrs (oldAttrs: {
-          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-        });
+        systemd.enable = cfg.enableSystemd;
         settings = {
           mainBar = {
             layer = "top";
             position = "top";
-            height = 32;
+            spacing = 0;
+            height = 26;
 
             modules-left = [
               "hyprland/workspaces"
-              "custom/monocle"
-              "hyprland/window"
             ];
 
             modules-right = [
-              "cpu"
-              "memory"
-              "disk"
+              "group/tray-expander"
+              "bluetooth"
               "custom/external-ip"
-              "network#wlan0"
-              "custom/vpn"
+              "network"
+              "pulseaudio"
+              "memory"
+              "cpu"
               "battery"
-              "idle_inhibitor"
-              "custom/audio-idle-inhibitor"
+              "custom/vpn"
+              "custom/idle"
+              "custom/webcam"
               "clock"
-              "tray"
             ];
 
             "hyprland/workspaces" = {
-              sort-by = "number";
+              on-click = "activate";
               format = "{icon}";
               format-icons = {
-                default = "<span size='175%'></span>";
-                active = "<span size='175%'></span>";
-                urgent = "<span size='175%'></span>";
+                default = "";
+                "1" = "1";
+                "2" = "2";
+                "3" = "3";
+                "4" = "4";
+                "5" = "5";
+                "6" = "6";
+                "7" = "7";
+                "8" = "8";
+                "9" = "9";
+                active = "󱓻";
               };
               persistent-workspaces = {
-                "*" = 8;
+                "1" = [ ];
+                "2" = [ ];
+                "3" = [ ];
+                "4" = [ ];
+                "5" = [ ];
+                "6" = [ ];
+                "7" = [ ];
+                "8" = [ ];
               };
-            };
-
-            "custom/monocle" = {
-              format = "M";
-            };
-
-            "hyprland/window" = {
-              max-length = 70;
-              separate-outputs = false;
             };
 
             cpu = {
               interval = 5;
-              format = "   CPU {usage}%";
-              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm btm";
+              format = " {usage:2}%";
+              on-click = "alacritty --class=TUI.float.lg -e ${pkgs.btop}/bin/btop";
             };
 
             memory = {
               interval = 5;
-              format = "   RAM {}%";
-              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm btm";
+              format = "  {percentage}%";
+              on-click = "alacritty --class=TUI.float.lg -e ${pkgs.btop}/bin/btop";
             };
 
-            disk = {
-              format = "  {free}";
-              path = "/";
-              on-click = "${pkgs.kitty}/bin/kitty --start-as=fullscreen --title btm btm";
+            clock = {
+              format = "   {:%a %d %b %H:%M}";
+              format-alt = "   {:%a %d %b %H:%M v%W}";
+              tooltip = false;
             };
 
-            "custom/external-ip" = {
-              interval = 10;
-              exec = "${external-ip}/bin/external-ip";
-              format = "{}";
-              return-type = "json";
-            };
-
-            "network#wlan0" = {
-              interface = "wlan0";
-              interval = 5;
-              tooltip-format = "Connected to {essid} {signalStrength}% ({ipaddr})";
-              tooltip-format-disconnected = "Not connected.";
-              format-wifi = "󰖩   {essid} {signalStrength}%";
+            network = {
+              format-icons = [
+                "󰤯"
+                "󰤟"
+                "󰤢"
+                "󰤥"
+                "󰤨"
+              ];
+              format = "{icon}";
+              format-wifi = "{icon}";
+              format-ethernet = "󰀂";
               format-disconnected = "󰖪";
+              tooltip-format-wifi = "{essid} {signalStrength}% ({frequency} GHz)\n{ipaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
+              tooltip-format-ethernet = "{ipaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
+              tooltip-format-disconnected = "Disconnected";
+              interval = 5;
+              spacing = 1;
+              on-click = "alacritty --class=TUI.float -e impala";
+            };
+
+            battery = {
+              format = "{icon}  {capacity}%";
+              #format-discharging = "{icon}";
+              #format-charging = "{icon}";
+              format-plugged = " {capacity}%";
+              format-icons = {
+                charging = [
+                  "󰢜"
+                  "󰂆"
+                  "󰂇"
+                  "󰂈"
+                  "󰢝"
+                  "󰂉"
+                  "󰢞"
+                  "󰂊"
+                  "󰂋"
+                  "󰂅"
+                ];
+                default = [
+                  "󰁺"
+                  "󰁻"
+                  "󰁼"
+                  "󰁽"
+                  "󰁾"
+                  "󰁿"
+                  "󰂀"
+                  "󰂁"
+                  "󰂂"
+                  "󰁹"
+                ];
+              };
+              format-full = "󰂅";
+              tooltip-format-discharging = "{power:>1.0f}W↓ {capacity}%";
+              tooltip-format-charging = "{power:>1.0f}W↑ {capacity}%";
+              interval = 5;
+              # on-click = "omarchy-menu power";
+              states = {
+                warning = 20;
+                critical = 10;
+              };
+            };
+
+            bluetooth = {
+              format = "";
+              format-disabled = "󰂲";
+              format-connected = "";
+              tooltip-format = "Devices connected: {num_connections}";
+              on-click = "alacritty --class=TUI.float -e bluetui";
+            };
+
+            pulseaudio = {
+              format = "{icon}";
+              on-click = "alacritty --class=Wiremix -e wiremix";
+              on-click-right = "${pkgs.pamixer}/bin/pamixer -t";
+              tooltip-format = "Playing at {volume}%";
+              scroll-step = 5;
+              format-muted = "󰝟";
+              format-icons = {
+                default = [
+                  ""
+                  ""
+                  ""
+                ];
+              };
+            };
+
+            "group/tray-expander" = {
+              orientation = "inherit";
+              drawer = {
+                transition-duration = 600;
+                children-class = "tray-group-item";
+              };
+              modules = [
+                "custom/expand-icon"
+                "tray"
+              ];
+            };
+
+            "custom/expand-icon" = {
+              format = " ";
+              tooltip = false;
             };
 
             "custom/vpn" = {
@@ -116,214 +208,104 @@ in
               interval = 5;
             };
 
-            battery = {
-              interval = 5;
-              states = {
-                warning = 30;
-                critical = 15;
-              };
-              format = "{icon}    {capacity}%";
-              format-discharging = "{icon}    {capacity}% {power:.1f}W";
-              format-charging = "󰂄 {capacity}%";
-              format-plugged = "󱐋 {capacity}%";
-              format-icons = [
-                " "
-                " "
-                " "
-                " "
-                " "
-                " "
-                " "
-                " "
-                " "
-                " "
-              ];
-              on-click = "";
-            };
-
-            idle_inhibitor = {
-              format = "{icon}";
-              tooltip-format-activated = "Idle inhibitor activated.";
-              tooltip-format-deactivated = "Idle inhibitor deactivated.";
-              format-icons = {
-                activated = " ";
-                deactivated = "";
-              };
-            };
-
-            "custom/audio-idle-inhibitor" = {
-              format = "{icon}";
-              exec = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit --dry-print-both-waybar";
-              tooltip = false;
+            "custom/idle" = {
+              format = "   ";
+              exec = "echo '{\"tooltip\": \"Not locking computer when idle\"}'";
+              exec-if = "test `systemctl --user is-active hypridle.service` = inactive";
               return-type = "json";
-              format-icons = {
-                output = " ";
-                input = "";
-                output-input = " ";
-                none = "";
-              };
+              interval = 5;
             };
 
-            clock = {
-              format = "{:%Y-%m-%d %H:%M W%W}";
-              tooltip = false;
-              # tooltip-format = "   {:%H:%M      %A %e %B v.%W}";
+            "custom/external-ip" = {
+              interval = 10;
+              exec = "${external-ip}";
+              format = "{}";
+              return-type = "json";
+              on-click = "ip=`curl -s --connect-timeout 1 http://ifconfig.me`; wl-copy $ip; notify-send \"󰆏  External IP copied ($ip)\"";
+            };
+
+            "custom/webcam" = {
+              exec = "${mic-cam-usage}";
+              interval = 5;
+              format = "{0}{1}";
+              escape = true;
             };
 
             tray = {
-              icon-size = 20;
-              spacing = 8;
+              icon-size = 12;
+              spacing = 12;
             };
           };
         };
 
         style = ''
-          /* -----------------------------------------------------
-          * General 
-          * ----------------------------------------------------- */
           * {
-            font-size: 14px;
-            font-weight: 600;
-            font-family: SFNS Display;
-          }
-
-          window#waybar {
             background-color: #${colors.base10};
             color: #${colors.base07};
-            opacity: 0.9;
-            border-radius: 0px;
+
+            border: none;
+            border-radius: 0;
+            min-height: 0;
+            font-family: SFNS Display;
+            font-size: 14px;
+            font-weight: 500;
           }
 
-          /* -----------------------------------------------------
-          * Workspaces 
-          * ----------------------------------------------------- */
-          #workspaces {
-            background-color: inherit;
-            margin-top: -50px;
-            margin-bottom: -50px
+          .modules-left {
+            margin-left: 8px;
           }
 
-          #workspaces button:hover {
-            background: inherit;
+          .modules-right {
+            margin-right: 8px;
           }
 
           #workspaces button {
-            color: #${colors.base0E};
-            padding: 4px 6px;
+            all: initial;
+            padding: 0 6px;
+            margin: 0 1.5px;
+            min-width: 9px;
           }
 
           #workspaces button.empty {
-            color: #${colors.base08};
+            opacity: 0.5;
           }
 
-          #workspaces button.visible {
-            color: #${colors.base0A};
+          #tray,
+          #memory,
+          #cpu,
+          #battery,
+          #network,
+          #bluetooth,
+          #clock,
+          #pulseaudio {
+            min-width: 12px;
+            margin: 0 7.5px;
           }
 
-          #workspaces button.active {
-            color: #${colors.base0A};
+          #clock {
+            font-weight: 600;
           }
 
-          #workspaces button.urgent {
-            color: #${colors.base0B};
+          #custom-expand-icon {
+            margin-right: 7px;
           }
 
-          /* -----------------------------------------------------
-          * Tooltips
-          * ----------------------------------------------------- */
-          tooltip {
-            background: #${colors.base10};
-            border: 2px solid #${colors.base0E};
-            color: #${colors.base07};
-            border-radius: 10px;
-          }
-
-          tooltip label {
-            color: #${colors.base07};
-          }
-
-          /* -----------------------------------------------------
-          * Window
-          * ----------------------------------------------------- */
-          #window {
-            color: #${colors.base07};
-            padding: 4px 10px;
-            font-weight: normal;
-          }
-
-          #custom-monocle {
-            opacity: 0;
-          }
-          window#waybar.fullscreen #custom-monocle {
-            opacity: 1;
+          #custom-vpn,
+          #custom-idle,
+          #custom-webcam {
             color: #${colors.base09};
           }
 
-          #cpu {
-            color: #${colors.base0B};
-            padding: 4px 10px;
-          }
-
-          #memory {
-            color: #${colors.base0E};
-            padding: 4px 10px;
-          }
-
-          #disk {
-            color: #${colors.base0C};
-            padding: 4px 10px;
-          }
-
-          #custom-external-ip {
-            color: #${colors.base0A};
-            padding: 4px 0px 4px 10px;
-          }
           #custom-external-ip.disconnected {
             color: #${colors.base09};
           }
 
-          #network {
-            color: #${colors.base0A};
-            padding: 4px 10px 4px 0px;
-          }
-          #network.disabled,
-          #network.disconnected {
-            color: #${colors.base09};
+          tooltip {
+            padding: 2px;
           }
 
-          #custom-vpn {
-            color: #${colors.base0F};
-            background-color: #${colors.base0A};
-          }
-
-          #battery {
-            color: #${colors.base0A};
-            padding: 4px 10px;
-          }
-          #battery.warning {
-            color: #${colors.base0B};
-          }
-          #battery.critical {
-            color: #${colors.base09};
-          }
-
-          #idle_inhibitor {
-            color: #${colors.base0B};
-            padding: 4px 0px 4px 10px;
-          }
-          #custom-audio-idle-inhibitor {
-            color: #${colors.base0B};
-            padding: 4px 0px 4px 0px;
-          }
-
-          #clock {
-            color: #${colors.base07};
-            padding: 4px 10px 4px 20px;
-          }
-
-          #tray {
-            color: #${colors.base07};
-            padding: 2px 10px;
+          .hidden {
+            opacity: 0;
           }
         '';
       };

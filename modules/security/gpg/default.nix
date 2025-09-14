@@ -17,7 +17,7 @@ let
       }
     else if config.antob.desktop.hyprland.enable then
       {
-        path = "${pkgs.pinentry-tofi}/bin/pinentry-tofi";
+        path = "${pkgs.pinentry-walker}/bin/pinentry-walker";
         name = null;
       }
     else

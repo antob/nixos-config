@@ -56,7 +56,7 @@ in
               };
             };
 
-            root = {
+            root = lib.mkIf (!impermanence) {
               priority = 3;
               size = "500G";
               label = "root";
@@ -70,7 +70,7 @@ in
                 content = {
                   type = "filesystem";
                   format = "ext4";
-                  mountpoint = if impermanence then "/mnt/old_root" else "/";
+                  mountpoint = "/";
                 };
               };
             };
