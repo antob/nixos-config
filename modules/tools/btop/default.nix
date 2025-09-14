@@ -20,11 +20,10 @@ in
       settings = {
         color_theme = "${pkgs.btop}/share/btop/themes/tokyo-storm.theme";
 
-        #* Define presets for the layout of the boxes. Preset 0 is always all boxes shown with default settings. Max 9 presets.
-        #* Format: "box_name:P:G,box_name:P:G" P=(0 or 1) for alternate positions, G=graph symbol to use for box.
-        #* Use whitespace " " as separator between different presets.
-        #* Example: "cpu:0:default,mem:0:tty,proc:1:default cpu:0:braille,proc:0:tty"
-        presets = "cpu:0:default,proc:1:default";
+        #* Processes sorting, "pid" "program" "arguments" "threads" "user" "memory" "cpu lazy" "cpu direct",
+        #* "cpu lazy" sorts top process over time (easier to follow), "cpu direct" updates top process directly.
+        proc_sorting = "cpu direct";
+        proc_gradient = false;
       };
     };
   };
