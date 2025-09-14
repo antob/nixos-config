@@ -94,10 +94,6 @@ in
           # Open PDFs with the Document Viewer
           "application/pdf" = [ "org.gnome.Evince.desktop" ];
 
-          # Open HTTP/S with Firefox
-          "handler/http" = [ "firefox.desktop" ];
-          "handler/https" = [ "firefox.desktop" ];
-
           # Open video files with mpv
           "video/mp4" = [ "mpv.desktop" ];
           "video/x-msvideo" = [ "mpv.desktop" ];

@@ -49,11 +49,7 @@ in
     antob = {
       home.extraOptions.programs.ssh = {
         enable = true;
-        forwardAgent = true;
-        serverAliveInterval = 5;
-        serverAliveCountMax = 1;
-        controlMaster = "auto";
-        controlPersist = "180";
+        enableDefaultConfig = false;
         extraOptionOverrides = {
           Ciphers = "aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr";
         };
@@ -63,6 +59,18 @@ in
           User ${config.antob.user.name}
         '';
         matchBlocks = {
+          "*" = {
+            forwardAgent = true;
+            addKeysToAgent = "no";
+            compression = false;
+            serverAliveInterval = 5;
+            serverAliveCountMax = 1;
+            userKnownHostsFile = "~/.ssh/known_hosts";
+            hashKnownHosts = false;
+            controlMaster = "auto";
+            controlPath = "~/.ssh/master-%r@%n:%p";
+            controlPersist = "180";
+          };
           hyllan.hostname = "hyllan.lan";
           pikvm = {
             hostname = "pikvm.lan";

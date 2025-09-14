@@ -9,19 +9,14 @@
 with lib;
 let
   cfg = config.antob.apps.firefox;
-
   betterfoxSettings = {
-    enable = true;
     fastfox.enable = true;
     securefox = {
       enable = true;
       passwords.enable = true;
     };
     peskyfox.enable = true;
-    smoothfox = {
-      enable = true;
-      smooth-scrolling.enable = true;
-    };
+    smoothfox.smooth-scrolling.enable = true;
   };
 
   # Betterfox overrides
@@ -154,12 +149,11 @@ in
     antob = {
       home.extraOptions = {
         imports = [
-          inputs.betterfox.homeManagerModules.betterfox
+          inputs.betterfox.homeModules.betterfox
         ];
 
         programs.firefox = {
           enable = true;
-          betterfox.enable = true;
           profiles = {
             ${config.antob.user.name} = {
               id = 0;
@@ -171,7 +165,6 @@ in
               };
               settings = commonSettings;
               extensions.packages = commonExtensions;
-              betterfox = betterfoxSettings;
             };
 
             "HL" = {
@@ -184,7 +177,6 @@ in
               };
               settings = commonSettings;
               extensions.packages = commonExtensions;
-              betterfox = betterfoxSettings;
             };
 
             "OBIT" = {
@@ -197,7 +189,23 @@ in
               };
               settings = commonSettings;
               extensions.packages = commonExtensions;
-              betterfox = betterfoxSettings;
+            };
+          };
+
+          betterfox = {
+            enable = true;
+            profiles = {
+              ${config.antob.user.name} = {
+                settings = betterfoxSettings;
+              };
+
+              "HL" = {
+                settings = betterfoxSettings;
+              };
+
+              "OBIT" = {
+                settings = betterfoxSettings;
+              };
             };
           };
         };

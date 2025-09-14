@@ -91,9 +91,9 @@ in
   services = {
     fwupd.enable = true;
 
-    logind = {
-      lidSwitch = "suspend-then-hibernate";
-      lidSwitchExternalPower = "suspend";
+    logind.settings.Login = {
+      HandleLidSwitch = "suspend-then-hibernate";
+      HandleLidSwitchExternalPower = "suspend";
     };
 
     chrony.enable = true;
