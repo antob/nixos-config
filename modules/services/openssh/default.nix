@@ -41,6 +41,11 @@ in
       cfg.port
     ];
 
+    # Solve common flakiness with SSH
+    boot.kernel.sysctl = {
+      "net.ipv4.tcp_mtu_probing" = 1;
+    };
+
     antob = {
       home.extraOptions.programs.ssh = {
         enable = true;
