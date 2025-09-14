@@ -158,6 +158,7 @@ in
               name = "nix";
               auto-format = true;
               formatter.command = "nixfmt";
+              language-servers = [ "nil" ];
             }
           ];
         };

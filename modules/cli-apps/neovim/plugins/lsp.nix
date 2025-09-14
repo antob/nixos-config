@@ -122,7 +122,15 @@
       servers = {
         jsonls.enable = true;
         marksman.enable = true;
-        nixd.enable = true;
+        nil_ls = {
+          enable = true;
+          extraOptions = {
+            offset_encoding = "utf-8";
+            formatting = {
+              command = [ "nixfmt" ];
+            };
+          };
+        };
         yamlls.enable = true;
         ruby_lsp = {
           enable = true;
@@ -142,7 +150,6 @@
         };
       };
     };
-
     rustaceanvim.enable = true;
   };
 }

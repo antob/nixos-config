@@ -4,7 +4,7 @@
     nodePackages.bash-language-server
     emmet-language-server
     vscode-langservers-extracted
-    nixd
+    nil
     shfmt
     stylua
   ];

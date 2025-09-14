@@ -8,6 +8,7 @@
         json = [ "jq" ];
         eruby = [ "htmlbeautifier" ];
         rust = [ "rustfmt" ];
+        nix = [ "nixfmt" ];
         javascript = {
           __unkeyed-1 = "prettierd";
           __unkeyed-2 = "prettier";

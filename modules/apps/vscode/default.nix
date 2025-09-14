@@ -167,8 +167,8 @@ in
           nix = {
             formatterPath = "nixfmt";
             enableLanguageServer = true;
-            serverPath = "nixd";
-            serverSettings.nixd = {
+            serverPath = "nil";
+            serverSettings.nil = {
               formatting = {
                 command = [ "nixfmt" ];
               };
@@ -220,7 +220,7 @@ in
 
     environment.systemPackages = with pkgs; [
       nixfmt-rfc-style
-      nixd
+      nil
     ];
   };
 }
