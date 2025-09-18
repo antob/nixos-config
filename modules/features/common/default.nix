@@ -127,6 +127,7 @@ in
       speedtest-rs
       file
       nvd
+      hostctl
     ];
 
     services = {
