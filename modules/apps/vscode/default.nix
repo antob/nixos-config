@@ -128,6 +128,10 @@ in
             editor.defaultFormatter = "testdouble.vscode-standard-ruby";
           };
 
+          "[nix]" = {
+            editor.defaultFormatter = "jnoortheen.nix-ide";
+          };
+
           "[python]" = {
             editor.defaultFormatter = "ms-python.black-formatter";
           };
