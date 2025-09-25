@@ -45,6 +45,7 @@ in
       bluetooth = enabled;
       zsa-voyager = enabled;
       yubikey = enabled;
+      ledger = enabled;
     };
 
     system.console.setFont = mkForce false;
