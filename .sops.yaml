@@ -13,7 +13,7 @@ keys:
   - &admin A5D2C0275BBB60F60770159EC457E72EEC222C29
   - &laptob_fw c77129031f8a9816c85e351721d093c8d0b23661
   - &hyllan 26ed358df14249befc3b72618ff9d36f72f3e498
-  - &wiggum ab47d1b550636f9d997b7e05fa9c5f8527ec9a88
+  - &wiggum 63195e56e676314ea266f7c2d4ea7781a7bada58
 
 creation_rules:
   - path_regex: hosts/hyllan/secrets.yaml$

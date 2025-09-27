@@ -29,6 +29,10 @@ with lib;
     };
 
     system.console.setFont = mkForce false;
+    hardware.networking.enable = mkForce false;
+
+    # Disable SSH connectivity. Connect through Tailscale only.
+    services.openssh.enable = mkForce false;
   };
 
   nixpkgs.config = {
@@ -44,6 +48,7 @@ with lib;
 
   # Networking and firewall
   networking = {
+    hostName = "wiggum";
     firewall = {
       enable = true;
       allowPing = true;
@@ -52,24 +57,27 @@ with lib;
     useDHCP = lib.mkForce false;
   };
 
-  # Bootloader.
-  boot.loader = {
-    systemd-boot = {
-      enable = true;
-      consoleMode = "max";
-      configurationLimit = 5;
-      editor = false;
-    };
-
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/efi";
+  systemd.network = {
+    enable = true;
+    networks."30-wan" = {
+      matchConfig.Name = "enp1s0";
+      networkConfig.DHCP = "ipv4";
+      address = [
+        "2a01:4f9:c013:a14a::/64"
+      ];
+      routes = [
+        { Gateway = "fe80::1"; }
+      ];
     };
   };
+
+  # Bootloader.
+  boot.loader.grub.enable = true;
 
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
+    gnupg.sshKeyPaths = [ "/etc/ssh/ssh_host_rsa_key" ];
   };
 
   system.stateVersion = "22.11";

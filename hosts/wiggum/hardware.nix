@@ -20,8 +20,10 @@
         "ahci"
         "xhci_pci"
         "virtio_pci"
+        "virtio_scsi"
         "sd_mod"
-        "virtio_blk"
+        "sr_mod"
+        "ext4"
       ];
       kernelModules = [ ];
     };
@@ -31,10 +33,4 @@
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
-  # Enable DHCP on the wireless link
-  networking = {
-    hostName = "wiggum";
-    useDHCP = lib.mkDefault true;
-  };
 }

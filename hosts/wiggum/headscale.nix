@@ -31,6 +31,15 @@ let
       }
     ];
 
+    ssh = [
+      {
+        action = "accept";
+        src = [ "group:admins" ];
+        dst = [ "*" ];
+        users = [ config.antob.user.name ];
+      }
+    ];
+
     # Auto-approvers section for routes
     autoApprovers = {
       routes = {
@@ -87,9 +96,12 @@ in
         "--login-server=${config.services.headscale.settings.server_url}"
         "--advertise-exit-node"
         "--accept-routes"
+        "--ssh"
       ];
     };
 
+    # Configure UDP GRO forwarding
+    # See https://tailscale.com/s/ethtool-config-udp-gro
     networkd-dispatcher = {
       enable = true;
       rules."50-tailscale" = {

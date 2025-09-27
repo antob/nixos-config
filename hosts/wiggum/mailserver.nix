@@ -17,6 +17,8 @@ in
     fqdn = fqdn;
     domains = [ "antob.com" ];
 
+    useUTF8FolderNames = true;
+
     enableImap = false;
     enableImapSsl = true;
     enableSubmission = false;

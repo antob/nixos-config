@@ -8,8 +8,12 @@
         content = {
           type = "gpt";
           partitions = {
-            ESP = {
+            boot = {
+              size = "1M";
+              type = "EF02";
               priority = 1;
+            };
+            ESP = {
               size = "1G";
               type = "EF00";
               label = "EFI";
@@ -20,10 +24,9 @@
                   "defaults"
                   "umask=0077"
                 ];
-                mountpoint = "/efi";
+                mountpoint = "/boot";
               };
             };
-
             root = {
               size = "100%";
               label = "root";
@@ -31,6 +34,12 @@
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/";
+              };
+            };
+            swap = {
+              size = "2G";
+              content = {
+                type = "swap";
               };
             };
           };
