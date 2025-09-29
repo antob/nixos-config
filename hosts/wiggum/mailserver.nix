@@ -15,28 +15,44 @@ in
     enable = true;
     stateVersion = 3;
     fqdn = fqdn;
-    domains = [ "antob.com" ];
+    domains = [
+      "antob.se"
+      "antob.com"
+    ];
 
     useUTF8FolderNames = true;
 
     enableImap = false;
     enableImapSsl = true;
     enableSubmission = false;
-    enableSubmissionSsl = false;
+    enableSubmissionSsl = true;
 
     indexDir = "/var/lib/dovecot/indices";
 
     # A list of all login accounts. To create the password hashes, use
     # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
     loginAccounts = {
-      "tob@antob.com" = {
+      "tob@antob.se" = {
         hashedPasswordFile = secrets.tob_hashed_password.path;
         aliases = [
+          "tobias@antob.se"
+          "tobias.lindholm@antob.se"
+          "info@antob.se"
+          "abuse@antob.se"
+          "postmaster@antob.se"
+          "admin@antob.se"
+          "tob@antob.com"
+          "tobias@antob.com"
+          "tobias.lindholm@antob.com"
           "info@antob.com"
           "abuse@antob.com"
           "postmaster@antob.com"
+          "admin@antob.com"
         ];
-        catchAll = [ "antob.com" ];
+        catchAll = [
+          "antob.se"
+          "antob.com"
+        ];
       };
     };
 
@@ -57,6 +73,20 @@ in
 
   # Mailserver has its on DNS on port 53
   services.dnsmasq.enable = lib.mkForce false;
+
+  # Setup SMTP-relay for Postfix
+  services.postfix = {
+    enable = true;
+    config = {
+      relayhost = [ "[mail.smtp2go.com]:587" ];
+      smtp_sasl_auth_enable = "yes";
+      smtp_sasl_password_maps = "texthash:${secrets.postfix_sasl_passwd.path}";
+      smtp_sasl_security_options = "noanonymous";
+      smtp_tls_security_level = lib.mkForce "may";
+      smtp_destination_concurrency_limit = "20";
+      header_size_limit = "4096000";
+    };
+  };
 
   # Create a systemd service to import certificates from Caddy to mailserver
   systemd.services.mailserver-import-certs = {
@@ -82,7 +112,12 @@ in
   };
 
   # Secret values
-  sops.secrets.tob_hashed_password = { };
+  sops.secrets = {
+    tob_hashed_password = { };
+    postfix_sasl_passwd = {
+      owner = config.services.postfix.user;
+    };
+  };
 
   environment.systemPackages = [
   ];
