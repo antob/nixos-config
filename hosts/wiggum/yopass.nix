@@ -21,6 +21,7 @@ in
     memcached.enable = true;
     caddy.virtualHosts."${siteDomain}".extraConfig = ''
       reverse_proxy 127.0.0.1:${toString port}
+      import logging
     '';
   };
 }
