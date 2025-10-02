@@ -133,10 +133,10 @@ let
 
   commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
     ublock-origin
-    proton-pass
     duckduckgo-privacy-essentials
     multi-account-containers
     linkhints
+    bitwarden
   ];
 
 in
