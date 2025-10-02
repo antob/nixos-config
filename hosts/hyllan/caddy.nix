@@ -73,7 +73,7 @@
         dataDir = dataDir;
         package = pkgs.caddy.withPlugins {
           plugins = [ "github.com/caddy-dns/digitalocean@v0.0.0-20250606074528-04bde2867106" ];
-          hash = "sha256-s+Zy9LDW9b5CLIp3aazu0V4COrug4JgawTcZ9cFWzgk=";
+          hash = "sha256-dw99Ob9LwfQHFIEYQWbg9ozu9jbg8uVb11lkD8Z61fA=";
         };
         environmentFile = secrets.caddy_env_variables.path;
         extraConfig = ''
@@ -91,33 +91,32 @@
             logFormat = ''
               output file ${cfg.logDir}/access-antob.log
             '';
-            extraConfig =
-              ''
-                tls {
-                  dns digitalocean {$DO_AUTH_TOKEN}
-                }
+            extraConfig = ''
+              tls {
+                dns digitalocean {$DO_AUTH_TOKEN}
+              }
 
-                import deny_external_access
+              import deny_external_access
 
-              ''
-              + builtins.concatStringsSep "\n" (
-                mapAttrsToList (name: attrs: ''
-                  @${name} host ${name}.antob.net
-                  handle @${name} {
-                    ${attrs.extraHandleConfig}
-                    reverse_proxy {
-                      to ${attrs.hostName}:${toString attrs.port}
-                      ${attrs.extraConfig}
-                    }
+            ''
+            + builtins.concatStringsSep "\n" (
+              mapAttrsToList (name: attrs: ''
+                @${name} host ${name}.antob.net
+                handle @${name} {
+                  ${attrs.extraHandleConfig}
+                  reverse_proxy {
+                    to ${attrs.hostName}:${toString attrs.port}
+                    ${attrs.extraConfig}
                   }
-
-                '') cfg.antobProxies
-              )
-              + ''
-                handle {
-                  abort
                 }
-              '';
+
+              '') cfg.antobProxies
+            )
+            + ''
+              handle {
+                abort
+              }
+            '';
           };
         };
       };

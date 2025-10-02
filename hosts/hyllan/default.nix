@@ -31,8 +31,7 @@ in
     ./nfsd.nix
     ./samba.nix
     ./miniflux.nix
-    ./ollama.nix
-    ./open-webui.nix
+    ./vaultwarden.nix
   ];
 
   antob = {
@@ -65,9 +64,6 @@ in
 
   nixpkgs.config = {
     allowUnfree = true;
-    nvidia.acceptLicense = true;
-    cudaSupport = true;
-    cudnnSupport = true;
   };
 
   services = {
