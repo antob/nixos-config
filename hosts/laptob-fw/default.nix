@@ -24,6 +24,8 @@ in
       desktop = enabled;
     };
 
+    apps.thunderbird = enabled;
+
     desktop.hyprland = enabled;
     virtualisation.virt-manager = enabled;
 
@@ -84,9 +86,7 @@ in
     nfs-utils # Needed for mounting NFS shares
     rustdesk-flutter
     iio-sensor-proxy # To enable automatic brightness in Gnome
-    brave
     calibre
-    tor-browser-bundle-bin
   ];
 
   services = {

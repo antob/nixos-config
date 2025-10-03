@@ -44,6 +44,7 @@ in
     group = mkOpt str "users" "The group to use for the user account.";
     fullName = mkOpt str "Tobias Lindholm" "The full name of the user.";
     email = mkOpt str "tobias.lindholm@antob.se" "The email of the user.";
+    shortEmail = mkOpt str "tob@antob.se" "The short email of the user.";
     icon = mkOpt (nullOr package) defaultIcon "The profile picture to use for the user.";
     hashedPassword =
       mkOpt str "$y$j9T$wjUKjUTgvrxCg7HVJIrl2/$A0nvjyLzv869pQYmjyuIgXafrZDk2Lzg9B/nA/W4609"
