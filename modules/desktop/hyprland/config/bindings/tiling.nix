@@ -14,10 +14,10 @@
   bindd = SUPER, M, Maximize window, fullscreen, 1
 
   # Move focus with SUPER + arrow keys
-  #bindd = SUPER, left, Move focus left, cyclenext, prev
-  #bindd = SUPER, right, Move focus right, cyclenext
-  bindd = SUPER, left, Move focus left, movefocus, l
-  bindd = SUPER, right, Move focus right, movefocus, r
+  # bindd = SUPER, left, Move focus left, cyclenext, prev
+  # bindd = SUPER, right, Move focus right, cyclenext
+  # bindd = SUPER, left, Move focus left, movefocus, l
+  # bindd = SUPER, right, Move focus right, movefocus, r
   bindd = SUPER, up, Move focus up, movefocus, u
   bindd = SUPER, down, Move focus down, movefocus, d
 

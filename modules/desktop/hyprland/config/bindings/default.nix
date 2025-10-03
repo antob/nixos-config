@@ -20,7 +20,8 @@ in
   bindd = SUPER, W, Web browser, exec, $browser
   bindd = SUPER SHIFT, W, Select Firefox profile, exec, ${dm-firefox-profile}
   bindd = SUPER, N, Neovim, exec, $terminal -e nvim
-  bindd = SUPER, T, Activity, exec, $terminal --class=TUI.float.lg -e ${lib.getExe pkgs.btop}
+  bindd = SUPER, T, Activity, exec, $terminal --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}
+  bindd = SUPER, B, Activity, exec, $terminal --class=TUI.float -e bluetui
   bindd = SUPER, O, Obsidian, exec, uwsm app -- obsidian -disable-gpu
   bindd = SUPER SHIFT, P, Displays, exec, uwsm app -- ${lib.getExe pkgs.nwg-displays}
 ''

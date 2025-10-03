@@ -1,6 +1,8 @@
 { }:
 ''
   # Move focus with SUPER + arrow keys
+  bindd = SUPER, left, Move focus left, layoutmsg, focus l
+  bindd = SUPER, right, Move focus right, layoutmsg, focus r
   bindd = SUPER SHIFT, left, Move window to left col, layoutmsg, movewindowto l
   bindd = SUPER SHIFT, right, Move window to right col, layoutmsg, movewindowto r
   bindd = SUPER SHIFT, up, Move window up col, layoutmsg, movewindowto u

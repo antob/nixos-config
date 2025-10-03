@@ -9,7 +9,7 @@
   monitor = eDP-1,preferred,auto,1.5
 
   # Home office extra screen
-  monitor = desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,auto-center-up,1.25
+  monitor = desc:Acer Technologies XB273U TJ5EE0018521,2560x1440@144,auto-center-up,1.0
 
   # Set by nwg-displays
   source = ~/.config/hypr/monitors.conf
