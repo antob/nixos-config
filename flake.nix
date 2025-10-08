@@ -70,6 +70,13 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+
+    # Niri
+    niri-unstable.url = "github:YaLTeR/niri";
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.niri-unstable.follows = "niri-unstable";
+    };
   };
 
   outputs =

@@ -13,7 +13,7 @@ in
   options.antob.desktop.addons.gtk = with types; {
     enable = mkEnableOption "Whether to customize GTK and apply themes.";
     theme = {
-      name = mkOpt str "Adwaita-dark" "The name of the GTK theme to apply.";
+      name = mkOpt str "Adwaita:dark" "The name of the GTK theme to apply.";
       pkg = mkOpt (nullOr package) null "The package to use for the theme.";
     };
     cursor = {

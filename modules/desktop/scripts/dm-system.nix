@@ -22,11 +22,8 @@ pkgs.writeShellScriptBin "dm-system" ''
     echo -e "$options" | walker --dmenu --theme dmenu_250 -p "$prompt…" "''${args[@]}"
   }
 
-  case $(menu "System" "  Lock\n󱄄  Screensaver\n󰤄  Suspend\n  Relaunch\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
-    *Lock*) cmd-lock-screen ;;
-    *Screensaver*) cmd-launch-screensaver ;;
+  case $(menu "System" "󰤄  Suspend\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
     *Suspend) systemctl suspend ;;
-    *Relaunch*) uwsm stop ;;
     *Reboot) systemctl reboot ;;
     *Reboot\ to\ FW*) systemctl reboot --firmware-setup ;;
     *Shutdown*) systemctl -- poweroff ;;

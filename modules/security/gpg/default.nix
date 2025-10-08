@@ -15,7 +15,7 @@ let
         path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
         name = "gnome3";
       }
-    else if config.antob.desktop.hyprland.enable then
+    else if (config.antob.desktop.hyprland.enable || config.antob.desktop.niri.enable) then
       {
         path = "${pkgs.pinentry-walker}/bin/pinentry-walker";
         name = null;

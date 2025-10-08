@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 pkgs.writeShellScriptBin "dm-firefox-profile" ''
   # Script name: dm-firefox-profile
@@ -17,5 +17,5 @@ pkgs.writeShellScriptBin "dm-firefox-profile" ''
     exit 0
   fi
 
-  uwsm app -- firefox -P $choice &
+  ${config.antob.desktop.addons.walker.launchPrefix}firefox -P $choice &
 ''

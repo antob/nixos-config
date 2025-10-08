@@ -9,18 +9,22 @@ with lib;
 let
   cfg = config.antob.desktop.addons.walker;
   colors = config.antob.color-scheme.colors;
-  wk-launch-webapp = lib.getExe (pkgs.callPackage ./scripts/wk-launch-webapp.nix { });
+  wk-launch-webapp = lib.getExe (
+    pkgs.callPackage ./scripts/wk-launch-webapp.nix { launchPrefix = cfg.launchPrefix; }
+  );
 in
 {
   options.antob.desktop.addons.walker = with types; {
     enable = mkEnableOption "Whether to enable Walker.";
+    runAsService = mkBoolOpt true "Run Walker as a systemd service.";
+    launchPrefix = mkOpt types.str "" "Prefix to use to launch apps.";
   };
 
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
       services.walker = {
         enable = true;
-        systemd.enable = true;
+        systemd.enable = cfg.runAsService;
         settings = {
           close_when_open = true;
           force_keyboard_focus = true;
@@ -42,7 +46,7 @@ in
             };
 
             applications = {
-              launch_prefix = "uwsm app -- ";
+              launch_prefix = cfg.launchPrefix;
               placeholder = " Search...";
               prioritize_new = false;
               context_aware = false;
@@ -118,9 +122,19 @@ in
 
               commands = [
                 {
-                  name = "SoundCloud";
-                  icon = ./icons/soundcloud.png;
-                  cmd = "${wk-launch-webapp} https://soundcloud.com/you/library";
+                  name = "Slack";
+                  icon = ./icons/slack.png;
+                  cmd = "${wk-launch-webapp} https://app.slack.com/client/T029VAUMS";
+                }
+                {
+                  name = "Teams";
+                  icon = ./icons/teams.png;
+                  cmd = "${wk-launch-webapp} https://teams.microsoft.com";
+                }
+                {
+                  name = "Google Meet";
+                  icon = ./icons/meet.png;
+                  cmd = "${wk-launch-webapp} https://meet.google.com";
                 }
               ];
             };

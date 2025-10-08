@@ -23,19 +23,19 @@ in
         enable = true;
         settings = {
           anchor = "top-right";
-          background-color = "#${colors.base10}d0";
-          border-color = "#${colors.base0B}";
-          text-color = "#${colors.base07}";
-          border-size = 2;
+          background-color = "#${colors.base10}ff";
+          border-color = "#${colors.base0C}ff";
+          text-color = "#${colors.base07}ff";
+          border-size = 3;
           width = 420;
           height = 110;
-          padding = 10;
-          outer-margin = 20;
+          padding = 16;
+          margin = 10;
+          outer-margin = 6;
           default-timeout = 5000;
           max-icon-size = 32;
           border-radius = 4;
           font = "SFNS Display 12";
-          # margin = 10;
 
           "mode=do-not-disturb" = {
             invisible = true;
