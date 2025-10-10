@@ -82,13 +82,13 @@ in
             cpu = {
               interval = 5;
               format = " {usage:2}%";
-              on-click = "alacritty --class=TUI.float.lg -e ${pkgs.btop}/bin/btop";
+              on-click = "alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
             };
 
             memory = {
               interval = 5;
               format = "  {percentage}%";
-              on-click = "alacritty --class=TUI.float.lg -e ${pkgs.btop}/bin/btop";
+              on-click = "alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
             };
 
             clock = {
@@ -114,7 +114,7 @@ in
               tooltip-format-disconnected = "Disconnected";
               interval = 5;
               spacing = 1;
-              on-click = "alacritty --class=TUI.float -e impala";
+              on-click = "alacritty --class=TUI.float.lg -e impala";
             };
 
             battery = {
@@ -308,6 +308,12 @@ in
             opacity: 0;
           }
         '';
+      };
+
+      # Working around the issue1 of waybar panels are duplicating after DPMS standby.
+      # See https://github.com/Alexays/Waybar/issues/3344
+      systemd.user.services.waybar = mkIf cfg.enableSystemd {
+        Service.ExecReload = mkForce "";
       };
     };
   };
