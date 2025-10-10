@@ -6,7 +6,7 @@ pkgs.writeShellScriptBin "mic-cam-usage" ''
   # Dependencies: fuser, pactl
   # Contributors: Tobias Lindholm
 
-  webcam_status=$(${pkgs.psmisc}/bin/fuser /dev/video[0-6])
+  webcam_status=$(${pkgs.psmisc}/bin/fuser /dev/video[0-6] 2>/dev/null)
 
   if [ -z "$webcam_status" ]; then
     webcam=""

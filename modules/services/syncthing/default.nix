@@ -17,9 +17,19 @@ in
     antob.home.extraOptions = {
       services.syncthing.enable = true;
     };
+
+    networking.firewall = {
+      allowedTCPPorts = [ 22000 ];
+      allowedUDPPorts = [
+        21027
+        22000
+      ];
+    };
+
     antob.persistence.home.directories = [
       ".config/syncthing"
       ".local/share/syncthing"
+      ".local/state/syncthing"
     ];
   };
 }

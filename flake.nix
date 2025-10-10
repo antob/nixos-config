@@ -119,6 +119,13 @@
           ];
         };
 
+        desktob = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          modules = [
+            ./hosts/desktob
+          ];
+        };
+
         hyllan = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
           modules = [
