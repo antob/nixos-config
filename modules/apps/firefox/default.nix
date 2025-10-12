@@ -81,7 +81,7 @@ let
     "browser.zoom.full" = false; # text-only zoom, not all elements on page
     "pdfjs.sidebarViewOnLoad" = 2; # force showing of Table of Contents in sidebar for PDFs (if available)
     "layout.word_select.eat_space_to_next_word" = false; # do not select the space next to a word when selecting a word
-    # "browser.tabs.loadInBackground" = false; # CTRL+SHIFT+CLICK for background tabs; Settings>General>Tabs>When you open a link, image or media in a new tab, switch to it immediately
+    "browser.tabs.loadInBackground" = false; # CTRL+SHIFT+CLICK for background tabs; Settings>General>Tabs>When you open a link, image or media in a new tab, switch to it immediately
     "browser.tabs.loadBookmarksInTabs" = true; # force bookmarks to open in a new tab, not the current tab
     "browser.tabs.insertAfterCurrent" = false; # if true, open new tab next to current tab, not at the end
     "ui.key.menuAccessKey" = 0; # remove underlined characters from various settings
