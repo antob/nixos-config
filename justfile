@@ -7,16 +7,16 @@ default:
 ###################################
 
 # Build flake
-build flake="laptob-fw": (_nixos-rebuild "build" flake)
+build flake="": (_nixos-rebuild "build" flake)
 
 # Switch flake
-switch flake="laptob-fw": (_nixos-rebuild "switch" flake)
+switch flake="": (_nixos-rebuild "switch" flake)
 
 # Boot flake
-boot flake="laptob-fw": (_nixos-rebuild "boot" flake)
+boot flake="": (_nixos-rebuild "boot" flake)
 
 # Test flake
-test flake="laptob-fw": (_nixos-rebuild "test" flake)
+test flake="": (_nixos-rebuild "test" flake)
 
 # Deploy flake to remote host
 deploy flake host mode="switch": (_nixos-rebuild mode flake host)
@@ -30,7 +30,7 @@ iso type="install":
   nix build .#nixosConfigurations.{{type}}-iso.config.system.build.isoImage
 
 # Install flake to remote host
-install host flake="laptob-fw" *ARGS:
+install host flake *ARGS:
   nixos-anywhere --flake .#{{flake}} {{host}} {{ARGS}}
 
 ###################################
@@ -96,5 +96,5 @@ repair-store *paths:
 ###################################
 
 # generic nixos-rebuild
-_nixos-rebuild mode flake host="":
-  nixos-rebuild {{mode}} --flake .#{{flake}} --sudo {{ if host == "" { "" } else { "--target-host " + host } }}
+_nixos-rebuild mode flake="" host="":
+  nixos-rebuild {{mode}} --flake .#{{ if flake == "" { `hostname` } else { flake } }} --sudo {{ if host == "" { "" } else { "--target-host " + host } }}

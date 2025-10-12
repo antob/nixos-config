@@ -1,27 +1,37 @@
 { lib, config, ... }:
+with lib;
 let
   impermanence = config.antob.persistence.enable;
+  phase1Systemd = config.boot.initrd.systemd.enable;
+  wipeScript = ''
+    mkdir /tmp -p
+    MNTPOINT=$(mktemp -d)
+    (
+      mount -t btrfs -o subvol=/ /dev/mapper/system "$MNTPOINT"
+      trap 'umount "$MNTPOINT"' EXIT
+
+      echo "Cleaning root subvolume"
+      btrfs subvolume list -o "$MNTPOINT/@root" | cut -f9 -d ' ' | while read -r subvolume; do
+        echo "Deleting $subvolume subvolume..."
+        btrfs subvolume delete "$MNTPOINT/$subvolume"
+      done && btrfs subvolume delete "$MNTPOINT/@root"
+
+      echo "Restoring blank subvolume"
+      btrfs subvolume snapshot "$MNTPOINT/@root-blank" "$MNTPOINT/@root"
+    )
+  '';
 in
 {
   disko.devices = {
-    nodev = lib.mkIf impermanence {
-      "/" = {
-        fsType = "tmpfs";
-        mountOptions = [
-          "defaults"
-          "size=16G"
-          "mode=755"
-        ];
-      };
-    };
     disk = {
       main = {
-        device = lib.mkDefault "/dev/nvme0n1";
+        device = mkDefault "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4d281d97";
         type = "disk";
         content = {
           type = "gpt";
           partitions = {
             ESP = {
+              priority = 1;
               size = "1G";
               type = "EF00";
               label = "EFI";
@@ -36,31 +46,58 @@ in
               };
             };
 
-            nix = {
+            cryptsystem = {
               size = "100%";
-              label = "nix";
               content = {
-                # LUKS passphrase will be prompted interactively only
                 type = "luks";
-                name = "cryptnix";
+                name = "system";
                 settings = {
                   allowDiscards = true;
                 };
                 content = {
-                  type = "filesystem";
-                  format = "ext4";
-                  mountpoint = "/nix";
+                  type = "btrfs";
+                  extraArgs = [
+                    "-f" # Override existing partition
+                    "-L system"
+                  ];
+                  # Snapshot of empty root. Used for impemnanence rollback on boot.
+                  postCreateHook = mkIf impermanence ''
+                    MNTPOINT=$(mktemp -d)
+                    mount "/dev/mapper/system" "$MNTPOINT" -o subvol=/
+                    trap 'umount $MNTPOINT; rm -rf $MNTPOINT' EXIT
+                    btrfs subvolume snapshot -r $MNTPOINT/@root $MNTPOINT/@root-blank
+                  '';
+                  # Subvolumes must set a mountpoint in order to be mounted,
+                  # unless their parent is mounted
+                  subvolumes = {
+                    "@root" = {
+                      mountpoint = "/";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                    "@nix" = {
+                      mountpoint = "/nix";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                    "@persist" = mkIf impermanence {
+                      mountpoint = "/nix/persist";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                    "@swap" = {
+                      mountpoint = "/.swapvol";
+                      swap.swapfile.size = "12G";
+                      mountOptions = [ "noatime" ];
+                    };
+                  };
                 };
-              };
-            };
-
-            encryptedSwap = {
-              size = "130G";
-              name = "cryptswap";
-              content = {
-                type = "swap";
-                randomEncryption = true;
-                priority = 100; # prefer to encrypt as long as we have space for it
               };
             };
           };
@@ -69,7 +106,28 @@ in
     };
   };
 
-  fileSystems = lib.mkIf impermanence {
+  fileSystems = mkIf impermanence {
     "/nix".neededForBoot = true;
+    "/nix/persist".neededForBoot = true;
+  };
+
+  boot.initrd = mkIf impermanence {
+    supportedFilesystems = [ "btrfs" ];
+    postDeviceCommands = mkIf (!phase1Systemd) (mkBefore wipeScript);
+    systemd.services.restore-root = mkIf phase1Systemd {
+      description = "Rollback btrfs rootfs";
+      wantedBy = [ "initrd.target" ];
+      requires = [
+        "dev-disk-by\\x2dlabel-system.device"
+      ];
+      after = [
+        "dev-disk-by\\x2dlabel-system.device"
+        "systemd-cryptsetup@system.service"
+      ];
+      before = [ "sysroot.mount" ];
+      unitConfig.DefaultDependencies = "no";
+      serviceConfig.Type = "oneshot";
+      script = wipeScript;
+    };
   };
 }

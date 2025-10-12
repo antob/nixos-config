@@ -34,6 +34,7 @@ in
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
     kernelParams = [
+      "nohibernate"
       # Increasing the VRAM allocation on AMD AI APUs
       # Calculation: `([size in GB] * 1024 * 1024 * 1024) / 4.096`
       "ttm.pages_limit=27648000" # 108 GB

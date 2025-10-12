@@ -29,6 +29,7 @@ in
     # desktop.hyprland = enabled;
     desktop.niri = enabled;
     virtualisation.virt-manager = enabled;
+    virtualisation.docker.storageDriver = "btrfs";
 
     tools = {
       fhs = enabled;
@@ -106,7 +107,7 @@ in
     hostName = "desktob";
 
     # Derived from `head -c 8 /etc/machine-id`
-    hostId = "75b6d6b4";
+    hostId = "672fb36e";
 
     # Wireless config
     wireless.iwd = {

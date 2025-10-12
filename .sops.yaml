@@ -3,7 +3,7 @@
 # # User ssh-to-pgp
 # $ nix shell nixpkgs#ssh-to-pgp
 # # Get server public key and fingerprint. Add fingerprint to this file.
-# $ ssh hyllan.local "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o hyllan.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
+# $ ssh hyllan.lan "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o hyllan.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
 # => 26ed358df14249befc3b72618ff9d36f72f3e498
 # # Import server public key
 # $ gpg --import hyllan.asc #
@@ -12,7 +12,7 @@
 keys:
   - &admin A5D2C0275BBB60F60770159EC457E72EEC222C29
   - &laptob_fw c77129031f8a9816c85e351721d093c8d0b23661
-  - &desktob 8d5a9515f7c27d782029c9f9c8dd3c0fd21df007
+  - &desktob d0e37ed077fd839b70aa5e519d0652b758a631f8
   - &hyllan 26ed358df14249befc3b72618ff9d36f72f3e498
   - &wiggum 63195e56e676314ea266f7c2d4ea7781a7bada58
 

@@ -12,10 +12,12 @@ in
 {
   options.antob.virtualisation.docker = with types; {
     enable = mkEnableOption "Whether or not to enable docker.";
+    storageDriver = mkOpt (nullOr str) null "Docker storage driver.";
   };
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
+    virtualisation.docker.storageDriver = cfg.storageDriver;
 
     antob = {
       user.extraGroups = [ "docker" ];

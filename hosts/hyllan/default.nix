@@ -45,6 +45,8 @@ in
       auto-snapshot.enable = false;
     };
 
+    virtualisation.docker.storageDriver = "btrfs";
+
     # Use custom setup for networking
     hardware.networking.enable = mkForce false;
 

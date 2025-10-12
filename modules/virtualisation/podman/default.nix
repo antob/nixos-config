@@ -12,6 +12,7 @@ in
 {
   options.antob.virtualisation.podman = with types; {
     enable = mkEnableOption "Whether or not to enable Podman.";
+    storageDriver = mkOpt str "overlay" "Podman storage driver.";
   };
 
   config = mkIf cfg.enable {
@@ -25,6 +26,7 @@ in
 
     virtualisation.containers.storage.settings = {
       storage = {
+        driver = cfg.storageDriver;
         # graphroot = lib.mkIf config.antob.persistence.enable "/nix/persist/var/lib/containers/storage";
         graphroot = "/var/lib/containers/storage";
         runroot = "/run/containers/storage";
