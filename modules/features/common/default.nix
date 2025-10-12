@@ -33,6 +33,7 @@ in
         helix = enabled;
         tmux = enabled;
         yazi = enabled;
+        nix-search-tv = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;
@@ -128,6 +129,7 @@ in
       file
       nvd
       hostctl
+      nix-search-tv
     ];
 
     services = {
