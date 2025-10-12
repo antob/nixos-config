@@ -1,10 +1,11 @@
 { lib, config, ... }:
+with lib;
 let
   impermanence = config.antob.persistence.enable;
 in
 {
   disko.devices = {
-    nodev = lib.mkIf impermanence {
+    nodev = mkIf impermanence {
       "/" = {
         fsType = "tmpfs";
         mountOptions = [
@@ -16,7 +17,7 @@ in
     };
     disk = {
       main = {
-        device = lib.mkDefault "/dev/nvme0n1";
+        device = mkDefault "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4a886fc7";
         type = "disk";
         content = {
           type = "gpt";
@@ -56,7 +57,7 @@ in
               };
             };
 
-            root = lib.mkIf (!impermanence) {
+            root = mkIf (!impermanence) {
               priority = 3;
               size = "500G";
               label = "root";
@@ -90,7 +91,7 @@ in
     };
   };
 
-  fileSystems = lib.mkIf impermanence {
+  fileSystems = mkIf impermanence {
     "/nix".neededForBoot = true;
   };
 }
