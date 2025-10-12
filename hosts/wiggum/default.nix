@@ -7,8 +7,6 @@
 with lib;
 {
   imports = with inputs; [
-    disko.nixosModules.disko
-    sops-nix.nixosModules.sops
     simple-nixos-mailserver.nixosModule
     ./hardware.nix
     ../../modules

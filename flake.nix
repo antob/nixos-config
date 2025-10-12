@@ -105,6 +105,13 @@
           config.allowUnfree = true;
         }
       );
+
+      commonModules = with inputs; [
+        sops-nix.nixosModules.sops
+        disko.nixosModules.disko
+        ./modules
+      ];
+
     in
     {
       overlays = import ./overlays { inherit inputs; };
@@ -114,28 +121,28 @@
       nixosConfigurations = {
         laptob-fw = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
-          modules = [
+          modules = commonModules ++ [
             ./hosts/laptob-fw
           ];
         };
 
         desktob = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
-          modules = [
+          modules = commonModules ++ [
             ./hosts/desktob
           ];
         };
 
         hyllan = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
-          modules = [
+          modules = commonModules ++ [
             ./hosts/hyllan
           ];
         };
 
         wiggum = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
-          modules = [
+          modules = commonModules ++ [
             ./hosts/wiggum
           ];
         };
@@ -143,7 +150,7 @@
         install-iso = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
           system = "x86_64-linux";
-          modules = [
+          modules = commonModules ++ [
             ./hosts/install-iso
           ];
         };
@@ -151,14 +158,14 @@
         minimal-iso = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
           system = "x86_64-linux";
-          modules = [
+          modules = commonModules ++ [
             ./hosts/minimal-iso
           ];
         };
 
         laptob-qemu = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
-          modules = [
+          modules = commonModules ++ [
             ./hosts/laptob-qemu
           ];
         };

@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  inputs,
   ...
 }:
 
@@ -14,10 +13,9 @@ let
   secrets = config.sops.secrets;
 in
 {
-  imports = with inputs; [
+  imports = [
     ./hardware.nix
     ../../modules
-    sops-nix.nixosModules.sops
     ./msmtp.nix
     ./caddy.nix
     ./podman.nix

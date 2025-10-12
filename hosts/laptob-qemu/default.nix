@@ -8,7 +8,6 @@
 with lib;
 {
   imports = with inputs; [
-    disko.nixosModules.disko
     nur.modules.nixos.default
     ./hardware.nix
     ../../modules

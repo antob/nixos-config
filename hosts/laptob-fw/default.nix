@@ -11,9 +11,7 @@ let
 in
 {
   imports = with inputs; [
-    disko.nixosModules.disko
     nur.modules.nixos.default
-    sops-nix.nixosModules.sops
     ./hardware.nix
     ../../modules
   ];
