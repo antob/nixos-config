@@ -48,6 +48,7 @@ in
       services.dbus.packages = [ pkgs.nautilus ];
 
       antob = {
+        services.gammastep = enabled;
         desktop.addons = {
           gtk = enabled;
           mako = enabled;
