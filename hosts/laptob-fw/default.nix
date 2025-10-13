@@ -52,6 +52,7 @@ in
 
     persistence = {
       enable = true;
+      path = "/nix/persist";
       directories = [
         "/var/lib/powertop"
         "/var/lib/chrony"

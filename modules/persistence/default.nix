@@ -15,6 +15,7 @@ in
 
   options.antob.persistence = with types; {
     enable = mkEnableOption "Enable persistence using impermanence.";
+    path = mkOpt str "/persist" "Path to persistent folder.";
     files = mkOpt (listOf (
       either str attrs
     )) [ ] "A list of files to be managed by impermanence's <option>files</option>.";
@@ -49,16 +50,16 @@ in
 
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
-      "d /persist/safe 0755 root root -"
-      "d /persist/var/log 0755 root root -"
-      "d /persist/var/lib/nixos 0755 root root -"
-      "d /persist/var/lib/systemd/coredump 0755 root root -"
+      "d ${cfg.path}/safe 0755 root root -"
+      "d ${cfg.path}/var/log 0755 root root -"
+      "d ${cfg.path}/var/lib/nixos 0755 root root -"
+      "d ${cfg.path}/var/lib/systemd/coredump 0755 root root -"
     ];
 
     # Necessary for user-specific impermanence
     # programs.fuse.userAllowOther = true;
 
-    environment.persistence."/persist" = {
+    environment.persistence."${cfg.path}" = {
       hideMounts = true;
       directories = cfg.directories ++ [
         "/var/log"
@@ -81,7 +82,7 @@ in
       };
     };
 
-    environment.persistence."/persist/safe" = {
+    environment.persistence."${cfg.path}/safe" = {
       hideMounts = true;
       inherit (cfg.safe) files directories;
       users."${userName}" = {
