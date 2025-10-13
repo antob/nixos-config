@@ -20,7 +20,6 @@ in
     antob.persistence.home.directories = [
       ".config/Code"
       ".vscode"
-      ".continue" # Config for vscode extension `continue`
     ];
 
     antob.home.extraOptions.programs.vscode = {
@@ -152,21 +151,10 @@ in
 
           # Installed extensions config
           rust-analyzer.check.command = "clippy";
-          redhat.telemetry.enabled = false;
           gitlens.telemetry.enabled = false;
           dotnetAcquisitionExtension.enableTelemetry = false;
           svelte.enable-ts-plugin = true;
           git.suggestSmartCommit = false;
-          continue = {
-            telemetryEnabled = false;
-            showInlineTip = false;
-          };
-          "yaml.schemas" = {
-            "file:///home/${config.antob.user.name}/.vscode/extensions/continue.continue/config-yaml-schema.json" =
-              [
-                ".continue/**/*.yaml"
-              ];
-          };
 
           nix = {
             formatterPath = "nixfmt";
@@ -191,6 +179,10 @@ in
           vs64.showWelcome = false;
 
           python.experiments.enabled = false;
+
+          llama-vscode = {
+            ask_install_llamacpp = false;
+          };
         };
 
         extensions = with extensions.vscode-marketplace; [
@@ -200,7 +192,7 @@ in
           jnoortheen.nix-ide
           rust-lang.rust-analyzer
           dotjoshjohnson.xml
-          redhat.vscode-yaml
+          kennylong.kubernetes-yaml-formatter
           shd101wyy.markdown-preview-enhanced
           formulahendry.auto-close-tag
           # ms-dotnettools.csharp
@@ -215,9 +207,9 @@ in
           # ms-dotnettools.vscode-dotnet-runtime
           esbenp.prettier-vscode
           mquandalle.graphql
-          continue.continue
           ms-python.python
           ms-python.black-formatter
+          ggml-org.llama-vscode
         ];
       };
     };
