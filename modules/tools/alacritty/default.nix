@@ -11,6 +11,7 @@ in
 {
   options.antob.tools.alacritty = with types; {
     enable = mkEnableOption "Enable alacritty";
+    fontSize = mkOpt int 12 "Font size.";
   };
 
   config = mkIf cfg.enable {
@@ -36,7 +37,7 @@ in
             family = "Hack Nerd Font";
             style = "Regular";
           };
-          size = 12;
+          size = cfg.fontSize;
           offset.y = 2;
         };
 

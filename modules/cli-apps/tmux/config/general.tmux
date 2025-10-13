@@ -24,6 +24,9 @@ set -g status-left-length 100
 set -g status-left ""
 set -g status-right "#{E:@catppuccin_status_session}"
 
+# Make splits even in main-vertical layout
+set-option -g main-pane-width 50%
+
 # Allow passthrough
 set -g allow-passthrough on
 

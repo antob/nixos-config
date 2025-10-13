@@ -30,6 +30,7 @@ in
 
     tools = {
       fhs = enabled;
+      alacritty.fontSize = 13;
     };
 
     services.tailscale = {
