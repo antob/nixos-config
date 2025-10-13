@@ -39,6 +39,7 @@ in
       # Calculation: `([size in GB] * 1024 * 1024 * 1024) / 4.096`
       "ttm.pages_limit=27648000" # 108 GB
       "ttm.page_pool_size=27648000" # 108 GB
+      "amd_iommu=off" # Disables IOMMU for lower latency
     ];
   };
 
