@@ -35,6 +35,9 @@ in
 
     cli-apps.llama-cpp = enabled;
 
+    services.tailscale = {
+      enable = true;
+      keyfile = secrets.tailscale_auth_key.path;
     };
 
     hardware = {
