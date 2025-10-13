@@ -33,9 +33,8 @@ in
       alacritty.fontSize = 13;
     };
 
-    services.tailscale = {
-      enable = true;
-      keyfile = secrets.tailscale_auth_key.path;
+    cli-apps.llama-cpp = enabled;
+
     };
 
     hardware = {
