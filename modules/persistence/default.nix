@@ -49,16 +49,16 @@ in
 
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
-      "d /nix/persist/safe 0755 root root -"
-      "d /nix/persist/var/log 0755 root root -"
-      "d /nix/persist/var/lib/nixos 0755 root root -"
-      "d /nix/persist/var/lib/systemd/coredump 0755 root root -"
+      "d /persist/safe 0755 root root -"
+      "d /persist/var/log 0755 root root -"
+      "d /persist/var/lib/nixos 0755 root root -"
+      "d /persist/var/lib/systemd/coredump 0755 root root -"
     ];
 
     # Necessary for user-specific impermanence
     # programs.fuse.userAllowOther = true;
 
-    environment.persistence."/nix/persist" = {
+    environment.persistence."/persist" = {
       hideMounts = true;
       directories = cfg.directories ++ [
         "/var/log"
@@ -81,7 +81,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist/safe" = {
+    environment.persistence."/persist/safe" = {
       hideMounts = true;
       inherit (cfg.safe) files directories;
       users."${userName}" = {

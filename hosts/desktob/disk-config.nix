@@ -85,7 +85,7 @@ in
                       ];
                     };
                     "@persist" = mkIf impermanence {
-                      mountpoint = "/nix/persist";
+                      mountpoint = "/persist";
                       mountOptions = [
                         "compress=zstd"
                         "noatime"
@@ -108,7 +108,7 @@ in
 
   fileSystems = mkIf impermanence {
     "/nix".neededForBoot = true;
-    "/nix/persist".neededForBoot = true;
+    "/persist".neededForBoot = true;
   };
 
   boot.initrd = mkIf impermanence {
