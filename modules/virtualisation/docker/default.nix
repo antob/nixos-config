@@ -35,6 +35,14 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.docker-compose ];
+    environment = {
+      systemPackages = with pkgs; [
+        docker-compose
+      ];
+
+      shellAliases = {
+        docker-compose = "docker compose";
+      };
+    };
   };
 }

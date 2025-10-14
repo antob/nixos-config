@@ -35,27 +35,33 @@ in
     };
 
     antob = {
-      home.extraOptions = {
-        home.shellAliases = {
-          "docker-compose" = "podman-compose";
-        };
-      };
-
       persistence = {
         directories = [
           "/var/lib/containers"
           "/run/containers"
         ];
-        home.directories = [ ".local/share/containers" ];
+        home.directories = [
+          ".local/share/containers"
+          ".config/containers"
+        ];
       };
 
       user.extraGroups = [ "podman" ];
       tools.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
     };
 
-    environment.systemPackages = with pkgs; [
-      podman-compose
-      docker-compose
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        podman-compose
+      ];
+
+      variables = {
+        PODMAN_COMPOSE_WARNING_LOGS = "false";
+      };
+
+      shellAliases = {
+        docker-compose = "podman compose";
+      };
+    };
   };
 }
