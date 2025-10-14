@@ -238,76 +238,77 @@ in
           };
         };
 
-        style = ''
-          * {
-            background-color: #${colors.base10};
-            color: #${colors.base07};
+        style = # css
+          ''
+            * {
+              background-color: #${colors.base10};
+              color: #${colors.base07};
 
-            border: none;
-            border-radius: 0;
-            min-height: 0;
-            font-family: SFNS Display;
-            font-size: 14px;
-            font-weight: 500;
-          }
+              border: none;
+              border-radius: 0;
+              min-height: 0;
+              font-family: SFNS Display;
+              font-size: 14px;
+              font-weight: 500;
+            }
 
-          .modules-left {
-            margin-left: 8px;
-          }
+            .modules-left {
+              margin-left: 8px;
+            }
 
-          .modules-right {
-            margin-right: 8px;
-          }
+            .modules-right {
+              margin-right: 8px;
+            }
 
-          #workspaces button {
-            all: initial;
-            padding: 0 6px;
-            margin: 0 1.5px;
-            min-width: 9px;
-          }
+            #workspaces button {
+              all: initial;
+              padding: 0 6px;
+              margin: 0 1.5px;
+              min-width: 9px;
+            }
 
-          #workspaces button.empty {
-            opacity: 0.5;
-          }
+            #workspaces button.empty {
+              opacity: 0.5;
+            }
 
-          #tray,
-          #memory,
-          #cpu,
-          #battery,
-          #network,
-          #bluetooth,
-          #clock,
-          #pulseaudio {
-            min-width: 12px;
-            margin: 0 7.5px;
-          }
+            #tray,
+            #memory,
+            #cpu,
+            #battery,
+            #network,
+            #bluetooth,
+            #clock,
+            #pulseaudio {
+              min-width: 12px;
+              margin: 0 7.5px;
+            }
 
-          #clock {
-            font-weight: 600;
-          }
+            #clock {
+              font-weight: 600;
+            }
 
-          #custom-expand-icon {
-            margin-right: 7px;
-          }
+            #custom-expand-icon {
+              margin-right: 7px;
+            }
 
-          #custom-vpn,
-          #custom-idle,
-          #custom-webcam {
-            color: #${colors.base09};
-          }
+            #custom-vpn,
+            #custom-idle,
+            #custom-webcam {
+              color: #${colors.base09};
+            }
 
-          #custom-external-ip.disconnected {
-            color: #${colors.base09};
-          }
+            #custom-external-ip.disconnected {
+              color: #${colors.base09};
+            }
 
-          tooltip {
-            padding: 2px;
-          }
+            tooltip {
+              padding: 2px;
+            }
 
-          .hidden {
-            opacity: 0;
-          }
-        '';
+            .hidden {
+              opacity: 0;
+            }
+          '';
       };
 
       # Working around the issue1 of waybar panels are duplicating after DPMS standby.
