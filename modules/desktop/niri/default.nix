@@ -84,6 +84,10 @@ in
               "󰭁".open-on-output = cfg.mainOutput;
             };
 
+            animations = {
+              workspace-switch.enable = false;
+            };
+
             input = {
               focus-follows-mouse = {
                 enable = true;
