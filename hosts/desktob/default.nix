@@ -138,6 +138,9 @@ in
     };
   };
 
+  # Do not wait for network connectivity (will timeout on nixos-rebuild)
+  systemd.services.systemd-networkd-wait-online.enable = mkForce false;
+
   # Bootloader.
   boot.loader = {
     systemd-boot = {
