@@ -17,6 +17,8 @@ in
   ];
 
   antob = {
+    system.info.laptop = true;
+
     features = {
       common = enabled;
       desktop = enabled;
@@ -24,15 +26,16 @@ in
 
     apps.thunderbird = enabled;
 
-    desktop.hyprland = enabled;
+    # desktop.hyprland = enabled;
+    desktop.niri = enabled;
     virtualisation.virt-manager = enabled;
 
     tools = {
       fhs = enabled;
-      easyeffects = {
-        enable = true;
-        preset = "fw13";
-      };
+      # easyeffects = {
+      #   enable = true;
+      #   preset = "fw13";
+      # };
     };
 
     services.tailscale = {

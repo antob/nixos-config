@@ -16,6 +16,7 @@ in
   ];
 
   antob = {
+    system.info.desktop = true;
     features = {
       common = enabled;
       desktop = enabled;
@@ -23,7 +24,6 @@ in
 
     # apps.thunderbird = enabled;
 
-    # desktop.hyprland = enabled;
     desktop.niri = enabled;
     virtualisation.virt-manager = enabled;
 

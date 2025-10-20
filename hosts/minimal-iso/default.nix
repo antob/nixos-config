@@ -20,6 +20,7 @@ with lib;
   programs.dconf.enable = true;
 
   antob = {
+    system.info.desktop = true;
     tools = {
       alacritty = enabled;
       git = enabled;

@@ -12,13 +12,14 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
-  dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { });
+  dm-system = lib.getExe (pkgs.callPackage ./scripts/dm-system.nix { });
   dm-vpn = lib.getExe (pkgs.callPackage ../scripts/dm-vpn.nix { });
   dm-firefox-profile = lib.getExe (
     pkgs.callPackage ../scripts/dm-firefox-profile.nix { inherit config; }
   );
   cmd-screenshot = lib.getExe (pkgs.callPackage ../scripts/cmd-screenshot.nix { });
   cmd-annotate = lib.getExe (pkgs.callPackage ./scripts/cmd-annotate.nix { });
+  cmd-toggle-swayidle = lib.getExe (pkgs.callPackage ../scripts/cmd-toggle-swayidle.nix { });
 in
 {
   imports = [ inputs.niri.nixosModules.niri ];
@@ -54,6 +55,11 @@ in
           nautilus = enabled;
           mako = enabled;
           swayosd = enabled;
+          swaylock.enable = config.antob.system.info.laptop;
+          swayidle = {
+            enable = true;
+            lockScreen = config.antob.system.info.laptop;
+          };
           waybar = {
             enable = true;
             enableSystemd = true;
@@ -123,7 +129,6 @@ in
                 mode = {
                   width = 2256;
                   height = 1504;
-                  refresh = 59.999;
                 };
                 scale = 1.5;
                 position = {
@@ -137,7 +142,6 @@ in
                 mode = {
                   width = 2560;
                   height = 1440;
-                  refresh = 144.006;
                 };
                 scale = 1.0;
                 position = {
@@ -151,7 +155,6 @@ in
                 mode = {
                   width = 5120;
                   height = 1440;
-                  refresh = 75.0;
                 };
                 scale = 1.0;
                 position = {
@@ -219,6 +222,7 @@ in
 
             window-rules = [
               {
+                opacity = 0.9;
                 draw-border-with-background = false;
                 geometry-corner-radius =
                   let
@@ -301,6 +305,9 @@ in
               {
                 sh = "walker --gapplication-service";
               }
+              {
+                sh = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
+              }
             ];
 
             binds =
@@ -337,7 +344,7 @@ in
                   repeat = false;
                 };
                 "Super+L" = {
-                  action = spawn "sh" "-c" "loginctl lock-session && sleep 5 && niri msg action power-off-monitors";
+                  action = spawn "sh" "-c" "loginctl lock-session && niri msg action power-off-monitors";
                   hotkey-overlay.title = "Lock screen";
                   repeat = false;
                 };
@@ -401,8 +408,7 @@ in
                 "${mod}+Home".action = focus-column-first;
                 "${mod}+End".action = focus-column-last;
 
-                "Alt+Tab".action = focus-window-down-or-top;
-                "Alt+Shift+Tab".action = focus-window-up-or-bottom;
+                "Alt+Tab".action = focus-window-previous;
 
                 # Move column/window
                 "${mod}+Shift+Left".action = move-column-left-or-to-monitor-left;
@@ -549,6 +555,10 @@ in
                 "${mod}+A" = {
                   action = spawn-sh "${cmd-annotate}";
                   hotkey-overlay.title = "Annotate image in clipboard";
+                };
+                "${mod}+U" = {
+                  action = spawn-sh "${cmd-toggle-swayidle}";
+                  hotkey-overlay.title = "Toggle locking on idle";
                 };
                 "Print" = {
                   action = spawn-sh "${cmd-screenshot}";

@@ -1,5 +1,4 @@
 { pkgs, ... }:
-
 pkgs.writeShellScriptBin "dm-system" ''
   #!/bin/bash
 
@@ -22,7 +21,8 @@ pkgs.writeShellScriptBin "dm-system" ''
     echo -e "$options" | walker --dmenu --theme dmenu_250 -p "$prompt…" "''${args[@]}"
   }
 
-  case $(menu "System" "󰤄  Suspend\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
+  case $(menu "System" "  Lock\n󰤄  Suspend\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
+    *Lock*) loginctl lock-session && niri msg action power-off-monitors ;;
     *Suspend) systemctl suspend ;;
     *Reboot) systemctl reboot ;;
     *Reboot\ to\ FW*) systemctl reboot --firmware-setup ;;

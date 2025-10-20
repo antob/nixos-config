@@ -14,6 +14,7 @@ with lib;
   ];
 
   antob = {
+    system.info.desktop = true;
     features = {
       common = enabled;
       desktop = enabled;
