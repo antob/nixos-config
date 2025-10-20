@@ -13,13 +13,12 @@ pkgs.writeShellScriptBin "cmd-screenshot" ''
     exit 1
   fi
 
-  pkill ${pkgs.slurp}/bin/slurp || ${pkgs.grim}/bin/grim -t ppm -g "$(${pkgs.slurp}/bin/slurp -o -d -F monospace)" - |
-    ${pkgs.satty}/bin/satty --filename - \
+  pkill ${pkgs.slurp}/bin/slurp || ${pkgs.grim}/bin/grim -t ppm -g "$(${pkgs.slurp}/bin/slurp -o -d -F monospace)" - | ${pkgs.satty}/bin/satty --filename - \
       --output-filename "$OUTPUT_DIR/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
       --early-exit \
       --actions-on-enter save-to-clipboard \
       --save-after-copy \
-      --initial-tool rectangle
-      --disable-notifications
+      --initial-tool rectangle \
+      --disable-notifications \
       --copy-command 'wl-copy'
 ''
