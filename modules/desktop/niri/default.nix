@@ -51,6 +51,7 @@ in
         services.gammastep = enabled;
         desktop.addons = {
           gtk = enabled;
+          nautilus = enabled;
           mako = enabled;
           swayosd = enabled;
           waybar = {
@@ -649,7 +650,6 @@ in
         gnome-calculator
         imv
         mpv
-        nautilus
         sushi
         brightnessctl
         swayosd

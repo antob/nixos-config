@@ -22,13 +22,16 @@ in
       pkg = mkOpt (nullOr package) pkgs.bibata-cursors "The package to use for the cursor theme.";
     };
     icon = {
-      name = mkOpt str "Papirus" "The name of the icon theme to apply.";
-      pkg = mkOpt package pkgs.papirus-icon-theme "The package to use for the icon theme.";
+      name = mkOpt str "Adwaita" "The name of the icon theme to apply.";
+      pkg = mkOpt package pkgs.adwaita-icon-theme "The package to use for the icon theme.";
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.icon.pkg ];
+    environment.systemPackages = [
+      cfg.icon.pkg
+      pkgs.adwaita-icon-theme-legacy
+    ];
 
     environment.sessionVariables = {
       GTK_THEME = cfg.theme.name;

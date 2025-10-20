@@ -61,6 +61,7 @@ in
           keyring = enabled;
           hyprlock = enabled;
           hypridle = enabled;
+          nautilus = enabled;
         };
 
         tools.btop = enabled;
@@ -121,7 +122,6 @@ in
           gnome-themes-extra
           imv
           mpv
-          nautilus
           sushi
           brightnessctl
           swayosd
