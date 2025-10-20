@@ -26,7 +26,12 @@ in
     # desktop.hyprland = enabled;
     desktop.niri = enabled;
     virtualisation.virt-manager = enabled;
+
+    virtualisation.docker.enable = false;
     virtualisation.docker.storageDriver = "btrfs";
+
+    virtualisation.podman.enable = true;
+    virtualisation.podman.storageDriver = "btrfs";
 
     tools = {
       fhs = enabled;
