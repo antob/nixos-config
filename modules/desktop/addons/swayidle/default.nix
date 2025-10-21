@@ -18,6 +18,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    antob.desktop.addons.swaylock.enable = cfg.lockScreen;
+
     antob.home.extraOptions = {
       services.swayidle = {
         enable = true;

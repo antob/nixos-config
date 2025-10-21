@@ -17,8 +17,6 @@ in
   ];
 
   antob = {
-    system.info.laptop = true;
-
     features = {
       common = enabled;
       desktop = enabled;

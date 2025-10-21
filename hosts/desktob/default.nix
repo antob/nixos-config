@@ -16,7 +16,6 @@ in
   ];
 
   antob = {
-    system.info.desktop = true;
     features = {
       common = enabled;
       desktop = enabled;
@@ -25,6 +24,7 @@ in
     # apps.thunderbird = enabled;
 
     desktop.niri = enabled;
+    desktop.addons.swayidle.lockScreen = false;
     virtualisation.virt-manager = enabled;
 
     virtualisation.docker.enable = false;

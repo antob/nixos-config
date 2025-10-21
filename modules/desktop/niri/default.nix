@@ -55,11 +55,7 @@ in
           nautilus = enabled;
           mako = enabled;
           swayosd = enabled;
-          swaylock.enable = config.antob.system.info.laptop;
-          swayidle = {
-            enable = true;
-            lockScreen = config.antob.system.info.laptop;
-          };
+          swayidle = enabled;
           waybar = {
             enable = true;
             enableSystemd = true;
