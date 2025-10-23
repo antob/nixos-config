@@ -9,7 +9,6 @@
 with lib;
 let
   cfg = config.antob.apps.vscode;
-  extensions = inputs.nix-vscode-extensions.extensions.${pkgs.system};
 in
 {
   options.antob.apps.vscode = with types; {
@@ -17,6 +16,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    nixpkgs.overlays = [
+      inputs.nix-vscode-extensions.overlays.default
+    ];
+
     antob.persistence.home.directories = [
       ".config/Code"
       ".vscode"
@@ -180,12 +183,17 @@ in
 
           python.experiments.enabled = false;
 
+          # Disable Copilot everywhere
+          github.copilot.enable = {
+            "*" = false;
+          };
+
           llama-vscode = {
             ask_install_llamacpp = false;
           };
         };
 
-        extensions = with extensions.vscode-marketplace; [
+        extensions = with pkgs.vscode-marketplace; [
           zhuangtongfa.material-theme # One Dark Pro
           tamasfe.even-better-toml
           # vadimcn.vscode-lldb
