@@ -38,7 +38,7 @@ in
       alacritty.fontSize = 13;
     };
 
-    cli-apps.llama-cpp = enabled;
+    services.ollama = enabled;
 
     services.tailscale = {
       enable = true;
