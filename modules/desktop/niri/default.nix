@@ -217,6 +217,7 @@ in
             };
 
             window-rules = [
+              # Default appearance for all windows
               {
                 opacity = 0.9;
                 draw-border-with-background = false;
@@ -233,6 +234,15 @@ in
                 clip-to-geometry = true;
               }
 
+              # Opaque windows
+              {
+                opacity = 1.0;
+                matches = [
+                  {
+                    app-id = "firefox";
+                  }
+                ];
+              }
               # Floating windows
               {
                 matches = [
