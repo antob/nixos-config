@@ -83,6 +83,7 @@ in
   networking.firewall.allowedTCPPorts = [
     465 # SubmissionSsl
     993 # ImapSsl
+    25 # SMTP (inbound delivery)
   ];
 
   # Setup SMTP-relay for Postfix
