@@ -13,8 +13,14 @@
 
     jails = {
       sshd.settings.enabled = true;
-      dovecot.settings.enabled = true;
-      postfix.settings.enabled = true;
+      dovecot.settings = {
+        enabled = true;
+        filter = "dovecot[mode=aggressive]";
+      };
+      postfix.settings = {
+        enabled = true;
+        filter = "postfix[mode=aggressive]";
+      };
       caddy-access.settings = {
         enabled = true;
         filter = "caddy-access";
