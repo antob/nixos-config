@@ -23,6 +23,7 @@ in
     antob.persistence.home.directories = [
       ".config/Code"
       ".vscode"
+      ".continue" # Config for vscode extension `continue`
     ];
 
     antob.home.extraOptions.programs.vscode = {
@@ -80,7 +81,7 @@ in
             fontFamily = "'Hack Nerd Font', 'monospace', monospace";
             formatOnSave = true;
             stickyScroll.enabled = false;
-            inlineSuggest.enabled = false;
+            inlineSuggest.enabled = true;
             acceptSuggestionOnCommitCharacter = false;
           };
 
@@ -188,8 +189,10 @@ in
             "*" = false;
           };
 
-          llama-vscode = {
-            ask_install_llamacpp = false;
+          continue = {
+            telemetryEnabled = false;
+            showInlineTip = false;
+            enableConsole = true;
           };
         };
 
@@ -217,7 +220,7 @@ in
           mquandalle.graphql
           ms-python.python
           ms-python.black-formatter
-          ggml-org.llama-vscode
+          continue.continue
         ];
       };
     };
