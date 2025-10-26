@@ -30,7 +30,7 @@ in
     enableImapSsl = true;
     enableSubmission = false;
     enableSubmissionSsl = true;
-    openFirewall = false; # Manually open required ports
+    openFirewall = true;
 
     indexDir = "/var/lib/dovecot/indices";
 
@@ -76,15 +76,8 @@ in
     };
   };
 
-  # Mailserver has its on DNS on port 53
+  # Mailserver has its DNS on port 53
   services.dnsmasq.enable = lib.mkForce false;
-
-  # Open required ports in firewall
-  networking.firewall.allowedTCPPorts = [
-    465 # SubmissionSsl
-    993 # ImapSsl
-    25 # SMTP (inbound delivery)
-  ];
 
   # Setup SMTP-relay for Postfix
   services.postfix = {
@@ -132,5 +125,6 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.pflogsumm
   ];
 }
