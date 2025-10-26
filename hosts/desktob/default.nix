@@ -39,6 +39,7 @@ in
     };
 
     services.ollama = enabled;
+    cli-apps.llama-cpp = enabled;
 
     services.tailscale = {
       enable = true;

@@ -22,21 +22,17 @@ in
 
       environmentVariables = {
         OLLAMA_ORIGINS = "*";
-        HSA_OVERRIDE_GFX_VERSION = "11.0.0";
       };
     };
 
     environment.systemPackages = with pkgs; [
-      vulkan-tools
       rocmPackages.rocm-runtime
       rocmPackages.rocminfo
       ollama-rocm
-      llama-cpp-vulkan
     ];
 
     antob.persistence = {
       directories = [ "/var/lib/private/ollama" ];
-      home.directories = [ ".cache/llama.cpp" ];
     };
   };
 }
