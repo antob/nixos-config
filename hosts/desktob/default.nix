@@ -21,17 +21,28 @@ in
       desktop = enabled;
     };
 
-    # apps.thunderbird = enabled;
+    apps = {
+      thunderbird = enabled;
+      lm-studio = enabled;
+    };
 
-    desktop.niri = enabled;
-    desktop.addons.swayidle.lockScreen = false;
-    virtualisation.virt-manager = enabled;
+    desktop = {
+      niri = enabled;
+      addons = {
+        swayidle.lockScreen = false;
+        keyring = enabled;
+      };
+    };
 
-    virtualisation.docker.enable = false;
-    virtualisation.docker.storageDriver = "btrfs";
+    virtualisation = {
+      virt-manager = enabled;
 
-    virtualisation.podman.enable = true;
-    virtualisation.podman.storageDriver = "btrfs";
+      docker.enable = false;
+      docker.storageDriver = "btrfs";
+
+      podman.enable = true;
+      podman.storageDriver = "btrfs";
+    };
 
     tools = {
       fhs = enabled;

@@ -24,8 +24,11 @@ in
 
     apps.thunderbird = enabled;
 
-    # desktop.hyprland = enabled;
-    desktop.niri = enabled;
+    desktop = {
+      niri = enabled;
+      addons.keyring = enabled;
+    };
+
     virtualisation.virt-manager = enabled;
 
     tools = {
