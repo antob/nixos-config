@@ -49,7 +49,12 @@ in
       alacritty.fontSize = 13;
     };
 
-    services.ollama = enabled;
+    services.ollama = {
+      enable = true;
+      host = "desktob.antob.net";
+      openFirewall = true;
+    };
+
     cli-apps.llama-cpp = enabled;
 
     services.tailscale = {
