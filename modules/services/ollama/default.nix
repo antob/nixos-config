@@ -21,6 +21,7 @@ in
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
+      package = pkgs.unstable.ollama-rocm;
       acceleration = "rocm";
 
       host = cfg.host;
@@ -32,10 +33,12 @@ in
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
+    environment.sessionVariables.OLLAMA_HOST = cfg.host;
+
     environment.systemPackages = with pkgs; [
-      rocmPackages.rocm-runtime
-      rocmPackages.rocminfo
-      ollama-rocm
+      unstable.rocmPackages.rocm-runtime
+      unstable.rocmPackages.rocminfo
+      unstable.ollama-rocm
     ];
 
     antob.persistence = {

@@ -26,6 +26,16 @@
     };
   };
 
+  unstable = final: _: {
+    unstable = import inputs.nixpkgs-unstable {
+      system = final.system;
+      config = {
+        allowUnfreePredicate = (pkg: true);
+        allowUnfree = true;
+      };
+    };
+  };
+
   # Adds my custom packages
   additions = final: prev: import ../pkgs { pkgs = final; };
 
