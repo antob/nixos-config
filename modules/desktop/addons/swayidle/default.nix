@@ -14,7 +14,7 @@ in
 {
   options.antob.desktop.addons.swayidle = with types; {
     enable = mkEnableOption "Whether to enable Swayidle.";
-    lockScreen = mkEnableOption "Whether to lock screen or just blank it.";
+    lockScreen = mkBoolOpt true "Whether to lock screen or just blank it.";
   };
 
   config = mkIf cfg.enable {
