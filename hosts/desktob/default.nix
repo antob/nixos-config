@@ -51,7 +51,7 @@ in
 
     services.ollama = {
       enable = true;
-      host = "desktob.antob.net";
+      host = "100.64.0.8";
       openFirewall = true;
     };
 
