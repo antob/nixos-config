@@ -70,6 +70,7 @@ in
     };
 
     system.console.setFont = mkForce false;
+    services.avahi.enable = mkForce false;
 
     persistence = {
       enable = true;
