@@ -287,6 +287,7 @@ in
                   { app-id = "chrome-app.slack.com"; }
                   { app-id = "chrome-teams.microsoft.com"; }
                   { app-id = "chrome-meet.google.com"; }
+                  { app-id = "thunderbird"; }
                 ];
               }
 
@@ -408,8 +409,8 @@ in
 
                 # Focus column/window
                 "${mod}+Left".action = focus-column-left;
-                "${mod}+Down".action = focus-window-or-workspace-down;
-                "${mod}+Up".action = focus-window-or-workspace-up;
+                "${mod}+Down".action = focus-window-down;
+                "${mod}+Up".action = focus-window-up;
                 "${mod}+Right".action = focus-column-right;
                 "${mod}+Home".action = focus-column-first;
                 "${mod}+End".action = focus-column-last;
