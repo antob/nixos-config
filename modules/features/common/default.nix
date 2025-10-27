@@ -26,6 +26,7 @@ in
         devenv = enabled;
         rustup = enabled;
         fzf = enabled;
+        scripts = enabled;
       };
 
       cli-apps = {
