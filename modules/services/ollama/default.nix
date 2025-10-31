@@ -21,7 +21,7 @@ in
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      package = pkgs.unstable.ollama-rocm;
+      package = pkgs.unstable.ollama;
       acceleration = "rocm";
 
       host = cfg.host;
