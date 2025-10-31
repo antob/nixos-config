@@ -18,8 +18,10 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [
       (cp ./bb.nix { })
-      (cp ./timer.nix { })
+      (cp ./catbin.nix { })
+      (cp ./getsong.nix { })
       (cp ./sfx.nix { })
+      (cp ./timer.nix { })
     ];
   };
 }

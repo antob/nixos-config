@@ -37,6 +37,28 @@ in
           path = "$XDG_DATA_HOME/zsh/zsh_history";
         };
 
+        siteFunctions = {
+          tempe = ''
+            cd "$(mktemp -d)"
+            chmod -R 0700 .
+            if [[ $# -eq 1 ]]; then
+              \mkdir -p "$1"
+              cd "$1"
+              chmod -R 0700 .
+            fi
+          '';
+
+          boop = ''
+            local last="$?"
+            if [[ "$last" == '0' ]]; then
+              sfx good
+            else
+              sfx bad
+            fi
+            $(exit "$last")
+          '';
+        };
+
         initContent =
           (lib.mkOrder 550 ''
             # Fix slow text paste

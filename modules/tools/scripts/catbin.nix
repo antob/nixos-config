@@ -1,0 +1,20 @@
+{ pkgs, ... }:
+
+pkgs.writeShellScriptBin "catbin" ''
+  #!/bin/bash
+  set -e
+  set -u
+
+  if [[ $# != 1 ]]; then
+    echo 'usage: echobin something_in_your_path' >&2
+    exit 1
+  fi
+
+  if hash bat 2>/dev/null; then
+    cat_command=bat
+  else
+    cat_command=cat
+  fi
+
+  exec "$cat_command" "$(command -v "$1")"
+''
