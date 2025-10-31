@@ -33,6 +33,7 @@ in
         };
 
         history = {
+          size = 100000;
           expireDuplicatesFirst = true;
           path = "$XDG_DATA_HOME/zsh/zsh_history";
         };
