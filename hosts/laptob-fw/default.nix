@@ -33,6 +33,7 @@ in
 
     tools = {
       fhs = enabled;
+      atuin = enabled;
       # easyeffects = {
       #   enable = true;
       #   preset = "fw13";

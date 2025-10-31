@@ -30,6 +30,7 @@ in
     ./samba.nix
     ./miniflux.nix
     ./vaultwarden.nix
+    ./atuin.nix
   ];
 
   antob = {

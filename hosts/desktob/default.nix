@@ -46,6 +46,7 @@ in
 
     tools = {
       fhs = enabled;
+      atuin = enabled;
       alacritty.fontSize = 13;
     };
 
