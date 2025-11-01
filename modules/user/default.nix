@@ -25,7 +25,7 @@ let
     };
   };
   propagatedIcon =
-    pkgs.runCommandNoCC "propagated-icon"
+    pkgs.runCommand "propagated-icon"
       {
         passthru = {
           fileName = cfg.icon.fileName;

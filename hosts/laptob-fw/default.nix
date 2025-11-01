@@ -80,7 +80,7 @@ in
     vulkan-tools
     amdgpu_top
     radeontop
-    glxinfo
+    mesa-demos
     acpi
     s-tui
     just

@@ -113,7 +113,7 @@ in
       inetutils
       procs
       unzip
-      du-dust
+      dust
       fwupd
       killall
       dogdns

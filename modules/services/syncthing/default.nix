@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -15,7 +16,10 @@ in
 
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
-      services.syncthing.enable = true;
+      services.syncthing = {
+        enable = true;
+        package = pkgs.unstable.syncthing;
+      };
     };
 
     networking.firewall = {
