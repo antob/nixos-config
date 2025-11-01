@@ -103,7 +103,7 @@ pkgs.writeShellScriptBin "dm-networkd-vpn" ''
   }
 
   generate_menu(){
-    PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | walker --dmenu --theme dmenu_250 -p "$MENU_TITLE…")
+    PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | walker --dmenu -p "$MENU_TITLE…")
     return 0
   }
 

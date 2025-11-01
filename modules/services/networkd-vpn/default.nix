@@ -45,6 +45,10 @@ in
         label = "Proton VPN (Sweden)";
         unitName = "wg-quick-protonvpn0";
       };
+      protonvpn1 = {
+        label = "Proton VPN (US/New York)";
+        unitName = "wg-quick-protonvpn1";
+      };
     };
 
     networking.wg-quick.interfaces = {
@@ -66,10 +70,29 @@ in
           }
         ];
       };
+      protonvpn1 = {
+        autostart = false;
+        address = [ "10.2.0.2/32" ];
+        dns = [ "10.2.0.1" ];
+        privateKeyFile = secrets.protonvpn1_private_key.path;
+
+        peers = [
+          {
+            publicKey = "XsJ968M1eNOuehhnuFTAtlTpzQfyFLpYTzo3L6Xe8EA=";
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "89.187.179.55:51820";
+            persistentKeepalive = 25;
+          }
+        ];
+      };
     };
 
     sops.secrets = {
       protonvpn0_private_key = { };
+      protonvpn1_private_key = { };
     };
   };
 }

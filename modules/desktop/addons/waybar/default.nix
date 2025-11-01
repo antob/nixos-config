@@ -11,6 +11,10 @@ let
   colors = config.antob.color-scheme.colors;
   external-ip = lib.getExe (pkgs.callPackage ./scripts/external-ip.nix { });
   mic-cam-usage = lib.getExe (pkgs.callPackage ./scripts/mic-cam-usage.nix { });
+  vpns = config.antob.services.networkd-vpn.vpns;
+  networkd-vpn-test = builtins.concatStringsSep " -o " (
+    builtins.attrValues (builtins.mapAttrs (name: value: "-d /proc/sys/net/ipv4/conf/${name}") vpns)
+  );
 in
 {
   options.antob.desktop.addons.waybar = with types; {
@@ -208,6 +212,14 @@ in
               interval = 5;
             };
 
+            "custom/networkd-vpn" = {
+              format = "  ";
+              exec = "echo '{\"class\": \"connected\", \"tooltip\": \"VPN connection active\"}'";
+              exec-if = "test ${networkd-vpn-test}";
+              return-type = "json";
+              interval = 5;
+            };
+
             "custom/idle" = {
               format = "   ";
               exec = "echo '{\"tooltip\": \"Not locking computer when idle\"}'";
@@ -292,6 +304,7 @@ in
             }
 
             #custom-vpn,
+            #custom-networkd-vpn,
             #custom-idle,
             #custom-webcam {
               color: #${colors.base09};
