@@ -50,10 +50,13 @@ in
       alacritty.fontSize = 13;
     };
 
-    services.ollama = {
-      enable = true;
-      host = "100.64.0.8";
-      openFirewall = true;
+    services = {
+      ollama = {
+        enable = true;
+        host = "100.64.0.8";
+        openFirewall = true;
+      };
+      networkd-vpn = enabled;
     };
 
     cli-apps.llama-cpp = enabled;
