@@ -5,7 +5,7 @@ let
   cmd-toggle-idle = lib.getExe (pkgs.callPackage ../../scripts/cmd-toggle-idle.nix { });
   dm-keybindings = lib.getExe (pkgs.callPackage ../../scripts/dm-keybindings.nix { });
   dm-system = lib.getExe (pkgs.callPackage ../../scripts/dm-system.nix { });
-  dm-vpn = lib.getExe (pkgs.callPackage ../../../scripts/dm-vpn.nix { });
+  dm-nm-vpn = lib.getExe (pkgs.callPackage ../../../scripts/dm-nm-vpn.nix { });
   cmd-lock-screen = lib.getExe (pkgs.callPackage ../../scripts/cmd-lock-screen.nix { });
 in
 ''
@@ -36,5 +36,5 @@ in
   bindd = SUPER CTRL, E, Emoji picker, exec, walker -m Emojis
   bindd = SUPER, K, Show key bindings, exec, ${dm-keybindings}
   bindd = SUPER, X, Show system menu, exec, ${dm-system}
-  bindd = SUPER, P, Show VPN menu, exec, ${dm-vpn}
+  bindd = SUPER, P, Show VPN menu, exec, ${dm-nm-vpn}
 ''

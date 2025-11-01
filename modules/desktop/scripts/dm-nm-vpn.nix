@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
-pkgs.writeShellScriptBin "dm-vpn" ''
-  # Script name: dm-vpn
+pkgs.writeShellScriptBin "dm-nm-vpn" ''
+  # Script name: dm-nm-vpn
   # Description: Activate and decativate VPN connections.
   # Dependencies: walker, nmcli
   # Contributors: Tobias Lindholm
