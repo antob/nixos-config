@@ -13,7 +13,11 @@ let
   colors = config.antob.color-scheme.colors;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
   dm-system = lib.getExe (pkgs.callPackage ./scripts/dm-system.nix { });
-  dm-nm-vpn = lib.getExe (pkgs.callPackage ../scripts/dm-nm-vpn.nix { });
+  dm-vpn =
+    if config.antob.services.networkd-vpn.enable then
+      lib.getExe (pkgs.callPackage ../scripts/dm-networkd-vpn.nix { inherit config; })
+    else
+      lib.getExe (pkgs.callPackage ../scripts/dm-nm-vpn.nix { });
   dm-firefox-profile = lib.getExe (
     pkgs.callPackage ../scripts/dm-firefox-profile.nix { inherit config; }
   );
@@ -397,7 +401,7 @@ in
                   repeat = false;
                 };
                 "${mod}+P" = {
-                  action = spawn-sh "${dm-nm-vpn}";
+                  action = spawn-sh "${dm-vpn}";
                   hotkey-overlay.title = "Show VPN menu";
                   repeat = false;
                 };

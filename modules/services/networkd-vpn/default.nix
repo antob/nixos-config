@@ -15,13 +15,15 @@ in
 
     vpns = mkOption {
       type = attrsOf (submodule {
-        unitName = mkOption {
-          type = str;
-          description = "Systemd unit name.";
-        };
-        label = mkOption {
-          type = str;
-          description = "Display label of the VPN.";
+        options = {
+          unitName = mkOption {
+            type = str;
+            description = "Systemd unit name.";
+          };
+          label = mkOption {
+            type = str;
+            description = "Display label of the VPN.";
+          };
         };
       });
       default = { };

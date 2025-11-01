@@ -1,0 +1,140 @@
+{ pkgs, config, ... }:
+
+let
+  vpns = config.antob.services.networkd-vpn.vpns;
+  labelsStr = builtins.concatStringsSep "\n" (
+    builtins.attrValues (builtins.mapAttrs (name: value: value.label) vpns)
+  );
+  ifAndLabelsStr = builtins.concatStringsSep " " (
+    builtins.attrValues (builtins.mapAttrs (name: value: "'${name}|${value.label}'") vpns)
+  );
+  labelToUnitName = builtins.concatStringsSep " " (
+    builtins.attrValues (builtins.mapAttrs (name: value: "['${value.label}']='${value.unitName}'") vpns)
+  );
+in
+pkgs.writeShellScriptBin "dm-networkd-vpn" ''
+  # Script name: dm-networkd-vpn
+  # Description: Activate and decativate VPN connections.
+  # Dependencies: walker
+  # Contributors: Tobias Lindholm
+
+  set -E
+  set -e
+  set -u
+  set -o pipefail
+
+  readonly PROGNAME=$(basename "$0")
+  readonly ARGS=("$@")
+
+  declare CONNECTION_LIST=""
+  declare CONNECTION_STATE=false
+  declare MENU_TITLE=""
+  declare PICKED_ENTRY=""
+  declare -rA label_to_unit=(${labelToUnitName})
+
+  usage(){
+      cat <<- EOF
+  usage: $PROGNAME
+
+  Creates a dmenu for VPN connections.
+
+    -h      show this help
+
+  EOF
+    return 0
+  }
+
+  parse_args(){
+    while getopts "h" argument; do
+      case "$argument" in
+        h)
+          usage
+          exit 0
+          ;;
+        *)
+          usage
+          exit 1
+          ;;
+      esac
+    done
+    shift "$((OPTIND-1))"
+    return 0
+  }
+
+  determine_connection_list(){
+    local active_connection=""
+    local available_connections=""
+
+    for item in ${ifAndLabelsStr}; do
+      IFS="|"
+      set -- $item
+      if [[ -d "/proc/sys/net/ipv4/conf/$1" ]]; then
+        active_connection+="$2\n"
+      fi
+    done
+    if [[ $active_connection ]]; then
+      CONNECTION_LIST=$active_connection
+      CONNECTION_STATE=true
+      return 0
+    fi
+
+    available_connections="${labelsStr}"
+    if [[ $available_connections ]]; then
+      CONNECTION_LIST=$available_connections
+      CONNECTION_STATE=false
+      return 0
+    fi
+    return 1
+  }
+
+  determine_menu_title(){
+    if [[ -z $CONNECTION_LIST ]]; then
+      MENU_TITLE="No VPN found"
+      return 0
+    fi
+
+    if [[ $CONNECTION_STATE == true ]]; then
+      MENU_TITLE="VPN - Active"
+      return 0
+    else
+      MENU_TITLE="VPN - Inactive"
+      return 0
+    fi
+  }
+
+  generate_menu(){
+    PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | walker --dmenu --theme dmenu_250 -p "$MENU_TITLE…")
+    return 0
+  }
+
+  activate_connection(){
+    sudo systemctl start "''${label_to_unit[$PICKED_ENTRY]}.service"
+    return 0
+  }
+
+  deactivate_connection(){
+    sudo systemctl stop "''${label_to_unit[$PICKED_ENTRY]}.service"
+    return 0
+  }
+
+  main(){
+    if [[ "''${#ARGS[@]}" -gt 0 ]]; then
+      parse_args "''${ARGS[@]}"
+    fi
+
+    determine_connection_list
+    determine_menu_title
+    generate_menu
+
+    if [[ "$CONNECTION_STATE" == false ]] && [[ -n "$PICKED_ENTRY" ]]; then
+      activate_connection
+    fi
+    if [[ "$CONNECTION_STATE" == true ]] && [[ -n "$PICKED_ENTRY" ]]; then
+      deactivate_connection
+    fi
+
+    exit 0
+  }
+
+  main
+''
