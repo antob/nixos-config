@@ -29,7 +29,7 @@ in
         filter_mode_shell_up_key_binding = "host";
         show_tabs = false;
         prefers_reduced_motion = true;
-        # enter_accept = false
+        enter_accept = true;
       };
     };
 
