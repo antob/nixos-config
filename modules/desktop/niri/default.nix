@@ -223,7 +223,7 @@ in
             window-rules = [
               # Default appearance for all windows
               {
-                opacity = 0.9;
+                opacity = 1.0;
                 draw-border-with-background = false;
                 geometry-corner-radius =
                   let
@@ -238,13 +238,20 @@ in
                 clip-to-geometry = true;
               }
 
-              # Opaque windows
+              # Transparent windows
               {
-                opacity = 1.0;
+                opacity = 0.9;
                 matches = [
-                  {
-                    app-id = "firefox";
-                  }
+                  { title = "Alacritty"; }
+                ];
+              }
+              {
+                opacity = 0.95;
+                matches = [
+                  { title = "Alacritty"; }
+                ];
+                excludes = [
+                  { app-id = "Alacritty"; }
                 ];
               }
               # Floating windows
@@ -255,9 +262,8 @@ in
                     app-id = "firefox";
                     title = "^Extension:";
                   }
-                  {
-                    app-id = "Wiremix";
-                  }
+                  { app-id = "Wiremix"; }
+                  { app-id = ".blueman-manager-wrapped"; }
                 ];
                 open-floating = true;
                 open-focused = true;
