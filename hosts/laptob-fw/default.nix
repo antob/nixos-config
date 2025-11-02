@@ -46,6 +46,12 @@ in
     };
 
     hardware = {
+      systemd-networking = {
+        enable = true;
+        hostName = "laptob-fw";
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "6278643e";
+      };
       fingerprint = enabled;
       bluetooth = enabled;
       zsa-voyager = enabled;
@@ -83,9 +89,6 @@ in
     mesa-demos
     acpi
     s-tui
-    just
-    nixos-anywhere
-    sops
     quickemu
     nfs-utils # Needed for mounting NFS shares
     rustdesk-flutter
@@ -95,12 +98,10 @@ in
 
   services = {
     fwupd.enable = true;
-
     logind.settings.Login = {
       HandleLidSwitch = "suspend-then-hibernate";
       HandleLidSwitchExternalPower = "suspend";
     };
-
     chrony.enable = true;
   };
 

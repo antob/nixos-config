@@ -131,6 +131,9 @@ in
       nvd
       hostctl
       nix-search-tv
+      just
+      nixos-anywhere
+      sops
     ];
 
     services = {

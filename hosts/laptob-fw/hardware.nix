@@ -55,11 +55,6 @@ in
 
   # Enable DHCP on the wireless link
   networking = {
-    hostName = "laptob-fw";
-
-    # Derived from `head -c 8 /etc/machine-id`
-    hostId = "6278643e";
-
     useDHCP = lib.mkDefault true;
     # networking.interfaces.enp193s0f3u1c2.useDHCP = lib.mkDefault true;
     # networking.interfaces.wlp1s0.useDHCP = lib.mkDefault true;

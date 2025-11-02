@@ -46,8 +46,23 @@ in
 
     virtualisation.docker.storageDriver = "btrfs";
 
-    # Use custom setup for networking
-    hardware.networking.enable = mkForce false;
+    hardware.systemd-networking = {
+      enable = true;
+      enableWireless = false;
+      enableVpn = false;
+      hostName = "hyllan";
+      # Derived from `head -c 8 /etc/machine-id`
+      hostId = "236689a3";
+      staticIp = {
+        enable = true;
+        address = "192.168.1.2/24";
+        dns = [
+          "192.168.1.4"
+          "1.1.1.1"
+        ];
+        gateway = "192.168.1.1";
+      };
+    };
 
     monitoring = {
       emailFrom = "home@antob.se";
@@ -118,37 +133,11 @@ in
     "d /mnt/tank/services 0755 root root -"
   ];
 
-  # Networking and firewall
-  networking = {
-    firewall = {
-      enable = true;
-      allowPing = true;
-    };
-    nftables.enable = true;
-    useDHCP = false;
-    usePredictableInterfaceNames = false;
-  };
-
   # Enable IP forwarding
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.ipv4.conf.all.forwarding" = true;
     "net.ipv6.conf.all.forwarding" = true;
-  };
-
-  systemd.network = {
-    enable = true;
-    networks."10-lan" = {
-      matchConfig.Name = "eth0";
-      address = [ "192.168.1.2/24" ];
-      dns = [
-        "192.168.1.4"
-        "1.1.1.1"
-      ];
-      routes = [
-        { Gateway = "192.168.1.1"; }
-      ];
-    };
   };
 
   # Bootloader.

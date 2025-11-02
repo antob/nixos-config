@@ -56,17 +56,21 @@ in
         host = "100.64.0.8";
         openFirewall = true;
       };
-      networkd-vpn = enabled;
+      tailscale = {
+        enable = true;
+        keyfile = secrets.tailscale_auth_key.path;
+      };
     };
 
     cli-apps.llama-cpp = enabled;
 
-    services.tailscale = {
-      enable = true;
-      keyfile = secrets.tailscale_auth_key.path;
-    };
-
     hardware = {
+      systemd-networking = {
+        enable = true;
+        hostName = "desktob";
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "672fb36e";
+      };
       bluetooth = enabled;
       zsa-voyager = enabled;
       yubikey = enabled;
@@ -74,13 +78,11 @@ in
     };
 
     system.console.setFont = mkForce false;
-    services.avahi.enable = mkForce false;
 
     persistence = {
       enable = true;
       directories = [
         "/var/lib/chrony"
-        "/var/lib/iwd"
       ];
       home.directories = [
         ".config/rustdesk"
@@ -93,9 +95,6 @@ in
         ".aws"
       ];
     };
-
-    # Use custom setup for networking
-    hardware.networking.enable = mkForce false;
   };
 
   environment.systemPackages = with pkgs; [
@@ -105,9 +104,6 @@ in
     mesa-demos
     acpi
     s-tui
-    just
-    nixos-anywhere
-    sops
     quickemu
     nfs-utils # Needed for mounting NFS shares
     rustdesk-flutter
@@ -118,55 +114,7 @@ in
   services = {
     fwupd.enable = true;
     chrony.enable = true;
-    resolved.enable = true;
   };
-
-  # Networking and firewall
-  networking = {
-    firewall = {
-      enable = true;
-      allowPing = true;
-    };
-    nftables.enable = true;
-    useDHCP = false;
-    usePredictableInterfaceNames = false;
-
-    hostName = "desktob";
-
-    # Derived from `head -c 8 /etc/machine-id`
-    hostId = "672fb36e";
-
-    # Wireless config
-    wireless.iwd = {
-      enable = true;
-      settings = {
-        Settings = {
-          AutoConnect = true;
-        };
-      };
-    };
-  };
-
-  systemd.network = {
-    enable = true;
-    networks = {
-      "10-lan" = {
-        matchConfig.Name = "eth0";
-        networkConfig.DHCP = "yes";
-        linkConfig.RequiredForOnline = "no";
-      };
-      "10-wireless" = {
-        matchConfig.Name = "wlan0";
-        networkConfig = {
-          DHCP = "yes";
-          IgnoreCarrierLoss = "3s";
-        };
-      };
-    };
-  };
-
-  # Do not wait for network connectivity (will timeout on nixos-rebuild)
-  systemd.services.systemd-networkd-wait-online.enable = mkForce false;
 
   # Bootloader.
   boot.loader = {
