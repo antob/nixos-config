@@ -54,10 +54,6 @@ in
           "postmaster@antob.com"
           "admin@antob.com"
         ];
-        catchAll = [
-          "antob.se"
-          "antob.com"
-        ];
       };
     };
 
@@ -75,6 +71,12 @@ in
       ];
     };
   };
+
+  # Forward catchall mail to plus alias
+  services.postfix.virtual = lib.mkOrder 200 ''
+    @antob.se tob+CatchAll@antob.se
+    @antob.com tob+CatchAll@antob.se
+  '';
 
   # Mailserver has its DNS on port 53
   services.dnsmasq.enable = lib.mkForce false;
