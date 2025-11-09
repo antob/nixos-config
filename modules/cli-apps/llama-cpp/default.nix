@@ -16,7 +16,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      llama-cpp-vulkan
+      unstable.llama-cpp-vulkan
       vulkan-tools
     ];
 
