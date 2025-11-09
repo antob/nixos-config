@@ -27,10 +27,8 @@ in
             bufferline = "multiple";
             auto-format = true;
             color-modes = true;
-            shell = [
-              "/usr/bin/zsh"
-              "-c"
-            ];
+            # Sync clipboard with system clipboard
+            default-yank-register = "+";
 
             cursor-shape = {
               insert = "bar";
@@ -85,10 +83,6 @@ in
               "A-[" = "goto_previous_buffer";
               "A-]" = "goto_next_buffer";
               A-w = ":buffer-close";
-              y = [
-                ":clipboard-yank"
-                "yank"
-              ];
               X = [
                 "extend_line_up"
                 "extend_to_line_bounds"
@@ -96,6 +90,9 @@ in
               space = {
                 c = "file_picker_in_current_buffer_directory";
               };
+              "^" = "goto_first_nonwhitespace";
+              "0" = "goto_line_start";
+              "$" = "goto_line_end";
             };
 
             insert = {
@@ -113,6 +110,9 @@ in
                 "extend_line_up"
                 "extend_to_line_bounds"
               ];
+              "^" = "goto_first_nonwhitespace";
+              "0" = "goto_line_start";
+              "$" = "goto_line_end";
             };
           };
         };
