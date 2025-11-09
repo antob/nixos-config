@@ -272,6 +272,10 @@ in
                 matches = [
                   { app-id = "TUI.float.lg"; }
                   { title = "satty"; }
+                  {
+                    app-id = "thunderbird";
+                    title = "Message Filters|Activity Manager";
+                  }
                 ];
                 open-floating = true;
                 open-focused = true;
