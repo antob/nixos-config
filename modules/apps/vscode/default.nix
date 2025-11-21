@@ -23,7 +23,6 @@ in
     antob.persistence.home.directories = [
       ".config/Code"
       ".vscode"
-      ".continue" # Config for vscode extension `continue`
     ];
 
     antob.home.extraOptions.programs.vscode = {
@@ -178,7 +177,10 @@ in
             };
           };
 
-          gitlens.launchpad.indicator.enabled = false;
+          gitlens = {
+            launchpad.indicator.enabled = false;
+            ai.enabled = false;
+          };
 
           vs64.showWelcome = false;
 
@@ -189,10 +191,17 @@ in
             "*" = false;
           };
 
-          continue = {
-            telemetryEnabled = false;
-            showInlineTip = false;
-            enableConsole = true;
+          llama-vscode = {
+            ask_install_llamacpp = false;
+            ask_upgrade_llamacpp_hours = 72000;
+            completion_models_list = [
+              {
+                name = "Local completion model";
+                endpoint = "http://localhost:8012";
+                # localStartCommand = "llama-server --fim-qwen-7b-default -ngl 99 --port 8012";
+                isKeyRequired = false;
+              }
+            ];
           };
         };
 
@@ -220,7 +229,7 @@ in
           mquandalle.graphql
           ms-python.python
           ms-python.black-formatter
-          continue.continue
+          ggml-org.llama-vscode
         ];
       };
     };
