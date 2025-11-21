@@ -17,7 +17,7 @@ in
     antob.home.extraOptions.programs.atuin = {
       enable = true;
       enableZshIntegration = true;
-      # flags = [ "--disable-up-arrow" ];
+      flags = [ "--disable-up-arrow" ];
       daemon.enable = true;
       settings = {
         auto_sync = true;
@@ -29,7 +29,7 @@ in
         filter_mode_shell_up_key_binding = "host";
         show_tabs = false;
         prefers_reduced_motion = true;
-        enter_accept = true;
+        enter_accept = false;
       };
     };
 
