@@ -150,7 +150,7 @@ in
                 };
               };
 
-              # OBIT montior
+              # OBIT monitor 1
               "Philips Consumer Electronics Company PHL 49B2U5900 AU02507007832" = {
                 mode = {
                   width = 5120;
@@ -162,6 +162,18 @@ in
                   y = -1440;
                 };
                 # layout.default-column-width.proportion = 2. / 3.;
+              };
+              # OBIT monitor 2
+              "LG Electronics LG HDR DQHD 0x000320C3" = {
+                mode = {
+                  width = 5120;
+                  height = 1440;
+                };
+                scale = 1.0;
+                position = {
+                  x = -2560;
+                  y = -1440;
+                };
               };
             };
 
@@ -416,7 +428,7 @@ in
                   repeat = false;
                 };
                 "${mod}+Ctrl+E" = {
-                  action = spawn-sh "walker -mEmojis";
+                  action = spawn-sh "walker -m Emojis";
                   hotkey-overlay.title = "Emoji selector";
                   repeat = false;
                 };
