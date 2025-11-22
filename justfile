@@ -37,6 +37,10 @@ install host flake *ARGS:
 # Various flake commands
 ###################################
 
+# Lock nixpkgs-prev to locked rev of current system
+bump-prev:
+  sed -i "s/\(^[ \t]*nixpkgs-prev.url .*\/nixpkgs\/\).*\";$/\1`jq -r '.nodes.nixpkgs.locked.rev' flake.lock`\";/" flake.nix
+
 # Update all the flake inputs
 up:
   nix flake update

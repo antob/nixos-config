@@ -26,8 +26,18 @@
     };
   };
 
-  unstable = final: _: {
-    unstable = import inputs.nixpkgs-unstable {
+  nixpkgs-next = final: _: {
+    nixpkgs-next = import inputs.nixpkgs-next {
+      system = final.system;
+      config = {
+        allowUnfreePredicate = (pkg: true);
+        allowUnfree = true;
+      };
+    };
+  };
+
+  nixpkgs-prev = final: _: {
+    nixpkgs-prev = import inputs.nixpkgs-prev {
       system = final.system;
       config = {
         allowUnfreePredicate = (pkg: true);

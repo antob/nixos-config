@@ -21,7 +21,7 @@ in
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      package = pkgs.unstable.ollama;
+      package = pkgs.nixpkgs-next.ollama;
       acceleration = "rocm";
 
       host = cfg.host;
@@ -36,9 +36,9 @@ in
     environment.sessionVariables.OLLAMA_HOST = cfg.host;
 
     environment.systemPackages = with pkgs; [
-      unstable.rocmPackages.rocm-runtime
-      unstable.rocmPackages.rocminfo
-      unstable.ollama-rocm
+      nixpkgs-next.rocmPackages.rocm-runtime
+      nixpkgs-next.rocmPackages.rocminfo
+      nixpkgs-next.ollama-rocm
     ];
 
     antob.persistence = {

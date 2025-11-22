@@ -16,7 +16,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      unstable.llama-cpp-vulkan
+      nixpkgs-next.llama-cpp-vulkan
       vulkan-tools
     ];
 
