@@ -46,7 +46,7 @@ in
 
       programs.niri = {
         enable = true;
-        package = pkgs.niri-unstable;
+        package = pkgs.niri-stable;
       };
 
       # xdg-desktop-portal-gnome FileChooser call depends on Nautilus
@@ -598,7 +598,7 @@ in
                   hotkey-overlay.title = "Screenshot of region";
                 };
                 "Shift+Print" = {
-                  action = screenshot-window;
+                  action = spawn-sh "niri msg action screenshot-window";
                   hotkey-overlay.title = "Screenshot of active window";
                 };
                 "Alt+Print" = {

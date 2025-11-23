@@ -78,11 +78,7 @@
     };
 
     # Niri
-    niri-unstable.url = "github:YaLTeR/niri";
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.niri-unstable.follows = "niri-unstable";
-    };
+    niri.url = "github:sodiboo/niri-flake";
   };
 
   outputs =

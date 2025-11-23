@@ -17,7 +17,9 @@ in
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    # TODO: Use latest kernel when the following issue is resolved:
+    # https://www.amd.com/en/resources/product-security/bulletin/amd-sb-7055.html
+    kernelPackages = pkgs.nixpkgs-prev.linuxPackages_latest;
 
     initrd = {
       availableKernelModules = [

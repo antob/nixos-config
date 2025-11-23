@@ -44,7 +44,6 @@ in
 
       programs.git = {
         enable = true;
-        inherit (cfg) userName userEmail;
         lfs = enabled;
 
         signing = {
@@ -52,28 +51,35 @@ in
           signByDefault = mkIf config.antob.security.gpg.enable true;
         };
 
-        aliases.hist = "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
+        settings = {
+          user = {
+            name = cfg.userName;
+            email = cfg.userEmail;
+          };
 
-        extraConfig = {
-          init = {
-            defaultBranch = "main";
-          };
-          pull = {
-            rebase = true;
-          };
-          push = {
-            autoSetupRemote = true;
-          };
-          core = {
-            whitespace = "trailing-space,space-before-tab";
-            editor = "nvim";
-            excludesfile = "~/.gitexcludes";
-          };
-          merge = {
-            conflictstyle = "diff3";
-          };
-          credential = {
-            helper = "cache";
+          aliases.hist = "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
+
+          extraConfig = {
+            init = {
+              defaultBranch = "main";
+            };
+            pull = {
+              rebase = true;
+            };
+            push = {
+              autoSetupRemote = true;
+            };
+            core = {
+              whitespace = "trailing-space,space-before-tab";
+              editor = "nvim";
+              excludesfile = "~/.gitexcludes";
+            };
+            merge = {
+              conflictstyle = "diff3";
+            };
+            credential = {
+              helper = "cache";
+            };
           };
         };
 

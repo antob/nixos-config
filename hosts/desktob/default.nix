@@ -23,7 +23,6 @@ in
 
     apps = {
       thunderbird = enabled;
-      lm-studio = enabled;
     };
 
     desktop = {
@@ -53,8 +52,8 @@ in
     services = {
       ollama = {
         enable = true;
-        host = "100.64.0.8";
-        openFirewall = true;
+        # host = "100.64.0.8";
+        # openFirewall = true;
       };
       tailscale = {
         enable = true;
