@@ -26,7 +26,7 @@ in
     };
 
     desktop = {
-      niri = enabled;
+      mango = enabled;
       addons = {
         swayidle.lockScreen = false;
         keyring = enabled;

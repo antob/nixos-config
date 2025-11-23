@@ -88,16 +88,37 @@ in
               };
             };
 
+            "ext/workspaces" = {
+              on-click = "activate";
+              on-click-right = "deactivate";
+              sort-by-id = true;
+              ignore-hidden = true;
+              format = "{icon}";
+              # format-icons = {
+              #   default = "";
+              #   "1" = "1";
+              #   "2" = "2";
+              #   "3" = "3";
+              #   "4" = "4";
+              #   "5" = "5";
+              #   "6" = "6";
+              #   "7" = "7";
+              #   "8" = "8";
+              #   "9" = "9";
+              #   active = "󱓻";
+              # };
+            };
+
             cpu = {
               interval = 5;
               format = " {usage:2}%";
-              on-click = "alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
+              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
             };
 
             memory = {
               interval = 5;
               format = "  {percentage}%";
-              on-click = "alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
+              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
             };
 
             clock = {
@@ -123,7 +144,7 @@ in
               tooltip-format-disconnected = "Disconnected";
               interval = 5;
               spacing = 1;
-              on-click = "alacritty --class=TUI.float.lg -e impala";
+              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float.lg -e ${pkgs.impala}/bin/impala";
             };
 
             battery = {
@@ -173,12 +194,12 @@ in
               format-disabled = "󰂲";
               format-connected = "";
               tooltip-format = "Devices connected: {num_connections}";
-              on-click = "alacritty --class=TUI.float -e bluetui";
+              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float -e ${pkgs.bluetui}/bin/bluetui";
             };
 
             pulseaudio = {
               format = "{icon}";
-              on-click = "alacritty --class=Wiremix -e wiremix";
+              on-click = "${pkgs.alacritty}/bin/alacritty --class=Wiremix -e ${pkgs.wiremix}/bin/wiremix";
               on-click-right = "${pkgs.pamixer}/bin/pamixer -t";
               tooltip-format = "Playing at {volume}%";
               scroll-step = 5;
@@ -246,7 +267,7 @@ in
               exec = "${external-ip}";
               format = "{}";
               return-type = "json";
-              on-click = "ip=`curl -s --connect-timeout 1 http://ifconfig.me`; wl-copy $ip; notify-send \"󰆏  External IP copied ($ip)\"";
+              on-click = "ip=`${pkgs.curl}/bin/curl -s --connect-timeout 1 http://ifconfig.me`; ${pkgs.wl-clipboard}/bin/wl-copy $ip; ${pkgs.libnotify}/bin/notify-send \"󰆏  External IP copied ($ip)\"";
             };
 
             "custom/webcam" = {

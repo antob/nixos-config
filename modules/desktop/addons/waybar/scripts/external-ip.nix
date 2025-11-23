@@ -6,7 +6,7 @@ pkgs.writeShellScriptBin "external-ip" ''
   # Dependencies: curl
   # Contributors: Tobias Lindholm
 
-  ip=`curl -s --connect-timeout 1 http://ifconfig.me`
+  ip=`${pkgs.curl}/bin/curl -s --connect-timeout 1 http://ifconfig.me`
   if [ $? -ne 0 ]; then
       echo "{\"text\": \" \", \"tooltip\": \"No connection\", \"class\": \"disconnected\"}"
   else
