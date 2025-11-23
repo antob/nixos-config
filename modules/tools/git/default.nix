@@ -51,13 +51,13 @@ in
           signByDefault = mkIf config.antob.security.gpg.enable true;
         };
 
+        aliases.hist = "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
+
         settings = {
           user = {
             name = cfg.userName;
             email = cfg.userEmail;
           };
-
-          aliases.hist = "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
 
           extraConfig = {
             init = {
