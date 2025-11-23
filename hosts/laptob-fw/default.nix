@@ -59,7 +59,10 @@ in
       ledger = enabled;
     };
 
-    system.console.setFont = mkForce false;
+    system = {
+      info.laptop = true;
+      console.setFont = mkForce false;
+    };
 
     persistence = {
       enable = true;

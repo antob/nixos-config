@@ -51,6 +51,21 @@ in
           waybar = {
             enable = true;
             enableSystemd = true;
+            modulesLeft = [ "hyprland/workspaces" ];
+            modulesRight = [
+              "group/tray-expander"
+              "bluetooth"
+              "custom/external-ip"
+              "network"
+              "pulseaudio"
+              "memory"
+              "cpu"
+              (mkIf config.antob.system.info.laptop "battery")
+              "custom/networkd-vpn"
+              "custom/hypridle"
+              "custom/webcam"
+              "clock"
+            ];
           };
           hyprsunset = enabled;
           walker = {

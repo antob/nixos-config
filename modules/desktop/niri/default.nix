@@ -63,6 +63,30 @@ in
           waybar = {
             enable = true;
             enableSystemd = true;
+            modulesLeft = [ "niri/workspaces" ];
+            modulesRight = [
+              "group/tray-expander"
+              "bluetooth"
+              "custom/external-ip"
+              "network"
+              "pulseaudio"
+              "memory"
+              "cpu"
+              (mkIf config.antob.system.info.laptop "battery")
+              "custom/networkd-vpn"
+              "custom/swayidle"
+              "custom/webcam"
+              "clock"
+            ];
+            extraStyle = ''
+              #workspaces button label {
+                font-size: 22px;
+              }
+
+              #workspaces button.active label {
+                font-size: 18px;
+              }
+            '';
           };
           walker = {
             enable = true;

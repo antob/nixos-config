@@ -20,6 +20,10 @@ in
   options.antob.desktop.addons.waybar = with types; {
     enable = mkEnableOption "Whether or not to install and configure Waybar.";
     enableSystemd = mkBoolOpt true "Whether to enable Waybar systemd integration.";
+    modulesLeft = mkOpt (listOf str) [ ] "Modules that will be displayed on the left.";
+    modulesCenter = mkOpt (listOf str) [ ] "Modules that will be displayed in the center.";
+    modulesRight = mkOpt (listOf str) [ ] "Modules that will be displayed on the right.";
+    extraStyle = mkOpt lines "" "Additional CSS to be added to the waybar stylesheet.";
   };
 
   config = mkIf cfg.enable {
@@ -34,26 +38,27 @@ in
             layer = "top";
             position = "top";
             spacing = 0;
-            height = 26;
+            height = 28;
 
-            modules-left = [
-              "hyprland/workspaces"
-            ];
+            modules-left = cfg.modulesLeft;
+            modules-center = cfg.modulesCenter;
+            modules-right = cfg.modulesRight;
 
-            modules-right = [
-              "group/tray-expander"
-              "bluetooth"
-              "custom/external-ip"
-              "network"
-              "pulseaudio"
-              "memory"
-              "cpu"
-              "battery"
-              "custom/vpn"
-              "custom/idle"
-              "custom/webcam"
-              "clock"
-            ];
+            "niri/workspaces" = {
+              format = "{icon}";
+              format-icons = {
+                default = "";
+                "󰬺" = "󰬺";
+                "󰬻" = "󰬻";
+                "󰬼" = "󰬼";
+                "󰬽" = "󰬽";
+                "󰬾" = "󰬾";
+                "󰬿" = "󰬿";
+                "󰭀" = "󰭀";
+                "󰭁" = "󰭁";
+                active = "󱓻";
+              };
+            };
 
             "hyprland/workspaces" = {
               on-click = "activate";
@@ -220,10 +225,18 @@ in
               interval = 5;
             };
 
-            "custom/idle" = {
+            "custom/hypridle" = {
               format = "   ";
               exec = "echo '{\"tooltip\": \"Not locking computer when idle\"}'";
               exec-if = "test `systemctl --user is-active hypridle.service` = inactive";
+              return-type = "json";
+              interval = 5;
+            };
+
+            "custom/swayidle" = {
+              format = "   ";
+              exec = "echo '{\"tooltip\": \"Not locking computer when idle\"}'";
+              exec-if = "test `systemctl --user is-active swayidle.service` = inactive";
               return-type = "json";
               interval = 5;
             };
@@ -239,7 +252,7 @@ in
             "custom/webcam" = {
               exec = "${mic-cam-usage}";
               interval = 5;
-              format = "{0}{1}";
+              format = "{0}{1} ";
               escape = true;
             };
 
@@ -250,78 +263,78 @@ in
           };
         };
 
-        style = # css
-          ''
-            * {
-              background-color: #${colors.base10};
-              color: #${colors.base07};
+        style = ''
+          * {
+            background-color: #${colors.base10};
+            color: #${colors.base07};
 
-              border: none;
-              border-radius: 0;
-              min-height: 0;
-              font-family: SFNS Display;
-              font-size: 14px;
-              font-weight: 500;
-            }
+            border: none;
+            border-radius: 0;
+            min-height: 0;
+            font-family: SFNS Display;
+            font-size: 14px;
+            font-weight: 500;
+          }
 
-            .modules-left {
-              margin-left: 8px;
-            }
+          .modules-left {
+            margin-left: 8px;
+          }
 
-            .modules-right {
-              margin-right: 8px;
-            }
+          .modules-right {
+            margin-right: 8px;
+          }
 
-            #workspaces button {
-              all: initial;
-              padding: 0 6px;
-              margin: 0 1.5px;
-              min-width: 9px;
-            }
+          #workspaces button {
+            all: initial;
+            padding: 0 6px;
+            margin: 0 1.5px;
+            min-width: 9px;
+          }
 
-            #workspaces button.empty {
-              opacity: 0.5;
-            }
+          #workspaces button.empty {
+            opacity: 0.5;
+          }
 
-            #tray,
-            #memory,
-            #cpu,
-            #battery,
-            #network,
-            #bluetooth,
-            #clock,
-            #pulseaudio {
-              min-width: 12px;
-              margin: 0 7.5px;
-            }
+          #tray,
+          #memory,
+          #cpu,
+          #battery,
+          #network,
+          #bluetooth,
+          #clock,
+          #pulseaudio {
+            min-width: 12px;
+            margin: 0 7.5px;
+          }
 
-            #clock {
-              font-weight: 600;
-            }
+          #clock {
+            font-weight: 600;
+          }
 
-            #custom-expand-icon {
-              margin-right: 7px;
-            }
+          #custom-expand-icon {
+            margin-right: 7px;
+          }
 
-            #custom-vpn,
-            #custom-networkd-vpn,
-            #custom-idle,
-            #custom-webcam {
-              color: #${colors.base09};
-            }
+          #custom-vpn,
+          #custom-networkd-vpn,
+          #custom-idle,
+          #custom-webcam {
+            color: #${colors.base09};
+          }
 
-            #custom-external-ip.disconnected {
-              color: #${colors.base09};
-            }
+          #custom-external-ip.disconnected {
+            color: #${colors.base09};
+          }
 
-            tooltip {
-              padding: 2px;
-            }
+          tooltip {
+            padding: 2px;
+          }
 
-            .hidden {
-              opacity: 0;
-            }
-          '';
+          .hidden {
+            opacity: 0;
+          }
+        ''
+        + cfg.extraStyle;
       };
 
       # Working around the issue1 of waybar panels are duplicating after DPMS standby.
