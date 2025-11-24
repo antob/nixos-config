@@ -197,7 +197,7 @@ in
             completion_models_list = [
               {
                 name = "Local completion model";
-                endpoint = "http://localhost:8012";
+                endpoint = "http://desktob.antob.net:8012";
                 # localStartCommand = "llama-server --fim-qwen-7b-default -ngl 99 --port 8012";
                 isKeyRequired = false;
               }
