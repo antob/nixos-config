@@ -14,8 +14,8 @@ pkgs.writeShellScriptBin "mic-cam-usage" ''
     webcam="󰄀"
   fi
 
-  current_source=$(${pkgs.pulseaudio}/bin/pactl info | grep "Default Source" | cut -f3 -d" ")
-  mic_status=$(${pkgs.pulseaudio}/bin/pactl list sources | grep -B 2 $current_source | grep RUNNING)
+  current_source=$(${pkgs.pulseaudio}/bin/pactl info | ${pkgs.gnugrep}/bin/grep "Default Source" | ${pkgs.coreutils}/bin/cut -f3 -d" ")
+  mic_status=$(${pkgs.pulseaudio}/bin/pactl list sources | ${pkgs.gnugrep}/bin/grep -B 2 $current_source | ${pkgs.gnugrep}/bin/grep RUNNING)
 
   if [ -z "$mic_status" ]; then
       mic=""

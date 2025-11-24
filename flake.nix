@@ -79,6 +79,13 @@
 
     # Niri
     niri.url = "github:sodiboo/niri-flake";
+
+    # MangoWC
+    mango = {
+      url = "github:DreamMaoMao/mango";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
