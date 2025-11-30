@@ -10,6 +10,7 @@ let
   cfg = config.antob.desktop.addons.swayidle;
   niri = config.antob.desktop.niri.enable;
   hyprland = config.antob.desktop.hyprland.enable;
+  mango = config.antob.desktop.mango.enable;
 in
 {
   options.antob.desktop.addons.swayidle = with types; {
@@ -37,6 +38,12 @@ in
               command = "${pkgs.swaylock}/bin/swaylock";
             }
           ]
+          ++ optionals mango [
+            {
+              event = "after-resume";
+              command = "${pkgs.wlr-dpms}/bin/wlr-dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r";
+            }
+          ]
           ++ optionals niri [
             {
               event = "after-resume";
@@ -45,7 +52,7 @@ in
           ]
           ++ optionals hyprland [
             {
-              event = "resume";
+              event = "after-resume";
               command = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r";
             }
           ];
@@ -61,6 +68,12 @@ in
             command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
           }
         ]
+        ++ optionals (mango && cfg.lockScreen) [
+          {
+            timeout = 600;
+            command = "${pkgs.wlr-dpms}/bin/wlr-dpms off";
+          }
+        ]
         ++ optionals (hyprland && cfg.lockScreen) [
           {
             timeout = 600;
@@ -71,12 +84,21 @@ in
           {
             timeout = 300;
             command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+            resumeCommand = "${pkgs.niri}/bin/niri msg action power-on-monitors && ${pkgs.brightnessctl}/bin/brightnessctl -r";
+          }
+        ]
+        ++ optionals (mango && !cfg.lockScreen) [
+          {
+            timeout = 300;
+            command = "${pkgs.wlr-dpms}/bin/wlr-dpms off";
+            resumeCommand = "${pkgs.wlr-dpms}/bin/wlr-dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r";
           }
         ]
         ++ optionals (hyprland && !cfg.lockScreen) [
           {
             timeout = 300;
             command = "${pkgs.hyprland}/bin/hyprctl dispatch dpms off";
+            resumeCommand = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r";
           }
         ]
         ++ optionals cfg.lockScreen [
