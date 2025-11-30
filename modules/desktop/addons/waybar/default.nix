@@ -89,24 +89,32 @@ in
             };
 
             "ext/workspaces" = {
-              on-click = "activate";
-              on-click-right = "deactivate";
               sort-by-id = true;
               ignore-hidden = true;
               format = "{icon}";
-              # format-icons = {
-              #   default = "";
-              #   "1" = "1";
-              #   "2" = "2";
-              #   "3" = "3";
-              #   "4" = "4";
-              #   "5" = "5";
-              #   "6" = "6";
-              #   "7" = "7";
-              #   "8" = "8";
-              #   "9" = "9";
-              #   active = "󱓻";
-              # };
+              format-icons = {
+                "1" = "1";
+                "2" = "2";
+                "3" = "3";
+                "4" = "4";
+                "5" = "5";
+                "6" = "6";
+                "7" = "7";
+                "8" = "8";
+                "9" = "9";
+                active = "󱓻";
+              };
+              persistent-workspaces = {
+                "1" = [ ];
+                "2" = [ ];
+                "3" = [ ];
+                "4" = [ ];
+                "5" = [ ];
+                "6" = [ ];
+                "7" = [ ];
+                "8" = [ ];
+                "9" = [ ];
+              };
             };
 
             cpu = {
@@ -338,7 +346,8 @@ in
 
           #custom-vpn,
           #custom-networkd-vpn,
-          #custom-idle,
+          #custom-hypridle,
+          #custom-swayidle,
           #custom-webcam {
             color: #${colors.base09};
           }
