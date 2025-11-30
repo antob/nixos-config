@@ -638,7 +638,7 @@ in
                 # // moving the mouse or pressing any other key.
                 "${mod}+Shift+P".action = power-off-monitors;
 
-                # Brightneww controls
+                # Brightness controls
                 XF86MonBrightnessUp = {
                   action = spawn-sh "${osdclient} --brightness raise";
                   hotkey-overlay.title = "Brightness up";
@@ -683,7 +683,7 @@ in
                   allow-when-locked = true;
                 };
                 XF86AudioMicMute = {
-                  action = spawn-sh "${osdclient} --input-volume ute-toggle";
+                  action = spawn-sh "${osdclient} --input-volume mute-toggle";
                   hotkey-overlay.title = "Mute microphone";
                   allow-when-locked = true;
                 };

@@ -11,7 +11,7 @@ let
   cfg = config.antob.desktop.mango;
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
-  # osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
+  osdclient = "${pkgs.swayosd}/bin/swayosd-client";
   dm-system = lib.getExe (pkgs.callPackage ../niri/scripts/dm-system.nix { });
   dm-vpn =
     if config.antob.services.networkd-vpn.enable then
@@ -21,9 +21,8 @@ let
   dm-firefox-profile = lib.getExe (
     pkgs.callPackage ../scripts/dm-firefox-profile.nix { inherit config; }
   );
-  # cmd-screenshot = lib.getExe (pkgs.callPackage ../scripts/cmd-screenshot.nix { });
-  # cmd-annotate = lib.getExe (pkgs.callPackage ./scripts/cmd-annotate.nix { });
-  # cmd-toggle-swayidle = lib.getExe (pkgs.callPackage ../scripts/cmd-toggle-swayidle.nix { });
+  cmd-screenshot = lib.getExe (pkgs.callPackage ../scripts/cmd-screenshot.nix { });
+  cmd-toggle-swayidle = lib.getExe (pkgs.callPackage ../scripts/cmd-toggle-swayidle.nix { });
 in
 {
   imports = [ inputs.mango.nixosModules.mango ];
@@ -67,9 +66,14 @@ in
         walker = {
           enable = true;
           runAsService = false;
-          # launchPrefix = "niri msg action spawn -- ";
         };
       };
+
+      persistence.home.directories = [
+        ".config/way-displays"
+      ];
+      # Add yourself to the input group to monitor events from way-displays
+      user.extraGroups = [ "input" ];
 
       home.extraOptions = {
         imports = [ inputs.mango.hmModules.mango ];
@@ -77,20 +81,7 @@ in
         wayland.windowManager.mango = {
           enable = true;
           settings = ''
-            # Cursor size
-            env=XCURSOR_SIZE,16
-            env=HYPRCURSOR_SIZE,16
-
-            # Force all apps to use Wayland
-            env=GDK_BACKEND,wayland,x11,*
-            env=QT_QPA_PLATFORM,wayland;xcb
-            env=QT_STYLE_OVERRIDE,kvantum
-            env=SDL_VIDEODRIVER,wayland
-            env=MOZ_ENABLE_WAYLAND,1
-            env=ELECTRON_OZONE_PLATFORM_HINT,wayland
-            env=OZONE_PLATFORM,wayland
-
-            # Keybindings
+            ## Keybindings
             bind=Super,Return,spawn,${
               if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty"
             }
@@ -104,15 +95,32 @@ in
             bind=Super,x,spawn,${dm-system}
             bind=Super,p,spawn,${dm-vpn}
             bind=Super+Ctrl,e,spawn,walker -m Emojis
+            bind=None,Print,spawn,${cmd-screenshot}
+            bind=Super,u,spawn,${cmd-toggle-swayidle}
+
+            # Brightness controls
+            bind=NONE,XF86MonBrightnessUp,spawn,${osdclient} --brightness raise
+            bind=NONE,XF86MonBrightnessDown,spawn,${osdclient} --brightness lower
+            bind=ALT,XF86MonBrightnessUp,spawn,${osdclient} --brightness +1
+            bind=ALT,XF86MonBrightnessDown,spawn,${osdclient} --brightness -1
+
+            # Volume controls
+            bind=NONE,XF86AudioRaiseVolume,spawn,${osdclient} --output-volume raise
+            bind=NONE,XF86AudioLowerVolume,spawn,${osdclient} --output-volume lower
+            bind=ALT,XF86AudioRaiseVolume,spawn,${osdclient} --output-volume +1
+            bind=ALT,XF86AudioLowerVolume,spawn,${osdclient} --output-volume -1
+            bind=NONE,XF86AudioMute,spawn,${osdclient} --output-volume mute-toggle
+            bind=NONE,XF86AudioMicMute,spawn,${osdclient} --input-volume mute-toggle";
 
             bind=SUPER,q,killclient
             bind=SUPER+SHIFT,r,reload_config
             bind=SUPER,f,togglefullscreen
             bind=SUPER+Shift,f,togglefakefullscreen
             bind=SUPER,m,togglemaximizescreen
+            bind=SUPER,v,togglefloating
+            bind=SUPER,o,toggleoverview
 
-            bind=SUPER,o,toggleoverlay
-
+            # switch workspace
             bind=SUPER,1,comboview,1
             bind=SUPER,2,comboview,2
             bind=SUPER,3,comboview,3
@@ -123,23 +131,52 @@ in
             bind=SUPER,8,comboview,8
             bind=SUPER,9,comboview,9
 
-            # smartmovewin
-            bind=CTRL+SHIFT,Up,smartmovewin,up
-            bind=CTRL+SHIFT,Down,smartmovewin,down
-            bind=CTRL+SHIFT,Left,smartmovewin,left
-            bind=CTRL+SHIFT,Right,smartmovewin,right
+            # move window to workspace
+            bind=SUPER+Shift,1,tag,1,0
+            bind=SUPER+Shift,2,tag,2,0
+            bind=SUPER+Shift,3,tag,3,0
+            bind=SUPER+Shift,4,tag,4,0
+            bind=SUPER+Shift,5,tag,5,0
+            bind=SUPER+Shift,6,tag,6,0
+            bind=SUPER+Shift,7,tag,7,0
+            bind=SUPER+Shift,8,tag,8,0
+            bind=SUPER+Shift,9,tag,9,0
 
             # switch window focus
-            bind=SUPER,Down,focusstack,next
-            bind=SUPER,Up,focusstack,prev
-            bind=SUPER,Left,focusdir,left
-            bind=SUPER,Right,focusdir,right
+            bind=SUPER,Right,focusstack,next
+            bind=SUPER,Left,focusstack,prev
+            bind=SUPER,Up,focusdir,up
+            bind=SUPER,Down,focusdir,down
+
+            # switch monitor focus
+            bind=ALT+SUPER,Down,focusmon,down
+            bind=ALT+SUPER,Up,focusmon,up
+            bind=ALT+SUPER,Left,focusmon,left
+            bind=ALT+SUPER,Right,focusmon,right
+
+            # move window to monitor
+            bind=ALT+SUPER+SHIFT,Down,tagmon,down,1
+            bind=ALT+SUPER+SHIFT,Up,tagmon,up,1
+            bind=ALT+SUPER+SHIFT,Left,tagmon,left,1
+            bind=ALT+SUPER+SHIFT,Right,tagmon,right,1
 
             # swap window
             bind=SUPER+SHIFT,Up,exchange_client,up
             bind=SUPER+SHIFT,Down,exchange_client,down
             bind=SUPER+SHIFT,Left,exchange_client,left
             bind=SUPER+SHIFT,Right,exchange_client,right
+
+            # resize window
+            bind=SUPER,code:21,resizewin,100 # Super+Plus
+            bind=SUPER,code:20,resizewin,-100 # Super+Minus
+            bind=SUPER+SHIFT,code:21,resizewin,0,100 # Super+Shift+Plus
+            bind=SUPER+SHIFT,code:20,resizewin,0,-100 # Super+Shift+Minus
+
+            # smartmovewin
+            # bind=CTRL+SHIFT,Up,smartmovewin,up
+            # bind=CTRL+SHIFT,Down,smartmovewin,down
+            # bind=CTRL+SHIFT,Left,smartmovewin,left
+            # bind=CTRL+SHIFT,Right,smartmovewin,right
 
             # Layouts
             bind=SUPER+Ctrl,t,setlayout,tile
@@ -148,31 +185,23 @@ in
             bind=SUPER+Ctrl,s,setlayout,scroller
             bind=SUPER+Ctrl,n,switch_layout
 
-            # Layouts in mango are per tag. So we'll set all tags to tile by default. 
-            tagrule=id:1,layout_name:tile
-            tagrule=id:2,layout_name:tile
-            tagrule=id:3,layout_name:tile
-            tagrule=id:4,layout_name:tile
-            tagrule=id:5,layout_name:tile
-            tagrule=id:6,layout_name:tile
-            tagrule=id:7,layout_name:tile
-            tagrule=id:8,layout_name:tile
-            tagrule=id:9,layout_name:tile
+            ## Mouse Bindings
+            mousebind=SUPER,btn_left,moveresize,curmove
+            mousebind=SUPER,btn_right,moveresize,curresize
 
-            animations=1
-            gappih=5
-            gappiv=5
-            gappoh=5
-            gappov=5
-            borderpx=4
-            no_border_when_single=0
-            focuscolor=0x${colors.base0C}ff
+            ## Env settings
+            env=XCURSOR_SIZE,${builtins.toString gtkCfg.cursor.size}
 
-            # Options
-            repeat_rate=40
-            repeat_delay=200
+            # Force all apps to use Wayland
+            env=GDK_BACKEND,wayland,x11,*
+            env=QT_QPA_PLATFORM,wayland;xcb
+            env=QT_STYLE_OVERRIDE,kvantum
+            env=SDL_VIDEODRIVER,wayland
+            env=MOZ_ENABLE_WAYLAND,1
+            env=ELECTRON_OZONE_PLATFORM_HINT,wayland
+            env=OZONE_PLATFORM,wayland
 
-            # Effect
+            ## Window Effects Configuration
             blur=0
             blur_layer=1
             blur_optimized=1
@@ -182,62 +211,135 @@ in
             blur_params_brightness = 0.9
             blur_params_contrast = 0.9
             blur_params_saturation = 1.2
+            shadows = 0
+            # layer_shadows = 1
+            # shadow_only_floating=1
+            # shadows_size = 12
+            # shadows_blur = 15
+            # shadows_position_x = 0
+            # shadows_position_y = 0
+            # shadowscolor= 0x000000ff
+            border_radius=6
 
-            shadows = 1
-            layer_shadows = 1
-            shadow_only_floating=1
-            shadows_size = 12
-            shadows_blur = 15
-            shadows_position_x = 0
-            shadows_position_y = 0
-            shadowscolor= 0x000000ff
+            ## Animation Configuration
+            animations=0
+            # layer_animations=1
+            # animation_type_open=zoom
+            # animation_type_close=zoom
+            # layer_animation_type_open=zoom
+            # layer_animation_type_close=zoom
+            # animation_fade_in=1
+            # animation_fade_out=1
+            # tag_animation_direction=1
+            # zoom_initial_ratio=0.3
+            # zoom_end_ratio=0.7
+            # fadein_begin_opacity=0.6
+            # fadeout_begin_opacity=0.8
+            # animation_duration_move=0
+            # animation_duration_open=0
+            # animation_duration_tag=0
+            # animation_duration_close=0
+            # animation_curve_open=0.46,1.0,0.29,1.1
+            # animation_curve_move=0.46,1.0,0.29,1
+            # animation_curve_tag=0.46,1.0,0.29,1
+            # animation_curve_close=0.08,0.92,0,1
 
-            # Animation Configuration
-            animations=1
-            layer_animations=1
-            animation_type_open=zoom
-            animation_type_close=slide 
-            layer_animation_type_open=slide
-            layer_animation_type_close=slide 
-            animation_fade_in=1
-            animation_fade_out=1
-            tag_animation_direction=1
-            zoom_initial_ratio=0.3
-            zoom_end_ratio=0.7
-            fadein_begin_opacity=0.6
-            fadeout_begin_opacity=0.8
-            animation_duration_move=500
-            animation_duration_open=400
-            animation_duration_tag=350
-            animation_duration_close=800
-            animation_curve_open=0.46,1.0,0.29,1.1
-            animation_curve_move=0.46,1.0,0.29,1
-            animation_curve_tag=0.46,1.0,0.29,1
-            animation_curve_close=0.08,0.92,0,1
-
-            # Scroller Layout Setting
+            ## Scroller Layout Setting
             scroller_structs=20
-            scroller_default_proportion=0.8
+            scroller_default_proportion=0.9
             scroller_focus_center=0
             scroller_prefer_center=1
-            edge_scroller_pointer_focus=1
+            edge_scroller_pointer_focus=0
             scroller_default_proportion_single=1.0
             scroller_proportion_preset=0.5,0.8,1.0
 
+            ## Overview Settings
+            enable_hotarea=0
 
-            monitorrule=eDP-1,0.55,1,tile,0,1.5,0,0,2256,1504,60
-            monitorrule=DP-1,0.55,1,tile,0,1,0,0,2560,1440,165
+            ## Miscellaneous Settings
+            cursor_size=${builtins.toString gtkCfg.cursor.size}
+            cursor_theme=${gtkCfg.cursor.name}
+            cursor_hide_timeout=5
+            no_border_when_single=1
 
+            ## Keyboard Settings
+            repeat_rate=40
+            repeat_delay=200
+
+            ## Trackpad Settings & Mouse Settings
+            tap_to_click=1
+            disable_while_typing=1
+            trackpad_natural_scrolling=1
+
+            ## Appearance Settings
+            gappih=5
+            gappiv=5
+            gappoh=5
+            gappov=5
+            borderpx=3
+            no_border_when_single=0
+            bordercolor=0x${colors.base12}ff
+            focuscolor=0x${colors.base0C}ff
+            maximizescreencolor=0x${colors.base12}ff
+            urgentcolor=0x${colors.base08}ff
+            scratchpadcolor=0x${colors.base12}ff
+            globalcolor=0x${colors.base12}ff
+            overlaycolor=0x${colors.base12}ff
+
+            ## Tag Rules
+            tagrule=id:1,no_hide:1,layout_name:scroller
+            tagrule=id:2,no_hide:1,layout_name:scroller
+            tagrule=id:3,no_hide:1,layout_name:scroller
+            tagrule=id:4,no_hide:1,layout_name:scroller
+            tagrule=id:5,no_hide:1,layout_name:scroller
+            tagrule=id:6,no_hide:1,layout_name:scroller
+            tagrule=id:7,no_hide:1,layout_name:scroller
+            tagrule=id:8,no_hide:1,layout_name:scroller
+            tagrule=id:9,no_hide:1,layout_name:scroller
+
+            ## Window Rules
+            # Floating windows
+            windowrule=isfloating:1,width:1100,height:700,appid:^TUI.float.lg$
+            windowrule=isfloating:1,width:1100,height:700,appid:thunderbird,title:Message Filters|Activity Manager
+            windowrule=isfloating:1,appid:^TUI.float$
+            windowrule=isfloating:1,appid:Wiremix
+            windowrule=isfloating:1,title:satty
+            windowrule=isfloating:1,appid:firefox,title:^Extension.*$
+
+            # Windows on specific workspace
+            windowrule=tags:2,appid:firefox
+            windowrule=tags:3,appid:code
+            windowrule=tags:5,appid:obsidian|chrome-app.slack.com|chrome-teams.microsoft.com|chrome-meet.google.com|thunderbird
+
+            # Transparancy
+            windowrule=focused_opacity:0.9,unfocused_opacity:0.9,appid:Alacritty
+
+            ## Monitor Rules
+            # monitorrule=name,mfact,nmaster,layout,transform,scale,x,y,width,height,refreshrate
+            # Internal laptop screen
+            #monitorrule=eDP-1,0.55,1,scroller,0,1.5,1808,1440,2256,1504,60
+            # Home monitor
+            #monitorrule=Acer Technologies XB273U TJ5EE0018521,0.55,1,scroller,0,1.5,1280,0,2560,1440,165
+            # OBIT monitor 1
+            #monitorrule=Philips Consumer Electronics Company PHL 49B2U5900 AU02507007832,0.55,1,scroller,0,1,0,0,5120,1440,60
+            # OBIT monitor 1
+            #monitorrule=LG Electronics LG HDR DQHD 0x000320C3,0.55,1,scroller,0,1,0,0,5120,1440,60
+
+            ## Keyboard layout and IME
             xkb_rules_layout=se,se
             xkb_rules_variant=us,
             xkb_rules_options=caps:ctrl_modifier
 
+            ## Exec setting
+            exec-once=way-displays > /tmp/way-displays.log 2>&1
+            exec-once=${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit
+            exec-once=walker --gapplication-service
+            exec-once=${pkgs.wl-clip-persist}/bin/wl-clip-persist --reconnect-tries 0
+            exec-once=${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store 
           '';
           autostart_sh = ''
+            # This needs to be non-empty for mango flake to add needed commands.
             ${pkgs.swaybg}/bin/swaybg -i ~/Pictures/Wallpapers/Omarchy-Backgrounds/1-scenery-pink-lakeside-sunset-lake-landscape-scenic-panorama-7680x3215-144.png -m fill
-            ${pkgs.wl-clip-persist}/bin/wl-clip-persist --reconnect-tries 0 &
-            ${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store & 
-            walker --gapplication-service &
           '';
         };
 
@@ -304,6 +406,8 @@ in
       wl-clipboard
       libqalculate
       wlr-randr
+      way-displays
+      wlr-dpms
     ];
 
     services.displayManager = {
