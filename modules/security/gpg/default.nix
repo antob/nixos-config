@@ -8,14 +8,15 @@
 with lib;
 let
   cfg = config.antob.security.gpg;
+  desktopCfg = config.antob.desktop;
 
   pinentry =
-    if config.antob.desktop.gnome.enable then
+    if desktopCfg.gnome.enable then
       {
         path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
         name = "gnome3";
       }
-    else if (config.antob.desktop.hyprland.enable || config.antob.desktop.niri.enable) then
+    else if (desktopCfg.hyprland.enable || desktopCfg.niri.enable || desktopCfg.mango.enable) then
       {
         path = "${pkgs.pinentry-walker}/bin/pinentry-walker";
         name = null;
