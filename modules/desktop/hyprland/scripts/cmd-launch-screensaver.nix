@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
+let
+  cmd-screensaver = lib.getExe (pkgs.callPackage ../../scripts/cmd-screensaver.nix { });
+in
 pkgs.writeShellScriptBin "cmd-launch-screensaver" ''
   #!/bin/bash
 
@@ -11,8 +14,8 @@ pkgs.writeShellScriptBin "cmd-launch-screensaver" ''
     hyprctl dispatch focusmonitor $m
     hyprctl dispatch exec -- \
       alacritty --class Screensaver \
-      --config-file ${./screensaver.toml} \
-      -e cmd-screensaver
+      --config-file ${../../scripts/screensaver.toml} \
+      -e ${cmd-screensaver}
   done
 
   hyprctl dispatch focusmonitor $focused

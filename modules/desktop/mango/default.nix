@@ -11,8 +11,9 @@ let
   cfg = config.antob.desktop.mango;
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
+  lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client";
-  dm-system = lib.getExe (pkgs.callPackage ../niri/scripts/dm-system.nix { });
+  dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });
   dm-vpn =
     if config.antob.services.networkd-vpn.enable then
       lib.getExe (pkgs.callPackage ../scripts/dm-networkd-vpn.nix { inherit config; })
@@ -23,6 +24,7 @@ let
   );
   cmd-screenshot = lib.getExe (pkgs.callPackage ../scripts/cmd-screenshot.nix { });
   cmd-toggle-swayidle = lib.getExe (pkgs.callPackage ../scripts/cmd-toggle-swayidle.nix { });
+  cmd-launch-blankscreen = lib.getExe (pkgs.callPackage ../scripts/cmd-launch-blankscreen.nix { });
 in
 {
   imports = [ inputs.mango.nixosModules.mango ];
@@ -97,6 +99,14 @@ in
             bind=Super+Ctrl,e,spawn,walker -m Emojis
             bind=None,Print,spawn,${cmd-screenshot}
             bind=Super,u,spawn,${cmd-toggle-swayidle}
+            bind=Super,l,spawn_shell,${
+              if lockScreen then
+                "loginctl lock-session && ${pkgs.wlr-dpms}/bin/wlr-dpms off"
+              else
+                "${cmd-launch-blankscreen}"
+            }
+            bind=Super+Ctrl,b,toggle_render_border
+            bind=Super+Ctrl,g,togglegaps
 
             # Brightness controls
             bind=NONE,XF86MonBrightnessUp,spawn,${osdclient} --brightness raise
@@ -180,8 +190,7 @@ in
 
             # Layouts
             bind=SUPER+Ctrl,t,setlayout,tile
-            bind=SUPER+Ctrl,v,setlayout,vertical_grid
-            bind=SUPER+Ctrl,c,setlayout,spiral
+            bind=SUPER+Ctrl,m,setlayout,monocle
             bind=SUPER+Ctrl,s,setlayout,scroller
             bind=SUPER+Ctrl,n,switch_layout
 
@@ -272,10 +281,10 @@ in
             trackpad_natural_scrolling=1
 
             ## Appearance Settings
-            gappih=5
-            gappiv=5
-            gappoh=5
-            gappov=5
+            gappih=10
+            gappiv=10
+            gappoh=10
+            gappov=10
             borderpx=3
             no_border_when_single=0
             bordercolor=0x${colors.base12}ff
@@ -288,7 +297,7 @@ in
 
             ## Tag Rules
             tagrule=id:1,no_hide:1,layout_name:scroller
-            tagrule=id:2,no_hide:1,layout_name:scroller
+            tagrule=id:2,no_hide:1,layout_name:monocle,no_render_border:1
             tagrule=id:3,no_hide:1,layout_name:scroller
             tagrule=id:4,no_hide:1,layout_name:scroller
             tagrule=id:5,no_hide:1,layout_name:scroller
@@ -314,6 +323,9 @@ in
             # Transparancy
             windowrule=focused_opacity:0.9,unfocused_opacity:0.9,appid:Alacritty
 
+            # Screensaver
+            windowrule=isfullscreen:1focused_opacity:1.0,unfocused_opacity:1.0,appid:Screensaver,title:Alacritty
+
             ## Monitor Rules
             # monitorrule=name,mfact,nmaster,layout,transform,scale,x,y,width,height,refreshrate
             # Internal laptop screen
@@ -334,7 +346,7 @@ in
             exec-once=way-displays > /tmp/way-displays.log 2>&1
             exec-once=${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit
             exec-once=walker --gapplication-service
-            exec-once=${pkgs.wl-clip-persist}/bin/wl-clip-persist --reconnect-tries 0
+            exec-once=${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular --reconnect-tries 0
             exec-once=${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store 
           '';
           autostart_sh = ''
@@ -388,27 +400,31 @@ in
 
     # security.polkit.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      gnome-keyring
-      gnome-calculator
-      imv
-      mpv
-      sushi
-      brightnessctl
-      swayosd
-      jq
-      impala
-      bluetui
-      wiremix
-      pamixer
-      swaybg
-      wayland-utils
-      wl-clipboard
-      libqalculate
-      wlr-randr
-      way-displays
-      wlr-dpms
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        gnome-keyring
+        gnome-calculator
+        imv
+        mpv
+        sushi
+        brightnessctl
+        swayosd
+        jq
+        impala
+        bluetui
+        wiremix
+        pamixer
+        swaybg
+        wayland-utils
+        wl-clipboard
+        libqalculate
+        wlr-randr
+        way-displays
+        wlr-dpms
+      ]
+      # Custom scripts
+      ++ (import ./scripts { inherit pkgs; });
 
     services.displayManager = {
       autoLogin = {

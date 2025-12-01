@@ -1,4 +1,13 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
+  cmd-launch-blankscreen = lib.getExe (pkgs.callPackage ./cmd-launch-blankscreen.nix { });
+in
 pkgs.writeShellScriptBin "dm-system" ''
   #!/bin/bash
 
@@ -21,8 +30,14 @@ pkgs.writeShellScriptBin "dm-system" ''
     echo -e "$options" | walker --dmenu --theme dmenu_250 -p "$prompt…" "''${args[@]}"
   }
 
-  case $(menu "System" "  Lock\n󰤄  Suspend\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
-    *Lock*) loginctl lock-session && niri msg action power-off-monitors ;;
+  case $(menu "System" "  Lock\n󱄄  Screensaver\n󰤄  Suspend\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
+    *Lock*) ${
+      if lockScreen then
+        "loginctl lock-session && ${pkgs.wlr-dpms}/bin/wlr-dpms off"
+      else
+        "${cmd-launch-blankscreen}"
+    } ;;
+    *Screensaver*) cmd-launch-screensaver ;;
     *Suspend) systemctl suspend ;;
     *Reboot) systemctl reboot ;;
     *Reboot\ to\ FW*) systemctl reboot --firmware-setup ;;

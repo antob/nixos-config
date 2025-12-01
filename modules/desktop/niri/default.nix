@@ -12,7 +12,7 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
-  dm-system = lib.getExe (pkgs.callPackage ./scripts/dm-system.nix { });
+  dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });
   dm-vpn =
     if config.antob.services.networkd-vpn.enable then
       lib.getExe (pkgs.callPackage ../scripts/dm-networkd-vpn.nix { inherit config; })
