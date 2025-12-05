@@ -23,16 +23,26 @@ in
 
     environment.systemPackages = with pkgs; [ font-manager ];
 
-    fonts.packages =
-      with pkgs;
-      [
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-        noto-fonts-color-emoji
-        nerd-fonts.hack
-        nerd-fonts.fira-code
-      ]
-      ++ cfg.fonts;
+    antob.home.extraOptions = {
+      fonts.fontconfig = {
+        enable = true;
+        defaultFonts = {
+          emoji = [
+            "Noto Color Emoji"
+          ];
+        };
+      };
+      home.packages =
+        with pkgs;
+        [
+          noto-fonts
+          noto-fonts-cjk-sans
+          noto-fonts-cjk-serif
+          noto-fonts-color-emoji
+          nerd-fonts.hack
+          nerd-fonts.fira-code
+        ]
+        ++ cfg.fonts;
+    };
   };
 }
