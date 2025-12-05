@@ -42,6 +42,7 @@ in
       "ttm.pages_limit=27648000" # 108 GB
       "ttm.page_pool_size=27648000" # 108 GB
       "amd_iommu=off" # Disables IOMMU for lower latency
+      "btusb.enable_autosuspend=0" # Prevent BT mouse sleep
     ];
   };
 
