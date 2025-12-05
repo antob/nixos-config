@@ -181,6 +181,7 @@ in
             bind=SUPER,code:20,resizewin,-100 # Super+Minus
             bind=SUPER+SHIFT,code:21,resizewin,0,100 # Super+Shift+Plus
             bind=SUPER+SHIFT,code:20,resizewin,0,-100 # Super+Shift+Minus
+            bind=SUPER,code:49,switch_proportion_preset # Super+Grave
 
             # smartmovewin
             # bind=CTRL+SHIFT,Up,smartmovewin,up
@@ -231,23 +232,23 @@ in
             border_radius=6
 
             ## Animation Configuration
-            animations=0
-            # layer_animations=1
-            # animation_type_open=zoom
-            # animation_type_close=zoom
-            # layer_animation_type_open=zoom
-            # layer_animation_type_close=zoom
-            # animation_fade_in=1
-            # animation_fade_out=1
-            # tag_animation_direction=1
+            animations=1
+            layer_animations=1
+            animation_type_open=fade
+            animation_type_close=fade
+            layer_animation_type_open=fade
+            layer_animation_type_close=fade
+            animation_fade_in=1
+            animation_fade_out=1
+            tag_animation_direction=1
             # zoom_initial_ratio=0.3
             # zoom_end_ratio=0.7
-            # fadein_begin_opacity=0.6
-            # fadeout_begin_opacity=0.8
-            # animation_duration_move=0
-            # animation_duration_open=0
-            # animation_duration_tag=0
-            # animation_duration_close=0
+            fadein_begin_opacity=0.5
+            fadeout_begin_opacity=0.8
+            animation_duration_move=400
+            animation_duration_open=100
+            animation_duration_tag=0
+            animation_duration_close=100
             # animation_curve_open=0.46,1.0,0.29,1.1
             # animation_curve_move=0.46,1.0,0.29,1
             # animation_curve_tag=0.46,1.0,0.29,1
@@ -260,7 +261,7 @@ in
             scroller_prefer_center=1
             edge_scroller_pointer_focus=0
             scroller_default_proportion_single=1.0
-            scroller_proportion_preset=0.5,0.8,1.0
+            scroller_proportion_preset=0.25,0.5,0.75,1.0
 
             ## Overview Settings
             enable_hotarea=0
