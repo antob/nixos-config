@@ -27,35 +27,19 @@ in
         extraArgs = [
           "-w"
         ];
-        events =
-          optionals cfg.lockScreen [
-            {
-              event = "before-sleep";
-              command = "${pkgs.swaylock}/bin/swaylock";
-            }
-            {
-              event = "lock";
-              command = "${pkgs.swaylock}/bin/swaylock";
-            }
-          ]
-          ++ optionals mango [
-            {
-              event = "after-resume";
-              command = "${pkgs.wlr-dpms}/bin/wlr-dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r";
-            }
-          ]
-          ++ optionals niri [
-            {
-              event = "after-resume";
-              command = "${pkgs.niri}/bin/niri msg action power-on-monitors && ${pkgs.brightnessctl}/bin/brightnessctl -r";
-            }
-          ]
-          ++ optionals hyprland [
-            {
-              event = "after-resume";
-              command = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r";
-            }
-          ];
+        events = {
+          "before-sleep" = mkIf cfg.lockScreen "${pkgs.swaylock}/bin/swaylock";
+          "lock" = mkIf cfg.lockScreen "${pkgs.swaylock}/bin/swaylock";
+          "after-resume" =
+            if mango then
+              "${pkgs.wlr-dpms}/bin/wlr-dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r"
+            else if niri then
+              "${pkgs.niri}/bin/niri msg action power-on-monitors && ${pkgs.brightnessctl}/bin/brightnessctl -r"
+            else if hyprland then
+              "${pkgs.hyprland}/bin/hyprctl dispatch dpms on && ${pkgs.brightnessctl}/bin/brightnessctl -r"
+            else
+              "";
+        };
         timeouts = [
           {
             timeout = 900;

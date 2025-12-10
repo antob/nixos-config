@@ -344,6 +344,7 @@ in
             xkb_rules_options=caps:ctrl_modifier
 
             ## Exec setting
+            exec-once=~/.config/mango/autostart.sh
             exec-once=way-displays > /tmp/way-displays.log 2>&1
             exec-once=${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit
             exec-once=walker --gapplication-service

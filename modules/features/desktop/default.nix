@@ -70,7 +70,7 @@ in
       imv
       vlc
       v4l-utils
-      nixpkgs-prev.guvcview # webcam tool
+      guvcview # webcam tool
       gnome-calculator
       evince
       # remmina # Remote Desktop Client

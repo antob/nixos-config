@@ -25,8 +25,11 @@ in
     apps.thunderbird = enabled;
 
     desktop = {
-      niri = enabled;
-      addons.keyring = enabled;
+      mango = enabled;
+      addons = {
+        swayidle.lockScreen = false; # Until swaylock is configured..
+        keyring = enabled;
+      };
     };
 
     virtualisation.virt-manager = enabled;
