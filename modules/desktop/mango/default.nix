@@ -177,17 +177,16 @@ in
             bind=SUPER+SHIFT,Right,exchange_client,right
 
             # resize window
-            bind=SUPER,code:21,resizewin,100 # Super+Plus
-            bind=SUPER,code:20,resizewin,-100 # Super+Minus
-            bind=SUPER+SHIFT,code:21,resizewin,0,100 # Super+Shift+Plus
-            bind=SUPER+SHIFT,code:20,resizewin,0,-100 # Super+Shift+Minus
-            bind=SUPER,code:49,switch_proportion_preset # Super+Grave
-
-            # smartmovewin
-            # bind=CTRL+SHIFT,Up,smartmovewin,up
-            # bind=CTRL+SHIFT,Down,smartmovewin,down
-            # bind=CTRL+SHIFT,Left,smartmovewin,left
-            # bind=CTRL+SHIFT,Right,smartmovewin,right
+            # Super+Minus
+            bind=SUPER,code:20,switch_proportion_preset
+            # Super+Shift+Plus
+            bind=SUPER+SHIFT,code:21,resizewin,100
+            # Super+Shift+Minus
+            bind=SUPER+SHIFT,code:20,resizewin,-100
+            # Super+Ctrl+Plus
+            bind=SUPER+CTRL,code:21,resizewin,0,100
+            # Super+Ctrl+Minus
+            bind=SUPER+CTRL,code:20,resizewin,0,-100
 
             # Layouts
             bind=SUPER+Ctrl,t,setlayout,tile
@@ -257,11 +256,11 @@ in
             ## Scroller Layout Setting
             scroller_structs=20
             scroller_default_proportion=0.9
-            scroller_focus_center=0
+            scroller_focus_center=1
             scroller_prefer_center=1
             edge_scroller_pointer_focus=0
             scroller_default_proportion_single=1.0
-            scroller_proportion_preset=0.25,0.5,0.75,1.0
+            scroller_proportion_preset=0.75,0.5,0.25,1.0
 
             ## Overview Settings
             enable_hotarea=0
