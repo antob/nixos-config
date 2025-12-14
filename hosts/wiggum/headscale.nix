@@ -73,8 +73,8 @@ in
           override_local_dns = true;
           nameservers = {
             global = [
+              "100.64.0.4"
               "192.168.1.4"
-              "100.64.0.19"
               "1.1.1.1"
               "1.0.0.1"
             ];
