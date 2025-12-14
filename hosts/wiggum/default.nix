@@ -13,8 +13,6 @@ with lib;
     ./fail2ban.nix
     ./caddy.nix
     ./headscale.nix
-    ./mailserver.nix
-    ./webmail.nix
   ];
 
   antob = {

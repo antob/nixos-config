@@ -21,10 +21,6 @@ in
       desktop = enabled;
     };
 
-    apps = {
-      thunderbird = enabled;
-    };
-
     desktop = {
       mango = enabled;
       addons = {

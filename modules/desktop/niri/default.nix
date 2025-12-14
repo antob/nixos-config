@@ -308,10 +308,6 @@ in
                 matches = [
                   { app-id = "TUI.float.lg"; }
                   { title = "satty"; }
-                  {
-                    app-id = "thunderbird";
-                    title = "Message Filters|Activity Manager";
-                  }
                 ];
                 open-floating = true;
                 open-focused = true;
@@ -337,7 +333,6 @@ in
                   { app-id = "chrome-app.slack.com"; }
                   { app-id = "chrome-teams.microsoft.com"; }
                   { app-id = "chrome-meet.google.com"; }
-                  { app-id = "thunderbird"; }
                 ];
               }
 

@@ -310,7 +310,6 @@ in
             ## Window Rules
             # Floating windows
             windowrule=isfloating:1,width:1100,height:700,appid:^TUI.float.lg$
-            windowrule=isfloating:1,width:1100,height:700,appid:thunderbird,title:Message Filters|Activity Manager
             windowrule=isfloating:1,appid:^TUI.float$
             windowrule=isfloating:1,appid:Wiremix
             windowrule=isfloating:1,title:satty
