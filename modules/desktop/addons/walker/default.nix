@@ -136,6 +136,11 @@ in
                   icon = ./icons/meet.png;
                   cmd = "${wk-launch-webapp} https://meet.google.com";
                 }
+                {
+                  name = "Music Assistant";
+                  icon = ./icons/music-assistant.png;
+                  cmd = "${wk-launch-webapp} https://music.antob.net";
+                }
               ];
             };
           };

@@ -12,4 +12,5 @@
   sfns-display-font = pkgs.callPackage ./sfns-display-font { };
   zsh-window-title = pkgs.callPackage ./zsh-window-title { };
   wlr-dpms = pkgs.callPackage ./wlr-dpms { };
+  soundcloudpy = pkgs.callPackage ./soundcloudpy { };
 }

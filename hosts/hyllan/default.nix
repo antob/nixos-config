@@ -31,6 +31,7 @@ in
     ./miniflux.nix
     ./vaultwarden.nix
     ./atuin.nix
+    ./music-assistant.nix
   ];
 
   antob = {

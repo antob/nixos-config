@@ -319,7 +319,7 @@ in
             # Windows on specific workspace
             windowrule=tags:2,appid:firefox
             windowrule=tags:3,appid:code
-            windowrule=tags:5,appid:obsidian|chrome-app.slack.com|chrome-teams.microsoft.com|chrome-meet.google.com|thunderbird
+            windowrule=tags:5,appid:obsidian|chrome-app.slack.com|chrome-teams.microsoft.com|chrome-meet.google.com|chrome-music.antob.net
 
             # Transparancy
             windowrule=focused_opacity:0.9,unfocused_opacity:0.9,appid:Alacritty
