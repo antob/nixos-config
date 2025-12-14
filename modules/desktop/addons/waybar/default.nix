@@ -324,6 +324,10 @@ in
             opacity: 0.5;
           }
 
+          #workspaces button.active label {
+            color: #${colors.base0C};
+          }
+
           #tray,
           #memory,
           #cpu,
