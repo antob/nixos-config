@@ -60,6 +60,11 @@ in
             command = "-workbench.action.navigateBack";
             when = "canNavigateBack";
           }
+          {
+            key = "shift+tab";
+            command = "outdent";
+            when = "editorTextFocus && !editorReadonly && !editorTabMovesFocus && !inlineSuggestionVisible";
+          }
         ];
 
         userSettings = {
@@ -194,12 +199,37 @@ in
           llama-vscode = {
             ask_install_llamacpp = false;
             ask_upgrade_llamacpp_hours = 72000;
-            completion_models_list = [
+            env_start_last_used = true;
+            tool_run_terminal_command_enabled = false;
+            env_start_last_used_confirm = true;
+            envs_list = [
               {
-                name = "Local completion model";
-                endpoint = "http://desktob.antob.net:8012";
-                # localStartCommand = "llama-server --fim-qwen-7b-default -ngl 99 --port 8012";
-                isKeyRequired = false;
+                name = "Local Environment";
+                description = "Everything local";
+                completion = {
+                  name = "Qwen2.5-Coder-7B-Q8_0-GGUF";
+                  # localStartCommand = "llama-server --fim-qwen-7b-default -ngl 99 --port 8012";
+                  endpoint = "http://desktob.antob.net:8012";
+                  aiModel = "";
+                  isKeyRequired = false;
+                };
+                chat = {
+                  name = "Qwen2.5-Coder-7B-Instruct-Q8_0-GGUF";
+                  # localStartCommand = "llama-server -hf ggml-org/Qwen2.5-Coder-7B-Instruct-Q8_0-GGUF -ngl 99 -ub 1024 -b 1024 --ctx-size 0 --cache-reuse 256 -np 2 --port 8011";
+                  endpoint = "http://desktob.antob.net:8011";
+                };
+                embeddings = {
+                  name = "Nomic-Embed-Text-V2-GGUF";
+                  # localStartCommand = "llama-server -hf ggml-org/Nomic-Embed-Text-V2-GGUF -ngl 99 -ub 2048 -b 2048 --ctx-size 2048 --embeddings --port 8010";
+                  endpoint = "http://desktob.antob.net:8010";
+                };
+                tools = {
+                  name = "OpenAI gpt-oss 20B";
+                  # localStartCommand = "llama-server -hf ggml-org/gpt-oss-20b-GGUF -c 0 --jinja --reasoning-format none -np 2 --port 8009";
+                  endpoint = "http://desktob.antob.net:8009";
+                  aiModel = "";
+                  isKeyRequired = false;
+                };
               }
             ];
           };
