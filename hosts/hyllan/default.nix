@@ -28,7 +28,7 @@ in
     ./esphome.nix
     ./nfsd.nix
     ./samba.nix
-    ./miniflux.nix
+    ./commafeed.nix
     ./vaultwarden.nix
     ./atuin.nix
     ./music-assistant.nix
