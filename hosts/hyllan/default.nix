@@ -32,6 +32,7 @@ in
     ./vaultwarden.nix
     ./atuin.nix
     ./music-assistant.nix
+    ./beszel.nix
   ];
 
   antob = {
