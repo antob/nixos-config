@@ -1,5 +1,5 @@
 {
-# gruvbox_material_medium_dark: &gruvbox_material_medium_dark
+  # gruvbox_material_medium_dark: &gruvbox_material_medium_dark
   primary = {
     background = "#282828";
     foreground = "#d4be98";
