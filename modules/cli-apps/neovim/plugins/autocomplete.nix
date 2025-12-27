@@ -16,6 +16,7 @@
         signature = { enabled = true },
         completion = {
           trigger = { show_in_snippet = false },
+          list = { selection = { preselect = false } },
           documentation = { auto_show = true, auto_show_delay_ms = 500 },
           menu = {
             auto_show = true,
@@ -27,6 +28,8 @@
         },
         keymap = {
           preset = "super-tab",
+          ['<Esc>'] = { 'hide', 'fallback' },
+          ['<CR>'] = { 'accept', 'fallback' },
         },
       })
     '';

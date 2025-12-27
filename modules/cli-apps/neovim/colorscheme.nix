@@ -11,14 +11,22 @@
     ];
 
     extraLuaConfig = lib.mkOrder 210 /* lua */ ''
-      vim.cmd("colorscheme vague")
-      -- vim.cmd("colorscheme catppuccin-mocha")
+      require("vague").setup({
+        transparent = true,
+        on_highlights = function(hl, c)
+          hl.LspReferenceRead = { gui = "bold", blend = 80 }
+          hl.LspReferenceText = { gui = "bold", blend = 80 }
+          hl.LspReferenceWrite = { gui = "bold", blend = 80 }
+        end,
+      })
 
-      require("vague").setup({ transparent = true })
+      vim.cmd("colorscheme vague")
+
       -- require("catppuccin").setup({
       --   -- flavour = "mocha",
       --   -- transparent_background = true,
       -- })
+      -- vim.cmd("colorscheme catppuccin-mocha")
     '';
   };
 }
