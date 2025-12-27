@@ -1,0 +1,25 @@
+{
+  pkgs,
+  ...
+}:
+{
+  programs.neovim = {
+    plugins = with pkgs.vimPlugins; [ lualine-nvim ];
+
+    extraLuaConfig = /* lua */ ''
+      require("lualine").setup({
+        options = {
+          globalstatus = true,
+          icons_enabled = true,
+          theme = "auto",
+          component_separators = "|",
+          section_separators = "",
+        },
+        sections = {
+          lualine_c = { "filename" },
+          lualine_y = {"progress", "lsp_status" },
+        };
+      })
+    '';
+  };
+}
