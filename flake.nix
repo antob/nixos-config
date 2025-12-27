@@ -50,11 +50,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Nixvim
-    nixvim = {
-      url = "github:nix-community/nixvim";
-    };
-
     # PaperWM
     paperwm = {
       url = "github:paperwm/PaperWM";
