@@ -7,6 +7,7 @@
 with lib;
 let
   cfg = config.antob.cli-apps.neovim;
+  alacritty = config.antob.tools.alacritty.enable;
 in
 {
   options.antob.cli-apps.neovim = with types; {
@@ -35,6 +36,15 @@ in
         enable = true;
         vimAlias = true;
       };
+
+      programs.alacritty.settings.keyboard.bindings = lib.mkIf alacritty [
+        # Map <C-S-o> for nvim
+        {
+          key = "o";
+          mods = "Control|Shift";
+          chars = "\\u001b[79;5u";
+        }
+      ];
     };
   };
 }

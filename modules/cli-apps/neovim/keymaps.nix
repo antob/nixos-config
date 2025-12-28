@@ -31,6 +31,9 @@
     -- clear highlight
     map({ "i", "n" }, "<ESC>", "<CMD>noh<CR><ESC>", "Clear highlights")
 
+    -- map Esc to C-c in command mode
+    map("c", "<ESC>", "<C-c>")
+
     -- Move selected line / block of text in visual mode
     map("v", "J", ":m '>+1<CR>gv=gv", "Move Lines Down")
     map("v", "K", ":m '<-2<CR>gv=gv", "Move Lines Up")
@@ -54,17 +57,13 @@
     map("i", "jj", "<ESC>", "Exit Insert")
     map("i", "jk", "<ESC>", "Exit Insert")
 
-    -- Navigate buffers
-    map("n", "<Right>", ":bnext<CR>", "Next Buffer")
-    map("n", "<Left>", ":bprevious<CR>", "Prev Buffer")
-
     -- Panes resizing
     map("n", "+", ":vertical resize +5<CR>", "Increase Width")
     map("n", "_", ":vertical resize -5<CR>", "Decrease Width")
 
     -- Keep search results centered
-    map("n", "n", "nzzv", "Next Match (centered)")
-    map("n", "N", "Nzzv", "Prev Match (centered)")
+    map("n", "n", "nzzzv", "Next Match (centered)")
+    map("n", "N", "Nzzzv", "Prev Match (centered)")
     map("n", "*", "*zzv", "Search Word (centered)")
     map("n", "#", "#zzv", "Search Word Back (centered)")
     map("n", "g*", "g*zz", "Search Partial (centered)")
@@ -81,6 +80,10 @@
 
     -- Write file in current directory (:w %:h/<new-file-name>)
     map("n", "<C-n>", ":w %:h/", "Write New File")
+
+    -- open new line in insert mode
+    map("i", "<C-o>", "<ESC>o", "Open new line below")
+    map("i", "<C-S-o>", "<ESC><S-o>", "Open new line above")
 
     -- navigation
     map("i", "<C-b>", "<ESC>^i", "Move to beginning of line")
@@ -100,10 +103,16 @@
     map("n", "--", "<CMD>split<CR>", "Split window horizontally")
     map("n", "\\\\", "<CMD>vsplit<CR>", "Split window vertically")
 
+    local builtin = require("telescope.builtin")
+    local utils = require("telescope.utils")
+    function all_files() builtin.find_files({ no_ignore = true, follow = true, hidden = true }) end
+    function relative_files() builtin.find_files({ cwd = utils.buffer_dir() }) end
+
     -- buffers
-    map("n", "<S-h>", "<CMD>bprevious<CR>", "Previous buffer")
-    map("n", "<S-l>", "<CMD>bnext<CR>", "Next buffer")
-    map("n", "<leader>bb", "<CMD>e #<CR>", "Switch to other buffer")
+    map({ "n", "i", "v" }, "<S-Left>", "<CMD>bprevious<CR>", "Previous buffer")
+    map({ "n", "i", "v" }, "<S-Right>", "<CMD>bnext<CR>", "Next buffer")
+    map({ "n", "i", "v" }, "<S-Up>", "<CMD>e #<CR>", "Switch to other buffer")
+    map({ "n", "i", "v" }, "<S-Down>", builtin.buffers, "Search buffers")
 
     -- tabs
     map("n", "<leader><tab>l", "<CMD>tablast<CR>", "Last tab")
@@ -113,11 +122,6 @@
     map("n", "<leader><tab>o", "<CMD>tabonly<CR>", "Close other tabs")
     map("n", "<leader><tab><tab>", "<CMD>tabnew<CR>", "New tab")
     map("n", "<leader><tab>c", "<CMD>tabclose<CR>", "Close tab")
-
-    local builtin = require("telescope.builtin")
-    local utils = require("telescope.utils")
-    function all_files() builtin.find_files({ no_ignore = true, follow = true, hidden = true }) end
-    function relative_files() builtin.find_files({ cwd = utils.buffer_dir() }) end
 
     -- find
     map("n", "<leader>ff", builtin.find_files, "Find files")
@@ -143,7 +147,7 @@
     map("n", "<leader>gf", builtin.git_bcommits, "Current file git commits")
 
     -- lsp
-    map({ "n", "v", "x" }, "<leader>=", vim.lsp.buf.format, "Format current buffer")
+    map({ "n", "v", "x" }, "=", "<cmd>Format<cr>", "Format current buffer")
     map("n", "<leader>li", "<cmd>LspInfo<cr>", "LSP Info")
     map("n", "<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
     map("n", "<leader>lh", function()

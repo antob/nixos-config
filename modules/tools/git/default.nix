@@ -128,6 +128,7 @@ in
 
     environment.shellAliases = {
       gh = "git hist";
+      gg = "lazygit";
     };
   };
 }

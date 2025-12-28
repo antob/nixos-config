@@ -73,44 +73,6 @@ in
               mods = "Control|Shift";
               action = "ResetFontSize";
             }
-
-            ## Tmux shortcuts
-            # Cycle layout
-            {
-              key = "l";
-              mods = "Control|Shift";
-              chars = "\\uE000";
-            }
-            # Spawn new pane
-            {
-              key = "Return";
-              mods = "Control|Shift";
-              chars = "\\uE010";
-            }
-            # Toggle pane zoom
-            {
-              key = "m";
-              mods = "Control|Shift";
-              chars = "\\uE011";
-            }
-            # Spawn new window
-            {
-              key = "t";
-              mods = "Control|Shift";
-              chars = "\\uE020";
-            }
-            # Focus previous window
-            {
-              key = "{";
-              mods = "Control|Shift";
-              chars = "\\uE021";
-            }
-            # Focus next window
-            {
-              key = "}";
-              mods = "Control|Shift";
-              chars = "\\uE022";
-            }
           ];
         };
       };

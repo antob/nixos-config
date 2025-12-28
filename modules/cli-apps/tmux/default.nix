@@ -10,6 +10,7 @@ let
   cfg = config.antob.cli-apps.tmux;
   configFiles = getFiles ./config;
   colors = config.antob.color-scheme.colors;
+  alacritty = config.antob.tools.alacritty.enable;
 
   plugins = with pkgs; [
     tmuxPlugins.sensible
@@ -56,6 +57,46 @@ in
 
         inherit plugins;
       };
+
+      programs.alacritty.settings.keyboard.bindings = lib.mkIf alacritty [
+        ## Make Alacritty send Control+Shift keys
+        # Cycle layout
+        {
+          key = "l";
+          mods = "Control|Shift";
+          chars = "\\uE000";
+        }
+        # Spawn new pane
+        {
+          key = "Return";
+          mods = "Control|Shift";
+          chars = "\\uE010";
+        }
+        # Toggle pane zoom
+        {
+          key = "m";
+          mods = "Control|Shift";
+          chars = "\\uE011";
+        }
+        # Spawn new window
+        {
+          key = "t";
+          mods = "Control|Shift";
+          chars = "\\uE020";
+        }
+        # Focus previous window
+        {
+          key = "{";
+          mods = "Control|Shift";
+          chars = "\\uE021";
+        }
+        # Focus next window
+        {
+          key = "}";
+          mods = "Control|Shift";
+          chars = "\\uE022";
+        }
+      ];
     };
 
     antob.persistence.home.directories = [ ".local/share/tmux" ];
