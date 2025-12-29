@@ -17,8 +17,8 @@
         },
         sections = {
           lualine_c = { "filename" },
-          lualine_y = {"progress", "lsp_status" },
-        };
+          lualine_y = { "progress", "lsp_status" },
+        },
       })
     '';
   };

@@ -23,8 +23,10 @@
 
       -- start treesitter
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { 'nix', 'ruby', 'markdown', 'lua', 'rust', 'typescript', 'javascript' },
-        callback = function() vim.treesitter.start() end,
+        pattern = { "nix", "ruby", "markdown", "lua", "rust", "typescript", "javascript" },
+        callback = function()
+          vim.treesitter.start()
+        end,
       })
     '';
   };

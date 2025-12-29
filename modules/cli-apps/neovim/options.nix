@@ -2,8 +2,8 @@
 {
   programs.neovim.extraLuaConfig = lib.mkOrder 200 /* lua */ ''
     -- globals
-    vim.g.mapleader = ' '
-    vim.g.maplocalleader = ' '
+    vim.g.mapleader = " "
+    vim.g.maplocalleader = " "
     vim.g.have_nerd_font = true
     vim.g.markdown_folding = false
 
@@ -76,11 +76,11 @@
     vim.opt.breakindent = true
 
     -- disable nvim intro
-    vim.opt.shortmess:append "sI"
+    vim.opt.shortmess:append("sI")
 
     -- go to previous/next line with h,l,left arrow and right arrow
     -- when cursor reaches end/beginning of line
-    vim.opt.whichwrap:append "<>[]hl"
+    vim.opt.whichwrap:append("<>[]hl")
 
     vim.opt.fillchars = { eob = " " }
   '';

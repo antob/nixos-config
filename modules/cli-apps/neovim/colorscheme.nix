@@ -31,7 +31,7 @@
             LspReferenceText = { bg = colors.none, blend = 80, style = { "bold" } },
             LspReferenceWrite = { bg = colors.none, blend = 80, style = { "bold" } },
           }
-        end
+        end,
       })
 
       vim.cmd("colorscheme catppuccin-mocha")

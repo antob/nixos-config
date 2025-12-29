@@ -15,14 +15,19 @@
       require("blink.cmp").setup({
         signature = { enabled = true },
         completion = {
-          trigger = { show_in_snippet = false },
+          trigger = {
+            show_in_snippet = false,
+            show_on_trigger_character = true,
+            show_on_keyword = false,
+          },
           list = {
             selection = {
-              preselect = false,
-              auto_insert = false,
+              preselect = true,
+              auto_insert = true,
             },
           },
           documentation = { auto_show = true, auto_show_delay_ms = 500 },
+          ghost_text = { enabled = true },
           menu = {
             auto_show = true,
             draw = {
@@ -33,17 +38,17 @@
         },
         keymap = {
           preset = "super-tab",
-          ['<Esc>'] = { 'hide', 'fallback' },
-          ['<CR>'] = { 'accept', 'fallback' },
+          ["<Esc>"] = { "cancel", "fallback" },
+          ["<CR>"] = { "accept", "fallback" },
         },
         cmdline = {
           keymap = {
             preset = "cmdline",
-            ['<CR>'] = { 'select_and_accept', 'fallback' },
-            ['<Esc>'] = { 'cancel', 'fallback' },
+            ["<CR>"] = { "select_and_accept", "fallback" },
+            ["<Esc>"] = { "cancel", "fallback" },
           },
           completion = {
-           list = {
+            list = {
               selection = {
                 preselect = false,
                 auto_insert = false,

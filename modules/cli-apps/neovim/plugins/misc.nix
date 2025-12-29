@@ -9,7 +9,6 @@
       plenary-nvim
       nvim-autopairs
       vim-tmux-navigator
-      lazygit-nvim
     ];
 
     extraLuaConfig = /* lua */ ''

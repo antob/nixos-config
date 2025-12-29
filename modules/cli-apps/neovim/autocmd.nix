@@ -1,6 +1,17 @@
 { ... }:
 {
   programs.neovim.extraLuaConfig = /* lua */ ''
+    -- open filepicker on start
+    vim.api.nvim_create_autocmd("VimEnter", {
+      callback = function()
+        if vim.fn.argv(0) == "" then
+          vim.defer_fn(function()
+            Snacks.picker.recent()
+          end, 10)
+        end
+      end,
+    })
+
     -- highlight when yanking text
     vim.api.nvim_create_autocmd("TextYankPost", {
       callback = function()

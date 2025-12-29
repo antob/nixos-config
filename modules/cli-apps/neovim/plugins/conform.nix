@@ -10,6 +10,7 @@
     extraLuaConfig = /* lua */ ''
       require("conform").setup({
         formatters_by_ft = {
+          ["*"] = { "injected" },
           bash = { "shfmt" },
           json = { "jq" },
           eruby = { "htmlbeautifier" },
@@ -17,6 +18,7 @@
           nix = { "nixfmt" },
           lua = { "stylua" },
           javascript = { "prettierd", "prettier", timeout_ms = 2000, stop_after_first = true },
+          just = { "just" },
           ["_"] = { "trim_whitespace", "trim_newlines" },
         },
 

@@ -92,6 +92,9 @@
     map("n", "<C-l>", "<C-w>l", "Focus window right")
     map("n", "<C-j>", "<C-w>j", "Focus window down")
     map("n", "<C-k>", "<C-w>k", "Focus window up")
+    map("n", "<C-m>", function()
+      Snacks.zen.zoom()
+    end, "Toggle zoom")
 
     -- save file
     map("n", "<C-s>", "<cmd>w<CR>", "Save file")
@@ -103,16 +106,36 @@
     map("n", "--", "<CMD>split<CR>", "Split window horizontally")
     map("n", "\\\\", "<CMD>vsplit<CR>", "Split window vertically")
 
-    local builtin = require("telescope.builtin")
-    local utils = require("telescope.utils")
-    function all_files() builtin.find_files({ no_ignore = true, follow = true, hidden = true }) end
-    function relative_files() builtin.find_files({ cwd = utils.buffer_dir() }) end
+    -- file browser
+    map("n", "<leader>o", "<cmd>Oil<CR>", "Filebrowser (Oil)")
+    map("n", "<leader>e", function()
+      Snacks.explorer()
+    end, "Filebrowser (Snacks)")
+
+    function find_buffers()
+      Snacks.picker.buffers({
+        win = {
+          input = { keys = { ["dd"] = "bufdelete", ["<c-d>"] = { "bufdelete", mode = { "n", "i" } } } },
+          list = { keys = { ["dd"] = "bufdelete" } },
+        },
+      })
+    end
 
     -- buffers
     map({ "n", "i", "v" }, "<S-Left>", "<CMD>bprevious<CR>", "Previous buffer")
     map({ "n", "i", "v" }, "<S-Right>", "<CMD>bnext<CR>", "Next buffer")
     map({ "n", "i", "v" }, "<S-Up>", "<CMD>e #<CR>", "Switch to other buffer")
-    map({ "n", "i", "v" }, "<S-Down>", builtin.buffers, "Search buffers")
+    map({ "n", "i", "v" }, "<S-Down>", find_buffers, "Search buffers")
+    map("n", "<leader>bb", find_buffers, "Search buffers")
+    map("n", "<leader>bd", function()
+      Snacks.bufdelete()
+    end, "Delete buffer")
+    map("n", "<leader>bo", function()
+      Snacks.bufdelete.other()
+    end, "Delete other buffers")
+    map("n", "<leader>bs", function()
+      Snacks.picker.grep_buffers()
+    end, "Search in open buffers")
 
     -- tabs
     map("n", "<leader><tab>l", "<CMD>tablast<CR>", "Last tab")
@@ -124,43 +147,91 @@
     map("n", "<leader><tab>c", "<CMD>tabclose<CR>", "Close tab")
 
     -- find
-    map("n", "<leader>ff", builtin.find_files, "Find files")
-    map("n", "<C-p>", builtin.find_files, "Find files")
-    map("n", "<leader>fa", all_files, "Find all files")
-    map("n", "<leader>fo", builtin.oldfiles, "Find old files")
-    map("n", "<leader>fr", relative_files, "Find files relative to buffer")
-    map("n", "<leader>fl", builtin.resume, "Open last picker")
+    map("n", "<leader>ff", function()
+      Snacks.picker.files()
+    end, "Find files")
+    map("n", "<C-p>", function()
+      Snacks.picker.files()
+    end, "Find files")
+    map("n", "<leader>fo", function()
+      Snacks.picker.recent()
+    end, "Find old files")
+    map("n", "<leader>fr", function()
+      Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
+    end, "Find files relative to buffer")
+    map("n", "<leader>fl", function()
+      Snacks.picker.resume()
+    end, "Open last picker")
 
     -- search
-    map("n", "<leader>ss", builtin.live_grep, "Grep")
-    map("n", "<leader>sw", builtin.grep_string, "Search word under cursor")
-    map("n", "<leader>sb", builtin.buffers, "Search buffers")
-    map("n", "<leader>sc", builtin.current_buffer_fuzzy_find, "Search in current buffer")
-    map("n", "<leader>sh", builtin.help_tags, "Search help pages")
-    map("n", "<leader>sm", builtin.man_pages, "Search man pages")
-    map("n", "<leader>sk", builtin.keymaps, "Search keymaps")
+    map("n", "<leader>ss", function()
+      Snacks.picker.grep()
+    end, "Grep")
+    map("n", "<leader>sw", function()
+      Snacks.picker.grep_word()
+    end, "Search word under cursor")
+    map("n", "<leader>sh", function()
+      Snacks.picker.help()
+    end, "Search help pages")
+    map("n", "<leader>sm", function()
+      Snacks.picker.man()
+    end, "Search man pages")
+    map("n", "<leader>sk", function()
+      Snacks.picker.keymaps({ layout = "select" })
+    end, "Search keymaps")
 
     -- git
-    map("n", "<leader>gg", "<cmd>LazyGit<cr>", "Lazygit")
-    map("n", "<leader>gs", builtin.git_status, "Git status")
-    map("n", "<leader>gc", builtin.git_commits, "Git commits")
-    map("n", "<leader>gf", builtin.git_bcommits, "Current file git commits")
+    map("n", "<leader>gg", function()
+      Snacks.lazygit()
+    end, "Lazygit")
+    map("n", "<leader>gs", function()
+      Snacks.picker.git_status()
+    end, "Git status")
+    map("n", "<leader>gd", function()
+      Snacks.picker.git_diff()
+    end, "Git diff")
+    map("n", "<leader>gl", function()
+      Snacks.picker.git_log()
+    end, "Git commits")
+    map("n", "<leader>gf", function()
+      Snacks.picker.git_log_file()
+    end, "Current file git commits")
 
     -- lsp
     map({ "n", "v", "x" }, "=", "<cmd>Format<cr>", "Format current buffer")
     map("n", "<leader>li", "<cmd>LspInfo<cr>", "LSP Info")
     map("n", "<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
     map("n", "<leader>lh", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
     end, "Toggle Inlay Hints")
-    map("n", "<leader>ls", builtin.lsp_document_symbols, "Document symbols")
-    map("n", "<leader>lS", builtin.lsp_workspace_symbols, "Workspace symbols")
+    map("n", "<leader>ls", function()
+      Snacks.picker.lsp_symbols()
+    end, "Document symbols")
+    map("n", "<leader>lS", function()
+      Snacks.picker.lsp_workspace_symbols()
+    end, "Workspace symbols")
 
-    map("n", "<leader>gd", builtin.lsp_definitions, "LSP definitions")
-    map("n", "<leader>gr", builtin.lsp_references, "LSP references")
-    map("n", "<leader>gi", builtin.lsp_implementations, "LSP implementations")
+    map("n", "<leader>ld", function()
+      Snacks.picker.lsp_definitions()
+    end, "LSP definitions")
+    map("n", "<leader>lr", function()
+      Snacks.picker.lsp_references()
+    end, "LSP references")
+    map("n", "<leader>li", function()
+      Snacks.picker.lsp_implementations()
+    end, "LSP implementations")
 
-    -- telescope diagnistics
-    map("n", "<leader>dd", builtin.diagnostics, "Find diagnostics")
+    -- diagnostics
+    map("n", "<leader>dd", function()
+      Snacks.picker.diagnostics()
+    end, "Workspace diagnostics")
+
+    -- terminal
+    map("n", "<leader>tt", function()
+      Snacks.terminal()
+    end, "Terminal")
+    map("n", "<leader>tc", function()
+      Snacks.terminal(nil, { cwd = vim.fn.expand("%:p:h") })
+    end, "Terminal in current folder")
   '';
 }

@@ -23,9 +23,10 @@
           max_height = 0.6,
           border = "rounded",
         },
+        keymaps = {
+          ["q"] = { "actions.close", mode = "n" },
+        },
       })
-
-      map("n", "<leader>e", "<cmd>Oil<CR>", "Filebrowser (oil)")
     '';
   };
 }

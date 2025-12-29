@@ -29,13 +29,16 @@
         map("i", "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
 
         -- Navigation (g prefix) - gd, gD, gr, gI, gy handled by Snacks
-        map("n", "gi", vim.lsp.buf.implementation, "Implementation")
         map("n", "gt", vim.lsp.buf.type_definition, "Type Definition")
         map("n", "<leader>v", "<cmd>vsplit | lua vim.lsp.buf.definition()<cr>", "Definition in Split")
 
         -- Diagnostics navigation ([ and ] prefix)
-        map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, "Prev Diagnostic")
-        map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next Diagnostic")
+        map("n", "[d", function()
+          vim.diagnostic.jump({ count = -1 })
+        end, "Prev Diagnostic")
+        map("n", "]d", function()
+          vim.diagnostic.jump({ count = 1 })
+        end, "Next Diagnostic")
 
         -- <leader>c = Code
         map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
@@ -57,7 +60,9 @@
         callback = function(args)
           local bufnr = args.buf
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if not client then return end
+          if not client then
+            return
+          end
 
           setup_keymaps(bufnr)
           vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -66,46 +71,46 @@
           if client.server_capabilities.documentHighlightProvider then
             local group = vim.api.nvim_create_augroup("LspDocumentHighlight_" .. bufnr, { clear = true })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                buffer = bufnr,
-                group = group,
-                callback = vim.lsp.buf.document_highlight,
+              buffer = bufnr,
+              group = group,
+              callback = vim.lsp.buf.document_highlight,
             })
             vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-                buffer = bufnr,
-                group = group,
-                callback = vim.lsp.buf.clear_references,
+              buffer = bufnr,
+              group = group,
+              callback = vim.lsp.buf.clear_references,
             })
           end
         end,
       })
 
       -- lua_ls
-      vim.lsp.config('lua_ls', {
+      vim.lsp.config("lua_ls", {
         on_init = function(client)
           if client.workspace_folders then
             local path = client.workspace_folders[1].name
             if
-              path ~= vim.fn.stdpath('config')
-              and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+              path ~= vim.fn.stdpath("config")
+              and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
             then
               return
             end
           end
 
-          client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+          client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
             runtime = {
-              version = 'LuaJIT',
+              version = "LuaJIT",
               path = {
-                'lua/?.lua',
-                'lua/?/init.lua',
+                "lua/?.lua",
+                "lua/?/init.lua",
               },
             },
             workspace = {
               checkThirdParty = false,
               library = {
-                vim.env.VIMRUNTIME
-              }
-            }
+                vim.env.VIMRUNTIME,
+              },
+            },
           })
         end,
         settings = {
@@ -114,7 +119,7 @@
               ignoreDir = { ".devenv", ".direnv" },
             },
           },
-        }
+        },
       })
 
       -- Enable LSPs
