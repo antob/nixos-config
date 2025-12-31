@@ -70,7 +70,7 @@
     map("n", "g#", "g#zz", "Search Partial Back (centered)")
 
     -- Split line with X
-    map("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<cr>", "Split Line")
+    map("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<CR>", "Split Line")
 
     -- ctrl + x to cut full line
     map("n", "<C-x>", "dd", "Cut Line")
@@ -97,17 +97,23 @@
     end, "Toggle zoom")
 
     -- save file
-    map("n", "<C-s>", "<cmd>w<CR>", "Save file")
+    map("n", "<C-s>", "<CMD>w<CR>", "Save file")
 
     -- copy whole file
-    map("n", "<C-c>", "<cmd>%y+<CR>", "Copy whole file")
+    map("n", "<C-c>", "<CMD>%y+<CR>", "Copy whole file")
 
     -- splits
     map("n", "--", "<CMD>split<CR>", "Split window horizontally")
     map("n", "\\\\", "<CMD>vsplit<CR>", "Split window vertically")
 
+    -- makefile targets
+    map("n", "<leader>mb", "<CMD>make build<CR>", "Make build")
+    map("n", "<leader>mc", "<CMD>make clean<CR>", "Make clean")
+    map("n", "<leader>mr", "<CMD>make run<CR>", "Make run")
+    map("n", "<leader>md", "<CMD>make debug<CR>", "Make debug")
+
     -- file browser
-    map("n", "<leader>o", "<cmd>Oil<CR>", "Filebrowser (Oil)")
+    map("n", "<leader>o", "<CMD>Oil<CR>", "Filebrowser (Oil)")
     map("n", "<leader>e", function()
       Snacks.explorer()
     end, "Filebrowser (Snacks)")
@@ -154,7 +160,7 @@
       Snacks.picker.files()
     end, "Find files")
     map("n", "<leader>fo", function()
-      Snacks.picker.recent()
+      Snacks.picker.recent({ filter = { paths = { [vim.fn.getcwd(0)] = true } } })
     end, "Find old files")
     map("n", "<leader>fr", function()
       Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
@@ -198,9 +204,9 @@
     end, "Current file git commits")
 
     -- lsp
-    map({ "n", "v", "x" }, "=", "<cmd>Format<cr>", "Format current buffer")
-    map("n", "<leader>li", "<cmd>LspInfo<cr>", "LSP Info")
-    map("n", "<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
+    map({ "n", "v", "x" }, "=", "<CMD>Format<CR>", "Format current buffer")
+    map("n", "<leader>li", "<CMD>LspInfo<CR>", "LSP Info")
+    map("n", "<leader>lr", "<CMD>LspRestart<CR>", "LSP Restart")
     map("n", "<leader>lh", function()
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
     end, "Toggle Inlay Hints")

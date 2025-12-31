@@ -16,8 +16,13 @@
           section_separators = "",
         },
         sections = {
-          lualine_c = { "filename" },
-          lualine_y = { "progress", "lsp_status" },
+          lualine_c = {
+            { "filename", filestatus = true, path = 1 },
+          },
+          lualine_y = {
+            "progress",
+            "lsp_status",
+          },
         },
       })
     '';

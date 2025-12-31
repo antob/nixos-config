@@ -19,13 +19,36 @@
           lua = { "stylua" },
           javascript = { "prettierd", "prettier", timeout_ms = 2000, stop_after_first = true },
           just = { "just" },
+          make = { "bake" },
           ["_"] = { "trim_whitespace", "trim_newlines" },
         },
 
         formatters = {
           shfmt = { command = "${lib.getExe pkgs.shfmt}" },
-          stylua = { command = "${lib.getExe pkgs.stylua}" },
-          htmlbeautifier = { command = "bundle", args = { "exec", "htmlbeautifier", "--keep-blank-lines", "1" } },
+          bake = { command = "${lib.getExe pkgs.mbake}" },
+          stylua = {
+            command = "${lib.getExe pkgs.stylua}",
+            args = {
+              "--indent-type",
+              "Spaces",
+              "--indent-width",
+              "2",
+              "--search-parent-directories",
+              "--respect-ignores",
+              "--stdin-filepath",
+              "$FILENAME",
+              "-",
+            },
+          },
+          htmlbeautifier = {
+            command = "bundle",
+            args = {
+              "exec",
+              "htmlbeautifier",
+              "--keep-blank-lines",
+              "1",
+            },
+          },
         },
 
         format_on_save = function(bufnr)
