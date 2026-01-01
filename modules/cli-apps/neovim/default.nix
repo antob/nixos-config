@@ -30,6 +30,7 @@ in
         ./keymaps.nix
         ./lsp
         ./plugins
+        ./syntax
       ];
 
       programs.neovim = {
