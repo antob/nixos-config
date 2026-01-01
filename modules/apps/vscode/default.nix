@@ -201,7 +201,7 @@ in
             ask_upgrade_llamacpp_hours = 72000;
             env_start_last_used = true;
             tool_run_terminal_command_enabled = false;
-            env_start_last_used_confirm = true;
+            env_start_last_used_confirm = false;
             envs_list = [
               {
                 name = "Local Environment";
