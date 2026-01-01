@@ -168,6 +168,9 @@
     map("n", "<leader>fl", function()
       Snacks.picker.resume()
     end, "Open last picker")
+    map("n", "<leader>fp", function()
+      Snacks.picker.projects()
+    end, "Find projects")
 
     -- search
     map("n", "<leader>ss", function()
