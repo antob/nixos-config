@@ -59,27 +59,25 @@ in
 
           alias.hist = "log --graph --pretty=format:'%Cred%h %cd%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short";
 
-          extraConfig = {
-            init = {
-              defaultBranch = "main";
-            };
-            pull = {
-              rebase = true;
-            };
-            push = {
-              autoSetupRemote = true;
-            };
-            core = {
-              whitespace = "trailing-space,space-before-tab";
-              editor = "nvim";
-              excludesfile = "~/.gitexcludes";
-            };
-            merge = {
-              conflictstyle = "diff3";
-            };
-            credential = {
-              helper = "cache";
-            };
+          init = {
+            defaultBranch = "main";
+          };
+          pull = {
+            rebase = true;
+          };
+          push = {
+            autoSetupRemote = true;
+          };
+          core = {
+            whitespace = "trailing-space,space-before-tab";
+            editor = "nvim";
+            excludesfile = "~/.gitexcludes";
+          };
+          merge = {
+            conflictstyle = "diff3";
+          };
+          credential = {
+            helper = "cache";
           };
         };
 
