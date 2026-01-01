@@ -134,6 +134,8 @@ in
       just
       nixos-anywhere
       sops
+      man-pages
+      man-pages-posix
     ];
 
     services = {
@@ -147,6 +149,13 @@ in
     location = {
       latitude = 57.7;
       longitude = 11.8;
+    };
+
+    documentation = {
+      enable = true;
+      man.enable = true;
+      man.man-db.enable = true;
+      dev.enable = true;
     };
   };
 }
