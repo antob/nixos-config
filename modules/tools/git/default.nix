@@ -126,6 +126,13 @@ in
 
     environment.shellAliases = {
       gh = "git hist";
+      gb = "git branch";
+      gco = "git checkout";
+      gc = "git commit --verbose";
+      gca = "git commit --verbose --all";
+      gd = "git diff";
+      gp = "git push";
+      gst = "git status";
       gg = "lazygit";
     };
   };

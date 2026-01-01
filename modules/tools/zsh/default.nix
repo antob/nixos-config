@@ -99,7 +99,7 @@ in
 
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" ] ++ cfg.extraOhMyZshPlugins;
+          plugins = [ ] ++ cfg.extraOhMyZshPlugins;
         };
       };
     };
