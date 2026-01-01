@@ -43,9 +43,6 @@
     };
   };
 
-  # Enable nixos-rebuild-ng, a full rewrite of nixos-rebuild in Python. Available for testing.
-  system.rebuild.enableNg = true;
-
   antob.persistence.home.directories = [
     ".local/share/nix"
   ];

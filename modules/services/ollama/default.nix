@@ -21,8 +21,7 @@ in
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      package = pkgs.nixpkgs-next.ollama;
-      acceleration = "rocm";
+      package = pkgs.ollama-vulkan;
 
       host = cfg.host;
       port = cfg.port;
@@ -34,12 +33,6 @@ in
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     environment.sessionVariables.OLLAMA_HOST = cfg.host;
-
-    environment.systemPackages = with pkgs; [
-      nixpkgs-next.rocmPackages.rocm-runtime
-      nixpkgs-next.rocmPackages.rocminfo
-      nixpkgs-next.ollama-rocm
-    ];
 
     antob.persistence = {
       directories = [ "/var/lib/private/ollama" ];
