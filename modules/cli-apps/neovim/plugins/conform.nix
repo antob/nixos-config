@@ -17,15 +17,32 @@
           rust = { "rustfmt" },
           nix = { "nixfmt", "injected" },
           lua = { "stylua" },
-          javascript = { "prettierd", "prettier", timeout_ms = 2000, stop_after_first = true },
+          javascript = { "prettier" },
+          javascriptreact = { "prettier" },
+          typescript = { "prettier" },
+          typescriptreact = { "prettier" },
+          vue = { "prettier" },
+          css = { "prettier" },
+          scss = { "prettier" },
+          less = { "prettier" },
+          html = { "prettier" },
+          json = { "prettier" },
+          jsonc = { "prettier" },
+          yaml = { "prettier" },
           just = { "just" },
           make = { "bake" },
           ["_"] = { "trim_whitespace", "trim_newlines" },
         },
 
+        default_format_opts = {
+          lsp_format = "fallback",
+        },
+
         formatters = {
           shfmt = { command = "${lib.getExe pkgs.shfmt}" },
           bake = { command = "${lib.getExe pkgs.mbake}" },
+          prettierd = { command = "${lib.getExe pkgs.prettierd}" },
+          prettier = { command = "${lib.getExe pkgs.prettier}" },
           stylua = {
             command = "${lib.getExe pkgs.stylua}",
             args = {

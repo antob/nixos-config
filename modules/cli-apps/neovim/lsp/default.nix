@@ -7,6 +7,7 @@
     lua-language-server
     nixd
     nodePackages.bash-language-server
+    typescript-language-server
     vscode-langservers-extracted
     shfmt
   ];
@@ -15,6 +16,60 @@
     plugins = with pkgs.vimPlugins; [ nvim-lspconfig ];
 
     extraLuaConfig = /* lua */ ''
+      -- Enable LSPs
+      vim.lsp.enable({
+        "lua_ls",
+        "nixd",
+        "rust_analyzer",
+        "ruby_lsp",
+        "ts_ls",
+        "cssls",
+      })
+
+      -- Configure LSPs
+      -- lua_ls
+      vim.lsp.config("lua_ls", {
+        on_init = function(client)
+          if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if
+              path ~= vim.fn.stdpath("config")
+              and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+            then
+              return
+            end
+          end
+
+          client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+            runtime = {
+              version = "LuaJIT",
+              path = {
+                "lua/?.lua",
+                "lua/?/init.lua",
+              },
+            },
+            workspace = {
+              checkThirdParty = false,
+              library = {
+                vim.env.VIMRUNTIME,
+              },
+            },
+          })
+        end,
+        settings = {
+          Lua = {
+            workspace = {
+              ignoreDir = { ".devenv", ".direnv" },
+            },
+          },
+        },
+      })
+
+      -- ruby_lsp
+      vim.lsp.config("ruby_lsp", {
+        cmd = { "bundle", "exec", "ruby-lsp" },
+      })
+
       -- LSP Keymaps Setup
       local function setup_keymaps(bufnr)
         local function map(mode, lhs, rhs, desc)
@@ -87,56 +142,6 @@
           end
         end,
       })
-
-      -- lua_ls
-      vim.lsp.config("lua_ls", {
-        on_init = function(client)
-          if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if
-              path ~= vim.fn.stdpath("config")
-              and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-            then
-              return
-            end
-          end
-
-          client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-            runtime = {
-              version = "LuaJIT",
-              path = {
-                "lua/?.lua",
-                "lua/?/init.lua",
-              },
-            },
-            workspace = {
-              checkThirdParty = false,
-              library = {
-                vim.env.VIMRUNTIME,
-              },
-            },
-          })
-        end,
-        settings = {
-          Lua = {
-            workspace = {
-              ignoreDir = { ".devenv", ".direnv" },
-            },
-          },
-        },
-      })
-
-      -- ruby_lsp
-      vim.lsp.config("ruby_lsp", {
-        cmd = { "bundle", "exec", "ruby-lsp" },
-      })
-
-      -- Enable LSPs
-      vim.lsp.enable({
-        "lua_ls",
-        "nixd",
-        "rust_analyzer",
-        "ruby_lsp",
-      })'';
+    '';
   };
 }
