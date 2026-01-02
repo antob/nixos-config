@@ -10,12 +10,12 @@
     extraLuaConfig = /* lua */ ''
       require("conform").setup({
         formatters_by_ft = {
-          ["*"] = { "injected" },
           bash = { "shfmt" },
           json = { "jq" },
-          eruby = { "htmlbeautifier" },
+          ruby = { "standardrb" },
+          eruby = { "erb_format" },
           rust = { "rustfmt" },
-          nix = { "nixfmt" },
+          nix = { "nixfmt", "injected" },
           lua = { "stylua" },
           javascript = { "prettierd", "prettier", timeout_ms = 2000, stop_after_first = true },
           just = { "just" },
@@ -40,13 +40,23 @@
               "-",
             },
           },
-          htmlbeautifier = {
+          standardrb = {
             command = "bundle",
             args = {
               "exec",
-              "htmlbeautifier",
-              "--keep-blank-lines",
-              "1",
+              "standardrb",
+              "--stdin",
+              "foo.rb",
+              "--fix",
+              "--stderr",
+            },
+          },
+          erb_format = {
+            command = "bundle",
+            args = {
+              "exec",
+              "erb-format",
+              "--stdin",
             },
           },
         },

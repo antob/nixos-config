@@ -25,8 +25,7 @@
         map("n", "K", function()
           vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
         end, "Hover")
-        map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
-        map("i", "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
+        map({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
 
         -- Navigation (g prefix) - gd, gD, gr, gI, gy handled by Snacks
         map("n", "gt", vim.lsp.buf.type_definition, "Type Definition")
@@ -44,15 +43,20 @@
         map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
         map("n", "<leader>cr", vim.lsp.buf.rename, "Rename Symbol")
         map("n", "<leader>cd", vim.diagnostic.open_float, "Line Diagnostic")
-        -- cf (format) handled by conform.lua
 
         -- <leader>l = LSP
-        map("n", "<leader>li", "<cmd>LspInfo<cr>", "LSP Info")
-        map("n", "<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
         map("n", "<leader>lh", function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
         end, "Toggle Inlay Hints")
       end
+
+      -- User commands
+      vim.api.nvim_create_user_command("LspInfo", ":checkhealth vim.lsp", { desc = "Alias to `:checkhealth vim.lsp`" })
+      vim.api.nvim_create_user_command("LspLog", function()
+        vim.cmd(string.format("tabnew %s", vim.lsp.log.get_filename()))
+      end, {
+        desc = "Opens LSP client log",
+      })
 
       -- LSP Attach Handler
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -121,6 +125,18 @@
           },
         },
       })
-    '';
+
+      -- ruby_lsp
+      vim.lsp.config("ruby_lsp", {
+        cmd = { "bundle", "exec", "ruby-lsp" },
+      })
+
+      -- Enable LSPs
+      vim.lsp.enable({
+        "lua_ls",
+        "nixd",
+        "rust_analyzer",
+        "ruby_lsp",
+      })'';
   };
 }
