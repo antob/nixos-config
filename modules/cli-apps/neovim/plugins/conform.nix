@@ -17,6 +17,7 @@
           rust = { "rustfmt" },
           nix = { "nixfmt", "injected" },
           lua = { "stylua" },
+          python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
           javascript = { "prettier" },
           javascriptreact = { "prettier" },
           typescript = { "prettier" },

@@ -10,6 +10,8 @@
     typescript-language-server
     vscode-langservers-extracted
     shfmt
+    ruff
+    ty
   ];
 
   programs.neovim = {
@@ -24,6 +26,7 @@
         "ruby_lsp",
         "ts_ls",
         "cssls",
+        "ty",
       })
 
       -- Configure LSPs
@@ -69,6 +72,9 @@
       vim.lsp.config("ruby_lsp", {
         cmd = { "bundle", "exec", "ruby-lsp" },
       })
+
+      -- Disable sematic tokens to stop color scheme changes when LSP start
+      vim.lsp.semantic_tokens.enable(false)
 
       -- LSP Keymaps Setup
       local function setup_keymaps(bufnr)
