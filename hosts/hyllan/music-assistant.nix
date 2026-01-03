@@ -17,6 +17,7 @@ in
         "soundcloud"
         "spotify"
         "ytmusic"
+        "sendspin"
       ];
     };
   };
