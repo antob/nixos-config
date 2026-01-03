@@ -92,6 +92,7 @@ in
             bind=Super+Shift,w,spawn,${dm-firefox-profile}
             bind=Super,e,spawn,nautilus --new-window
             bind=Super,b,spawn,alacritty --class=TUI.float -e bluetui
+            bind=Super,n,spawn,alacritty --class=TUI.float.lg -e ${pkgs.impala}/bin/impala
             bind=Super,t,spawn,alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}
             bind=Super,d,spawn,walker -p 'Start…'
             bind=Super,x,spawn,${dm-system}
