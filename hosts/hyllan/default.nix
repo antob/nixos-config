@@ -19,7 +19,6 @@ in
     ./msmtp.nix
     ./caddy.nix
     ./podman.nix
-    ./plex.nix
     ./mysql.nix
     ./postgresql.nix
     ./photoprism.nix
@@ -28,7 +27,7 @@ in
     ./esphome.nix
     ./nfsd.nix
     ./samba.nix
-    ./commafeed.nix
+    ./miniflux.nix
     ./vaultwarden.nix
     ./atuin.nix
     ./music-assistant.nix
