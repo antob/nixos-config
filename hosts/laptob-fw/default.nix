@@ -141,7 +141,7 @@ in
       mountConfig = {
         Options = "noatime";
       };
-      what = "hyllan.lan:/mnt/tank/share/public";
+      what = "192.168.1.2:/mnt/tank/share/public";
       where = "/mnt/share/public";
     }
     {
@@ -149,7 +149,7 @@ in
       mountConfig = {
         Options = "noatime";
       };
-      what = "hyllan.lan:/mnt/tank/share/private";
+      what = "192.168.1.2:/mnt/tank/share/private";
       where = "/mnt/share/private";
     }
   ];

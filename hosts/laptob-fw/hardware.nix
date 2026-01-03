@@ -19,6 +19,11 @@ in
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
 
+    supportedFilesystems = [
+      "nfs"
+      "nfs4"
+    ];
+
     initrd = {
       availableKernelModules = [
         "xhci_pci"
