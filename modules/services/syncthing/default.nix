@@ -18,7 +18,7 @@ in
     antob.home.extraOptions = {
       services.syncthing = {
         enable = true;
-        package = pkgs.nixpkgs-next.syncthing;
+        package = pkgs.syncthing;
       };
     };
 
