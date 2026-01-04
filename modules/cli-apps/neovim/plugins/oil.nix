@@ -25,6 +25,7 @@
         },
         keymaps = {
           ["q"] = { "actions.close", mode = "n" },
+          ["<leader>o"] = { "actions.close", mode = "n" },
         },
       })
     '';

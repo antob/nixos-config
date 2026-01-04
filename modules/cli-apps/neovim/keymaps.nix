@@ -70,7 +70,7 @@
     map("n", "g#", "g#zz", "Search Partial Back (centered)")
 
     -- Split line with X
-    map("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<CR>", "Split Line")
+    nosmap("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<CR>", "Split Line")
 
     -- ctrl + x to cut full line
     map("n", "<C-x>", "dd", "Cut Line")
@@ -79,7 +79,7 @@
     map("n", "<C-a>", "ggVG", "Select All")
 
     -- Write file in current directory (:w %:h/<new-file-name>)
-    map("n", "<C-n>", ":w %:h/", "Write New File")
+    nosmap("n", "<C-n>", ":w %:h/", "Write New File")
 
     -- open new line in insert mode
     map("i", "<C-o>", "<ESC>o", "Open new line below")
@@ -97,7 +97,7 @@
     end, "Toggle zoom")
 
     -- save file
-    map("n", "<C-s>", "<CMD>w<CR>", "Save file")
+    nosmap("n", "<C-s>", "<CMD>w<CR>", "Save file")
 
     -- copy whole file
     map("n", "<C-c>", "<CMD>%y+<CR>", "Copy whole file")
@@ -118,6 +118,7 @@
       Snacks.explorer()
     end, "Filebrowser (Snacks)")
 
+    -- buffers
     function find_buffers()
       Snacks.picker.buffers({
         win = {
@@ -126,8 +127,6 @@
         },
       })
     end
-
-    -- buffers
     map({ "n", "i", "v" }, "<S-Left>", "<CMD>bprevious<CR>", "Previous buffer")
     map({ "n", "i", "v" }, "<S-Right>", "<CMD>bnext<CR>", "Next buffer")
     map({ "n", "i", "v" }, "<S-Up>", "<CMD>e #<CR>", "Switch to other buffer")
