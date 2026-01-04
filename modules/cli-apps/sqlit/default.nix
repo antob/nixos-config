@@ -20,7 +20,7 @@ in
     ];
 
     environment.variables = {
-      SQLIT_CONFIG_DIR = "./config/sqlit";
+      SQLIT_CONFIG_DIR = "$HOME/.config/sqlit";
     };
 
     antob.persistence = {
