@@ -119,5 +119,3 @@ set -g detach-on-destroy on   # exit from tmux when closing a session
 set -g escape-time 0          # zero-out escape time delay
 set -g renumber-windows on    # renumber all windows when any window is closed
 set -g set-clipboard external # use system clipboard
-
-TMUX_FZF_LAUNCH_KEY="C-f"

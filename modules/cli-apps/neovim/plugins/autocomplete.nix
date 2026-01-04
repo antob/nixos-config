@@ -23,11 +23,11 @@
           list = {
             selection = {
               preselect = true,
-              auto_insert = true,
+              auto_insert = false,
             },
           },
           documentation = { auto_show = true, auto_show_delay_ms = 500 },
-          ghost_text = { enabled = true },
+          ghost_text = { enabled = false },
           menu = {
             auto_show = true,
             draw = {
@@ -43,15 +43,19 @@
         },
         cmdline = {
           keymap = {
-            preset = "cmdline",
+            preset = "none",
             ["<CR>"] = { "select_and_accept", "fallback" },
             ["<Esc>"] = { "cancel", "fallback" },
+            ["<Tab>"] = { "show", "select_next", "fallback" },
+            ["<S-Tab>"] = { "select_prev", "fallback" },
+            ["<Down>"] = { "select_next", "fallback" },
+            ["<Up>"] = { "select_prev", "fallback" },
           },
           completion = {
             list = {
               selection = {
-                preselect = false,
-                auto_insert = false,
+                preselect = true,
+                auto_insert = true,
               },
             },
           },

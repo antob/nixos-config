@@ -20,7 +20,7 @@
         },
       },
       float = {
-        border = "single",
+        border = "rounded",
         format = function(diagnostic)
           return string.format(
             "%s (%s) [%s]",
