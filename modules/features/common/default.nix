@@ -35,6 +35,7 @@ in
         tmux = enabled;
         yazi = enabled;
         nix-search-tv = enabled;
+        sqlit = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;
@@ -136,6 +137,7 @@ in
       sops
       man-pages
       man-pages-posix
+      witr
     ];
 
     services = {
