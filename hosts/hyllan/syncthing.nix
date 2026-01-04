@@ -14,27 +14,6 @@ in
       overrideDevices = false;
       overrideFolders = false;
       guiAddress = "0.0.0.0:${toString port}";
-      settings = {
-        devices = {
-          "laptob-fw" = {
-            id = "6LOVNRB-YSW65OL-RRN4GXI-LMF5BD3-JIY3UBU-DDTR7T3-35VTT3Z-2I2U4AM";
-          };
-        };
-        folders = {
-          "Documents" = {
-            path = "${dataDir}/Documents";
-            devices = [ "laptob-fw" ];
-          };
-          "Projects" = {
-            path = "${dataDir}/Projects";
-            devices = [ "laptob-fw" ];
-          };
-          "Pictures" = {
-            path = "${dataDir}/Pictures";
-            devices = [ "laptob-fw" ];
-          };
-        };
-      };
     };
   };
 
