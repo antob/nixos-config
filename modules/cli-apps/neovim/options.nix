@@ -1,6 +1,8 @@
 { lib, ... }:
 {
   programs.neovim.extraLuaConfig = lib.mkOrder 200 /* lua */ ''
+    -- vim.opt.runtimepath:prepend("~/Projects/C64/kicknvim")
+
     -- globals
     vim.g.mapleader = " "
     vim.g.maplocalleader = " "
@@ -41,7 +43,7 @@
     vim.opt.signcolumn = "yes"
     vim.opt.splitbelow = true
     vim.opt.splitright = true
-    vim.opt.timeoutlen = 400
+    vim.opt.timeoutlen = 1000
     vim.opt.winborder = "rounded"
 
     -- Undo and swap
