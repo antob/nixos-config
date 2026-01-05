@@ -200,7 +200,7 @@ in
             mousebind=SUPER,btn_right,moveresize,curresize
 
             ## Env settings
-            env=XCURSOR_SIZE,${builtins.toString gtkCfg.cursor.size}
+            env=XCURSOR_SIZE,${toString gtkCfg.cursor.size}
 
             # Force all apps to use Wayland
             env=GDK_BACKEND,wayland,x11,*
@@ -267,7 +267,7 @@ in
             enable_hotarea=0
 
             ## Miscellaneous Settings
-            cursor_size=${builtins.toString gtkCfg.cursor.size}
+            cursor_size=${toString gtkCfg.cursor.size}
             cursor_theme=${gtkCfg.cursor.name}
             cursor_hide_timeout=5
             no_border_when_single=1
