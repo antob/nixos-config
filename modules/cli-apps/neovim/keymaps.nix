@@ -108,9 +108,18 @@
 
     -- makefile targets
     map("n", "<leader>mb", "<CMD>make build<CR>", "Make build")
+    map("n", "<leader>mB", function()
+      vim.cmd.make("build NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
+    end, "Make build current file")
     map("n", "<leader>mc", "<CMD>make clean<CR>", "Make clean")
     map("n", "<leader>mr", "<CMD>make run<CR>", "Make run")
+    map("n", "<leader>mR", function()
+      vim.cmd.make("run NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
+    end, "Make run current file")
     map("n", "<leader>md", "<CMD>make debug<CR>", "Make debug")
+    map("n", "<leader>mD", function()
+      vim.cmd.make("debug NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
+    end, "Make debug current file")
 
     -- file browser
     map("n", "<leader>o", "<CMD>Oil<CR>", "Filebrowser (Oil)")
