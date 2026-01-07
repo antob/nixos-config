@@ -94,16 +94,18 @@ bind -n \uE021 previous-window
 bind -n \uE022 next-window
 
 bind-key "C-s" run-shell "sesh connect \"$(
-	sesh list -t | fzf-tmux -p 55%,60% \
+	sesh list --icons -t | fzf-tmux -p 55%,60% \
 		--no-sort --ansi --border-label ' Sessions ' --prompt '⚡  ' \
 		--header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
 		--bind 'tab:down,btab:up' \
 		--bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list)' \
-		--bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t)' \
-		--bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c)' \
-		--bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z)' \
-		--bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .cache -E .stfolder -E .Trash -E .Trash-1000 . ~/Projects)' \
-		--bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list -t)'
+		--bind 'ctrl-t:change-prompt(  )+reload(sesh list --icons -t)' \
+		--bind 'ctrl-g:change-prompt(󰒓  )+reload(sesh list --icons -c)' \
+		--bind 'ctrl-x:change-prompt(  )+reload(sesh list --icons -z)' \
+		--bind 'ctrl-f:change-prompt(  )+reload(fd -H -d 2 -t d -E .cache -E .stfolder -E .Trash -E .Trash-1000 . ~/Projects)' \
+		--bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list --icons -t)' \
+    --preview-window 'right:55%' \
+    --preview 'sesh preview {}'
 )\""
 
 # Hooks
