@@ -40,6 +40,9 @@
           },
         },
       })
+
+      -- Make SnacksPickerBorder use the PmenuBorder highlight group
+      vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuBorder" })
     '';
   };
 }
