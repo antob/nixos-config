@@ -150,6 +150,12 @@
     map("n", "<leader>bs", function()
       Snacks.picker.grep_buffers()
     end, "Search in open buffers")
+    map("n", "<leader>.", function()
+      Snacks.scratch()
+    end, "Toogle scratch buffer")
+    map("n", "<leader>br", function()
+      Snacks.scratch.select()
+    end, "List scratch buffers")
 
     -- tabs
     map("n", "<leader><tab>l", "<CMD>tablast<CR>", "Last tab")

@@ -12,6 +12,7 @@
         explorer = { enabled = false },
         indent = { enabled = false },
         input = { enabled = false },
+        scratch = { enabled = true },
 
         picker = {
           enabled = true,
