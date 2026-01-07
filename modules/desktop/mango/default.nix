@@ -265,6 +265,9 @@ in
             scroller_default_proportion_single=1.0
             scroller_proportion_preset=0.75,0.5,0.25,1.0
 
+            ## Master-Stack Layout Settings
+            new_is_master=0
+
             ## Overview Settings
             enable_hotarea=0
 
@@ -272,7 +275,6 @@ in
             cursor_size=${toString gtkCfg.cursor.size}
             cursor_theme=${gtkCfg.cursor.name}
             cursor_hide_timeout=5
-            no_border_when_single=1
 
             ## Keyboard Settings
             repeat_rate=40
@@ -289,7 +291,7 @@ in
             gappoh=10
             gappov=10
             borderpx=3
-            no_border_when_single=0
+            no_border_when_single=1
             bordercolor=0x${colors.base12}ff
             focuscolor=0x${colors.base0C}ff
             maximizescreencolor=0x${colors.base12}ff
@@ -323,10 +325,10 @@ in
             windowrule=tags:5,appid:obsidian|chrome-app.slack.com|chrome-teams.microsoft.com|chrome-meet.google.com|chrome-music.antob.net
 
             # Transparancy
-            windowrule=focused_opacity:0.9,unfocused_opacity:0.9,appid:Alacritty
+            windowrule=focused_opacity:1.0,unfocused_opacity:1.0,appid:Alacritty
 
             # Screensaver
-            windowrule=isfullscreen:1focused_opacity:1.0,unfocused_opacity:1.0,appid:Screensaver,title:Alacritty
+            windowrule=isfullscreen:1,focused_opacity:1.0,unfocused_opacity:1.0,appid:Screensaver,title:Alacritty
 
             ## Monitor Rules
             # monitorrule=name,mfact,nmaster,layout,transform,scale,x,y,width,height,refreshrate
