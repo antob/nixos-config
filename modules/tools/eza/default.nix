@@ -22,10 +22,10 @@ in
         in
         {
           ".." = "cd ..";
-          ls = "${pkgs.eza}/bin/eza --group-directories-first";
+          ls = "${pkgs.eza}/bin/eza --group-directories-first --icons";
           la = "ls -a";
-          l = "ls -l";
-          ll = "ls -al";
+          l = "ls -lg";
+          ll = "ls -alg";
           lt = "ls --tree -D -L 2 -I ${treeIgnore}";
           ltt = "ls --tree -D -L 3 -I ${treeIgnore}";
         };
