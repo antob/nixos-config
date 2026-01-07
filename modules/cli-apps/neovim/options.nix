@@ -38,7 +38,7 @@
     vim.opt.pumheight = 20
 
     -- Show only one line in command line
-    vim.opt.cmdheight = 0
+    vim.opt.cmdheight = 1
 
     vim.opt.signcolumn = "yes"
     vim.opt.splitbelow = true
@@ -56,7 +56,7 @@
     vim.opt.updatetime = 250
 
     -- Search highlight
-    vim.opt.hlsearch = false
+    vim.opt.hlsearch = true
     vim.opt.incsearch = true
 
     -- Sets how neovim will display certain whitespace characters in the editor.

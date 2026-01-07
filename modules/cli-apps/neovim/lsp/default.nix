@@ -86,7 +86,7 @@
         map("n", "K", function()
           vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
         end, "Hover")
-        map({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
+        map({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, "Signature Help")
 
         -- Navigation (g prefix) - gd, gD, gr, gI, gy handled by Snacks
         map("n", "gt", vim.lsp.buf.type_definition, "Type Definition")

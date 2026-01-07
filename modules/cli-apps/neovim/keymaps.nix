@@ -190,12 +190,15 @@
     map("n", "<leader>sh", function()
       Snacks.picker.help()
     end, "Search help pages")
-    map("n", "<leader>sm", function()
+    map("n", "<leader>sp", function()
       Snacks.picker.man()
     end, "Search man pages")
     map("n", "<leader>sk", function()
       Snacks.picker.keymaps({ layout = "select" })
     end, "Search keymaps")
+    map("n", "<leader>sm", function()
+      Snacks.picker.marks()
+    end, "Search marks")
 
     -- git
     map("n", "<leader>gg", function()
