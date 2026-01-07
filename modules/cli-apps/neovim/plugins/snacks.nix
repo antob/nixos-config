@@ -32,6 +32,12 @@
         scroll = { enabled = false },
         statuscolumn = { enabled = false },
         words = { enabled = false },
+        styles = {
+          lazygit = {
+            border = "rounded",
+            wo = { winhighlight = "FloatBorder:PmenuBorder" },
+          },
+        },
       })
     '';
   };

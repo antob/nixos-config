@@ -28,7 +28,7 @@ in
     ];
 
     antob.home.extraOptions = {
-      xdg.configFile."lazygit/config.yml".text = ''
+      xdg.configFile."lazygit/config.yml".text = /* yaml */ ''
         gui:
           showFileTree: false
           showRandomTip: false
@@ -37,9 +37,14 @@ in
           border: single
           theme:
             selectedLineBgColor:
-              - '#${colors.base12}'
+              - "#${colors.base12}"
             inactiveBorderColor:
-              - '#${colors.base12}'
+              - "#${colors.base12}"
+        git:
+          autoFetch: false
+        update:
+          method: never
+        promptToReturnFromSubprocess: false
       '';
 
       programs.git = {
