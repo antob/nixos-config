@@ -198,6 +198,8 @@ in
             ## Mouse Bindings
             mousebind=SUPER,btn_left,moveresize,curmove
             mousebind=SUPER,btn_right,moveresize,curresize
+            mousebind=NONE,btn_left,toggleoverview,1
+            mousebind=NONE,btn_right,killclient,0
 
             ## Env settings
             env=XCURSOR_SIZE,${toString gtkCfg.cursor.size}
