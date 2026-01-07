@@ -9,6 +9,6 @@
     ./oil.nix
     ./snacks.nix
     ./treesitter.nix
-    ./llama.nix
+    ./copilot-lua.nix
   ];
 }
