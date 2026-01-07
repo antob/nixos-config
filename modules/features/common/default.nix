@@ -36,6 +36,7 @@ in
         yazi = enabled;
         nix-search-tv = enabled;
         sqlit = enabled;
+        opencode = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;
