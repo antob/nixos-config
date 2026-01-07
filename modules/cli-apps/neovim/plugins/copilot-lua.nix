@@ -12,7 +12,7 @@
         },
         suggestion = {
           enabled = true,
-          auto_trigger = false,
+          auto_trigger = true,
           hide_during_completion = true,
           debounce = 15,
           trigger_on_accept = true,
@@ -28,6 +28,9 @@
         },
         filetypes = {
           dotenv = false,
+        },
+        logger = {
+          file_log_level = vim.log.levels.INFO,
         },
         server_opts_overrides = {
           settings = {

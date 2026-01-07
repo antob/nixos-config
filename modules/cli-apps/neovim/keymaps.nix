@@ -249,5 +249,10 @@
     map("n", "<leader>tc", function()
       Snacks.terminal(nil, { cwd = vim.fn.expand("%:p:h") })
     end, "Terminal in current folder")
+
+    -- copilot
+    map("n", "<leader>ce", "<CMD>Copilot enable<CR>", "Enable Copilot")
+    map("n", "<leader>cd", "<CMD>Copilot disable<CR>", "Disable Copilot")
+    map("n", "<leader>cs", "<CMD>Copilot status<CR>", "Show Copilot status")
   '';
 }
