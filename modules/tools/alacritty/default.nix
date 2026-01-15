@@ -21,7 +21,7 @@ in
 
         settings = {
           env = {
-            TERM = "xterm-256color";
+            TERM = "alacritty";
           };
 
           window = {
