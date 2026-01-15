@@ -6,7 +6,7 @@
       callback = function()
         if vim.fn.argv(0) == "" then
           vim.defer_fn(function()
-            Snacks.picker.recent({ filter = { paths = { [vim.fn.getcwd(0)] = true } } })
+            Snacks.picker.files()
           end, 10)
         end
       end,

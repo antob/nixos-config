@@ -9,6 +9,7 @@
       nvim-autopairs
       vim-tmux-navigator
       nvim-ts-autotag
+      vim-eunuch
     ];
 
     extraLuaConfig = /* lua */ ''

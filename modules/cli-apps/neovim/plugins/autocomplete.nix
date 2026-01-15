@@ -46,7 +46,7 @@
             preset = "none",
             ["<CR>"] = { "select_and_accept", "fallback" },
             ["<Esc>"] = { "cancel", "fallback" },
-            ["<Tab>"] = { "show", "select_next", "fallback" },
+            ["<Tab>"] = { "show_and_insert", "select_next", "fallback" },
             ["<S-Tab>"] = { "select_prev", "fallback" },
             ["<Down>"] = { "select_next", "fallback" },
             ["<Up>"] = { "select_prev", "fallback" },

@@ -16,6 +16,11 @@
           section_separators = "",
         },
         sections = {
+          lualine_b = {
+            "branch",
+            "diff",
+            { "diagnostics", symbols = { error = " ", warn = " ", info = " ", hint = " " } },
+          },
           lualine_c = {
             { "filename", filestatus = true, path = 1 },
           },

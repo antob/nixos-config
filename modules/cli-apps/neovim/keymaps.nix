@@ -73,10 +73,10 @@
     nosmap("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<CR>", "Split Line")
 
     -- ctrl + x to cut full line
-    map("n", "<C-x>", "dd", "Cut Line")
+    -- map("n", "<C-x>", "dd", "Cut Line")
 
     -- Select all
-    map("n", "<C-a>", "ggVG", "Select All")
+    -- map("n", "<C-a>", "ggVG", "Select All")
 
     -- Write file in current directory (:w %:h/<new-file-name>)
     nosmap("n", "<C-n>", ":w %:h/", "Write New File")
@@ -105,20 +105,22 @@
     -- splits
     map("n", "--", "<CMD>split<CR>", "Split window horizontally")
     map("n", "\\\\", "<CMD>vsplit<CR>", "Split window vertically")
+    map("n", "<C-w>f", "<C-w>vgf", "Split window vertically and edit file name under the cursor")
+    map("n", "<C-w><C-f>", "<C-w>vgf", "Split window vertically and edit file name under the cursor")
 
     -- makefile targets
     map("n", "<leader>mb", "<CMD>make build<CR>", "Make build")
     map("n", "<leader>mB", function()
-      vim.cmd.make("build NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
+      vim.cmd("make build NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
     end, "Make build current file")
     map("n", "<leader>mc", "<CMD>make clean<CR>", "Make clean")
-    map("n", "<leader>mr", "<CMD>make run<CR>", "Make run")
+    map("n", "<leader>mr", "<CMD>!make run<CR>", "Make run")
     map("n", "<leader>mR", function()
-      vim.cmd.make("run NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
+      vim.cmd("!make run NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
     end, "Make run current file")
-    map("n", "<leader>md", "<CMD>make debug<CR>", "Make debug")
+    map("n", "<leader>md", "<CMD>make! debug<CR>", "Make debug")
     map("n", "<leader>mD", function()
-      vim.cmd.make("debug NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
+      vim.cmd("!make debug NAME=" .. vim.fn.expand("%:t:r") .. " SRCFILE=" .. vim.fn.expand("%:."))
     end, "Make debug current file")
 
     -- file browser
@@ -136,10 +138,10 @@
         },
       })
     end
-    map({ "n", "i", "v" }, "<S-Left>", "<CMD>bprevious<CR>", "Previous buffer")
-    map({ "n", "i", "v" }, "<S-Right>", "<CMD>bnext<CR>", "Next buffer")
-    map({ "n", "i", "v" }, "<S-Up>", "<CMD>e #<CR>", "Switch to other buffer")
-    map({ "n", "i", "v" }, "<S-Down>", find_buffers, "Search buffers")
+    map({ "n", "i", "v" }, "<C-Left>", "<CMD>bprevious<CR>", "Previous buffer")
+    map({ "n", "i", "v" }, "<C-Right>", "<CMD>bnext<CR>", "Next buffer")
+    map({ "n", "i", "v" }, "<C-Up>", "<CMD>e #<CR>", "Switch to other buffer")
+    map({ "n", "i", "v" }, "<C-Down>", find_buffers, "Search buffers")
     map("n", "<leader>bb", find_buffers, "Search buffers")
     map("n", "<leader>bd", function()
       Snacks.bufdelete()
@@ -233,15 +235,15 @@
     map("n", "<leader>lS", function()
       Snacks.picker.lsp_workspace_symbols()
     end, "Workspace symbols")
-    map("n", "gd", function()
-      Snacks.picker.lsp_definitions()
-    end, "LSP definitions")
-    map("n", "gr", function()
-      Snacks.picker.lsp_references()
-    end, "LSP references")
-    map("n", "gI", function()
-      Snacks.picker.lsp_implementations()
-    end, "LSP implementations")
+    -- map("n", "gd", function()
+    --   Snacks.picker.lsp_definitions()
+    -- end, "LSP definitions")
+    -- map("n", "gr", function()
+    --   Snacks.picker.lsp_references()
+    -- end, "LSP references")
+    -- map("n", "gI", function()
+    --   Snacks.picker.lsp_implementations()
+    -- end, "LSP implementations")
 
     -- diagnostics
     map("n", "<leader>dd", function()

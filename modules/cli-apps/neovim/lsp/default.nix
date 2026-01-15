@@ -91,6 +91,11 @@
         -- Navigation (g prefix) - gd, gD, gr, gI, gy handled by Snacks
         map("n", "gt", vim.lsp.buf.type_definition, "Type Definition")
         map("n", "<leader>v", "<cmd>vsplit | lua vim.lsp.buf.definition()<cr>", "Definition in Split")
+        map("n", "gd", vim.lsp.buf.definition, "LSP definitions")
+        vim.keymap.set("n", "gr", Snacks.picker.lsp_references, { nowait = true, desc = "LSP references" })
+        map("n", "gI", function()
+          Snacks.picker.lsp_implementations()
+        end, "LSP implementations")
 
         -- Diagnostics navigation ([ and ] prefix)
         map("n", "[d", function()
@@ -109,6 +114,15 @@
         map("n", "<leader>lh", function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
         end, "Toggle Inlay Hints")
+
+        map("n", "<C-w>]", function()
+          vim.api.nvim_command("vsplit")
+          vim.lsp.buf.definition()
+        end, "Split window vertically and goto definition")
+        map("n", "<C-w><C-]>", function()
+          vim.api.nvim_command("vsplit")
+          vim.lsp.buf.definition()
+        end, "Split window vertically and goto definition")
       end
 
       -- User commands
@@ -126,6 +140,11 @@
           local bufnr = args.buf
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if not client then
+            return
+          end
+
+          if client.name == "copilot" then
+            -- Do not add keymaps for copilot
             return
           end
 

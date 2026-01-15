@@ -95,7 +95,7 @@
             return
           end
 
-          return { timeout_ms = 500, lsp_format = "fallback" }
+          return { timeout_ms = 1500, lsp_format = "fallback" }
         end,
       })
 
