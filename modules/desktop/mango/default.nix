@@ -317,7 +317,9 @@ in
             windowrule=isfloating:1,appid:^TUI.float$
             windowrule=isfloating:1,appid:Wiremix
             windowrule=isfloating:1,title:satty
+            windowrule=isfloating:1,title:Bluetooth Devices|blueman
             windowrule=isfloating:1,appid:firefox,title:^Extension.*$
+            windowrule=isfloating:1,appid:X64
 
             # Windows on specific workspace
             windowrule=tags:2,appid:firefox
