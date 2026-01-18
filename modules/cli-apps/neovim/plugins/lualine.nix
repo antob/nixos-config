@@ -29,6 +29,16 @@
             "lsp_status",
           },
         },
+        winbar = {
+          lualine_z = {
+            { "filename", filestatus = true, path = 1, color = { fg = "#6c7086", bg = "#313244" } },
+          },
+        },
+        inactive_winbar = {
+          lualine_z = {
+            { "filename", filestatus = true, path = 1, color = { fg = "#6c7086", bg = "#1a1b26" } },
+          },
+        },
       })
     '';
   };

@@ -23,6 +23,26 @@
           untracked = { text = "┆" },
         },
         watch_gitdir = { follow_files = true },
+        on_attach = function(bufnr)
+          local gitsigns = require("gitsigns")
+
+          -- Navigation
+          vim.keymap.set("n", "]g", function()
+            if vim.wo.diff then
+              vim.cmd.normal({ "]g", bang = true })
+            else
+              gitsigns.nav_hunk("next")
+            end
+          end)
+
+          vim.keymap.set("n", "[g", function()
+            if vim.wo.diff then
+              vim.cmd.normal({ "[g", bang = true })
+            else
+              gitsigns.nav_hunk("prev")
+            end
+          end)
+        end,
       })
     '';
   };

@@ -38,11 +38,15 @@
             border = "rounded",
             wo = { winhighlight = "FloatBorder:PmenuBorder" },
           },
+          zoom_indicator = {
+            text = " 󰊓 ",
+            row = 1,
+          },
         },
       })
 
-      -- Make SnacksPickerBorder use the PmenuBorder highlight group
-      vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuBorder" })
+      -- Make SnacksPickerBorder use the PmenuExtra highlight group
+      vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuExtra" })
     '';
   };
 }

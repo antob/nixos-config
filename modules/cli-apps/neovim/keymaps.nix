@@ -5,12 +5,7 @@
     map("n", "<C-d>", "<C-d>zz")
     map("n", "<C-u>", "<C-u>zz")
 
-    -- use ; to enter command mode
-    nosmap({ "n", "v", "x" }, ";", ":")
-    nosmap({ "n", "v", "x" }, ":", ";")
-
     -- yank to system clipboard
-    map({ "v", "x", "n" }, "<C-y>", '"+y', "Yank to System clipboard.")
     map({ "v", "x", "n" }, "<leader>y", '"+y', "Yank to System clipboard.")
 
     -- keep cursor position when joining lines
@@ -62,28 +57,21 @@
     map("n", "_", ":vertical resize -5<CR>", "Decrease Width")
 
     -- Keep search results centered
-    map("n", "n", "nzzzv", "Next Match (centered)")
-    map("n", "N", "Nzzzv", "Prev Match (centered)")
-    map("n", "*", "*zzv", "Search Word (centered)")
-    map("n", "#", "#zzv", "Search Word Back (centered)")
+    map("n", "n", "nzz", "Next Match (centered)")
+    map("n", "N", "Nzz", "Prev Match (centered)")
+    map("n", "*", "*zz", "Search Word (centered)")
+    map("n", "#", "#zz", "Search Word Back (centered)")
     map("n", "g*", "g*zz", "Search Partial (centered)")
     map("n", "g#", "g#zz", "Search Partial Back (centered)")
 
     -- Split line with X
     nosmap("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<CR>", "Split Line")
 
-    -- ctrl + x to cut full line
-    -- map("n", "<C-x>", "dd", "Cut Line")
-
-    -- Select all
-    -- map("n", "<C-a>", "ggVG", "Select All")
-
     -- Write file in current directory (:w %:h/<new-file-name>)
     nosmap("n", "<C-n>", ":w %:h/", "Write New File")
 
     -- open new line in insert mode
-    map("i", "<C-o>", "<ESC>o", "Open new line below")
-    map("i", "<C-S-o>", "<ESC><S-o>", "Open new line above")
+    map("i", "<C-o><C-o>", "<C-o>o", "Open new line below")
 
     -- navigation
     map("i", "<C-b>", "<ESC>^i", "Move to beginning of line")
@@ -92,12 +80,9 @@
     map("n", "<C-l>", "<C-w>l", "Focus window right")
     map("n", "<C-j>", "<C-w>j", "Focus window down")
     map("n", "<C-k>", "<C-w>k", "Focus window up")
-    map("n", "<C-m>", function()
+    map("n", "<leader>z", function()
       Snacks.zen.zoom()
     end, "Toggle zoom")
-
-    -- save file
-    nosmap("n", "<C-s>", "<CMD>w<CR>", "Save file")
 
     -- copy whole file
     map("n", "<C-c>", "<CMD>%y+<CR>", "Copy whole file")
@@ -187,6 +172,12 @@
     map("n", "<leader>fp", function()
       Snacks.picker.projects()
     end, "Find projects")
+    map("n", "<leader>fm", function()
+      Snacks.picker.marks()
+    end, "Find marks")
+    map("n", "<leader>fj", function()
+      Snacks.picker.jumps()
+    end, "Find jumps")
 
     -- search
     map("n", "<leader>ss", function()
@@ -204,9 +195,6 @@
     map("n", "<leader>sk", function()
       Snacks.picker.keymaps({ layout = "select" })
     end, "Search keymaps")
-    map("n", "<leader>sm", function()
-      Snacks.picker.marks()
-    end, "Search marks")
 
     -- git
     map("n", "<leader>gg", function()
