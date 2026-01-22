@@ -32,6 +32,12 @@
             LspReferenceWrite = { bg = colors.none, blend = 80, style = { "bold" } },
           }
         end,
+        integrations = {
+          snacks = {
+            enabled = true,
+          },
+          gitsigns = true,
+        },
       })
 
       vim.cmd("colorscheme catppuccin-mocha")
