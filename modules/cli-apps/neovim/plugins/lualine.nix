@@ -7,25 +7,40 @@
     plugins = with pkgs.vimPlugins; [ lualine-nvim ];
 
     extraLuaConfig = /* lua */ ''
+      local custom_catppuccin = require("lualine.themes.catppuccin")
+      custom_catppuccin.normal.c.bg = "#292c3c"
+      custom_catppuccin.inactive.c.bg = "#292c3c"
+
       require("lualine").setup({
         options = {
           globalstatus = false,
           icons_enabled = true,
-          theme = "auto",
-          component_separators = "│",
+          theme = custom_catppuccin,
+          component_separators = " ⃒",
           section_separators = "",
         },
         sections = {
           lualine_b = {
-            "branch",
             { "diagnostics", symbols = { error = " ", warn = " ", info = " ", hint = " " } },
           },
           lualine_c = {
             { "filename", filestatus = true, path = 1 },
           },
+          lualine_x = { "filetype" },
           lualine_y = {
             "progress",
-            "lsp_status",
+            {
+              "lsp_status",
+              icon = "󰚩",
+              symbols = {
+                spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+                done = "󰗡",
+                separator = " ",
+              },
+              ignore_lsp = { "copilot" },
+              show_name = false,
+              padding = { left = 1, right = 2 },
+            },
           },
         },
         inactive_sections = {
@@ -34,7 +49,7 @@
           lualine_c = {
             { "filename", filestatus = true, path = 1 },
           },
-          lualine_x = { "location" },
+          lualine_x = { "filetype", "progress", "location" },
           lualine_y = {},
           lualine_z = {},
         },

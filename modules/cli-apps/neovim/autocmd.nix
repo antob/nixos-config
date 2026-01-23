@@ -51,6 +51,14 @@
       end,
     })
 
+    -- Register tmux ft as bash for TS highlighting
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = { "tmux" },
+      callback = function()
+        vim.treesitter.language.register("config", "tmux")
+      end,
+    })
+
     -- Enable cursorline only in active window
     local cl_var = "auto_cursorline"
     vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained" }, {

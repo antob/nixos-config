@@ -139,6 +139,7 @@ in
       man-pages
       man-pages-posix
       witr
+      wl-color-picker
     ];
 
     services = {

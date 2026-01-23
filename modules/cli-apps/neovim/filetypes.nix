@@ -15,5 +15,12 @@
         ["%.env%.[%w_.-]+"] = "dotenv",
       },
     })
+
+    -- Tmux config filetype
+    vim.filetype.add({
+      extension = {
+        tmux = "tmux",
+      },
+    })
   '';
 }

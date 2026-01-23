@@ -40,7 +40,7 @@
           },
           zoom_indicator = {
             text = " 󰊓 ",
-            row = 1,
+            row = 0,
           },
         },
       })

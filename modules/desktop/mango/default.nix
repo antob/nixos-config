@@ -316,7 +316,7 @@ in
             windowrule=isfloating:1,width:1100,height:700,appid:^TUI.float.lg$
             windowrule=isfloating:1,appid:^TUI.float$
             windowrule=isfloating:1,appid:Wiremix
-            windowrule=isfloating:1,title:satty
+            windowrule=isfloating:1,title:satty|Copy color to Clipboard
             windowrule=isfloating:1,title:Bluetooth Devices|blueman
             windowrule=isfloating:1,appid:firefox,title:^Extension.*$
             windowrule=isfloating:1,appid:X64

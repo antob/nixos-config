@@ -26,7 +26,7 @@ let
     {
       plugin = tmuxPlugins.catppuccin;
       extraConfig = ''
-        set -g @catppuccin_flavor "macchiato"
+        set -g @catppuccin_flavor "frappe"
         set -g @catppuccin_status_left_separator "█"
         set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
       '';
@@ -53,7 +53,7 @@ in
         terminal = "xterm-256color";
         clock24 = true;
         historyLimit = 100000;
-        extraConfig = builtins.concatStringsSep "\n" (builtins.map lib.strings.fileContents configFiles);
+        extraConfig = builtins.concatStringsSep "\n" (map lib.strings.fileContents configFiles);
 
         inherit plugins;
       };
