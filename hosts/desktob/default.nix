@@ -106,6 +106,10 @@ in
     calibre
   ];
 
+  environment.shellInit = ''
+    export GITHUB_COPILOT_TOKEN="$(cat ${secrets.github_copilot_token.path})"
+  '';
+
   services = {
     fwupd.enable = true;
     chrony.enable = true;
@@ -129,7 +133,12 @@ in
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    secrets.tailscale_auth_key = { };
+    secrets = {
+      tailscale_auth_key = { };
+      github_copilot_token = {
+        owner = "tob";
+      };
+    };
   };
 
   # To be able to access ESP32 devices through the serial port
