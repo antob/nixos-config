@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  programs.neovim.extraLuaConfig = lib.mkOrder 200 /* lua */ ''
+  programs.neovim.initLua = lib.mkOrder 200 /* lua */ ''
     -- keymap helpers
     local function map(mode, lhs, rhs, desc)
       vim.keymap.set(mode, lhs, rhs, { desc = desc, silent = true })

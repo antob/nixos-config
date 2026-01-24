@@ -10,7 +10,7 @@
       catppuccin-nvim
     ];
 
-    extraLuaConfig = lib.mkOrder 210 /* lua */ ''
+    initLua = lib.mkOrder 210 /* lua */ ''
       -- require("vague").setup({
       --   transparent = true,
       --   on_highlights = function(hl, c)

@@ -1,6 +1,6 @@
 { ... }:
 {
-  programs.neovim.extraLuaConfig = /* lua */ ''
+  programs.neovim.initLua = /* lua */ ''
     -- open filepicker on start
     vim.api.nvim_create_autocmd("VimEnter", {
       callback = function()

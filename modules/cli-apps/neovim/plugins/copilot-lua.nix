@@ -5,7 +5,7 @@
       copilot-lua
     ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       require("copilot").setup({
         panel = {
           enabled = false,

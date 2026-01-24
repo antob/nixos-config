@@ -5,7 +5,7 @@
       llama-vim
     ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       vim.g.llama_config = {
         endpoint = "http://desktob.antob.net:8012/infill",
         show_info = 1,

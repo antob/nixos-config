@@ -12,7 +12,7 @@
     nixpkgs-next.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # NixPkgs Unstable (kept one step behind)
-    nixpkgs-prev.url = "github:nixos/nixpkgs/2d293cbfa5a793b4c50d17c05ef9e385b90edf6c";
+    nixpkgs-prev.url = "github:nixos/nixpkgs/c6245e83d836d0433170a16eb185cefe0572f8b8";
 
     # Home Manager
     home-manager = {
@@ -77,13 +77,12 @@
 
     # MangoWC
     mango = {
-      url = "github:DreamMaoMao/mango";
+      url = "github:DreamMaoMao/mango?ref=refs/tags/0.11.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Neovim nightly
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-
   };
 
   outputs =

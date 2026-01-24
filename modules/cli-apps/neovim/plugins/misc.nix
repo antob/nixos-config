@@ -12,7 +12,7 @@
       vim-eunuch
     ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       require("nvim-autopairs").setup({})
       require("nvim-ts-autotag").setup({})
     '';

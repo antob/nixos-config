@@ -5,7 +5,7 @@
       snacks-nvim
     ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       require("snacks").setup({
         bigfile = { enabled = true },
         dashboard = { enabled = false },

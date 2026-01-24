@@ -31,6 +31,6 @@ in
       hplip
     ];
 
-    antob.persistence.directories = [ "/etc/cups" ];
+    antob.persistence.directories = [ "/var/lib/cups" ];
   };
 }

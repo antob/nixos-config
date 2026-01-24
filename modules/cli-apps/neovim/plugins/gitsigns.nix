@@ -6,7 +6,7 @@
   programs.neovim = {
     plugins = with pkgs.vimPlugins; [ gitsigns-nvim ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       require("gitsigns").setup({
         current_line_blame = true,
         current_line_blame_opts = {

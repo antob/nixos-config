@@ -17,7 +17,7 @@
   programs.neovim = {
     plugins = with pkgs.vimPlugins; [ nvim-lspconfig ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       -- Enable LSPs
       vim.lsp.enable({
         "lua_ls",

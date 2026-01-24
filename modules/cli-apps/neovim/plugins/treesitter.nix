@@ -9,8 +9,8 @@
       nvim-treesitter-textobjects
     ];
 
-    extraLuaConfig = /* lua */ ''
-      require("nvim-treesitter.configs").setup({
+    initLua = /* lua */ ''
+      require("nvim-treesitter").setup({
         highlight = { enable = true },
         indent = { enable = true },
         incremental_selection = {

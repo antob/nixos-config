@@ -6,7 +6,7 @@
   programs.neovim = {
     plugins = with pkgs.vimPlugins; [ oil-nvim ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       require("oil").setup({
         default_file_explorer = true,
         lsp_file_methods = {

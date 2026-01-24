@@ -6,7 +6,7 @@
   programs.neovim = {
     plugins = with pkgs.vimPlugins; [ lualine-nvim ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       local custom_catppuccin = require("lualine.themes.catppuccin")
       custom_catppuccin.normal.c.bg = "#292c3c"
       custom_catppuccin.inactive.c.bg = "#292c3c"

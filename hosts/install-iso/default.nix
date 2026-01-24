@@ -116,7 +116,7 @@ with lib;
     unzip
     fwupd
     killall
-    dogdns
+    doggo
     dmidecode
     usbutils
     pciutils

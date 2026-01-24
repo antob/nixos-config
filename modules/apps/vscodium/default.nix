@@ -119,7 +119,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      nixfmt-rfc-style
+      nixfmt
       nixd
       (vscode-with-extensions.override {
         vscode = vscodium;

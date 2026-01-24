@@ -101,7 +101,7 @@ in
     s-tui
     quickemu
     nfs-utils # Needed for mounting NFS shares
-    nixpkgs-prev.rustdesk-flutter
+    rustdesk-flutter
     iio-sensor-proxy # To enable automatic brightness in Gnome
     calibre
   ];

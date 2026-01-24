@@ -118,7 +118,7 @@ in
       dust
       fwupd
       killall
-      dogdns
+      doggo
       duf
       jqp
       xh

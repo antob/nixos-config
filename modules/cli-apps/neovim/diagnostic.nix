@@ -5,7 +5,7 @@
       tiny-inline-diagnostic-nvim
     ];
 
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       vim.diagnostic.config({
         severity_sort = true,
         virtual_text = false,

@@ -265,7 +265,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      nixfmt-rfc-style
+      nixfmt
       nil
     ];
   };

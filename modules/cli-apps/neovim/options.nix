@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  programs.neovim.extraLuaConfig = lib.mkOrder 200 /* lua */ ''
+  programs.neovim.initLua = lib.mkOrder 200 /* lua */ ''
     -- vim.opt.runtimepath:prepend("~/Projects/C64/kicknvim")
 
     -- globals

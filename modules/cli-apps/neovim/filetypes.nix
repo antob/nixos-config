@@ -1,6 +1,6 @@
 { ... }:
 {
-  programs.neovim.extraLuaConfig = /* lua */ ''
+  programs.neovim.initLua = /* lua */ ''
     -- Dotenv filetype
     vim.filetype.add({
       extension = {
