@@ -63,7 +63,7 @@ in
             "custom/webcam"
             "clock"
           ];
-          extraStyle = '''';
+          extraStyle = "";
         };
         walker = {
           enable = true;

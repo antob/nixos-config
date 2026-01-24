@@ -10,69 +10,121 @@
     ];
 
     initLua = /* lua */ ''
-      require("nvim-treesitter").setup({
-        highlight = { enable = true },
-        indent = { enable = true },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<A-o>",
-            node_incremental = "<A-o>",
-            scope_incremental = false, -- "<A-up>"
-            node_decremental = "<A-i>",
-          },
+      require("nvim-treesitter-textobjects").setup({
+        select = {
+          lookahead = true,
         },
-        textobjects = {
-          select = {
-            enable = true,
-
-            -- Automatically jump forward to textobj, similar to targets.vim
-            lookahead = true,
-
-            keymaps = {
-              ["af"] = { query = "@call.outer", desc = "Select outer part of a function call" },
-              ["if"] = { query = "@call.inner", desc = "Select inner part of a function call" },
-
-              ["am"] = { query = "@function.outer", desc = "Select outer part of a method/function definition" },
-              ["im"] = { query = "@function.inner", desc = "Select inner part of a method/function definition" },
-
-              ["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
-              ["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              ["]f"] = { query = "@call.outer", desc = "Next function call start" },
-              ["]m"] = { query = "@function.outer", desc = "Next method/function def start" },
-              ["]c"] = { query = "@class.outer", desc = "Next class start" },
-
-              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-              ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-            },
-            goto_next_end = {
-              ["]F"] = { query = "@call.outer", desc = "Next function call end" },
-              ["]M"] = { query = "@function.outer", desc = "Next method/function def end" },
-              ["]C"] = { query = "@class.outer", desc = "Next class end" },
-            },
-            goto_previous_start = {
-              ["[f"] = { query = "@call.outer", desc = "Prev function call start" },
-              ["[m"] = { query = "@function.outer", desc = "Prev method/function def start" },
-              ["[c"] = { query = "@class.outer", desc = "Prev class start" },
-            },
-            goto_previous_end = {
-              ["[F"] = { query = "@call.outer", desc = "Prev function call end" },
-              ["[M"] = { query = "@function.outer", desc = "Prev method/function def end" },
-              ["[C"] = { query = "@class.outer", desc = "Prev class end" },
-            },
-          },
+        move = {
+          set_jumps = true,
         },
       })
 
+      local select = require("nvim-treesitter-textobjects.select")
+      local move = require("nvim-treesitter-textobjects.move")
+
+      -- Select keymappings
+      vim.keymap.set({ "x", "o" }, "af", function()
+        select.select_textobject("@call.outer", "textobjects")
+      end, { desc = "Function outer region" })
+      vim.keymap.set({ "x", "o" }, "if", function()
+        select.select_textobject("@call.inner", "textobjects")
+      end, { desc = "Function inner region" })
+
+      vim.keymap.set({ "x", "o" }, "am", function()
+        select.select_textobject("@function.outer", "textobjects")
+      end, { desc = "Method outer region" })
+      vim.keymap.set({ "x", "o" }, "im", function()
+        select.select_textobject("@function.inner", "textobjects")
+      end, { desc = "Method inner region" })
+
+      vim.keymap.set({ "x", "o" }, "ac", function()
+        select.select_textobject("@class.outer", "textobjects")
+      end, { desc = "Class outer region" })
+      vim.keymap.set({ "x", "o" }, "ic", function()
+        select.select_textobject("@class.inner", "textobjects")
+      end, { desc = "Class inner region" })
+
+      vim.keymap.set({ "x", "o" }, "aa", function()
+        select.select_textobject("@parameter.outer", "textobjects")
+      end, { desc = "Parameter outer region" })
+      vim.keymap.set({ "x", "o" }, "ia", function()
+        select.select_textobject("@parameter.inner", "textobjects")
+      end, { desc = "Parameter inner region" })
+
+      vim.keymap.set({ "x", "o" }, "a=", function()
+        select.select_textobject("@assignment.outer", "textobjects")
+      end, { desc = "Assignment outer region" })
+      vim.keymap.set({ "x", "o" }, "i=", function()
+        select.select_textobject("@assignment.inner", "textobjects")
+      end, { desc = "Assignment inner region" })
+
+      -- Move keymappings
+      vim.keymap.set({ "n", "x", "o" }, "]m", function()
+        move.goto_next_start("@function.outer", "textobjects")
+      end, { desc = "Next method" })
+      vim.keymap.set({ "n", "x", "o" }, "]M", function()
+        move.goto_next_end("@function.outer", "textobjects")
+      end, { desc = "End of next method" })
+      vim.keymap.set({ "n", "x", "o" }, "[m", function()
+        move.goto_previous_start("@function.outer", "textobjects")
+      end, { desc = "Previous method" })
+      vim.keymap.set({ "n", "x", "o" }, "[M", function()
+        move.goto_previous_end("@function.outer", "textobjects")
+      end, { desc = "End of previous method" })
+
+      vim.keymap.set({ "n", "x", "o" }, "]c", function()
+        move.goto_next_start("@class.outer", "textobjects")
+      end, { desc = "Next class" })
+      vim.keymap.set({ "n", "x", "o" }, "]C", function()
+        move.goto_next_end("@class.outer", "textobjects")
+      end, { desc = "End of next class" })
+      vim.keymap.set({ "n", "x", "o" }, "[c", function()
+        move.goto_previous_start("@class.outer", "textobjects")
+      end, { desc = "Previous class" })
+      vim.keymap.set({ "n", "x", "o" }, "[C", function()
+        move.goto_previous_end("@class.outer", "textobjects")
+      end, { desc = "End of previous class" })
+
+      vim.keymap.set({ "n", "x", "o" }, "]f", function()
+        move.goto_next_start("@call.outer", "textobjects")
+      end, { desc = "Next function" })
+      vim.keymap.set({ "n", "x", "o" }, "]F", function()
+        move.goto_next_end("@call.outer", "textobjects")
+      end, { desc = "End of next function" })
+      vim.keymap.set({ "n", "x", "o" }, "[f", function()
+        move.goto_previous_start("@call.outer", "textobjects")
+      end, { desc = "Previous function" })
+      vim.keymap.set({ "n", "x", "o" }, "[F", function()
+        move.goto_previous_end("@call.outer", "textobjects")
+      end, { desc = "End of previous function" })
+
+      vim.keymap.set({ "n", "x", "o" }, "]a", function()
+        move.goto_next_start("@parameter.outer", "textobjects")
+      end, { desc = "Next parameter" })
+      vim.keymap.set({ "n", "x", "o" }, "]A", function()
+        move.goto_next_end("@parameter.outer", "textobjects")
+      end, { desc = "End of next parameter" })
+      vim.keymap.set({ "n", "x", "o" }, "[a", function()
+        move.goto_previous_start("@parameter.outer", "textobjects")
+      end, { desc = "Previous parameter" })
+      vim.keymap.set({ "n", "x", "o" }, "[A", function()
+        move.goto_previous_end("@parameter.outer", "textobjects")
+      end, { desc = "End of previous parameter" })
+
       -- start treesitter
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "nix", "ruby", "markdown", "lua", "rust", "typescript", "javascript" },
+        pattern = {
+          "nix",
+          "ruby",
+          "markdown",
+          "lua",
+          "rust",
+          "typescript",
+          "typescriptreact",
+          "javascript",
+          "javascriptreact",
+          "python",
+        },
         callback = function()
           vim.treesitter.start()
         end,
