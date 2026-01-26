@@ -16,12 +16,15 @@ in
   config = mkIf cfg.enable {
     services.displayManager.cosmic-greeter.enable = true;
     services.desktopManager.cosmic.enable = true;
-
-    # environment.systemPackages = with pkgs; [
-    # ];
-
-    antob.system.env = {
-      MOZ_ENABLE_WAYLAND = "1";
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = config.antob.user.name;
     };
+
+    services.system76-scheduler.enable = true;
+
+    antob.persistence.home.directories = [
+      ".config/cosmic"
+    ];
   };
 }
