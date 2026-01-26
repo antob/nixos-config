@@ -45,9 +45,9 @@
       vim.keymap.set("i", "<C-c>", function()
         if copilot_suggestion.is_visible() then
           copilot_suggestion.dismiss()
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
         else
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
         end
       end, { noremap = true, silent = true, desc = "Dismiss Copilot suggestion and exit insert mode" })
     '';
