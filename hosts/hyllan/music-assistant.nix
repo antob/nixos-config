@@ -9,7 +9,7 @@ in
 {
   virtualisation.oci-containers.containers = {
     mass = {
-      image = "ghcr.io/music-assistant/server:beta";
+      image = "ghcr.io/music-assistant/server:2.8.0b7";
       autoStart = true;
       extraOptions = [
         "--network=host"
