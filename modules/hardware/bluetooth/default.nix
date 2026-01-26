@@ -16,7 +16,17 @@ in
   config = mkIf cfg.enable {
     hardware.bluetooth = {
       enable = true;
-      settings.General.Experimental = "true";
+      powerOnBoot = true;
+      settings = {
+        General = {
+          # ControllerMode = "bredr"; # Fix frequent Bluetooth audio dropouts
+          Experimental = true;
+          FastConnectable = true;
+        };
+        Policy = {
+          AutoEnable = true;
+        };
+      };
     };
 
     services.blueman.enable = true;
