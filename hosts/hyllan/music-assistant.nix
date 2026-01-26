@@ -3,21 +3,27 @@
 let
   subdomain = "music";
   port = 8095;
-  dataDir = "/mnt/tank/services/music-assistant";
+  dataDir = "/mnt/tank/services/mass";
+  localMusicDir = "/mnt/tank/share/public/Music";
 in
 {
-  antob.services = {
-    music-assistant = {
-      enable = true;
-      providers = [
-        # "airplay"
-        "dlna"
-        "filesystem_local"
-        "sonos"
-        "soundcloud"
-        "spotify"
-        "ytmusic"
-        "sendspin"
+  virtualisation.oci-containers.containers = {
+    mass = {
+      image = "ghcr.io/music-assistant/server:beta";
+      autoStart = true;
+      extraOptions = [
+        "--network=host"
+      ];
+      capabilities = {
+        SYS_ADMIN = true;
+        DAC_READ_SEARCH = true;
+      };
+      environment = {
+        TZ = "Europe/Stockholm";
+      };
+      volumes = [
+        "${dataDir}:/data"
+        "${localMusicDir}:/mnt/Music"
       ];
     };
   };
@@ -40,16 +46,5 @@ in
   networking.firewall.allowedTCPPorts = [
     8097 # Port to stream audio to players
     4416 # bgutil-ytdlp-pot-provider
-  ];
-
-  fileSystems = {
-    "/var/lib/private/music-assistant" = {
-      device = dataDir;
-      options = [ "bind" ];
-    };
-  };
-
-  systemd.tmpfiles.rules = [
-    "d ${dataDir} 0750 nobody nobody -"
   ];
 }
