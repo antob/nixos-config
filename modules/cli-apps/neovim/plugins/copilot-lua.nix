@@ -23,7 +23,7 @@
             accept_line = "<M-Right>",
             next = "<M-]>",
             prev = "<M-[>",
-            dismiss = "<C-]>",
+            dismiss = "<C-e>",
           },
         },
         filetypes = {

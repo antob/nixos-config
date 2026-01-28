@@ -38,7 +38,6 @@
         },
         keymap = {
           preset = "super-tab",
-          ["<Esc>"] = { "cancel", "fallback" },
           ["<CR>"] = { "accept", "fallback" },
         },
         cmdline = {

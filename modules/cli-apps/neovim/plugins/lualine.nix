@@ -38,7 +38,7 @@
                 separator = " ",
               },
               ignore_lsp = { "copilot" },
-              show_name = false,
+              show_name = true,
               padding = { left = 1, right = 2 },
             },
           },

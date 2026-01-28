@@ -74,8 +74,6 @@
     map("i", "<C-o><C-o>", "<C-o>o", "Open new line below")
 
     -- navigation
-    map("i", "<C-b>", "<ESC>^i", "Move to beginning of line")
-    map("i", "<C-e>", "<End>", "Move to end of line")
     map("n", "<C-h>", "<C-w>h", "Focus window left")
     map("n", "<C-l>", "<C-w>l", "Focus window right")
     map("n", "<C-j>", "<C-w>j", "Focus window down")
@@ -83,9 +81,6 @@
     map("n", "<leader>z", function()
       Snacks.zen.zoom()
     end, "Toggle zoom")
-
-    -- copy whole file
-    map("n", "<C-c>", "<CMD>%y+<CR>", "Copy whole file")
 
     -- splits
     map("n", "--", "<CMD>split<CR>", "Split window horizontally")

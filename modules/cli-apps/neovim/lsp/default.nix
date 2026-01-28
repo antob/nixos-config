@@ -89,9 +89,9 @@
         map({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, "Signature Help")
 
         -- Navigation (g prefix) - gd, gD, gr, gI, gy handled by Snacks
-        map("n", "gt", vim.lsp.buf.type_definition, "Type Definition")
+        map("n", "gt", Snacks.picker.lsp_type_definitions, "Type Definition")
         map("n", "<leader>v", "<cmd>vsplit | lua vim.lsp.buf.definition()<cr>", "Definition in Split")
-        map("n", "gd", vim.lsp.buf.definition, "LSP definitions")
+        map("n", "gd", Snacks.picker.lsp_definitions, "LSP definitions")
         vim.keymap.set("n", "gr", Snacks.picker.lsp_references, { nowait = true, desc = "LSP references" })
         map("n", "gI", function()
           Snacks.picker.lsp_implementations()
