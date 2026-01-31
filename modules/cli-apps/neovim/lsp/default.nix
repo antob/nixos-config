@@ -24,6 +24,7 @@
         "nixd",
         "rust_analyzer",
         "ruby_lsp",
+        "herb_ls",
         "ts_ls",
         "cssls",
         "ty",
@@ -71,6 +72,11 @@
       -- ruby_lsp
       vim.lsp.config("ruby_lsp", {
         cmd = { "bundle", "exec", "ruby-lsp" },
+      })
+
+      -- herb_ls
+      vim.lsp.config("herb_ls", {
+        cmd = { "${pkgs.herb-tools}/bin/herb-language-server", "--stdio" },
       })
 
       -- Disable sematic tokens to stop color scheme changes when LSP start

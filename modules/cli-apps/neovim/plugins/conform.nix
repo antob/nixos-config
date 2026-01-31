@@ -13,7 +13,7 @@
           bash = { "shfmt" },
           json = { "jq" },
           ruby = { "standardrb" },
-          eruby = { "erb_format" },
+          eruby = { "herb_format" },
           rust = { "rustfmt" },
           nix = { "nixfmt", "injected" },
           lua = { "stylua" },
@@ -69,12 +69,10 @@
               "--stderr",
             },
           },
-          erb_format = {
-            command = "bundle",
+          herb_format = {
+            command = "${pkgs.herb-tools}/bin/herb-format",
             args = {
-              "exec",
-              "erb-format",
-              "--stdin",
+              "-",
             },
           },
         },

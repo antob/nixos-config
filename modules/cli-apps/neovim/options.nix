@@ -85,5 +85,8 @@
     vim.opt.whichwrap:append("<>[]hl")
 
     vim.opt.fillchars = { eob = " " }
+
+    -- disable ruby provider, conflicting keymaps with tree-sitter movements
+    vim.g.loaded_ruby_provider = 0
   '';
 }
