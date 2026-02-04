@@ -340,6 +340,11 @@ in
             margin: 0 7.5px;
           }
 
+          #bluetooth {
+            font-size: 120%;
+            min-width: 16px;
+          }
+
           #clock {
             font-weight: 600;
           }

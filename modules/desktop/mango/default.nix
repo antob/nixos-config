@@ -50,7 +50,6 @@ in
           enableSystemd = true;
           modulesLeft = [ "ext/workspaces" ];
           modulesRight = [
-            "group/tray-expander"
             "bluetooth"
             "custom/external-ip"
             "network"
