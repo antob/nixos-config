@@ -7,7 +7,6 @@
     plugins = with pkgs.vimPlugins; [
       nvim-web-devicons
       nvim-autopairs
-      vim-tmux-navigator
       nvim-ts-autotag
       vim-eunuch
     ];
