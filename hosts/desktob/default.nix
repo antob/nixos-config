@@ -108,6 +108,7 @@ in
 
   environment.shellInit = ''
     export GITHUB_COPILOT_TOKEN="$(cat ${secrets.github_copilot_token.path})"
+    export OPENROUTER_NVIM_API_KEY="$(cat ${secrets.openrouter_nvim_api_key.path})"
   '';
 
   services = {
@@ -136,6 +137,9 @@ in
     secrets = {
       tailscale_auth_key = { };
       github_copilot_token = {
+        owner = "tob";
+      };
+      openrouter_nvim_api_key = {
         owner = "tob";
       };
     };
