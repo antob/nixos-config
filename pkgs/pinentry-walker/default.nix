@@ -57,7 +57,7 @@ pkgs.writeShellScriptBin "pinentry-walker" ''
       echo "$1" | sed -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
   }
 
-  walker_cmd="${pkgs.walker}/bin/walker --password"
+  walker_cmd="${pkgs.nixpkgs-prev.walker}/bin/walker --password"
   win_prompt="Password"
   keyinfo=""
 
