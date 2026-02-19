@@ -6,7 +6,7 @@
       callback = function()
         if vim.fn.argv(0) == "" then
           vim.defer_fn(function()
-            Snacks.picker.files()
+            Snacks.picker.smart()
           end, 10)
         end
       end,
