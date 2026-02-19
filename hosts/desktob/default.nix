@@ -90,6 +90,11 @@ in
         ".aws"
       ];
     };
+
+    system.env = {
+      GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
+      OPENROUTER_NVIM_API_KEY = "$(cat ${secrets.openrouter_nvim_api_key.path})";
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -105,11 +110,6 @@ in
     iio-sensor-proxy # To enable automatic brightness in Gnome
     calibre
   ];
-
-  environment.shellInit = ''
-    export GITHUB_COPILOT_TOKEN="$(cat ${secrets.github_copilot_token.path})"
-    export OPENROUTER_NVIM_API_KEY="$(cat ${secrets.openrouter_nvim_api_key.path})"
-  '';
 
   services = {
     fwupd.enable = true;
@@ -133,10 +133,12 @@ in
 
   # Sops secrets
   sops = {
-    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFile = ../common/secrets.yaml;
     secrets = {
       tailscale_auth_key = { };
       github_copilot_token = {
+        # The sops file can be also overwritten per secret...
+        # sopsFile = ./secrets.yaml;
         owner = "tob";
       };
       openrouter_nvim_api_key = {

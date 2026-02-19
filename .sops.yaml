@@ -17,23 +17,29 @@ keys:
   - &wiggum 63195e56e676314ea266f7c2d4ea7781a7bada58
 
 creation_rules:
+  - path_regex: hosts/common/secrets.yaml$
+    key_groups:
+      - pgp:
+          - *admin
+          - *laptob_fw
+          - *desktob
   - path_regex: hosts/hyllan/secrets.yaml$
     key_groups:
-    - pgp:
-      - *admin
-      - *hyllan
+      - pgp:
+          - *admin
+          - *hyllan
   - path_regex: hosts/laptob-fw/secrets.yaml$
     key_groups:
-    - pgp:
-      - *admin
-      - *laptob_fw
+      - pgp:
+          - *admin
+          - *laptob_fw
   - path_regex: hosts/desktob/secrets.yaml$
     key_groups:
-    - pgp:
-      - *admin
-      - *desktob
+      - pgp:
+          - *admin
+          - *desktob
   - path_regex: hosts/wiggum/secrets.yaml$
     key_groups:
-    - pgp:
-      - *admin
-      - *wiggum
+      - pgp:
+          - *admin
+          - *wiggum
