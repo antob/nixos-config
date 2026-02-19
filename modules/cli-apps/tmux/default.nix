@@ -29,6 +29,8 @@ let
         set -g @catppuccin_flavor "frappe"
         set -g @catppuccin_status_left_separator "█"
         set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
+        set -ogq @catppuccin_window_text " #W"
+        set -ogq @catppuccin_window_current_text " #W"
       '';
     }
   ];
