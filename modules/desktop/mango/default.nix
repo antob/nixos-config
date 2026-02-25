@@ -11,6 +11,7 @@ let
   cfg = config.antob.desktop.mango;
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
+  terminal = "${pkgs.alacritty}/bin/alacritty";
   lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client";
   dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });
@@ -84,15 +85,15 @@ in
           settings = ''
             ## Keybindings
             bind=Super,Return,spawn,${
-              if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty"
+              if config.antob.cli-apps.tmux.enable then "${terminal} -e tmux-attach-unused" else "${terminal}"
             }
-            bind=Super+Shift,Return,spawn,alacritty
+            bind=Super+Shift,Return,spawn,${terminal}
             bind=Super,w,spawn,firefox
             bind=Super+Shift,w,spawn,${dm-firefox-profile}
             bind=Super,e,spawn,nautilus --new-window
-            bind=Super,b,spawn,alacritty --class=TUI.float -e bluetui
-            bind=Super,n,spawn,alacritty --class=TUI.float.lg -e ${pkgs.impala}/bin/impala
-            bind=Super,t,spawn,alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}
+            bind=Super,b,spawn,${terminal} --class=TUI.float -e bluetui
+            bind=Super,n,spawn,${terminal} --class=TUI.float.lg -e ${pkgs.impala}/bin/impala
+            bind=Super,t,spawn,${terminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}
             bind=Super,d,spawn,walker -p 'Start…'
             bind=Super,x,spawn,${dm-system}
             bind=Super,p,spawn,${dm-vpn}
@@ -327,6 +328,7 @@ in
 
             # Transparancy
             windowrule=focused_opacity:1.0,unfocused_opacity:1.0,appid:Alacritty
+            windowrule=focused_opacity:1.0,unfocused_opacity:1.0,appid:kitty
 
             # Screensaver
             windowrule=isfullscreen:1,focused_opacity:1.0,unfocused_opacity:1.0,appid:Screensaver,title:Alacritty

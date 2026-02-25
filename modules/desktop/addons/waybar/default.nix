@@ -15,6 +15,7 @@ let
   networkd-vpn-test = builtins.concatStringsSep " -o " (
     builtins.attrValues (builtins.mapAttrs (name: value: "-d /proc/sys/net/ipv4/conf/${name}") vpns)
   );
+  terminal = "${pkgs.alacritty}/bin/alacritty";
 in
 {
   options.antob.desktop.addons.waybar = with types; {
@@ -120,13 +121,13 @@ in
             cpu = {
               interval = 5;
               format = " {usage:2}%";
-              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
+              on-click = "${terminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
             };
 
             memory = {
               interval = 5;
               format = "  {percentage}%";
-              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
+              on-click = "${terminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
             };
 
             clock = {
@@ -152,7 +153,7 @@ in
               tooltip-format-disconnected = "Disconnected";
               interval = 5;
               spacing = 1;
-              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float.lg -e ${pkgs.impala}/bin/impala";
+              on-click = "${terminal} --class=TUI.float.lg -e ${pkgs.impala}/bin/impala";
             };
 
             battery = {
@@ -202,12 +203,12 @@ in
               format-disabled = "󰂲";
               format-connected = "";
               tooltip-format = "Devices connected: {num_connections}";
-              on-click = "${pkgs.alacritty}/bin/alacritty --class=TUI.float -e ${pkgs.bluetui}/bin/bluetui";
+              on-click = "${terminal} --class=TUI.float -e ${pkgs.bluetui}/bin/bluetui";
             };
 
             pulseaudio = {
               format = "{icon}";
-              on-click = "${pkgs.alacritty}/bin/alacritty --class=Wiremix -e ${pkgs.wiremix}/bin/wiremix";
+              on-click = "${terminal} --class=Wiremix -e ${pkgs.wiremix}/bin/wiremix";
               on-click-right = "${pkgs.pamixer}/bin/pamixer -t";
               tooltip-format = "Playing at {volume}%";
               scroll-step = 5;

@@ -12,6 +12,7 @@ in
 {
   options.antob.tools.kitty = with types; {
     enable = mkEnableOption "Enable kitty";
+    fontSize = mkOpt int 12 "Font size.";
   };
 
   config = mkIf cfg.enable {
@@ -24,7 +25,7 @@ in
 
       font = {
         name = "Hack Nerd Font";
-        size = 14;
+        size = cfg.fontSize;
       };
 
       shellIntegration.enableZshIntegration = true;
@@ -43,23 +44,25 @@ in
         window_border_width = "1pt";
         scrollback_lines = 10000;
         term = "xterm-256color";
+        clear_all_shortcuts = "yes";
+        confirm_os_window_close = 0;
+        undercurl_style = "thick-sparse";
+        url_color = "#${colors.base06}";
+        url_style = "straight";
+        modify_font = "cell_width 103%";
+        text_composition_strategy = "legacy"; # Makes font thinner
       };
 
       extraConfig = ''
-        include ${./themes/one-dark.conf}
+        include ${./themes/tokyonight-night.conf}
       '';
 
       keybindings = {
-        "ctrl+shift+right" = "next_window";
-        "ctrl+shift+left" = "previous_window";
-        "ctrl+shift+enter" = "new_window_with_cwd";
-        "ctrl+shift+tab" = "new_tab_with_cwd";
-        "ctrl+shift+m" = "toggle_layout stack";
-        "ctrl+left" = "resize_window narrower";
-        "ctrl+right" = "resize_window wider";
-        "ctrl+up" = "resize_window taller";
-        "ctrl+down" = "resize_window shorter 3";
-        "ctrl+home" = "resize_window reset";
+        "ctrl+shift+equal" = "change_font_size all +1.0";
+        "ctrl+shift+minus" = "change_font_size all -1.0";
+        "ctrl+shift+0" = "change_font_size all 0";
+        "ctrl+shift+c" = "copy_to_clipboard";
+        "ctrl+shift+v" = "paste_from_clipboard";
       };
     };
   };

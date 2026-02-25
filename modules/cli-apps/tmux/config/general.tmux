@@ -5,6 +5,7 @@ set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
 set -as terminal-features ',*:usstyle'
 set -as terminal-features ',xterm*:RGB'
 set -as terminal-features ',alacritty*:RGB'
+set -as terminal-features ',kitty*:RGB'
 
 set -g mouse on
 

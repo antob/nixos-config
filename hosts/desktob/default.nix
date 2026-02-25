@@ -43,6 +43,7 @@ in
       fhs = enabled;
       atuin = enabled;
       alacritty.fontSize = 13;
+      kitty.fontSize = 13;
     };
 
     services = {

@@ -11,6 +11,7 @@ let
   configFiles = getFiles ./config;
   colors = config.antob.color-scheme.colors;
   alacritty = config.antob.tools.alacritty.enable;
+  kitty = config.antob.tools.kitty.enable;
 
   plugins = with pkgs; [
     tmuxPlugins.sensible
@@ -99,6 +100,27 @@ in
           chars = "\\uE022";
         }
       ];
+
+      programs.kitty.keybindings = lib.mkIf kitty {
+        ## Make Kitty send Control+Shift keys
+        # Cycle layout
+        "ctrl+shift+l" = "send_text all \\uE000";
+
+        # Spawn new pane
+        "ctrl+shift+enter" = "send_text all \\uE010";
+
+        # Toggle pane zoom
+        "ctrl+shift+m" = "send_text all \\uE011";
+
+        # Spawn new window
+        "ctrl+shift+t" = "send_text all \\uE020";
+
+        # Focus previous window
+        "ctrl+shift+[" = "send_text all \\uE021";
+
+        # Focus next window
+        "ctrl+shift+]" = "send_text all \\uE022";
+      };
     };
 
     antob.persistence.home.directories = [ ".local/share/tmux" ];
