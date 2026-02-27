@@ -32,6 +32,7 @@ in
     ./atuin.nix
     ./music-assistant.nix
     ./beszel.nix
+    ./open-webui.nix
   ];
 
   antob = {
