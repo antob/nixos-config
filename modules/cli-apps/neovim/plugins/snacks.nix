@@ -35,8 +35,9 @@
         words = { enabled = false },
         styles = {
           lazygit = {
-            border = "rounded",
             wo = { winhighlight = "FloatBorder:PmenuBorder" },
+            height = 0.99,
+            width = 0.99,
           },
           zoom_indicator = {
             text = " 󰊓 ",
