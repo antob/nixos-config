@@ -10,5 +10,6 @@
     ./snacks.nix
     ./treesitter.nix
     ./copilot-lua.nix
+    ./quicker.nix
   ];
 }

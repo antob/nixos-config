@@ -68,7 +68,8 @@
     }
 
     -- Preview substitutions live, as you type!
-    vim.opt.inccommand = "split"
+    -- Set to "nosplit" to avoid conflict with quicker plugin.
+    vim.opt.inccommand = "nosplit"
 
     -- Misc
     vim.opt.completeopt = "menu,menuone,noselect"
@@ -86,7 +87,9 @@
 
     vim.opt.fillchars = { eob = " " }
 
-    -- disable ruby provider, conflicting keymaps with tree-sitter movements
+    -- Disable keymaps from built in ruby provider.
+    -- Prevents conflicts with keymaps for tree-sitter movements.
     vim.g.loaded_ruby_provider = 0
+    vim.g.no_ruby_maps = 1
   '';
 }
