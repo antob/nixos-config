@@ -58,7 +58,10 @@ in
       };
     };
 
-    cli-apps.llama-cpp = enabled;
+    cli-apps = {
+      llama-cpp = enabled;
+      opencode = enabled;
+    };
 
     hardware = {
       systemd-networking = {
@@ -94,8 +97,6 @@ in
 
     system.env = {
       GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
-      OPENROUTER_NVIM_API_KEY = "$(cat ${secrets.openrouter_nvim_api_key.path})";
-      OPENROUTER_OPENCODE_API_KEY = "$(cat ${secrets.openrouter_opencode_api_key.path})";
     };
   };
 
@@ -141,12 +142,6 @@ in
       github_copilot_token = {
         # The sops file can be also overwritten per secret...
         # sopsFile = ./secrets.yaml;
-        owner = "tob";
-      };
-      openrouter_nvim_api_key = {
-        owner = "tob";
-      };
-      openrouter_opencode_api_key = {
         owner = "tob";
       };
     };

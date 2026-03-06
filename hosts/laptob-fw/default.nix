@@ -41,6 +41,8 @@ in
       # };
     };
 
+    cli-apps.opencode = enabled;
+
     services.tailscale = {
       enable = true;
       keyfile = secrets.tailscale_auth_key.path;
@@ -86,7 +88,6 @@ in
 
     system.env = {
       GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
-      OPENROUTER_NVIM_API_KEY = "$(cat ${secrets.openrouter_nvim_api_key.path})";
     };
   };
 
@@ -135,9 +136,6 @@ in
     secrets = {
       tailscale_auth_key = { };
       github_copilot_token = {
-        owner = "tob";
-      };
-      openrouter_nvim_api_key = {
         owner = "tob";
       };
     };
