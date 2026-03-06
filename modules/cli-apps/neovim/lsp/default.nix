@@ -103,14 +103,6 @@
           Snacks.picker.lsp_implementations()
         end, "LSP implementations")
 
-        -- Diagnostics navigation ([ and ] prefix)
-        map("n", "[d", function()
-          vim.diagnostic.jump({ count = -1 })
-        end, "Prev Diagnostic")
-        map("n", "]d", function()
-          vim.diagnostic.jump({ count = 1 })
-        end, "Next Diagnostic")
-
         -- <leader>c = Code
         map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
         map("n", "<leader>cr", vim.lsp.buf.rename, "Rename Symbol")

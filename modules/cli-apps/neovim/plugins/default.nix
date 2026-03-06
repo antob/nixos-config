@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./mini.nix
     ./autocomplete.nix
     ./conform.nix
     ./gitsigns.nix

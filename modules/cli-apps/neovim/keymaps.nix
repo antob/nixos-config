@@ -29,10 +29,6 @@
     -- map Esc to C-c in command mode
     map("c", "<ESC>", "<C-c>")
 
-    -- Move selected line / block of text in visual mode
-    map("v", "J", ":m '>+1<CR>gv=gv", "Move Lines Down")
-    map("v", "K", ":m '<-2<CR>gv=gv", "Move Lines Up")
-
     -- Remap for dealing with visual line wraps
     expmap("n", "k", "v:count == 0 ? 'gk' : 'k'", "Up (wrapped)")
     expmap("n", "j", "v:count == 0 ? 'gj' : 'j'", "Down (wrapped)")
@@ -52,10 +48,6 @@
     map("i", "jj", "<ESC>", "Exit Insert")
     map("i", "jk", "<ESC>", "Exit Insert")
 
-    -- Panes resizing
-    map("n", "+", ":vertical resize +5<CR>", "Increase Width")
-    map("n", "_", ":vertical resize -5<CR>", "Decrease Width")
-
     -- Keep search results centered
     map("n", "n", "nzz", "Next Match (centered)")
     map("n", "N", "Nzz", "Prev Match (centered)")
@@ -73,13 +65,8 @@
     -- open new line in insert mode
     map("i", "<C-o><C-o>", "<C-o>o", "Open new line below")
 
-    -- navigation
-    map("n", "<C-h>", "<C-w>h", "Focus window left")
-    map("n", "<C-l>", "<C-w>l", "Focus window right")
-    map("n", "<C-j>", "<C-w>j", "Focus window down")
-    map("n", "<C-k>", "<C-w>k", "Focus window up")
     map("n", "<leader>z", function()
-      Snacks.zen.zoom()
+      MiniMisc.zoom()
     end, "Toggle zoom")
 
     -- splits
@@ -120,16 +107,17 @@
         },
       })
     end
-    map({ "n", "i", "v" }, "<C-Left>", "<CMD>bprevious<CR>", "Previous buffer")
-    map({ "n", "i", "v" }, "<C-Right>", "<CMD>bnext<CR>", "Next buffer")
-    map({ "n", "i", "v" }, "<C-Up>", "<CMD>e #<CR>", "Switch to other buffer")
-    map({ "n", "i", "v" }, "<C-Down>", find_buffers, "Search buffers")
     map("n", "<leader>bb", find_buffers, "Search buffers")
     map("n", "<leader>bd", function()
-      Snacks.bufdelete()
+      MiniBufremove.delete()
     end, "Delete buffer")
     map("n", "<leader>bo", function()
-      Snacks.bufdelete.other()
+      local buf = vim.api.nvim_get_current_buf()
+      for _, b in ipairs(vim.api.nvim_list_bufs()) do
+        if b ~= buf and vim.bo[b].buflisted then
+          MiniBufremove.delete(b)
+        end
+      end
     end, "Delete other buffers")
     map("n", "<leader>bs", picker.grep_buffers, "Search in open buffers")
     map("n", "<leader>.", function()
@@ -205,13 +193,6 @@
     map("n", "<leader>sq", picker.qflist, "Search quickfix list")
     map("n", "<leader>sR", picker.resume, "Resume picker")
     map("n", "<leader>su", picker.undo, "Search undo history")
-
-    -- Create some toggle mappings
-    Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-    Snacks.toggle.diagnostics():map("<leader>ud")
-    Snacks.toggle.line_number():map("<leader>ul")
-    Snacks.toggle.treesitter():map("<leader>uT")
-    Snacks.toggle.inlay_hints():map("<leader>uh")
 
     -- lsp
     map("n", "<leader>li", "<CMD>LspInfo<CR>", "LSP Info")
