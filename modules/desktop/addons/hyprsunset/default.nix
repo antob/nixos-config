@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  pkgs,
+  inputs,
   ...
 }:
 
@@ -17,6 +19,7 @@ in
     antob.home.extraOptions = {
       services.hyprsunset = {
         enable = true;
+        package = inputs.hyprnix.packages.${pkgs.stdenv.hostPlatform.system}.hyprsunset;
         settings = {
           max-gamma = 150;
 

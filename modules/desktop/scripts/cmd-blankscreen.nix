@@ -7,7 +7,7 @@ pkgs.writeShellScriptBin "cmd-blankscreen" ''
     exit 0
   }
 
-  trap exit_screensaver SIGINT SIGTERM SIGHUP SIGQUIT
+  trap exit_script SIGINT SIGTERM SIGHUP SIGQUIT
 
   ${pkgs.wlr-dpms}/bin/wlr-dpms off
 

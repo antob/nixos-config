@@ -385,29 +385,6 @@ in
       };
     };
 
-    # [preferred]
-    # default=gtk
-    # org.freedesktop.impl.portal.ScreenCast=wlr
-    # org.freedesktop.impl.portal.Screenshot=wlr
-    # org.freedesktop.impl.portal.Secret=gnome-keyring
-    # org.freedesktop.impl.portal.Inhibit=none
-
-    # Desktop portal
-    xdg.portal = {
-      extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-      ];
-      config.common = {
-        default = [ "gtk" ];
-        "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
-        "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
-        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-        "org.freedesktop.impl.portal.Inhibit" = [ "none" ];
-      };
-    };
-
-    # security.polkit.enable = true;
-
     environment.systemPackages =
       with pkgs;
       [

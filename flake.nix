@@ -65,12 +65,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hyprland
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # Hyprnix
+    hyprnix.url = "github:hyprwm/hyprnix";
 
     # Niri
     niri.url = "github:sodiboo/niri-flake";

@@ -89,5 +89,5 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
   dynamic_bindings | \
     sort -u | \
     parse_bindings | \
-    walker --dmenu --theme keybindings -p 'Keybindings'
+    ${pkgs.nixpkgs-prev.walker}/bin/walker --dmenu --theme keybindings -p 'Keybindings'
 ''

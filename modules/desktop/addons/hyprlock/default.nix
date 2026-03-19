@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  pkgs,
+  inputs,
   ...
 }:
 
@@ -18,6 +20,7 @@ in
     antob.home.extraOptions = {
       programs.hyprlock = {
         enable = true;
+        package = inputs.hyprnix.packages.${pkgs.stdenv.hostPlatform.system}.hyprlock;
         settings = {
           background = [
             {

@@ -23,11 +23,11 @@ in
     };
 
     desktop = {
-      mango = enabled;
-      addons = {
-        swayidle.lockScreen = false; # Until swaylock is configured..
-        keyring = enabled;
+      hyprland = {
+        enable = true;
+        enableCache = true;
       };
+      addons.keyring = enabled;
     };
 
     virtualisation.virt-manager = enabled;

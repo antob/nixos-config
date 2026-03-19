@@ -22,9 +22,12 @@ in
     };
 
     desktop = {
-      mango = enabled;
+      hyprland = {
+        enable = true;
+        enableCache = true;
+      };
       addons = {
-        swayidle.lockScreen = false;
+        hypridle.lockScreen = false;
         keyring = enabled;
       };
     };

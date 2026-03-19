@@ -5,7 +5,10 @@
   ...
 }:
 let
-  lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
+  cfgAddons = config.antob.desktop.addons;
+  swayLock = cfgAddons.swayidle.enable && cfgAddons.swayidle.lockScreen;
+  hyprLock = cfgAddons.hypridle.enable && cfgAddons.hypridle.lockScreen;
+  lockScreen = swayLock || hyprLock;
   cmd-launch-blankscreen = lib.getExe (pkgs.callPackage ./cmd-launch-blankscreen.nix { });
 in
 pkgs.writeShellScriptBin "dm-system" ''

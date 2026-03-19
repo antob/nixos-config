@@ -3,4 +3,5 @@
   (pkgs.callPackage ./cmd-launch-webapp.nix { })
   (pkgs.callPackage ./cmd-lock-screen.nix { })
   (pkgs.callPackage ./cmd-launch-screensaver.nix { })
+  (pkgs.callPackage ./consume-or-expel-window.nix { })
 ]

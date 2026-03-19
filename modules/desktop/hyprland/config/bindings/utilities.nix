@@ -1,12 +1,24 @@
-{ pkgs, lib }:
+{
+  pkgs,
+  lib,
+  config,
+}:
 let
-  cmd-screenshot = lib.getExe (pkgs.callPackage ../../scripts/cmd-screenshot.nix { });
+  cmd-screenshot = lib.getExe (pkgs.callPackage ../../../scripts/cmd-screenshot.nix { });
   cmd-toggle-nightlight = lib.getExe (pkgs.callPackage ../../scripts/cmd-toggle-nightlight.nix { });
   cmd-toggle-idle = lib.getExe (pkgs.callPackage ../../scripts/cmd-toggle-idle.nix { });
   dm-keybindings = lib.getExe (pkgs.callPackage ../../scripts/dm-keybindings.nix { });
-  dm-system = lib.getExe (pkgs.callPackage ../../scripts/dm-system.nix { });
-  dm-nm-vpn = lib.getExe (pkgs.callPackage ../../../scripts/dm-nm-vpn.nix { });
+  dm-system = lib.getExe (pkgs.callPackage ../../scripts/dm-system.nix { inherit config; });
   cmd-lock-screen = lib.getExe (pkgs.callPackage ../../scripts/cmd-lock-screen.nix { });
+  lockScreen = config.antob.desktop.addons.hypridle.lockScreen;
+  cmd-launch-blankscreen = lib.getExe (
+    pkgs.callPackage ../../../scripts/cmd-launch-blankscreen.nix { }
+  );
+  dm-vpn =
+    if config.antob.services.networkd-vpn.enable then
+      lib.getExe (pkgs.callPackage ../../../scripts/dm-networkd-vpn.nix { inherit config; })
+    else
+      lib.getExe (pkgs.callPackage ../../../scripts/dm-nm-vpn.nix { });
 in
 ''
   # Screenshots
@@ -25,16 +37,18 @@ in
   # Toggle nightlight
   bindd = SUPER CTRL, N, Toggle nightlight, exec, ${cmd-toggle-nightlight}
 
-  # Toggle idlinqg
+  # Toggle idling
   bindd = SUPER, U, Toggle locking on idle, exec, ${cmd-toggle-idle}
 
   # Lock screen
-  bindd = SUPER, L, Lock screen, exec, ${cmd-lock-screen}
+  bindd = SUPER, L, Lock screen, exec, ${
+    if lockScreen then "${cmd-lock-screen}" else "${cmd-launch-blankscreen}"
+  }
 
   # Menus
-  bindd = SUPER, D, Launch apps, exec, walker -p "Start…"
-  bindd = SUPER CTRL, E, Emoji picker, exec, walker -m Emojis
+  bindd = SUPER, D, Launch apps, exec, ${pkgs.nixpkgs-prev.walker}/bin/walker -p "Start…"
+  bindd = SUPER CTRL, E, Emoji picker, exec, ${pkgs.nixpkgs-prev.walker}/bin/walker -m Emojis
   bindd = SUPER, K, Show key bindings, exec, ${dm-keybindings}
   bindd = SUPER, X, Show system menu, exec, ${dm-system}
-  bindd = SUPER, P, Show VPN menu, exec, ${dm-nm-vpn}
+  bindd = SUPER, P, Show VPN menu, exec, ${dm-vpn}
 ''

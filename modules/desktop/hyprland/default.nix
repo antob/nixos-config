@@ -10,6 +10,8 @@ with lib;
 let
   cfg = config.antob.desktop.hyprland;
   gtkCfg = config.antob.desktop.addons.gtk;
+  lockScreen = config.antob.desktop.addons.hypridle.lockScreen;
+  hypr-pkgs = inputs.hyprnix.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [
@@ -36,9 +38,9 @@ in
           withUWSM = true;
 
           # set the flake package
-          package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-          portalPackage =
-            inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+          package = hypr-pkgs.hyprland;
+          # make sure to also set the portal package, so that they are in sync
+          portalPackage = hypr-pkgs.xdg-desktop-portal-hyprland;
         };
 
         dconf.enable = true;
@@ -74,7 +76,7 @@ in
             launchPrefix = "uwsm app -- ";
           };
           keyring = enabled;
-          hyprlock = enabled;
+          hyprlock.enable = lockScreen;
           hypridle = enabled;
           nautilus = enabled;
         };
@@ -97,18 +99,38 @@ in
             enable = true;
 
             # set the flake package
-            package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-            portalPackage =
-              inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+            package = hypr-pkgs.hyprland;
+            # make sure to also set the portal package, so that they are in sync
+            portalPackage = hypr-pkgs.xdg-desktop-portal-hyprland;
 
             systemd.enable = false; # Conflicts with UWSM
             xwayland.enable = true; # Default
 
-            plugins = [
-              inputs.hyprland-plugins.packages.${pkgs.system}.hyprscrolling
-            ];
             extraConfig = import ./config { inherit lib config pkgs; };
           };
+
+          home.file.".config/uwsm/env".text = ''
+            # Hint electron apps to use wayland
+            export NIXOS_OZONE_WL=1;
+            export QT_QPA_PLATFORMTHEME=qt6ct;
+
+            # Cursor size
+            export XCURSOR_SIZE=16
+            export HYPRCURSOR_SIZE=16
+
+            # Force all apps to use Wayland
+            export GDK_BACKEND="wayland,x11,*"
+            export QT_QPA_PLATFORM="wayland;xcb"
+            export QT_STYLE_OVERRIDE=kvantum
+            export SDL_VIDEODRIVER=wayland
+            export MOZ_ENABLE_WAYLAND=1
+            export ELECTRON_OZONE_PLATFORM_HINT=wayland
+            export OZONE_PLATFORM=wayland
+          '';
+          home.file.".config/uwsm/env-hyprland".text = ''
+            # Cursor size
+            export HYPRCURSOR_SIZE=16
+          '';
         };
 
         system.env = {
@@ -117,9 +139,6 @@ in
           QT_QPA_PLATFORMTHEME = "qt6ct";
         };
       };
-
-      # Needed for Impala (network management TUI)
-      networking.wireless.iwd.enable = true;
 
       # Desktop portal
       xdg.portal = {
@@ -142,16 +161,17 @@ in
           swayosd
           jq
           hyprshot
-          hyprpicker
+          hypr-pkgs.hyprpicker
           impala
           bluetui
-          blueberry
           wiremix
           pamixer
           swaybg
           wl-clipboard
+          wlr-dpms
           nwg-displays
           libqalculate
+          gsettings-desktop-schemas
         ]
         # Custom scripts
         ++ (import ./scripts { inherit pkgs; });
@@ -161,8 +181,6 @@ in
         ".config/hypr/monitors.conf"
         ".config/hypr/workspaces.conf"
       ];
-
-      services.gnome.at-spi2-core.enable = true;
 
       systemd.services."getty@tty1" = mkIf config.antob.user.autoLogin {
         overrideStrategy = "asDropin";

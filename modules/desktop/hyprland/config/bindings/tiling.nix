@@ -4,6 +4,7 @@
   bindd = SUPER ALT, M, Switch to master layout, exec, hyprctl keyword general:layout master
   bindd = SUPER ALT, D, Switch to dwindle layout, exec, hyprctl keyword general:layout dwindle
   bindd = SUPER ALT, S, Switch to scrolling layout, exec, hyprctl keyword general:layout scrolling
+  bindd = SUPER ALT, O, Switch to monocle layout, exec, hyprctl keyword general:layout monocle
 
   # Close windows
   bindd = SUPER, Q, Close active window, killactive,
@@ -18,8 +19,19 @@
   # bindd = SUPER, right, Move focus right, cyclenext
   # bindd = SUPER, left, Move focus left, movefocus, l
   # bindd = SUPER, right, Move focus right, movefocus, r
+
   bindd = SUPER, up, Move focus up, movefocus, u
   bindd = SUPER, down, Move focus down, movefocus, d
+
+  bindd = SUPER, left, Move focus left, layoutmsg, focus l
+  bindd = SUPER, right, Move focus right, layoutmsg, focus r
+  bindd = SUPER, left, Move focus left, layoutmsg, cycleprev # For monocle layout
+  bindd = SUPER, right, Move focus right, layoutmsg, cyclenext # For monocle layout
+
+  # Resize active column
+  bindd = SUPER, minus, Decrease column width, layoutmsg, colresize -0.1
+  bindd = SUPER, equal, Increase column width, layoutmsg, colresize +0.1
+  bindd = SUPER SHIFT, equal, Maximize column width, layoutmsg, fit active
 
   # Switch workspaces with SUPER + [0-9]
   bindd = SUPER, 1, Switch to workspace 1, workspace, 1
@@ -48,10 +60,17 @@
   bindd = SUPER SHIFT, TAB, Previous workspace, workspace, e-1
 
   # Swap active window with the one next to it with SUPER + SHIFT + arrow keys
-  bindd = SUPER SHIFT, left, Swap window to the left, swapwindow, l
-  bindd = SUPER SHIFT, right, Swap window to the right, swapwindow, r
+  # bindd = SUPER SHIFT, left, Swap window to the left, swapwindow, l
+  # bindd = SUPER SHIFT, right, Swap window to the right, swapwindow, r
   bindd = SUPER SHIFT, up, Swap window up, swapwindow, u
   bindd = SUPER SHIFT, down, Swap window down, swapwindow, d
+
+  # bindd = SUPER SHIFT, left, Move window to left col, layoutmsg, movewindow l
+  # bindd = SUPER SHIFT, right, Move window to right col, layoutmsg, movewindow r
+  bindd = SUPER SHIFT, left, Move window to left col, exec, consume-or-expel-window l
+  bindd = SUPER SHIFT, right, Move window to right col, exec, consume-or-expel-window r
+  # bindd = SUPER SHIFT, up, Move window up col, layoutmsg, movewindow u
+  # bindd = SUPER SHIFT, down, Move window down col, layoutmsg, movewindow d
 
   # Swap active window with master
   bindd = SUPER, BackSpace, Swap window with master, layoutmsg, swapwithmaster auto

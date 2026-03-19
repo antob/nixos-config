@@ -14,10 +14,8 @@ pkgs.writeShellScriptBin "cmd-screensaver" ''
   trap exit_screensaver SIGINT SIGTERM SIGHUP SIGQUIT
 
   while true; do
-    effect=$(${tte} 2>&1 | grep -oP '{\K[^}]+' | tr ',' ' ' | tr ' ' '\n' | sed -n '/^beams$/,$p' | sort -u | shuf -n1)
-    ${tte} -i ${./branding/logo.txt} \
-      --frame-rate 240 --canvas-width 0 --canvas-height $(($(tput lines) - 2)) --anchor-canvas c --anchor-text c \
-      "$effect" &
+    ${tte} -i ${./branding/logo.txt} -R \
+      --frame-rate 240 --canvas-width 0 --canvas-height $(($(tput lines) - 2)) --anchor-canvas c --anchor-text c &
 
     while pgrep -x .tte-wrapped >/dev/null; do
       if read -t 3 -n 1; then

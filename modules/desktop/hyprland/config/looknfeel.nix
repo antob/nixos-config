@@ -78,6 +78,14 @@ in
     animation = workspaces, 0, 0, ease
   }
 
+  # See https://wiki.hypr.land/Configuring/Scrolling-Layout/ for more
+  scrolling {
+    follow_focus = false
+    focus_fit_method = 0 # 0 = center, 1 = fit
+    # wrap_focus = false
+    column_width = 1.0
+  }
+
   # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
   dwindle {
     pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
