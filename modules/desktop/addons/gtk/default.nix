@@ -36,7 +36,7 @@ in
     environment.sessionVariables = {
       GTK_THEME = cfg.theme.name;
       XCURSOR_THEME = cfg.cursor.name;
-      XCURSOR_SIZE = builtins.toString cfg.cursor.size;
+      XCURSOR_SIZE = toString cfg.cursor.size;
     };
 
     antob.home.extraOptions = {
@@ -60,12 +60,13 @@ in
         };
 
         gtk3.extraConfig = {
-          gtk-application-prefer-dark-theme = 1;
           gtk-error-bell = false;
+          color-scheme = "dark";
         };
         gtk4.extraConfig = {
-          gtk-application-prefer-dark-theme = 1;
+          gtk-interface-color-scheme = "dark";
           gtk-error-bell = false;
+          color-scheme = "dark";
         };
       };
     };

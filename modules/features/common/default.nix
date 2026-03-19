@@ -121,7 +121,7 @@ in
       duf
       jqp
       xh
-      neofetch
+      fastfetch
       dmidecode
       usbutils
       pciutils

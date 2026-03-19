@@ -42,6 +42,7 @@ in
               - "#${colors.base12}"
         git:
           autoFetch: false
+          overrideGpg: true
         update:
           method: never
         promptToReturnFromSubprocess: false

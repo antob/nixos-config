@@ -111,7 +111,7 @@ bind-key "C-s" run-shell "sesh connect \"$(
 		--bind 'ctrl-g:change-prompt(󰒓  )+reload(sesh list --icons -c)' \
 		--bind 'ctrl-x:change-prompt(  )+reload(sesh list --icons -z)' \
 		--bind 'ctrl-f:change-prompt(  )+reload(fd -H -d 2 -t d -E .cache -E .stfolder -E .Trash -E .Trash-1000 . ~/Projects)' \
-		--bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list --icons -t)' \
+		--bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons -t)' \
     --preview-window 'right:55%' \
     --preview 'sesh preview {}'
 )\""
