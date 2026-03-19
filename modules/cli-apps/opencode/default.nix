@@ -21,6 +21,12 @@ in
           theme = "tokyonight";
           autoshare = false;
           autoupdate = true;
+          enabled_providers = [
+            "openrouter"
+            "opencode"
+            "github-copilot"
+            "openai"
+          ];
           permission = {
             # File read permissions
             read = {
@@ -97,7 +103,7 @@ in
             code-reviewer = {
               description = "Reviews code for best practices and potential issues";
               mode = "subagent";
-              model = "anthropic/claude-sonnet-4-5";
+              model = "github-copilot/claude-sonnet-4-5";
               prompt = "You are a code reviewer. Focus on security, performance, and maintainability.";
               permission = {
                 read = {
@@ -110,6 +116,9 @@ in
           };
         };
       };
+
+      # Plugins
+      home.file.".config/opencode/plugins/env-protection.js".source = ./plugins/env-protection.js;
     };
 
     antob.persistence = {
