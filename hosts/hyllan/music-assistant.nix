@@ -9,7 +9,7 @@ in
 {
   virtualisation.oci-containers.containers = {
     mass = {
-      image = "ghcr.io/music-assistant/server:2.8.0b17";
+      image = "ghcr.io/music-assistant/server:2.8.0b21";
       autoStart = true;
       extraOptions = [
         "--network=host"
@@ -35,7 +35,8 @@ in
 
   virtualisation.oci-containers.containers = {
     ytdlp-pot-provider = {
-      image = "docker.io/brainicism/bgutil-ytdlp-pot-provider:latest";
+      # https://hub.docker.com/r/brainicism/bgutil-ytdlp-pot-provider/tags
+      image = "docker.io/brainicism/bgutil-ytdlp-pot-provider:1.3.1";
       autoStart = true;
       extraOptions = [
         "--network=host"
