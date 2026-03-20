@@ -28,6 +28,7 @@
         "ts_ls",
         "cssls",
         "ty",
+        "m68k",
       })
 
       -- Configure LSPs
@@ -77,6 +78,24 @@
       -- herb_ls
       vim.lsp.config("herb_ls", {
         cmd = { "${pkgs.herb-tools}/bin/herb-language-server", "--stdio" },
+      })
+
+      -- m68k-lsp-server
+      vim.lsp.config("m68k", {
+        cmd = { "${pkgs.m68k-lsp-server}/bin/m68k-lsp-server", "--stdio" },
+        init_options = {
+          format = {
+            case = {
+              instruction = "lower",
+              directive = "upper",
+              control = "upper",
+              sectionType = "upper",
+              register = "lower",
+              hex = "lower",
+            },
+            finalNewLine = true,
+          },
+        },
       })
 
       -- Disable sematic tokens to stop color scheme changes when LSP start

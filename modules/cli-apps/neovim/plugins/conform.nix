@@ -32,6 +32,7 @@
           yaml = { "prettier" },
           just = { "just" },
           make = { "bake" },
+          asm68k = { lsp_format = "last" },
           ["_"] = { "trim_whitespace", "trim_newlines" },
         },
 

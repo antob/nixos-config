@@ -13,4 +13,5 @@
   zsh-window-title = pkgs.callPackage ./zsh-window-title { };
   wlr-dpms = pkgs.callPackage ./wlr-dpms { };
   herb-tools = pkgs.callPackage ./herb-tools { };
+  m68k-lsp-server = pkgs.callPackage ./m68k-lsp-server { };
 }
