@@ -30,13 +30,16 @@
 
   windowrule = tag +floating-window, match:class (Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|About|TUI.float)
   windowrule = tag +floating-window, match:class (xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus), match:title ^(Open.*Files?|Open Folder|Save.*Files?|Save.*As|Save|All Files)
-  windowrule = tag +floating-window-lg, match:class (TUI.float.lg|nwg-displays)
+  windowrule = tag +floating-window-lg, match:class (TUI.float.lg|nwg-displays|X64)
 
   # Fullscreen screensaver
   windowrule = fullscreen on, match:class Screensaver
 
   # No transparency on media windows
-  windowrule = opacity 1 1, match:class ^(zoom|vlc|mpv|com.github.PintaProject.Pinta|imv|org.gnome.NautilusPreviewer)$
+  windowrule = opacity 1 1, match:class ^(zoom|vlc|mpv|com.github.PintaProject.Pinta|imv|org.gnome.NautilusPreviewer|X64)$
+
+  # fs-uae
+  windowrule = float on, size 960 768, opacity 1 1, match:class fs-uae
 
   # Do not animate fullscreen windows
   windowrule = no_anim on, match:fullscreen 1
