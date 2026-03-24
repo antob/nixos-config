@@ -82,7 +82,12 @@ in
           };
         };
 
-        password-store.enable = true;
+        password-store = {
+          enable = true;
+          settings = {
+            PASSWORD_STORE_DIR = "$XDG_DATA_HOME/password-store";
+          };
+        };
 
         # DNS lookup failure on update during boot
         # tealdeer.enable = true;

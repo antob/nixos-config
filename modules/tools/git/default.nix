@@ -54,6 +54,7 @@ in
 
         signing = {
           key = cfg.signingKey;
+          format = "openpgp";
           signByDefault = mkIf config.antob.security.gpg.enable true;
         };
 

@@ -7,15 +7,15 @@
     plugins = with pkgs.vimPlugins; [ lualine-nvim ];
 
     initLua = /* lua */ ''
-      local custom_catppuccin = require("lualine.themes.catppuccin")
-      custom_catppuccin.normal.c.bg = "#292c3c"
-      custom_catppuccin.inactive.c.bg = "#292c3c"
+      local custom_theme = require("lualine.themes.ayu_mirage")
+      -- custom_theme.normal.c.bg = "#292c3c"
+      -- custom_theme.inactive.c.bg = "#292c3c"
 
       require("lualine").setup({
         options = {
           globalstatus = false,
           icons_enabled = true,
-          theme = custom_catppuccin,
+          theme = custom_theme,
           component_separators = " ⃒",
           section_separators = "",
         },
