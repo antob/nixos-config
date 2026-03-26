@@ -43,6 +43,10 @@ in
         git:
           autoFetch: false
           overrideGpg: true
+          pagers:
+            - useExternalDiffGitConfig: false
+            - pager: ${pkgs.delta}/bin/delta --side-by-side --paging=never --syntax-theme "TwoDark"
+              colorArg: always
         update:
           method: never
         promptToReturnFromSubprocess: false
