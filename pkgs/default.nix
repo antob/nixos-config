@@ -14,4 +14,6 @@
   wlr-dpms = pkgs.callPackage ./wlr-dpms { };
   herb-tools = pkgs.callPackage ./herb-tools { };
   m68k-lsp-server = pkgs.callPackage ./m68k-lsp-server { };
+  pi-coding-agent = pkgs.callPackage ./pi-coding-agent { };
+  agent-browser = pkgs.callPackage ./agent-browser { };
 }

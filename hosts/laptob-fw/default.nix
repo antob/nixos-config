@@ -41,7 +41,10 @@ in
       # };
     };
 
-    cli-apps.opencode = enabled;
+    cli-apps = {
+      opencode = enabled;
+      pi-coding-agent = enabled;
+    };
 
     services.tailscale = {
       enable = true;
@@ -79,9 +82,9 @@ in
         ".config/vice"
         ".RetroDebugger"
         ".C64Debugger"
-        ".nuget"
-        ".microsoft"
-        ".dotnet"
+        # ".nuget"
+        # ".microsoft"
+        # ".dotnet"
         ".aws"
       ];
     };

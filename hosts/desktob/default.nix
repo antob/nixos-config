@@ -64,6 +64,7 @@ in
     cli-apps = {
       llama-cpp = enabled;
       opencode = enabled;
+      pi-coding-agent = enabled;
     };
 
     hardware = {
