@@ -26,7 +26,7 @@ in
           background-color = "#${colors.base10}ff";
           border-color = "#${colors.base0C}ff";
           text-color = "#${colors.base07}ff";
-          border-size = 3;
+          border-size = 2;
           width = 420;
           height = 110;
           padding = 16;

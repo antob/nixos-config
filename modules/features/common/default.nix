@@ -107,6 +107,7 @@ in
       http = "xh";
       https = "xhs";
       speedtest = "speedtest-rs";
+      j = "just";
     };
 
     environment.systemPackages = with pkgs; [
@@ -144,6 +145,12 @@ in
       man-pages-posix
       witr
       wl-color-picker
+      python3
+      bun
+      nmap
+      arp-scan
+      masscan
+      whatweb
     ];
 
     services = {

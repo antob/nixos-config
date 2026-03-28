@@ -12,6 +12,7 @@
     shfmt
     ruff
     ty
+    just-lsp
   ];
 
   programs.neovim = {
@@ -29,6 +30,7 @@
         "cssls",
         "ty",
         "m68k",
+        "just",
       })
 
       -- Configure LSPs

@@ -4,10 +4,12 @@ set -as terminal-overrides ',*:Setulc=\E[58::2::::%p1%{65536}%/%d::%p1%{256}%/%{
 set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
 set -as terminal-features ',*:usstyle'
 set -as terminal-features ',xterm*:RGB'
-set -as terminal-features ',alacritty*:RGB'
+set -as terminal-features ',alacritty*:RGB:extkeys'
 set -as terminal-features ',kitty*:RGB'
 
 set -g mouse on
+set -g extended-keys on
+set -g extended-keys-format csi-u
 
 # Set C-a as prefix
 unbind C-b
@@ -128,4 +130,4 @@ set-hook -g pane-exited "select-layout"
 set -g detach-on-destroy on   # exit from tmux when closing a session
 set -g escape-time 0          # zero-out escape time delay
 set -g renumber-windows on    # renumber all windows when any window is closed
-set -g set-clipboard external # use system clipboard
+set -g set-clipboard on # use system clipboard, now changed to 'on'

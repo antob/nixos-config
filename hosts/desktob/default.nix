@@ -100,6 +100,8 @@ in
 
     system.env = {
       GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
+      OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
+      OPENCODE_API_KEY = "$(cat ${secrets.opencode_api_key.path})";
     };
   };
 
@@ -145,6 +147,12 @@ in
       github_copilot_token = {
         # The sops file can be also overwritten per secret...
         # sopsFile = ./secrets.yaml;
+        owner = "tob";
+      };
+      openrouter_api_key = {
+        owner = "tob";
+      };
+      opencode_api_key = {
         owner = "tob";
       };
     };

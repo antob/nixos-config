@@ -33,6 +33,7 @@
           just = { "just" },
           make = { "bake" },
           asm68k = { lsp_format = "last" },
+          markdown = { "rumdl" },
           ["_"] = { "trim_whitespace", "trim_newlines" },
         },
 
@@ -76,6 +77,7 @@
               "-",
             },
           },
+          rumdl = { command = "${lib.getExe pkgs.rumdl}" },
         },
 
         format_on_save = function(bufnr)
