@@ -47,6 +47,7 @@ in
       atuin = enabled;
       alacritty.fontSize = 13;
       kitty.fontSize = 13;
+      wezterm.fontSize = 13;
     };
 
     services = {

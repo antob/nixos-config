@@ -28,5 +28,5 @@
   }
 
   # Scroll faster in the terminal
-  windowrule = scroll_touchpad 1.5, match:class Alacritty
+  windowrule = scroll_touchpad 1.5, match:class (Alacritty|org.wezfurlong.wezterm|kitty)
 ''

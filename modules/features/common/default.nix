@@ -18,6 +18,7 @@ in
     antob = {
       tools = {
         alacritty = enabled;
+        wezterm = enabled;
         git = enabled;
         zsh = enabled;
         starship = enabled;
@@ -31,8 +32,6 @@ in
 
       cli-apps = {
         neovim = enabled;
-        helix = enabled;
-        tmux = enabled;
         yazi = enabled;
         nix-search-tv = enabled;
         sqlit = enabled;

@@ -1,13 +1,14 @@
 { pkgs, ... }:
 let
   tte = "${pkgs.terminaltexteffects}/bin/tte";
+  terminal = "${pkgs.alacritty}/bin/alacritty";
 in
 pkgs.writeShellScriptBin "cmd-screensaver" ''
   #!/bin/bash
 
   function exit_screensaver {
     pkill -x .tte-wrapped 2>/dev/null
-    pkill -f "alacritty --class Screensaver" 2>/dev/null
+    pkill -f "${terminal} --class Screensaver" 2>/dev/null
     exit 0
   }
 

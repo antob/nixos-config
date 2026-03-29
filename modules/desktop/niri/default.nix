@@ -11,6 +11,11 @@ let
   cfg = config.antob.desktop.niri;
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
+
+  terminal = "wezterm";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
+  tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
+
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
   dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });
   dm-vpn =
@@ -279,12 +284,14 @@ in
                 opacity = 0.9;
                 matches = [
                   { title = "Alacritty"; }
+                  { add-ip = "org.wezfurlong.wezterm"; }
                 ];
               }
               {
                 opacity = 0.95;
                 matches = [
                   { title = "Alacritty"; }
+                  { add-ip = "org.wezfurlong.wezterm"; }
                 ];
                 excludes = [
                   { app-id = "Alacritty"; }
@@ -374,14 +381,12 @@ in
                   repeat = false;
                 };
                 "${mod}+Return" = {
-                  action = spawn-sh (
-                    if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty"
-                  );
+                  action = spawn-sh (if config.antob.cli-apps.tmux.enable then "${tmuxTerminal}" else "${terminal}");
                   hotkey-overlay.title = "Terminal (tmux)";
                   repeat = false;
                 };
                 "${mod}+Shift+Return" = {
-                  action = spawn "alacritty";
+                  action = spawn "${terminal}";
                   hotkey-overlay.title = "Terminal (no tmux)";
                   repeat = false;
                 };
@@ -402,13 +407,13 @@ in
                 };
 
                 "${mod}+B" = {
-                  action = spawn-sh "alacritty --class=TUI.float -e bluetui";
+                  action = spawn-sh "${tuiTerminal} --class=TUI.float -e bluetui";
                   hotkey-overlay.title = "Bluetooth";
                   repeat = false;
                 };
 
                 "${mod}+T" = {
-                  action = spawn-sh "alacritty --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
+                  action = spawn-sh "${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
                   hotkey-overlay.title = "Activity";
                   repeat = false;
                 };

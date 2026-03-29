@@ -11,6 +11,10 @@ let
 
   cursorTheme = "Bibata-Modern-Ice";
   cursorSize = 16;
+
+  terminal = "${pkgs.alacritty}/bin/alacritty";
+  terminalName = "Alacritty";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
 in
 {
   options.antob.desktop.gnome = with types; {
@@ -391,9 +395,8 @@ in
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
             binding = "<Super>Return";
-            command =
-              if config.antob.cli-apps.tmux.enable then "alacritty -e tmux-attach-unused" else "alacritty";
-            name = "Alacritty";
+            command = if config.antob.cli-apps.tmux.enable then "${tmuxTerminal}" else "${terminal}";
+            name = "${terminalName}";
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
             binding = "<Super>comma";
@@ -412,8 +415,8 @@ in
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
             binding = "<Super><Shift>Return";
-            command = "alacritty";
-            name = "Alacritty";
+            command = "${terminal}";
+            name = "${terminalName}";
           };
           "system/locale" = {
             region = "sv_SE.UTF-8";
