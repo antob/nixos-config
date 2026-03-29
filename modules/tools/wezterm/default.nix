@@ -11,6 +11,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    antob.persistence = {
+      home.directories = [
+        ".local/share/wezterm"
+        ".cache/wezterm"
+      ];
+    };
+
     antob.home.extraOptions.programs.wezterm = {
       enable = true;
       enableZshIntegration = true;
@@ -20,12 +27,13 @@ in
         local act = wezterm.action
 
         -- Plugin imports
+        -- Run the command `wezterm.plugin.update_all()` from the debug overlay to update all local plugins.
         local layout_mgr = wezterm.plugin.require("https://github.com/antob/wezterm-layout-manager")
 
         -- General settings
         config.color_scheme = "Tokyo Night"
         config.font = wezterm.font("Hack Nerd Font")
-        config.font_size = ${toString cfg.fontSize}
+        config.font_size = tonumber("${toString cfg.fontSize}")
         config.window_decorations = "NONE"
         config.window_padding = {
           left = 12,
@@ -209,18 +217,18 @@ in
           {
             key = "a",
             mods = "LEADER",
-            action = act.SendKey {
-              mods="CTRL",
-              key="a"
-            },
+            action = act.SendKey({
+              mods = "CTRL",
+              key = "a",
+            }),
           },
           {
             key = "a",
             mods = "LEADER|CTRL",
-            action = act.SendKey {
-              mods="CTRL",
-              key="a"
-            },
+            action = act.SendKey({
+              mods = "CTRL",
+              key = "a",
+            }),
           },
 
           -- Plugin keybindings
