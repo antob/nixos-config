@@ -4,6 +4,14 @@
   ...
 }:
 {
+  home.packages = with pkgs; [
+    rumdl
+  ];
+
+  home.sessionVariables = {
+    RUMDL_CACHE_DIR = "~/.cache/rumdl";
+  };
+
   programs.neovim = {
     plugins = with pkgs.vimPlugins; [ conform-nvim ];
 
@@ -77,7 +85,6 @@
               "-",
             },
           },
-          rumdl = { command = "${lib.getExe pkgs.rumdl}" },
         },
 
         format_on_save = function(bufnr)
