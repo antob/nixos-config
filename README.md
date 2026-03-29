@@ -6,31 +6,31 @@
 
 Optional, but just to ensure no remnants of the secure erase mess anything up, zap the drive.
 
-```
+```text
 # sgdisk --zap-all *DRIVE*
 ```
 
 Now do the actual partitioning. You can adjust the sizes of the EFI partition (though at least 300 MB is recommended). We are naming drives here so we can use the names instead of potentially volatile names like '/dev/sda'.
 
-```
+```text
 # sgdisk --clear --new=1:0:+1GiB --typecode=1:ef00 --change-name=1:EFI --new=2:0:0 --typecode=2:8300 --change-name=2:cryptsystem *DRIVE*
 ```
 
 Verify that the partitions are set up properly.
 
-```
+```text
 # fdisk -l
 ```
 
-### Create the encrypted system partition. Note that we explicitly specify LUKS2 as well as our encryption parameters.
+### Create the encrypted system partition. Note that we explicitly specify LUKS2 as well as our encryption parameters
 
-```
+```text
 # cryptsetup luksFormat --type luks2 --align-payload=8192 -s 256 -c aes-xts-plain64 /dev/disk/by-partlabel/cryptsystem
 ```
 
 Open the new encrypted system partition.
 
-```
+```text
 # cryptsetup open /dev/disk/by-partlabel/cryptsystem system
 ```
 
@@ -38,61 +38,61 @@ Open the new encrypted system partition.
 
 Create the filesystem
 
-```
+```text
 # mkfs.btrfs --label system /dev/mapper/system
 ```
 
 Mount at root
 
-```
+```text
 # mount -t btrfs LABEL=system /mnt
 ```
 
 Create the root subvolume (this will be '/' on the final system)
 
-```
+```text
 # btrfs subvolume create /mnt/@root
 ```
 
 Create the home subvolume
 
-```
+```text
 # btrfs subvolume create /mnt/@home
 ```
 
 Create the nix directory subvolume (this will hold all NixOS data)
 
-```
+```text
 # btrfs subvolume create /mnt/@nix
 ```
 
 Create a subvolume for persistent storage
 
-```
+```text
 # btrfs subvolume create /mnt/@persist
 ```
 
 Create a subvolume for swap
 
-```
+```text
 # btrfs subvolume create /mnt/@swap
 ```
 
 Unmount root so we can change mount options
 
-```
+```text
 # umount -R /mnt
 ```
 
 Remount the root subvolume with options. The compression here is optional, zstd offers the best storage but you may prefer a different algorithm for speed, or omit entirely. Only use ssd if you are on an SSD. You can also enable atime if desired, but it comes with overhead.
 
-```
+```text
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@root LABEL=system /mnt
 ```
 
 Mount the home, nix and persist subvolumes (same deal with options as previous step)
 
-```
+```text
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@home LABEL=system /mnt/home
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@nix LABEL=system /mnt/nix
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=zstd,ssd,noatime,subvol=@persist LABEL=system /mnt/persist
@@ -100,7 +100,7 @@ Mount the home, nix and persist subvolumes (same deal with options as previous s
 
 Mount the swap subvolume. Note: Do not use compression for swap subvolume.
 
-```
+```text
 # mount -t btrfs -o defaults,x-mount.mkdir,compress=none,ssd,noatime,subvol=@swap LABEL=system /mnt/swap
 ```
 
@@ -108,19 +108,19 @@ Mount the swap subvolume. Note: Do not use compression for swap subvolume.
 
 Format the partition as FAT-32, with label 'EFI'
 
-```
+```text
 # mkfs.fat -F32 -n EFI /dev/disk/by-partlabel/EFI
 ```
 
 Make the mount directory
 
-```
+```text
 # mkdir /mnt/efi
 ```
 
 Mount the ESP
 
-```
+```text
 # mount LABEL=EFI /mnt/efi
 ```
 
@@ -128,19 +128,19 @@ Mount the ESP
 
 Create the swapfile. Filesize set to RAM size + 2GB is good. The `mkswapfile` command requires at least version 6.1 of `btrfs-progs`.
 
-```
+```text
 # btrfs filesystem mkswapfile --size 10G /mnt/swap/swapfile
 ```
 
 Calculate swapfile offset value to put in `resume_offset` kernel parameter.
 
-```
+```text
 # btrfs inspect-internal map-swapfile -r /mnt/swap/swapfile
 ```
 
 Activate the swap file:
 
-```
+```text
 # swapon /mnt/swap/swapfile
 ```
 
@@ -148,7 +148,7 @@ Activate the swap file:
 
 Otionally setup ZFS.
 
-```
+```text
 $ sudo zpool create -O compression=on -O mountpoint=none -O acltype=posixacl -O xattr=sa -o ashift=12 tank raidz ata-TOSHIBA_HDWG440_14A0A017FZ0G ata-TOSHIBA_HDWG440_14A0A024FZ0G ata-TOSHIBA_HDWG440_Z3B0A06DFZ0G ata-TOSHIBA_HDWG440_Z3B0A0FLFZ0G
 
 # Let NixOS manage mounting datasets
@@ -165,37 +165,37 @@ $ sudo mount -o X-mount.mkdir -t zfs tank /mnt/tank
 
 Install git.
 
-```
+```text
 $ nix shell nixpkgs#git
 ```
 
 Generate config for current machine.
 
-```
+```text
 # nixos-generate-config --root /mnt
 ```
 
 Clone your config flake and cd into the folder.
 
-```
+```text
 # git clone https://github.com/antob/nixos-config /mnt/etc/nixos/antob
 # cd /mnt/etc/nixos/antob
 ```
 
 Add `resume_offset` kernel parameter using value calculated in a previous step.
 
-```
+```text
 # In relevant host hardware file (e.g `hosts/laptob/hardware.nix`)
 boot.kernelParams = [ "resume_offset=140544" ]; # Example value
 ```
 
 If needed, switch (or compare) specific host `hardware.nix` with generated `/mnt/etc/nixos/hardware-configuration.nix`.
 
-### Install NixOS.
+### Install NixOS
 
 In folder `/mnt/etc/nixos/antob`
 
-```
+```text
 # nixos-install --flake .#laptob
 ```
 
@@ -205,20 +205,20 @@ Reboot.
 
 Change location of cloned config repo
 
-```
+```text
 $ sudo mv <location of cloned directory> <prefered location>
 $ sudo chown -R <user>:users <new directory location>
 ```
 
 Remove generated hardware config. This is done because in the past it would auto update this config if you would have auto update in your configuration.
 
-```
+```text
 $ sudo rm /etc/nixos/configuration.nix
 ```
 
 Iterate on the config and rebuild system with
 
-```
+```text
 sudo nixos-rebuild switch --flake '.#laptob'
 ```
 
@@ -226,6 +226,6 @@ sudo nixos-rebuild switch --flake '.#laptob'
 
 As an alternativ, installation can be made using `disko-install` which combines disk partitioning and nixos-install. Eg:
 
-```
+```text
 $ sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake .#laptob --disk main /dev/nvme0n1
 ```
