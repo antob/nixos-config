@@ -127,10 +127,15 @@ in
             export ELECTRON_OZONE_PLATFORM_HINT=wayland
             export OZONE_PLATFORM=wayland
           '';
+
           home.file.".config/uwsm/env-hyprland".text = ''
             # Cursor size
             export HYPRCURSOR_SIZE=16
           '';
+
+          xdg.portal = {
+            extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+          };
         };
 
         system.env = {
@@ -146,6 +151,13 @@ in
         extraPortals = [
           pkgs.xdg-desktop-portal-gtk
         ];
+        config.common = {
+          default = [
+            "hyprland"
+            "gtk"
+          ];
+          "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+        };
       };
 
       environment.systemPackages =
