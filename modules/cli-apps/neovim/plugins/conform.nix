@@ -9,7 +9,7 @@
   ];
 
   home.sessionVariables = {
-    RUMDL_CACHE_DIR = "~/.cache/rumdl";
+    RUMDL_CACHE_DIR = "$HOME/.cache/rumdl";
   };
 
   programs.neovim = {

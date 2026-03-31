@@ -135,6 +135,8 @@
     map("n", "<leader><tab>o", "<CMD>tabonly<CR>", "Close other tabs")
     map("n", "<leader><tab><tab>", "<CMD>tabnew<CR>", "New tab")
     map("n", "<leader><tab>c", "<CMD>tabclose<CR>", "Close tab")
+    map("n", "]t", "<CMD>tabnext<CR>", "Next tab")
+    map("n", "[t", "<CMD>tabprevious<CR>", "Previous tab")
 
     -- Top Pickers
     map("n", "<leader><space>", picker.smart, "Smart Find Files")
