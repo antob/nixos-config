@@ -284,16 +284,18 @@ in
                 opacity = 0.9;
                 matches = [
                   { title = "Alacritty"; }
-                  { add-ip = "org.wezfurlong.wezterm"; }
+                  { add-id = "org.wezfurlong.wezterm"; }
                   { app-id = "kitty"; }
+                  { add-id = "com.mitchellh.ghostty"; }
                 ];
               }
               {
                 opacity = 0.95;
                 matches = [
                   { title = "Alacritty"; }
-                  { add-ip = "org.wezfurlong.wezterm"; }
+                  { add-id = "org.wezfurlong.wezterm"; }
                   { app-id = "kitty"; }
+                  { add-id = "com.mitchellh.ghostty"; }
                 ];
                 excludes = [
                   { app-id = "Alacritty"; }
