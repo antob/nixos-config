@@ -9,7 +9,7 @@ let
   );
 in
 ''
-  $terminal = uwsm app -- wezterm
+  $terminal = uwsm app -- kitty
   $tmuxTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty 
   $tuiTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty 
   $browser = uwsm app -- firefox

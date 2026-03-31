@@ -12,7 +12,7 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
 
-  terminal = "wezterm";
+  terminal = "kitty";
   tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
 
@@ -285,6 +285,7 @@ in
                 matches = [
                   { title = "Alacritty"; }
                   { add-ip = "org.wezfurlong.wezterm"; }
+                  { app-id = "kitty"; }
                 ];
               }
               {
@@ -292,6 +293,7 @@ in
                 matches = [
                   { title = "Alacritty"; }
                   { add-ip = "org.wezfurlong.wezterm"; }
+                  { app-id = "kitty"; }
                 ];
                 excludes = [
                   { app-id = "Alacritty"; }

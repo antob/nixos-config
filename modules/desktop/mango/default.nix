@@ -12,7 +12,7 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
-  terminal = "wezterm";
+  terminal = "kitty";
   lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client";
   dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });

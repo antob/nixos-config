@@ -47,6 +47,7 @@ in
       atuin = enabled;
       alacritty.fontSize = 13;
       kitty.fontSize = 13;
+      kitty.enable = true;
       wezterm.fontSize = 13;
     };
 
