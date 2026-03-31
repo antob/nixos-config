@@ -28,7 +28,7 @@ in
 
         -- Plugin imports
         -- Run the command `wezterm.plugin.update_all()` from the debug overlay to update all local plugins.
-        local layout_mgr = wezterm.plugin.require("https://github.com/antob/wezterm-layout-manager")
+        local ws_mgr = wezterm.plugin.require("https://github.com/antob/wezterm-workspace-manager")
 
         -- General settings
         config.color_scheme = "Tokyo Night"
@@ -45,12 +45,25 @@ in
         config.check_for_updates = false
         config.scrollback_lines = 10000
 
+        -- Multiplexing
+        config.unix_domains = {
+          {
+            name = "unix",
+          },
+        }
+
+        -- This causes `wezterm` to act as though it was started as
+        -- `wezterm connect unix` by default, connecting to the unix
+        -- domain on startup.
+        -- If you prefer to connect manually, leave out this line.
+        config.default_gui_startup_args = { "connect", "unix" }
+
         -- Tab bar settings
         config.enable_tab_bar = true
         config.use_fancy_tab_bar = false
         config.tab_bar_at_bottom = true
         config.show_new_tab_button_in_tab_bar = false
-        config.hide_tab_bar_if_only_one_tab = true
+        config.hide_tab_bar_if_only_one_tab = false
         config.tab_max_width = 64
 
         -- Leader key
@@ -235,22 +248,22 @@ in
           {
             key = "s",
             mods = "LEADER",
-            action = layout_mgr.apply_layout(),
+            action = ws_mgr.apply_workspace(),
           },
           {
             key = "s",
             mods = "LEADER|CTRL",
-            action = layout_mgr.apply_layout(),
+            action = ws_mgr.apply_workspace(),
           },
           {
             key = "s",
             mods = "LEADER|SHIFT",
-            action = layout_mgr.save_layout(),
+            action = ws_mgr.save_workspace(),
           },
           {
             key = "d",
             mods = "LEADER|SHIFT",
-            action = layout_mgr.delete_layout(),
+            action = ws_mgr.delete_workspace(),
           },
           -- Rename current workspace
           {
