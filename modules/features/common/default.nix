@@ -19,7 +19,6 @@ in
       tools = {
         alacritty = enabled;
         kitty = enabled;
-        wezterm = enabled;
         git = enabled;
         zsh = enabled;
         starship = enabled;
