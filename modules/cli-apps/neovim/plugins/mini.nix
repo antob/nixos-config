@@ -11,7 +11,7 @@
     initLua = /* lua */ ''
       require("mini.misc").setup({})
       require("mini.surround").setup({})
-      require("mini.pairs").setup({})
+      -- require("mini.pairs").setup({})
       require("mini.jump").setup({})
       require("mini.cursorword").setup({})
       require("mini.icons").setup({})

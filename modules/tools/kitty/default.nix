@@ -23,19 +23,14 @@ in
         TERM = "xterm-256color";
       };
 
-      # font = {
-      #   name = "Hack Nerd Font";
-      #   size = cfg.fontSize;
-      # };
+      font = {
+        name = "Hack";
+        size = cfg.fontSize;
+      };
 
       shellIntegration.enableZshIntegration = true;
 
       settings = {
-        font_size = toString cfg.fontSize;
-        font_family = "family=\"Hack Nerd Font Mono\"";
-        bold_font = "auto";
-        italic_font = "auto";
-        bold_italic_font = "auto";
         cursor_shape = "beam";
         enable_audio_bell = "no";
         window_padding_width = "4";
@@ -52,8 +47,10 @@ in
         undercurl_style = "thick-sparse";
         url_color = "#${colors.base06}";
         url_style = "straight";
-        modify_font = "cell_width 103%";
+        # modify_font = "cell_width 103%";
         text_composition_strategy = "legacy"; # Makes font thinner
+        allow_remote_control = "socket-only";
+        listen_on = "unix:/tmp/kitty.sock";
       };
 
       extraConfig = ''
@@ -72,7 +69,6 @@ in
         "ctrl+shift+page_down" = "scroll_page_down";
         "ctrl+shift+z" = "scroll_to_prompt -1";
         "ctrl+shift+x" = "scroll_to_prompt 1";
-        "ctrl+shift+h" = "show_scrollback";
         "ctrl+shift+f" = "search_scrollback";
         "ctrl+shift+enter" = "launch --cwd=current";
         "ctrl+shift+right" = "next_window";
@@ -84,13 +80,29 @@ in
         "ctrl+shift+t" = "new_tab_with_cwd";
         "ctrl+shift+alt+]" = "move_tab_forward";
         "ctrl+shift+alt+[" = "move_tab_backward";
-        "ctrl+shift+alt+t" = "set_tab_title";
+        "ctrl+shift+4" = "set_tab_title";
         "ctrl+shift+l" = "next_layout";
         "ctrl+shift+p" = "command_palette";
         "ctrl+shift+m" = "toggle_layout stack";
         "ctrl+shift+s" = "goto_session ~/.local/share/kitty/sessions";
         "ctrl+shift+w" =
           "save_as_session --save-only --base-dir ~/.local/share/kitty/sessions --match=session:. .";
+
+        # Browse scrollback buffer in nvim
+        "ctrl+shift+h" = "kitty_scrollback_nvim --nvim-args --clean --noplugin -n";
+        # Browse output of the last shell command in nvim
+        "ctrl+shift+g" =
+          "kitty_scrollback_nvim --config ksb_builtin_last_cmd_output --nvim-args --clean --noplugin -n";
+      };
+      mouseBindings = {
+        # Show clicked command output in nvim
+        "ctrl+shift+right press" =
+          "ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output --nvim-args --clean --noplugin -n";
+      };
+      actionAliases = {
+        # kitty-scrollback.nvim Kitten alias
+        "kitty_scrollback_nvim" =
+          "kitten '/home/${config.antob.user.name}/.local/share/nvim/site/pack/hm/start/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py'";
       };
     };
   };

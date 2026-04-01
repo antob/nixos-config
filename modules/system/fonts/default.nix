@@ -41,6 +41,7 @@ in
           noto-fonts-color-emoji
           nerd-fonts.hack
           nerd-fonts.fira-code
+          hack-font # Without nerd-fonts patch, for kitty
         ]
         ++ cfg.fonts;
     };
