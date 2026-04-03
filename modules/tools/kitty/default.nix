@@ -16,6 +16,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    antob.persistence.home.directories = [
+      ".local/share/kitty"
+      ".cache/kitty"
+    ];
+
     antob.home.extraOptions.programs.kitty = {
       enable = true;
 
