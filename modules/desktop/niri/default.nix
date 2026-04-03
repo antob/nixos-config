@@ -13,7 +13,6 @@ let
   colors = config.antob.color-scheme.colors;
 
   terminal = "kitty";
-  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
 
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
@@ -381,13 +380,8 @@ in
                   repeat = false;
                 };
                 "${mod}+Return" = {
-                  action = spawn-sh (if config.antob.cli-apps.tmux.enable then "${tmuxTerminal}" else "${terminal}");
-                  hotkey-overlay.title = "Terminal (tmux)";
-                  repeat = false;
-                };
-                "${mod}+Shift+Return" = {
                   action = spawn "${terminal}";
-                  hotkey-overlay.title = "Terminal (no tmux)";
+                  hotkey-overlay.title = "Terminal";
                   repeat = false;
                 };
                 "${mod}+W" = {

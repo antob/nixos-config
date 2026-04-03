@@ -10,16 +10,12 @@ let
 in
 ''
   $terminal = uwsm app -- kitty
-  $tmuxTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty 
   $tuiTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty 
   $browser = uwsm app -- firefox
   $chromium = uwsm app -- chromium --app=
 
   # Apps
-  bindd = SUPER, RETURN, Terminal, exec, ${
-    if config.antob.cli-apps.tmux.enable then "$tmuxTerminal -e tmux-attach-unused" else "$terminal"
-  }
-  bindd = SUPER SHIFT, RETURN, Terminal, exec, $terminal
+  bindd = SUPER, RETURN, Terminal, exec, $terminal
   bindd = SUPER, E, File manager, exec, uwsm app -- nautilus --new-window
   bindd = SUPER, W, Web browser, exec, $browser
   bindd = SUPER SHIFT, W, Select Firefox profile, exec, ${dm-firefox-profile}

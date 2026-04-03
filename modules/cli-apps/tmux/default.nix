@@ -39,6 +39,7 @@ in
 {
   options.antob.cli-apps.tmux = with types; {
     enable = mkBoolOpt false "Whether or not to enable tmux.";
+    addTerminalKeybindings = mkBoolOpt false "Whether or not to add keybindings to terminals in tmux.";
   };
 
   config = mkIf cfg.enable {
@@ -61,7 +62,7 @@ in
         inherit plugins;
       };
 
-      programs.alacritty.settings.keyboard.bindings = lib.mkIf alacritty [
+      programs.alacritty.settings.keyboard.bindings = lib.mkIf (cfg.addTerminalKeybindings && alacritty) [
         ## Make Alacritty send Control+Shift keys
         # Cycle layout
         {
@@ -101,7 +102,7 @@ in
         }
       ];
 
-      programs.kitty.keybindings = lib.mkIf kitty {
+      programs.kitty.keybindings = lib.mkIf (cfg.addTerminalKeybindings && kitty) {
         ## Make Kitty send Control+Shift keys
         # Cycle layout
         "ctrl+shift+l" = "send_text all \\uE000";

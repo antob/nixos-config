@@ -14,7 +14,6 @@ let
 
   terminal = "${pkgs.alacritty}/bin/alacritty";
   terminalName = "Alacritty";
-  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
 in
 {
   options.antob.desktop.gnome = with types; {
@@ -41,7 +40,7 @@ in
       MOZ_ENABLE_WAYLAND = "1";
       NIXOS_OZONE_WL = "1";
       XCURSOR_THEME = cursorTheme;
-      XCURSOR_SIZE = builtins.toString cursorSize;
+      XCURSOR_SIZE = toString cursorSize;
     };
 
     # Desktop additions
@@ -395,7 +394,7 @@ in
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
             binding = "<Super>Return";
-            command = if config.antob.cli-apps.tmux.enable then "${tmuxTerminal}" else "${terminal}";
+            command = "${terminal}";
             name = "${terminalName}";
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
@@ -412,11 +411,6 @@ in
             binding = "Print";
             command = "flameshot-gui";
             name = "Flameshot";
-          };
-          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
-            binding = "<Super><Shift>Return";
-            command = "${terminal}";
-            name = "${terminalName}";
           };
           "system/locale" = {
             region = "sv_SE.UTF-8";

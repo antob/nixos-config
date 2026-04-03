@@ -32,6 +32,7 @@ in
 
       cli-apps = {
         neovim = enabled;
+        tmux = enabled;
         yazi = enabled;
         nix-search-tv = enabled;
         sqlit = enabled;

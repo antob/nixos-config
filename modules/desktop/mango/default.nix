@@ -82,10 +82,7 @@ in
           enable = true;
           settings = ''
             ## Keybindings
-            bind=Super,Return,spawn,${
-              if config.antob.cli-apps.tmux.enable then "${tmuxTerminal} -e tmux-attach-unused" else "${terminal}"
-            }
-            bind=Super+Shift,Return,spawn,${terminal}
+            bind=Super,Return,spawn,${terminal}
             bind=Super,w,spawn,firefox
             bind=Super+Shift,w,spawn,${dm-firefox-profile}
             bind=Super,e,spawn,nautilus --new-window
