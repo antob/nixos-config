@@ -44,9 +44,7 @@ in
           autoFetch: false
           overrideGpg: true
           pagers:
-            - useExternalDiffGitConfig: false
-            - pager: ${pkgs.delta}/bin/delta --side-by-side --paging=never --syntax-theme "TwoDark"
-              colorArg: always
+            - useExternalDiffGitConfig: true
         update:
           method: never
         promptToReturnFromSubprocess: false
@@ -89,6 +87,9 @@ in
           };
           credential = {
             helper = "cache";
+          };
+          diff = {
+            external = "${pkgs.difftastic}/bin/difft";
           };
         };
 

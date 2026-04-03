@@ -150,6 +150,7 @@ in
       arp-scan
       masscan
       whatweb
+      difftastic
     ];
 
     services = {
