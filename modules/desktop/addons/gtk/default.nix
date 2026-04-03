@@ -61,14 +61,12 @@ in
 
         gtk3.extraConfig = {
           gtk-error-bell = false;
-          color-scheme = "dark";
         };
         gtk4 = {
           theme = null; # See https://stopthemingmy.app
           extraConfig = {
             gtk-interface-color-scheme = "dark";
             gtk-error-bell = false;
-            color-scheme = "dark";
           };
         };
       };
