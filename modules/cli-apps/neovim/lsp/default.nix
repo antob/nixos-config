@@ -6,7 +6,7 @@
   home.packages = with pkgs; [
     lua-language-server
     nixd
-    nodePackages.bash-language-server
+    bash-language-server
     typescript-language-server
     vscode-langservers-extracted
     shfmt
