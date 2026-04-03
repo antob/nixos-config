@@ -8,11 +8,11 @@
 with lib;
 let
   cfg = config.antob.cli-apps.yazi;
-  yazi-flavors = pkgs.fetchFromGitHub {
-    owner = "yazi-rs";
-    repo = "flavors";
-    rev = "02f3fc6";
-    hash = "sha256-7facwGT4DoaMwdkBrMzPlqDbrbSjwW57qRD34iP48+0=";
+  tokyonight-flavor = pkgs.fetchFromGitHub {
+    owner = "BennyOe";
+    repo = "tokyo-night.yazi";
+    rev = "8e6296f14daff24151c736ebd0b9b6cd89b02b03";
+    hash = "sha256-LArhRteD7OQRBguV1n13gb5jkl90sOxShkDzgEf3PA0=";
   };
 in
 {
@@ -40,16 +40,13 @@ in
 
         theme = {
           flavor = {
-            dark = "catppuccin-frappe";
-            light = "catppuccin-frappe";
+            dark = "tokyo-night";
+            light = "tokyo-night";
           };
         };
 
         flavors = {
-          "catppuccin-frappe" = "${yazi-flavors}/catppuccin-frappe.yazi";
-          "catppuccin-latte" = "${yazi-flavors}/catppuccin-latte.yazi";
-          "catppuccin-macchiato" = "${yazi-flavors}/catppuccin-macchiato.yazi";
-          "catppuccin-mocha" = "${yazi-flavors}/catppuccin-mocha.yazi";
+          "tokyo-night" = "${tokyonight-flavor}";
         };
 
         plugins = {
