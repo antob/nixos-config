@@ -47,6 +47,7 @@ in
         mako = enabled;
         swayosd = enabled;
         swayidle = enabled;
+        rofi = enabled;
         waybar = {
           enable = true;
           enableSystemd = true;
@@ -65,10 +66,6 @@ in
             "clock"
           ];
           extraStyle = "";
-        };
-        walker = {
-          enable = true;
-          runAsService = false;
         };
       };
 
@@ -95,10 +92,10 @@ in
             bind=Super,b,spawn,${tuiTerminal} --class=TUI.float -e bluetui
             bind=Super,n,spawn,${tuiterminal} --class=TUI.float.lg -e ${pkgs.impala}/bin/impala
             bind=Super,t,spawn,${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}
-            bind=Super,d,spawn,walker -p 'Start…'
+            bind=Super,d,spawn,rofi -show drun
             bind=Super,x,spawn,${dm-system}
             bind=Super,p,spawn,${dm-vpn}
-            bind=Super+Ctrl,e,spawn,walker -m Emojis
+            bind=Super+Ctrl,e,spawn,rofimoji --prompt Emojis --action copy
             bind=None,Print,spawn,${cmd-screenshot}
             bind=Super,u,spawn,${cmd-toggle-swayidle}
             bind=Super,l,spawn_shell,${
@@ -354,7 +351,6 @@ in
             exec-once=~/.config/mango/autostart.sh
             exec-once=way-displays > /tmp/way-displays.log 2>&1
             exec-once=${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit
-            exec-once=walker --gapplication-service
             exec-once=${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular --reconnect-tries 0
             exec-once=${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store 
           '';

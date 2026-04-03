@@ -70,9 +70,8 @@ in
             ];
           };
           hyprsunset = enabled;
-          walker = {
+          rofi = {
             enable = true;
-            runAsService = true;
             launchPrefix = "uwsm app -- ";
           };
           keyring = enabled;

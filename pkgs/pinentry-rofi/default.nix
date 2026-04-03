@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-pkgs.writeShellScriptBin "pinentry-walker" ''
+pkgs.writeShellScriptBin "pinentry-rofi" ''
   set -eu
 
   VERSION="0.0.1"
@@ -57,8 +57,8 @@ pkgs.writeShellScriptBin "pinentry-walker" ''
       echo "$1" | sed -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
   }
 
-  walker_cmd="${pkgs.walker}/bin/walker --password"
-  win_prompt="Password"
+  rofi_cmd="${pkgs.rofi}/bin/rofi -theme password -dmenu -password"
+  win_prompt=" "
   keyinfo=""
 
   main () {
@@ -137,18 +137,18 @@ pkgs.writeShellScriptBin "pinentry-walker" ''
               #SETPROMPT Passphrase:
               IFS=" " line_arr=($(split_line "$line"))
               log_debug "line_arr: ''${line_arr[*]}"
-              win_prompt="''${line_arr[0]}"
+              win_prompt="$win_prompt''${line_arr[0]} "
               assuan_send "OK"
           elif [[ "$line" =~ ^SETTITLE ]] ; then
               assuan_send "OK"
           elif [[ "$line" =~ ^GETPIN ]] ; then
               passw=None
-              walker_cmd+=" --placeholder '$win_prompt' < /dev/null"
-              log_debug "''${walker_cmd}"
-              passw="$(eval "''${walker_cmd}")"
+              rofi_cmd+=" -p '$win_prompt' < /dev/null"
+              log_debug "''${rofi_cmd}"
+              passw="$(eval "''${rofi_cmd}")"
               if [[ -z "''${passw}" ]] ; then
-                  # assuan_send "ERR 83886179 Operation cancelled <walker>"
-                  log_debug "walker canceled, or empty password"
+                  # assuan_send "ERR 83886179 Operation cancelled <rofi>"
+                  log_debug "rofi canceled, or empty password"
                   exit 1
               else
                   if [[ -n ''${passw} ]] ; then

@@ -46,8 +46,8 @@ in
   }
 
   # Menus
-  bindd = SUPER, D, Launch apps, exec, ${pkgs.nixpkgs-prev.walker}/bin/walker -p "Start…"
-  bindd = SUPER CTRL, E, Emoji picker, exec, ${pkgs.nixpkgs-prev.walker}/bin/walker -m Emojis
+  bindd = SUPER, D, Launch apps, exec, ${pkgs.rofi}/bin/rofi -show drun
+  bindd = SUPER CTRL, E, Emoji picker, exec, rofimoji --prompt Emojis --action copy
   bindd = SUPER, K, Show key bindings, exec, ${dm-keybindings}
   bindd = SUPER, X, Show system menu, exec, ${dm-system}
   bindd = SUPER, P, Show VPN menu, exec, ${dm-vpn}

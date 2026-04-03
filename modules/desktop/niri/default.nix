@@ -93,9 +93,8 @@ in
               }
             '';
           };
-          walker = {
+          rofi = {
             enable = true;
-            runAsService = false;
             launchPrefix = "niri msg action spawn -- ";
           };
         };
@@ -366,9 +365,6 @@ in
                 sh = "swaybg --mode fill --image /home/tob/Pictures/Wallpapers/Omarchy-Backgrounds/1-scenery-pink-lakeside-sunset-lake-landscape-scenic-panorama-7680x3215-144.png";
               }
               {
-                sh = "walker --gapplication-service";
-              }
-              {
                 sh = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
               }
             ];
@@ -436,7 +432,7 @@ in
 
                 # Menues
                 "${mod}+D" = {
-                  action = spawn-sh "walker -p 'Start…'";
+                  action = spawn-sh "rofi -show drun";
                   hotkey-overlay.title = "App launcher";
                   repeat = false;
                 };
@@ -456,7 +452,7 @@ in
                   repeat = false;
                 };
                 "${mod}+Ctrl+E" = {
-                  action = spawn-sh "walker -m Emojis";
+                  action = spawn-sh "rofimoji --prompt Emojis --action copy";
                   hotkey-overlay.title = "Emoji selector";
                   repeat = false;
                 };

@@ -9,6 +9,7 @@
   pinentry-dmenu = pkgs.callPackage ./pinentry-dmenu { };
   pinentry-tofi = pkgs.callPackage ./pinentry-tofi { };
   pinentry-walker = pkgs.callPackage ./pinentry-walker { };
+  pinentry-rofi = pkgs.callPackage ./pinentry-rofi { };
   sfns-display-font = pkgs.callPackage ./sfns-display-font { };
   zsh-window-title = pkgs.callPackage ./zsh-window-title { };
   wlr-dpms = pkgs.callPackage ./wlr-dpms { };

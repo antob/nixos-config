@@ -11,11 +11,11 @@ pkgs.writeShellScriptBin "dm-firefox-profile" ''
   [[ ! -f $PROFILES ]] && exit
 
   names=$(cat $PROFILES | grep 'Name=' | grep -v 'default' | awk -F '=' '{print $2}')
-  choice=$(echo "$names" | ${pkgs.nixpkgs-prev.walker}/bin/walker --dmenu --theme dmenu_250 -p 'Firefox profiles…') || exit
+  choice=$(echo "$names" | ${pkgs.rofi}/bin/rofi -dmenu -theme sm -p 'Firefox profiles…') || exit
 
   if [ -z "$choice" ]; then
     exit 0
   fi
 
-  ${config.antob.desktop.addons.walker.launchPrefix}firefox -P $choice &
+  ${config.antob.desktop.addons.rofi.launchPrefix}firefox -P $choice &
 ''

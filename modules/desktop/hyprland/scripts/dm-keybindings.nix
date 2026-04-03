@@ -4,7 +4,7 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
   #!/bin/bash
 
   # A script to display Hyprland keybindings defined in your configuration
-  # using walker for an interactive search menu.
+  # using rofi for an interactive search menu.
 
   # Fetch dynamic keybindings from Hyprland
   #
@@ -89,5 +89,5 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
   dynamic_bindings | \
     sort -u | \
     parse_bindings | \
-    ${pkgs.nixpkgs-prev.walker}/bin/walker --dmenu --theme keybindings -p 'Keybindings'
+    ${pkgs.rofi}/bin/rofi -dmenu -theme xl -p 'Keybindings'
 ''

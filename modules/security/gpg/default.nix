@@ -16,14 +16,9 @@ let
         path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
         name = "gnome3";
       }
-    else if (desktopCfg.hyprland.enable || desktopCfg.niri.enable || desktopCfg.mango.enable) then
-      {
-        path = "${pkgs.pinentry-walker}/bin/pinentry-walker";
-        name = null;
-      }
     else
       {
-        path = "${pkgs.pinentry-dmenu}/bin/pinentry-dmenu";
+        path = "${pkgs.pinentry-rofi}/bin/pinentry-rofi";
         name = null;
       };
 

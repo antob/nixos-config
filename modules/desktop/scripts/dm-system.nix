@@ -30,7 +30,7 @@ pkgs.writeShellScriptBin "dm-system" ''
       fi
     fi
 
-    echo -e "$options" | walker --dmenu --theme dmenu_250 -p "$prompt…" "''${args[@]}"
+    echo -e "$options" | rofi -dmenu -theme sm -p "$prompt…" "''${args[@]}"
   }
 
   case $(menu "System" "  Lock\n󱄄  Screensaver\n󰤄  Suspend\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in

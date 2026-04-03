@@ -46,7 +46,7 @@ modules/           # All custom NixOS/HM modules under antob.*
   apps/            # GUI applications
   cli-apps/        # CLI tools
   desktop/         # Window managers (hyprland, niri, gnome, cosmic…)
-    addons/        # Shared WM addons (waybar, mako, walker, gtk…)
+    addons/        # Shared WM addons (waybar, mako, rofi, gtk…)
   features/        # High-level feature flags (common, desktop)
   hardware/        # Hardware modules (audio, bluetooth, networking…)
   home/            # Home Manager integration wrapper

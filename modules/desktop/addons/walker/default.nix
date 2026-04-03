@@ -24,7 +24,6 @@ in
     antob.home.extraOptions = {
       services.walker = {
         enable = true;
-        package = pkgs.nixpkgs-prev.walker;
         systemd.enable = cfg.runAsService;
         settings = {
           close_when_open = true;

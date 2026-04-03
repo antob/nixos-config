@@ -3,7 +3,7 @@
 pkgs.writeShellScriptBin "dm-nm-vpn" ''
   # Script name: dm-nm-vpn
   # Description: Activate and decativate VPN connections.
-  # Dependencies: walker, nmcli
+  # Dependencies: rofi, nmcli
   # Contributors: Tobias Lindholm
 
   set -E
@@ -84,7 +84,7 @@ pkgs.writeShellScriptBin "dm-nm-vpn" ''
   }
 
   generate_menu(){
-      PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | walker --dmenu --theme dmenu_250 -p "$MENU_TITLE…")
+      PICKED_ENTRY=$(echo -e "$CONNECTION_LIST" | rofi -dmenu -theme sm -p "$MENU_TITLE…")
       return 0
   }
 

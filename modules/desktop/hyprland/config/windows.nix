@@ -12,8 +12,8 @@
   # Remove 1px border around hyprshot screenshots
   layerrule = no_anim on, match:namespace selection
 
-  # No animations on Walker menues
-  layerrule = no_anim on, match:namespace walker
+  # No animations on rofi menues
+  layerrule = no_anim on, match:namespace rofi
 
   # Apps on specific workspaces
   windowrule = workspace 2, match:class (firefox)
