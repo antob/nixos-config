@@ -46,7 +46,7 @@ in
   }
 
   # Menus
-  bindd = SUPER, D, Launch apps, exec, ${pkgs.rofi}/bin/rofi -show drun
+  bindd = SUPER, D, Launch apps, exec, ${pkgs.rofi}/bin/rofi -show drun -show-icons
   bindd = SUPER CTRL, E, Emoji picker, exec, rofimoji --prompt Emojis --action copy
   bindd = SUPER, K, Show key bindings, exec, ${dm-keybindings}
   bindd = SUPER, X, Show system menu, exec, ${dm-system}

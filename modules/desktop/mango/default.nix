@@ -89,7 +89,7 @@ in
             bind=Super,b,spawn,${tuiTerminal} --class=TUI.float -e bluetui
             bind=Super,n,spawn,${tuiterminal} --class=TUI.float.lg -e ${pkgs.impala}/bin/impala
             bind=Super,t,spawn,${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}
-            bind=Super,d,spawn,rofi -show drun
+            bind=Super,d,spawn,rofi -show drun -show-icons
             bind=Super,x,spawn,${dm-system}
             bind=Super,p,spawn,${dm-vpn}
             bind=Super+Ctrl,e,spawn,rofimoji --prompt Emojis --action copy

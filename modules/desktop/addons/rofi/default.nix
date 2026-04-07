@@ -50,11 +50,10 @@ in
         };
       };
 
-      # Password prompt theme
       xdg.configFile."rofi/config.rasi".text = /* rasi */ ''
         configuration {
             modes: "drun";
-            show-icons: true;
+            show-icons: false;
             display-drun: " ";
             drun-display-format: "{name}";
         }
@@ -62,6 +61,7 @@ in
         @theme "default.rasi"
       '';
 
+      # Password prompt theme
       xdg.configFile."rofi/themes/password.rasi".text = /* rasi */ ''
         @import "default.rasi"
 

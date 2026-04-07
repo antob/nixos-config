@@ -426,7 +426,7 @@ in
 
                 # Menues
                 "${mod}+D" = {
-                  action = spawn-sh "rofi -show drun";
+                  action = spawn-sh "rofi -show drun -show-icons";
                   hotkey-overlay.title = "App launcher";
                   repeat = false;
                 };
