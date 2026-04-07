@@ -16,8 +16,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      llama-cpp-vulkan
-      vulkan-tools
+      llama-cpp-rocm
     ];
 
     antob.persistence = {

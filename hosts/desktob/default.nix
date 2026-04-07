@@ -111,6 +111,7 @@ in
     amdgpu_top
     radeontop
     mesa-demos
+    rocmPackages.rocminfo
     acpi
     s-tui
     quickemu
@@ -119,6 +120,9 @@ in
     iio-sensor-proxy # To enable automatic brightness in Gnome
     calibre
   ];
+
+  # Enable ROCm support in nixpkgs
+  nixpkgs.config.rocmSupport = true;
 
   services = {
     fwupd.enable = true;

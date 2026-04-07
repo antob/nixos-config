@@ -1,7 +1,5 @@
-# Add printer with: `$ lpadmin -p HP -E -v "ipp://192.168.1.120/ipp/print" -m everywhere`
 {
   config,
-  pkgs,
   lib,
   ...
 }:
@@ -21,8 +19,6 @@ in
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      package = pkgs.ollama-vulkan;
-
       host = cfg.host;
       port = cfg.port;
       environmentVariables = {
