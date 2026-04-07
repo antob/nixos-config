@@ -42,6 +42,7 @@ in
           nerd-fonts.hack
           nerd-fonts.fira-code
           hack-font # Without nerd-fonts patch, for kitty
+          roboto-mono
         ]
         ++ cfg.fonts;
     };

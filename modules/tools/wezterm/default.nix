@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.antob.tools.wezterm;
+  colors = config.antob.color-scheme.colors;
 in
 {
   options.antob.tools.wezterm = with types; {
@@ -30,8 +31,15 @@ in
         -- Run the command `wezterm.plugin.update_all()` from the debug overlay to update all local plugins.
         local ws_mgr = wezterm.plugin.require("https://github.com/antob/wezterm-workspace-manager")
 
+        -- Customize the Tokyo Night theme
+        local custom_theme = wezterm.color.get_builtin_schemes()["Tokyo Night"]
+        custom_theme.selection_bg = "#${colors.base04}"
+
         -- General settings
-        config.color_scheme = "Tokyo Night"
+        config.color_schemes = {
+          ["Custom Tokyo Night"] = custom_theme,
+        }
+        config.color_scheme = "Custom Tokyo Night"
         config.font = wezterm.font("Hack Nerd Font")
         config.font_size = tonumber("${toString cfg.fontSize}")
         config.window_decorations = "NONE"
@@ -44,6 +52,10 @@ in
         config.audible_bell = "Disabled"
         config.check_for_updates = false
         config.scrollback_lines = 10000
+        config.default_cursor_style = "SteadyBar"
+        config.cursor_blink_rate = 0
+        config.command_palette_bg_color = "#${colors.base13}"
+        config.command_palette_fg_color = "#${colors.base06}"
 
         -- Multiplexing
         config.unix_domains = {
@@ -152,11 +164,11 @@ in
             mods = "SHIFT",
             action = act.ScrollByPage(1),
           },
-          {
-            key = "r",
-            mods = "CTRL|SHIFT",
-            action = act.ReloadConfiguration,
-          },
+          -- {
+          --   key = "r",
+          --   mods = "CTRL|SHIFT",
+          --   action = act.ReloadConfiguration,
+          -- },
           {
             key = "p",
             mods = "CTRL|SHIFT",
