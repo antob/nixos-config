@@ -17,8 +17,10 @@ in
     antob.home.extraOptions = {
       programs.opencode = {
         enable = true;
-        settings = {
+        tui = {
           theme = "tokyonight";
+        };
+        settings = {
           autoshare = false;
           autoupdate = true;
           enabled_providers = [

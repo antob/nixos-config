@@ -5,9 +5,9 @@
 }:
 {
   programs.neovim = {
-    plugins = with pkgs.vimPlugins; [
-      vague-nvim
-      catppuccin-nvim
+    plugins = with pkgs; [
+      vimPlugins.vague-nvim
+      nixpkgs-prev.vimPlugins.catppuccin-nvim
     ];
 
     initLua = lib.mkOrder 210 /* lua */ ''
