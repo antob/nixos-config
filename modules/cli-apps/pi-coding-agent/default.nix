@@ -16,13 +16,12 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      # pi-coding-agent
+      pi-coding-agent
       python3
     ];
 
     environment.variables = {
       PI_CODING_AGENT_DIR = "$HOME/.config/pi";
-      PATH = "$HOME/.config/pi/node_modules/.bin";
     };
 
     antob.persistence = {
