@@ -49,6 +49,9 @@ unbind -T copy-mode-vi MouseDragEnd1Pane
 
 ## Keybindings
 
+# Send Shift+Enter as a literal key sequence to the terminal
+bind-key -n S-Enter send-keys Escape "[13;2u"
+
 # Copying
 bind-key -T copy-mode-vi v send-keys -X begin-selection
 bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle

@@ -39,7 +39,7 @@ in
 {
   options.antob.cli-apps.tmux = with types; {
     enable = mkBoolOpt false "Whether or not to enable tmux.";
-    addTerminalKeybindings = mkBoolOpt false "Whether or not to add keybindings to terminals in tmux.";
+    addTerminalKeybindings = mkBoolOpt true "Whether or not to add keybindings to terminals in tmux.";
   };
 
   config = mkIf cfg.enable {
@@ -99,6 +99,12 @@ in
           key = "}";
           mods = "Control|Shift";
           chars = "\\uE022";
+        }
+        # Make Alacritty send Shift+Enter for new line in tmux
+        {
+          key = "Return";
+          mods = "Shift";
+          chars = "\\u001b[13;2u";
         }
       ];
 
