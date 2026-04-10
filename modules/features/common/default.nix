@@ -18,7 +18,6 @@ in
     antob = {
       tools = {
         alacritty = enabled;
-        kitty = enabled;
         git = enabled;
         zsh = enabled;
         starship = enabled;
@@ -152,6 +151,7 @@ in
       masscan
       whatweb
       difftastic
+      ffmpeg
     ];
 
     services = {

@@ -9,13 +9,15 @@ let
   );
 in
 ''
-  $terminal = uwsm app -- kitty
+  $terminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty;
+  $tmuxTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused;
   $tuiTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty 
   $browser = uwsm app -- firefox
   $chromium = uwsm app -- chromium --app=
 
   # Apps
-  bindd = SUPER, RETURN, Terminal, exec, $terminal
+  bindd = SUPER, RETURN, Terminal (tmux), exec, $tmuxTerminal
+  bindd = SUPER SHIFT, RETURN, Terminal, exec, $terminal
   bindd = SUPER, E, File manager, exec, uwsm app -- nautilus --new-window
   bindd = SUPER, W, Web browser, exec, $browser
   bindd = SUPER SHIFT, W, Select Firefox profile, exec, ${dm-firefox-profile}

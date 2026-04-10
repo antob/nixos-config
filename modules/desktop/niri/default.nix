@@ -12,7 +12,8 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
 
-  terminal = "kitty";
+  terminal = "${pkgs.alacritty}/bin/alacritty";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
 
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
@@ -379,9 +380,14 @@ in
                   hotkey-overlay.title = "Show hotkey overlay";
                   repeat = false;
                 };
-                "${mod}+Return" = {
+                "${mod}+Shift+Return" = {
                   action = spawn "${terminal}";
                   hotkey-overlay.title = "Terminal";
+                  repeat = false;
+                };
+                "${mod}+Return" = {
+                  action = spawn "${tmuxTerminal}";
+                  hotkey-overlay.title = "Terminal (tmux)";
                   repeat = false;
                 };
                 "${mod}+W" = {

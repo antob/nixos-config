@@ -13,6 +13,7 @@ let
   cursorSize = 16;
 
   terminal = "${pkgs.alacritty}/bin/alacritty";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
   terminalName = "Alacritty";
 in
 {
@@ -394,8 +395,8 @@ in
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
             binding = "<Super>Return";
-            command = "${terminal}";
-            name = "${terminalName}";
+            command = "${tmuxTerminal}";
+            name = "${terminalName} (tmux)";
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
             binding = "<Super>comma";
@@ -411,6 +412,11 @@ in
             binding = "Print";
             command = "flameshot-gui";
             name = "Flameshot";
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
+            binding = "<Super><Shift>Return";
+            command = "${terminal}";
+            name = "${terminalName}";
           };
           "system/locale" = {
             region = "sv_SE.UTF-8";

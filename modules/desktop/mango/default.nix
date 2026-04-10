@@ -12,7 +12,8 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
-  terminal = "kitty";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
+  terminal = "${pkgs.alacritty}/bin/alacritty";
   lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client";
   dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });
@@ -82,7 +83,8 @@ in
           enable = true;
           settings = ''
             ## Keybindings
-            bind=Super,Return,spawn,${terminal}
+            bind=Super,Return,spawn,${tmuxTerminal}
+            bind=Super+Shift,Return,spawn,${terminal}
             bind=Super,w,spawn,firefox
             bind=Super+Shift,w,spawn,${dm-firefox-profile}
             bind=Super,e,spawn,nautilus --new-window
