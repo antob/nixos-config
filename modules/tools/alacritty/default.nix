@@ -39,7 +39,10 @@ in
               style = "Regular";
             };
             size = cfg.fontSize;
-            offset.y = 2;
+            offset = {
+              y = 0;
+              x = 0;
+            };
           };
 
           scrolling = {
@@ -88,7 +91,7 @@ in
               <test name="prgname">
                 <string>alacritty</string>
               </test>
-              <edit name="family" mode="append" binding="weak">
+              <edit name="family" mode="append" binding="strong">
                 <string>Noto Color Emoji</string>
               </edit>
             </match>
