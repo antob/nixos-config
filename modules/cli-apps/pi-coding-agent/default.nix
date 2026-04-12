@@ -18,6 +18,7 @@ in
     environment.systemPackages = with pkgs; [
       pi-coding-agent
       python3
+      libsixel
     ];
 
     environment.variables = {

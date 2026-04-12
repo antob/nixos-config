@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -18,6 +19,7 @@ in
     antob.home.extraOptions = {
       programs.alacritty = {
         enable = true;
+        package = pkgs.alacritty-graphics;
 
         settings = {
           env = {

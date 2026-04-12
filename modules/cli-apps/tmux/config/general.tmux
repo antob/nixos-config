@@ -4,7 +4,7 @@ set -as terminal-overrides ',*:Setulc=\E[58::2::::%p1%{65536}%/%d::%p1%{256}%/%{
 set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
 set -as terminal-features ',*:usstyle'
 set -as terminal-features ',xterm*:RGB'
-set -as terminal-features ',alacritty*:RGB:extkeys'
+set -as terminal-features ',alacritty*:RGB:extkeys:sixel'
 set -as terminal-features ',kitty*:RGB'
 
 set -g mouse on
