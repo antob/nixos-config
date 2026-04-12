@@ -12,8 +12,8 @@ let
   cursorTheme = "Bibata-Modern-Ice";
   cursorSize = 16;
 
-  terminal = "${pkgs.alacritty}/bin/alacritty";
-  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
+  terminal = "${pkgs.alacritty-graphics}/bin/alacritty";
+  tmuxTerminal = "${pkgs.alacritty-graphics}/bin/alacritty -e tmux-attach-unused";
   terminalName = "Alacritty";
 in
 {

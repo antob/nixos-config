@@ -12,8 +12,8 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
-  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
-  terminal = "${pkgs.alacritty}/bin/alacritty";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty-graphics -e tmux-attach-unused";
+  terminal = "${pkgs.alacritty}/bin/alacritty-graphics";
   lockScreen = config.antob.desktop.addons.swayidle.lockScreen;
   osdclient = "${pkgs.swayosd}/bin/swayosd-client";
   dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });

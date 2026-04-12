@@ -12,8 +12,8 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
 
-  terminal = "${pkgs.alacritty}/bin/alacritty";
-  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux-attach-unused";
+  terminal = "${pkgs.alacritty}/bin/alacritty-graphics";
+  tmuxTerminal = "${pkgs.alacritty}/bin/alacritty-graphics -e tmux-attach-unused";
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
 
   osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
