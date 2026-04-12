@@ -107,6 +107,7 @@ in
       https = "xhs";
       speedtest = "speedtest-rs";
       j = "just";
+      open = "xdg-open";
     };
 
     environment.systemPackages = with pkgs; [
