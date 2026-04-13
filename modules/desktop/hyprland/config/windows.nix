@@ -4,7 +4,7 @@
   windowrule = suppress_event maximize, match:class .*
 
   # Just dash of opacity by default
-  windowrule = opacity 0.97 0.9, match:class .*
+  windowrule = opacity 1.0 0.95, match:class .*
 
   # Fix some dragging issues with XWayland
   # windowrule = no_focus on,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
@@ -35,8 +35,9 @@
   # Fullscreen screensaver
   windowrule = fullscreen on, match:class Screensaver
 
-  # No transparency on media windows
+  # No transparency on specific windows
   windowrule = opacity 1 1, match:class ^(zoom|vlc|mpv|com.github.PintaProject.Pinta|imv|org.gnome.NautilusPreviewer|X64)$
+  windowrule = opacity 1 1, match:class ^(firefox|Alacritty)$
 
   # fs-uae
   windowrule = float on, size 960 768, opacity 1 1, match:class fs-uae
