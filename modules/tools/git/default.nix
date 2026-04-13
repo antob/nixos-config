@@ -25,6 +25,7 @@ in
       git
       gitui
       lazygit
+      delta
     ];
 
     antob.home.extraOptions = {
@@ -44,7 +45,7 @@ in
           autoFetch: false
           overrideGpg: true
           pagers:
-            - useExternalDiffGitConfig: true
+            - pager: delta --dark --paging=never
         update:
           method: never
         promptToReturnFromSubprocess: false
@@ -81,15 +82,43 @@ in
             whitespace = "trailing-space,space-before-tab";
             editor = "nvim";
             excludesfile = "~/.gitexcludes";
+            pager = "delta";
           };
           merge = {
-            conflictstyle = "diff3";
+            conflictstyle = "zdiff3";
           };
           credential = {
             helper = "cache";
           };
-          diff = {
-            external = "${pkgs.difftastic}/bin/difft";
+          interactive = {
+            diffFilter = "delta --color-only";
+          };
+          delta = {
+            navigate = true; # use n and N to move between diff sections
+            syntax-theme = "OneHalfDark";
+
+            features = "side-by-side line-numbers decorations";
+            plus-style = "syntax '#003800'";
+            minus-style = "syntax '#3f0001'";
+
+            decorations = {
+              commit-decoration-style = "yellow ul ol";
+              file-style = "yellow";
+              file-decoration-style = "yellow ul";
+              hunk-header-file-style = "yellow";
+              hunk-header-line-number-style = "yellow";
+              hunk-header-decoration-style = "#444444 ul";
+              file-added-label = "added: ";
+              file-copied-label = "copied: ";
+              file-modified-label = "modified: ";
+              file-removed-label = "removed: ";
+              file-renamed-label = "renamed: ";
+            };
+
+            line-numbers = {
+              line-numbers-left-style = "#444444";
+              line-numbers-right-style = "#444444";
+            };
           };
         };
 
