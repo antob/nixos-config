@@ -3,7 +3,7 @@
   config,
   pkgs,
 }:
-import ./autostart.nix { inherit pkgs; }
+import ./autostart.nix { inherit pkgs lib; }
 + import ./bindings { inherit lib config pkgs; }
 + import ./windows.nix { }
 + import ./workspaces.nix { }
