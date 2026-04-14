@@ -191,6 +191,18 @@ in
               settings = commonSettings;
               extensions.packages = commonExtensions;
             };
+
+            "Puzzel" = {
+              id = 3;
+              name = "Puzzel";
+              search = {
+                default = "ddg";
+                privateDefault = "ddg";
+                force = true;
+              };
+              settings = commonSettings;
+              extensions.packages = commonExtensions;
+            };
           };
 
           betterfox = {

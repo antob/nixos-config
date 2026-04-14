@@ -12,6 +12,7 @@ let
   cmd-launch-webapp = lib.getExe (
     pkgs.callPackage ../../scripts/cmd-launch-webapp.nix { launchPrefix = cfg.launchPrefix; }
   );
+  userHome = "/home/${config.antob.user.name}";
 in
 {
   options.antob.desktop.addons.rofi = with types; {
@@ -41,12 +42,22 @@ in
         teams = {
           name = "Teams";
           icon = ./icons/teams.png;
-          exec = "${cmd-launch-webapp} https://teams.microsoft.com";
+          exec = "${cmd-launch-webapp} https://teams.cloud.microsoft";
         };
         googleMeet = {
           name = "Google Meet";
           icon = ./icons/meet.png;
           exec = "${cmd-launch-webapp} https://meet.google.com";
+        };
+        obit = {
+          name = "Chromium (OBIT)";
+          icon = ./icons/chromium.png;
+          exec = "chromium --user-data-dir=${userHome}/.config/chromium/OBIT";
+        };
+        puzzel = {
+          name = "Chromium (Puzzel)";
+          icon = ./icons/chromium.png;
+          exec = "chromium --user-data-dir=${userHome}/.config/chromium/Puzzel";
         };
       };
 
