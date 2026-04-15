@@ -174,6 +174,7 @@ in
       gd = "git diff";
       gp = "git push";
       gst = "git status";
+      gw = "git worktree";
       gg = "lazygit";
     };
   };

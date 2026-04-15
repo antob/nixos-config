@@ -219,6 +219,10 @@ in
               "OBIT" = {
                 settings = betterfoxSettings;
               };
+
+              "Puzzel" = {
+                settings = betterfoxSettings;
+              };
             };
           };
         };
