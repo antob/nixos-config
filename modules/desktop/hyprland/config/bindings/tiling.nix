@@ -55,9 +55,8 @@
   bindd = SUPER SHIFT, 8, Move window to workspace 8, movetoworkspace, 8
   bindd = SUPER SHIFT, 9, Move window to workspace 9, movetoworkspace, 9
 
-  # Tab between workspaces
-  bindd = SUPER, TAB, Next workspace, workspace, e+1
-  bindd = SUPER SHIFT, TAB, Previous workspace, workspace, e-1
+  # Tab to previous workspace
+  bind = SUPER, TAB, workspace, previous
 
   # Swap active window with the one next to it with SUPER + SHIFT + arrow keys
   # bindd = SUPER SHIFT, left, Swap window to the left, swapwindow, l

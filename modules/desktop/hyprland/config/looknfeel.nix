@@ -103,6 +103,8 @@ in
   binds {
     # Will allow moving focus when in fullscreen/maximized
     movefocus_cycles_fullscreen = true
+    allow_workspace_cycles = true
+    workspace_back_and_forth = true
   }
 
   # https://wiki.hyprland.org/Configuring/Variables/#misc
