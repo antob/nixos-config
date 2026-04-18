@@ -79,6 +79,9 @@
 
     # Neovim nightly
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
+    # OpenCode
+    opencode.url = "github:anomalyco/opencode";
   };
 
   outputs =

@@ -1698,6 +1698,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_7": {
+      "locked": {
+        "lastModified": 1773909469,
+        "narHash": "sha256-vglVrLfHjFIzIdV9A27Ugul6rh3I1qHbbitGW7dk420=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7149c06513f335be57f26fcbbbe34afda923882b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts_4",
@@ -1716,6 +1732,24 @@
       "original": {
         "owner": "nix-community",
         "repo": "NUR",
+        "type": "github"
+      }
+    },
+    "opencode": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1776402848,
+        "narHash": "sha256-fpwsL9qDzYeLCX7GAyffkHCh5xR0K0vugg4viEmh/rQ=",
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "rev": "e7f8f7fa3bceab49b1606de72d969be63c3e8785",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anomalyco",
+        "repo": "opencode",
         "type": "github"
       }
     },
@@ -1782,6 +1816,7 @@
         "nixpkgs-prev": "nixpkgs-prev",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nur": "nur",
+        "opencode": "opencode",
         "paperwm": "paperwm",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "sops-nix": "sops-nix"
