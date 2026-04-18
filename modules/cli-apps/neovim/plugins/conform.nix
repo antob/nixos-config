@@ -53,7 +53,15 @@
           shfmt = { command = "${lib.getExe pkgs.shfmt}" },
           bake = { command = "${lib.getExe pkgs.mbake}" },
           prettierd = { command = "${lib.getExe pkgs.prettierd}" },
-          prettier = { command = "${lib.getExe pkgs.prettier}" },
+          prettier = {
+            command = "${lib.getExe pkgs.prettier}",
+            args = {
+              "--trailing-comma",
+              "none",
+              "--stdin-filepath",
+              "$FILENAME",
+            },
+          },
           stylua = {
             command = "${lib.getExe pkgs.stylua}",
             args = {
