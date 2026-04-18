@@ -105,6 +105,10 @@ bind -n \uE020 new-window -c "#{pane_current_path}"
 bind -n \uE021 previous-window
 # Focus next window
 bind -n \uE022 next-window
+# Move focused window left
+bind -n \uE023 swap-window -t -1
+# Move focused window right
+bind -n \uE024 swap-window -t +1
 
 bind-key "C-s" run-shell "sesh connect \"$(
 	sesh list --icons -t | fzf-tmux -p 55%,60% \

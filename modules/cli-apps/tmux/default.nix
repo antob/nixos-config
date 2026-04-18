@@ -54,7 +54,6 @@ in
     antob.home.extraOptions = {
       programs.tmux = {
         enable = true;
-        terminal = "xterm-256color";
         clock24 = true;
         historyLimit = 100000;
         extraConfig = builtins.concatStringsSep "\n" (map lib.strings.fileContents configFiles);
@@ -100,6 +99,18 @@ in
           mods = "Control|Shift";
           chars = "\\uE022";
         }
+        # Move window left
+        {
+          key = "{";
+          mods = "Control|Shift|Alt";
+          chars = "\\uE023";
+        }
+        # Move window right
+        {
+          key = "}";
+          mods = "Control|Shift|Alt";
+          chars = "\\uE024";
+        }
         # Make Alacritty send Shift+Enter for new line in tmux
         {
           key = "Return";
@@ -127,6 +138,12 @@ in
 
         # Focus next window
         "ctrl+shift+]" = "send_text all \\uE022";
+
+        # Move focused window left
+        "ctrl+shift+alt+[" = "send_text all \\uE023";
+
+        # Move focused window right
+        "ctrl+shift+alt+]" = "send_text all \\uE024";
       };
     };
 
