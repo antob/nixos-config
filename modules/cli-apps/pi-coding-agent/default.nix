@@ -8,6 +8,7 @@
 with lib;
 let
   cfg = config.antob.cli-apps.pi-coding-agent;
+  userHome = "/home/${config.antob.user.name}";
 in
 {
   options.antob.cli-apps.pi-coding-agent = with types; {
@@ -16,17 +17,24 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      pi-coding-agent
+      # pi-coding-agent
+      nodejs
+      bun
       python3
       libsixel
     ];
 
     environment.variables = {
-      PI_CODING_AGENT_DIR = "$HOME/.config/pi";
+      # PI_CODING_AGENT_DIR = "$HOME/.config/pi";
+      PATH = "${userHome}/.cache/.bun/bin";
     };
 
     antob.persistence = {
-      home.directories = [ ".config/pi" ];
+      home.directories = [
+        ".pi"
+        ".cache/bun"
+        ".cache/.bun"
+      ];
     };
 
     antob.cli-apps.agent-browser.enable = true;
