@@ -46,7 +46,6 @@ in
       fhs = enabled;
       atuin = enabled;
       alacritty.fontSize = 13;
-      wezterm.enable = true;
       wezterm.fontSize = 13;
     };
 

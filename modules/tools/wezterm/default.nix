@@ -56,6 +56,7 @@ in
         config.command_palette_fg_color = "#${colors.base06}"
         config.window_close_confirmation = "NeverPrompt"
         config.enable_tab_bar = false
+        config.enable_kitty_keyboard = true
 
         -- Key bindings
         config.disable_default_key_bindings = true
