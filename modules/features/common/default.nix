@@ -153,6 +153,7 @@ in
       whatweb
       difftastic
       ffmpeg
+      imagemagick
     ];
 
     services = {
