@@ -19,7 +19,7 @@ in
     antob.home.extraOptions = {
       programs.alacritty = {
         enable = true;
-        package = pkgs.alacritty-graphics;
+        package = pkgs.alacritty;
 
         settings = {
           env = {

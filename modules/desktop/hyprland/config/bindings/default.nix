@@ -9,8 +9,8 @@ let
   );
 in
 ''
-  $terminal = uwsm app -- ${pkgs.alacritty-graphics}/bin/alacritty;
-  $tmuxTerminal = uwsm app -- ${pkgs.alacritty-graphics}/bin/alacritty -e tmux-attach-unused;
+  $terminal = uwsm app -- ${pkgs.wezterm}/bin/wezterm;
+  $tmuxTerminal = uwsm app -- ${pkgs.wezterm}/bin/wezterm -e tmux-attach-unused;
   $tuiTerminal = uwsm app -- ${pkgs.alacritty}/bin/alacritty 
   $browser = uwsm app -- firefox
   $chromium = uwsm app -- chromium --app=

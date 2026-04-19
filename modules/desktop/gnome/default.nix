@@ -12,9 +12,9 @@ let
   cursorTheme = "Bibata-Modern-Ice";
   cursorSize = 16;
 
-  terminal = "${pkgs.alacritty-graphics}/bin/alacritty";
-  tmuxTerminal = "${pkgs.alacritty-graphics}/bin/alacritty -e tmux-attach-unused";
-  terminalName = "Alacritty";
+  terminal = "${pkgs.wezterm}/bin/wezterm";
+  tmuxTerminal = "${pkgs.wezterm}/bin/wezterm -e tmux-attach-unused";
+  terminalName = "Terminal";
 in
 {
   options.antob.desktop.gnome = with types; {
