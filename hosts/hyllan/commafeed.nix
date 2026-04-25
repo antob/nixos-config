@@ -23,6 +23,7 @@ in
   fileSystems = {
     "/var/lib/private/commafeed" = {
       device = dataDir;
+      fsType = "none";
       options = [ "bind" ];
     };
   };

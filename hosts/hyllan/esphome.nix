@@ -28,6 +28,7 @@ in
   fileSystems = {
     "/var/lib/private/esphome" = {
       device = dataDir;
+      fsType = "none";
       options = [ "bind" ];
     };
   };

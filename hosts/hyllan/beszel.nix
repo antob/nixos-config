@@ -32,6 +32,7 @@ in
   fileSystems = {
     "/var/lib/private/beszel-hub" = {
       device = dataDir;
+      fsType = "none";
       options = [ "bind" ];
     };
   };

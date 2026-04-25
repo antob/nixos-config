@@ -30,6 +30,7 @@ in
   fileSystems = {
     "/var/lib/private/open-webui" = {
       device = dataDir;
+      fsType = "none";
       options = [ "bind" ];
     };
   };

@@ -38,6 +38,7 @@ in
   fileSystems = {
     "/var/lib/private/ollama" = {
       device = dataDir;
+      fsType = "none";
       options = [ "bind" ];
     };
   };

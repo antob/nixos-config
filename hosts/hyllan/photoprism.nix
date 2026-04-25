@@ -58,6 +58,7 @@ in
 
     "/var/lib/private/photoprism" = {
       device = dataDir;
+      fsType = "none";
       options = [ "bind" ];
     };
   };
