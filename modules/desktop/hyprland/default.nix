@@ -16,6 +16,7 @@ in
 {
   imports = [
     ./addons/swayosd
+    ./addons/hyprpaper
   ];
 
   options.antob.desktop.hyprland = with types; {
@@ -177,7 +178,6 @@ in
           bluetui
           wiremix
           pamixer
-          swaybg
           wl-clipboard
           wlr-dpms
           nwg-displays
