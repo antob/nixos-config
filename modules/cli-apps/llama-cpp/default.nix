@@ -20,7 +20,10 @@ in
     ];
 
     antob.persistence = {
-      home.directories = [ ".cache/llama.cpp" ];
+      home.directories = [
+        ".cache/llama.cpp"
+        ".cache/huggingface"
+      ];
     };
   };
 }
