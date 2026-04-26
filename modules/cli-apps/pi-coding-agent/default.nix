@@ -23,6 +23,7 @@ in
       nodejs
       bun
       python3
+      uv
       libsixel
     ];
 
