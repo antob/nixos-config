@@ -65,6 +65,7 @@ in
       llama-cpp = enabled;
       opencode = enabled;
       pi-coding-agent = enabled;
+      voxtype = enabled;
     };
 
     hardware = {

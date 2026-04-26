@@ -82,6 +82,12 @@
 
     # OpenCode
     opencode.url = "github:anomalyco/opencode";
+
+    # Voxtype
+    voxtype = {
+      url = "github:peteonrails/voxtype";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
