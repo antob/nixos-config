@@ -44,6 +44,11 @@ in
           icon = ./icons/teams.png;
           exec = "${cmd-launch-webapp} https://teams.cloud.microsoft";
         };
+        telegram = {
+          name = "Telegram";
+          icon = ./icons/telegram.png;
+          exec = "${cmd-launch-webapp} https://web.telegram.org/k";
+        };
         googleMeet = {
           name = "Google Meet";
           icon = ./icons/meet.png;
