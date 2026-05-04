@@ -25,11 +25,12 @@ in
       python3
       uv
       libsixel
+      rtk
     ];
 
     environment.variables = {
-      # PI_CODING_AGENT_DIR = "$HOME/.config/pi";
       PATH = "${userHome}/.cache/.bun/bin";
+      RTK_TELEMETRY_DISABLED = 1;
     };
 
     antob.home.extraOptions = {
@@ -41,8 +42,11 @@ in
     antob.persistence = {
       home.directories = [
         ".pi"
+        ".agents"
+        ".gsd"
         ".cache/bun"
         ".cache/.bun"
+        ".local/share/rtk"
       ];
     };
 
