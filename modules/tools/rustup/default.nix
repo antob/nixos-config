@@ -32,5 +32,10 @@ in
       CARGO_HOME = "$XDG_DATA_HOME/cargo";
       RUSTUP_HOME = "$XDG_DATA_HOME/rustup";
     };
+
+    antob.persistence.home.directories = [
+      ".local/share/rustup"
+      ".local/share/cargo"
+    ];
   };
 }
