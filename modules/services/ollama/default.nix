@@ -23,6 +23,7 @@ in
       port = cfg.port;
       environmentVariables = {
         OLLAMA_ORIGINS = "*";
+        OLLAMA_KEEP_ALIVE = "1h";
       };
     };
 
