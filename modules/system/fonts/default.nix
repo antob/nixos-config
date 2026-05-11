@@ -41,8 +41,12 @@ in
           noto-fonts-color-emoji
           nerd-fonts.hack
           nerd-fonts.fira-code
+          nerd-fonts.monaspace
+          nerd-fonts.jetbrains-mono
           hack-font # Without nerd-fonts patch, for kitty
           roboto-mono
+          monaspace
+          jetbrains-mono
         ]
         ++ cfg.fonts;
     };

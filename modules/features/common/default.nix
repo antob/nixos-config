@@ -18,7 +18,7 @@ in
     antob = {
       tools = {
         alacritty = enabled;
-        wezterm = enabled;
+        kitty = enabled;
         git = enabled;
         zsh = enabled;
         starship = enabled;

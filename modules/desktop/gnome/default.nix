@@ -12,8 +12,8 @@ let
   cursorTheme = "Bibata-Modern-Ice";
   cursorSize = 16;
 
-  terminal = "${pkgs.wezterm}/bin/wezterm";
-  tmuxTerminal = "${pkgs.wezterm}/bin/wezterm -e tmux-attach-unused";
+  terminal = "${pkgs.kitty}/bin/kitty";
+  tmuxTerminal = "${pkgs.kitty}/bin/kitty tmux-attach-unused";
   terminalName = "Terminal";
 in
 {

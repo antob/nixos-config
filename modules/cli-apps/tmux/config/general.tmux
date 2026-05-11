@@ -3,9 +3,10 @@ set -g default-terminal 'tmux-256color'
 set -as terminal-overrides ',*:Setulc=\E[58::2::::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'
 set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
 set -as terminal-features ',*:usstyle'
-set -as terminal-features ',xterm*:RGB'
+set -as terminal-features ',xterm*:RGB:extkeys'
+set -as terminal-features ',tmux*:RGB:extkeys'
 set -as terminal-features ',alacritty*:RGB:extkeys:sixel'
-set -as terminal-features ',kitty*:RGB'
+set -as terminal-features ',kitty*:RGB:extkeys'
 
 set -g mouse on
 set -g extended-keys on

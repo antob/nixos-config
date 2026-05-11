@@ -29,7 +29,7 @@ in
       };
 
       font = {
-        name = "Hack";
+        name = "Jetbrains Mono";
         size = cfg.fontSize;
       };
 
@@ -53,7 +53,7 @@ in
         url_color = "#${colors.base06}";
         url_style = "straight";
         # modify_font = "cell_width 103%";
-        text_composition_strategy = "legacy"; # Makes font thinner
+        # text_composition_strategy = "legacy"; # Makes font thinner
         allow_remote_control = "socket-only";
         listen_on = "unix:/tmp/kitty.sock";
       };
@@ -75,40 +75,40 @@ in
         "ctrl+shift+z" = "scroll_to_prompt -1";
         "ctrl+shift+x" = "scroll_to_prompt 1";
         "ctrl+shift+f" = "search_scrollback";
-        "ctrl+shift+enter" = "launch --cwd=current";
-        "ctrl+shift+right" = "next_window";
-        "ctrl+shift+left" = "previous_window";
-        "ctrl+shift+alt+right" = "move_window_forward";
-        "ctrl+shift+alt+left" = "move_window_backward";
-        "ctrl+shift+]" = "next_tab";
-        "ctrl+shift+[" = "previous_tab";
-        "ctrl+shift+t" = "new_tab_with_cwd";
-        "ctrl+shift+alt+]" = "move_tab_forward";
-        "ctrl+shift+alt+[" = "move_tab_backward";
-        "ctrl+shift+4" = "set_tab_title";
-        "ctrl+shift+l" = "next_layout";
+        # "ctrl+shift+enter" = "launch --cwd=current";
+        # "ctrl+shift+right" = "next_window";
+        # "ctrl+shift+left" = "previous_window";
+        # "ctrl+shift+alt+right" = "move_window_forward";
+        # "ctrl+shift+alt+left" = "move_window_backward";
+        # "ctrl+shift+]" = "next_tab";
+        # "ctrl+shift+[" = "previous_tab";
+        # "ctrl+shift+t" = "new_tab_with_cwd";
+        # "ctrl+shift+alt+]" = "move_tab_forward";
+        # "ctrl+shift+alt+[" = "move_tab_backward";
+        # "ctrl+shift+4" = "set_tab_title";
+        # "ctrl+shift+l" = "next_layout";
         "ctrl+shift+p" = "command_palette";
-        "ctrl+shift+m" = "toggle_layout stack";
-        "ctrl+shift+s" = "goto_session ~/.local/share/kitty/sessions";
-        "ctrl+shift+w" =
-          "save_as_session --save-only --base-dir ~/.local/share/kitty/sessions --match=session:. .";
+        # "ctrl+shift+m" = "toggle_layout stack";
+        # "ctrl+shift+s" = "goto_session ~/.local/share/kitty/sessions";
+        # "ctrl+shift+w" =
+        #   "save_as_session --save-only --base-dir ~/.local/share/kitty/sessions --match=session:. .";
 
-        # Browse scrollback buffer in nvim
-        "ctrl+shift+h" = "kitty_scrollback_nvim --nvim-args --clean --noplugin -n";
-        # Browse output of the last shell command in nvim
-        "ctrl+shift+g" =
-          "kitty_scrollback_nvim --config ksb_builtin_last_cmd_output --nvim-args --clean --noplugin -n";
+        # # Browse scrollback buffer in nvim
+        # "ctrl+shift+h" = "kitty_scrollback_nvim --nvim-args --clean --noplugin -n";
+        # # Browse output of the last shell command in nvim
+        # "ctrl+shift+g" =
+        #   "kitty_scrollback_nvim --config ksb_builtin_last_cmd_output --nvim-args --clean --noplugin -n";
       };
-      mouseBindings = {
-        # Show clicked command output in nvim
-        "ctrl+shift+right press" =
-          "ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output --nvim-args --clean --noplugin -n";
-      };
-      actionAliases = {
-        # kitty-scrollback.nvim Kitten alias
-        "kitty_scrollback_nvim" =
-          "kitten '/home/${config.antob.user.name}/.local/share/nvim/site/pack/hm/start/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py'";
-      };
+      # mouseBindings = {
+      #   # Show clicked command output in nvim
+      #   "ctrl+shift+right press" =
+      #     "ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output --nvim-args --clean --noplugin -n";
+      # };
+      # actionAliases = {
+      #   # kitty-scrollback.nvim Kitten alias
+      #   "kitty_scrollback_nvim" =
+      #     "kitten '/home/${config.antob.user.name}/.local/share/nvim/site/pack/hm/start/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py'";
+      # };
     };
   };
 }
