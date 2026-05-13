@@ -108,8 +108,7 @@ in
 
   environment.systemPackages = with pkgs; [
     vulkan-tools
-    amdgpu_top
-    radeontop
+    nvtopPackages.amd
     mesa-demos
     rocmPackages.rocminfo
     acpi

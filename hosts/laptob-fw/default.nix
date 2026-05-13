@@ -101,8 +101,7 @@ in
   environment.systemPackages = with pkgs; [
     powertop
     vulkan-tools
-    amdgpu_top
-    radeontop
+    nvtopPackages.amd
     mesa-demos
     acpi
     s-tui
