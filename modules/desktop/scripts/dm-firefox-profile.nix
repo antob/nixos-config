@@ -7,7 +7,7 @@ pkgs.writeShellScriptBin "dm-firefox-profile" ''
   # Contributors: Tobias Lindholm
 
   # Where to get firefox profile names
-  PROFILES="$HOME/.mozilla/firefox/profiles.ini"
+  PROFILES="$HOME/.config/mozilla/firefox/profiles.ini"
   [[ ! -f $PROFILES ]] && exit
 
   names=$(cat $PROFILES | grep 'Name=' | grep -v 'default' | awk -F '=' '{print $2}')

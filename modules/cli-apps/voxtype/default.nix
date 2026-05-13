@@ -2,8 +2,6 @@
 {
   config,
   lib,
-  pkgs,
-  inputs,
   ...
 }:
 
@@ -18,43 +16,56 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob.home.extraOptions = {
-      imports = [ inputs.voxtype.homeManagerModules.default ];
+    antob = {
+      home.extraOptions.xdg.configFile."voxtype/config.toml".text = # toml
+        ''
+          engine = "whisper"
+          state_file = "auto"
 
-      programs.voxtype = {
-        enable = true;
-        package = inputs.voxtype.packages.${pkgs.stdenv.hostPlatform.system}.vulkan;
-        service.enable = true;
-        settings = {
-          hotkey = {
-            enabled = true;
-            key = "SCROLLLOCK";
-          };
-          whisper = {
-            model = cfg.modelName;
-            language = "auto";
-            translate = false;
-          };
-          audio.feedback = {
-            enabled = true;
-            theme = "default";
-            volume = 0.1;
-          };
-          output.notification = {
-            on_recording_start = false;
-            on_recording_stop = false;
-            on_transcription = false;
-          };
-          meeting.enabled = true;
-        };
-      };
+          [audio]
+          device = "default"
+          max_duration_secs = 60
+          sample_rate = 16000
+
+          [audio.feedback]
+          enabled = true
+          theme = "default"
+          volume = 0.1
+
+          [hotkey]
+          enabled = true
+          key = "SCROLLLOCK"
+          modifiers = []
+
+          [meeting]
+          enabled = true
+
+          [output]
+          fallback_to_clipboard = true
+          mode = "type"
+          pre_type_delay_ms = 0
+          type_delay_ms = 0
+
+          [output.notification]
+          on_recording_start = false
+          on_recording_stop = false
+          on_transcription = false
+
+          [status]
+          icon_theme = "emoji"
+
+          [whisper]
+          language = "auto"
+          model = "${cfg.modelName}"
+          on_demand_loading = false
+          translate = false
+        '';
+
+      persistence.home.directories = [
+        ".local/share/voxtype"
+      ];
+
+      user.extraGroups = [ "input" ];
     };
-
-    antob.persistence.home.directories = [
-      ".config/voxtype"
-      ".local/share/voxtype"
-    ];
-
-    antob.user.extraGroups = [ "input" ];
   };
 }

@@ -27,7 +27,10 @@ in
         enable = true;
         enableCache = true;
       };
-      addons.keyring = enabled;
+      addons = {
+        hypridle.lockScreen = false;
+        keyring = enabled;
+      };
     };
 
     virtualisation.virt-manager = enabled;
@@ -42,7 +45,6 @@ in
     };
 
     cli-apps = {
-      opencode = enabled;
       pi-coding-agent = enabled;
     };
 

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  inputs,
   ...
 }:
 with lib;
@@ -14,10 +13,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [
-      inputs.neovim-nightly-overlay.overlays.default
-    ];
-
     antob.home.extraOptions = {
       imports = [
         ./options.nix

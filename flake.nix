@@ -76,18 +76,6 @@
       url = "github:DreamMaoMao/mango?ref=refs/tags/0.11.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Neovim nightly
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-
-    # OpenCode
-    opencode.url = "github:anomalyco/opencode";
-
-    # Voxtype
-    voxtype = {
-      url = "github:peteonrails/voxtype";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =

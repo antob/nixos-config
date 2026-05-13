@@ -86,13 +86,6 @@ in
     column_width = 1.0
   }
 
-  # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-  dwindle {
-    pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-    preserve_split = true # You probably want this
-    force_split = 2 # Always split on the right
-  }
-
   # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
   master {
     new_status = master

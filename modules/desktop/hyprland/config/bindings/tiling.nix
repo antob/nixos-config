@@ -2,7 +2,6 @@
 ''
   # Change layout
   bindd = SUPER ALT, M, Switch to master layout, exec, hyprctl keyword general:layout master
-  bindd = SUPER ALT, D, Switch to dwindle layout, exec, hyprctl keyword general:layout dwindle
   bindd = SUPER ALT, S, Switch to scrolling layout, exec, hyprctl keyword general:layout scrolling
   bindd = SUPER ALT, O, Switch to monocle layout, exec, hyprctl keyword general:layout monocle
 

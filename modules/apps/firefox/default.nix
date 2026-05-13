@@ -10,7 +10,6 @@ with lib;
 let
   cfg = config.antob.apps.firefox;
   betterfoxSettings = {
-    fastfox.enable = true;
     securefox = {
       enable = true;
       passwords.enable = true;
@@ -21,9 +20,6 @@ let
 
   # Betterfox overrides
   commonSettings = {
-    ## FASTFOX
-    "browser.sessionstore.restore_pinned_tabs_on_demand" = true;
-
     ## SECUREFOX
     "signon.rememberSignons" = false; # disable password manager
     "extensions.formautofill.addresses.enabled" = false; # disable address manager
@@ -155,6 +151,7 @@ in
 
         programs.firefox = {
           enable = true;
+          configPath = "~/.config/mozilla/firefox";
           profiles = {
             ${config.antob.user.name} = {
               id = 0;
@@ -235,7 +232,7 @@ in
         };
       };
 
-      persistence.home.directories = [ ".mozilla/firefox" ];
+      persistence.home.directories = [ ".config/mozilla/firefox" ];
     };
   };
 }
