@@ -11,6 +11,7 @@
     ./snacks.nix
     ./treesitter.nix
     ./copilot-lua.nix
+    # ./llama-vim.nix
     ./quicker.nix
   ];
 }
