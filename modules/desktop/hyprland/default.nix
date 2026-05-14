@@ -97,6 +97,7 @@ in
 
           wayland.windowManager.hyprland = {
             enable = true;
+            configType = "hyprlang";
 
             # set the flake package
             package = hypr-pkgs.hyprland;
