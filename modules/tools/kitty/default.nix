@@ -43,6 +43,7 @@ in
         tab_separator = " | ";
         enabled_layouts = "tall,vertical,horizontal,grid,stack";
         hide_window_decorations = "yes";
+        disable_ligatures = "always";
         background_opacity = "1.0";
         window_border_width = "1pt";
         scrollback_lines = 10000;
