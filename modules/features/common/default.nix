@@ -109,6 +109,7 @@ in
       speedtest = "speedtest-rs";
       j = "just";
       open = "xdg-open";
+      hexyl = "hexyl --border none --color-scheme gradient";
     };
 
     environment.systemPackages = with pkgs; [
@@ -155,6 +156,7 @@ in
       difftastic
       ffmpeg
       imagemagick
+      hexyl
     ];
 
     services = {
