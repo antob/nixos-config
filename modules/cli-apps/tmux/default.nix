@@ -120,6 +120,9 @@ in
       ];
 
       programs.kitty.keybindings = lib.mkIf (cfg.addTerminalKeybindings && kitty) {
+        # Pass Shift+Enter through tmux to inner applications
+        "shift+enter" = "send_text all \\x1b[13;2u";
+
         ## Make Kitty send Control+Shift keys
         # Cycle layout
         "ctrl+shift+l" = "send_text all \\uE000";
