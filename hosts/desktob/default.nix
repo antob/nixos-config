@@ -81,6 +81,7 @@ in
       zsa-voyager = enabled;
       yubikey = enabled;
       ledger = enabled;
+      ddcutil = enabled;
     };
 
     system.console.setFont = mkForce false;

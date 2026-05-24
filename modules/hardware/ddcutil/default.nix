@@ -17,7 +17,8 @@ in
   config = mkIf cfg.enable {
     hardware.i2c.enable = true;
     antob.user.extraGroups = [ "i2c" ];
-
+    boot.extraModulePackages = with config.boot.kernelPackages; [ ddcci-driver ];
+    boot.kernelModules = [ "ddcci-backlight" ];
     environment.systemPackages = with pkgs; [
       ddcutil
     ];
