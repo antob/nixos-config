@@ -9,6 +9,7 @@
 with lib;
 let
   cfg = config.antob.apps.firefox;
+  userHome = "/home/${config.antob.user.name}";
   betterfoxSettings = {
     securefox = {
       enable = true;
@@ -151,7 +152,7 @@ in
 
         programs.firefox = {
           enable = true;
-          configPath = "~/.config/mozilla/firefox";
+          configPath = "${userHome}/.config/mozilla/firefox";
           profiles = {
             ${config.antob.user.name} = {
               id = 0;
