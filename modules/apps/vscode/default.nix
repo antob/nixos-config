@@ -257,7 +257,7 @@ in
           # ms-dotnettools.vscode-dotnet-runtime
           esbenp.prettier-vscode
           mquandalle.graphql
-          ms-python.python
+          # ms-python.python
           ms-python.black-formatter
           ggml-org.llama-vscode
         ];
