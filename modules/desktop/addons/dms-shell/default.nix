@@ -65,6 +65,7 @@ in
     antob.persistence.home.directories = [
       ".config/DankMaterialShell"
       ".local/state/DankMaterialShell"
+      ".cache/DankMaterialShell"
     ];
   };
 }
