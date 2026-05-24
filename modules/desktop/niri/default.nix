@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 
@@ -12,12 +11,13 @@ let
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
 
+  dmsEnabled = config.antob.desktop.addons.dms-shell.enable;
+  noctaliaEnabled = config.antob.desktop.addons.noctalia-shell.enable;
+
   terminal = "${pkgs.kitty}/bin/kitty";
-  tmuxTerminal = "${pkgs.kitty}/bin/kitty tmux-attach-unused";
+  tmuxTerminal = "${pkgs.kitty}/bin/kitty";
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
 
-  osdclient = "${pkgs.swayosd}/bin/swayosd-client --monitor ''$(niri msg -j focused-output | jq -r '.name')";
-  dm-system = lib.getExe (pkgs.callPackage ../scripts/dm-system.nix { inherit config; });
   dm-vpn =
     if config.antob.services.networkd-vpn.enable then
       lib.getExe (pkgs.callPackage ../scripts/dm-networkd-vpn.nix { inherit config; })
@@ -26,722 +26,407 @@ let
   dm-firefox-profile = lib.getExe (
     pkgs.callPackage ../scripts/dm-firefox-profile.nix { inherit config; }
   );
-  cmd-screenshot = lib.getExe (pkgs.callPackage ../scripts/cmd-screenshot.nix { });
-  cmd-annotate = lib.getExe (pkgs.callPackage ./scripts/cmd-annotate.nix { });
-  cmd-toggle-swayidle = lib.getExe (pkgs.callPackage ../scripts/cmd-toggle-swayidle.nix { });
+  cmd-cycle-workspace = lib.getExe (pkgs.callPackage ./scripts/cmd-cycle-workspace.nix { });
 in
 {
-  imports = [ inputs.niri.nixosModules.niri ];
-
   options.antob.desktop.niri = with types; {
     enable = mkEnableOption "Enable Niri.";
-    enableCache = mkEnableOption "Enable Niri build cache.";
     mainOutput = mkOpt types.str "eDP-1" "The name of the main output.";
   };
 
-  config = mkMerge [
-    (mkIf cfg.enableCache {
-      nix.settings = {
-        substituters = [ "https://niri.cachix.org" ];
-        trusted-public-keys = [ "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964=" ];
-      };
-    })
-    (mkIf cfg.enable {
-      nixpkgs.overlays = [ inputs.niri.overlays.niri ];
-
-      programs.niri = {
-        enable = true;
-        package = pkgs.niri-stable;
-      };
-
-      # xdg-desktop-portal-gnome FileChooser call depends on Nautilus
-      services.dbus.packages = [ pkgs.nautilus ];
-
-      antob = {
-        services.gammastep = enabled;
-        desktop.addons = {
-          gtk = enabled;
-          nautilus = enabled;
-          mako = enabled;
-          swayosd = enabled;
-          swayidle = enabled;
-          waybar = {
-            enable = true;
-            enableSystemd = true;
-            modulesLeft = [ "niri/workspaces" ];
-            modulesRight = [
-              "group/tray-expander"
-              "bluetooth"
-              "custom/external-ip"
-              "network"
-              "pulseaudio"
-              "memory"
-              "cpu"
-              (mkIf config.antob.system.info.laptop "battery")
-              "custom/networkd-vpn"
-              "custom/swayidle"
-              "custom/webcam"
-              "clock"
-            ];
-            extraStyle = ''
-              #workspaces button label {
-                font-size: 22px;
-              }
-
-              #workspaces button.active label {
-                font-size: 18px;
-              }
-            '';
-          };
-          rofi = {
-            enable = true;
-            launchPrefix = "niri msg action spawn -- ";
-          };
-        };
-
-        home.extraOptions = {
-          programs.niri.settings = {
-            prefer-no-csd = true;
-            hotkey-overlay.skip-at-startup = true;
-            # clipboard.disable-primary = true;
-            overview.zoom = 0.5;
-            screenshot-path = "~/Pictures/Screenshots/%Y-%m-%dT%H:%M:%S.png";
-            gestures.hot-corners.enable = false;
-
-            workspaces = {
-              "󰬺".open-on-output = cfg.mainOutput;
-              "󰬻".open-on-output = cfg.mainOutput;
-              "󰬼".open-on-output = cfg.mainOutput;
-              "󰬽".open-on-output = cfg.mainOutput;
-              "󰬾".open-on-output = cfg.mainOutput;
-              "󰬿".open-on-output = cfg.mainOutput;
-              "󰭀".open-on-output = cfg.mainOutput;
-              "󰭁".open-on-output = cfg.mainOutput;
-            };
-
-            animations = {
-              workspace-switch.enable = false;
-            };
-
-            input = {
-              focus-follows-mouse = {
-                enable = true;
-                max-scroll-amount = "0%";
-              };
-              keyboard = {
-                repeat-delay = 200;
-                repeat-rate = 40;
-
-                xkb = {
-                  layout = "se,se";
-                  variant = "us,";
-                  options = "caps:ctrl_modifier,grp:win_space_toggle";
-                };
-              };
-              touchpad = {
-                dwt = true;
-              };
-            };
-
-            cursor = {
-              hide-when-typing = true;
-              hide-after-inactive-ms = 5000;
-              size = gtkCfg.cursor.size;
-              theme = gtkCfg.cursor.name;
-            };
-
-            outputs = {
-              # Internal laptop screen
-              eDP-1 = {
-                focus-at-startup = true;
-                mode = {
-                  width = 2256;
-                  height = 1504;
-                };
-                scale = 1.5;
-                position = {
-                  x = -752;
-                  y = 0;
-                };
-              };
-
-              # Home monitor
-              "Acer Technologies XB273U TJ5EE0018521" = {
-                mode = {
-                  width = 2560;
-                  height = 1440;
-                };
-                scale = 1.0;
-                position = {
-                  x = -1280;
-                  y = -1440;
-                };
-              };
-
-              # OBIT monitor 1
-              "Philips Consumer Electronics Company PHL 49B2U5900 AU02507007832" = {
-                mode = {
-                  width = 5120;
-                  height = 1440;
-                };
-                scale = 1.0;
-                position = {
-                  x = -2560;
-                  y = -1440;
-                };
-                # layout.default-column-width.proportion = 2. / 3.;
-              };
-              # OBIT monitor 2
-              "LG Electronics LG HDR DQHD 0x000320C3" = {
-                mode = {
-                  width = 5120;
-                  height = 1440;
-                };
-                scale = 1.0;
-                position = {
-                  x = -2560;
-                  y = -1440;
-                };
-              };
-            };
-
-            layout = {
-              gaps = 16;
-              struts.left = 32;
-              struts.right = 32;
-              always-center-single-column = true;
-
-              # When to center a column when changing focus, options are:
-              # - "never", default behavior, focusing an off-screen column will keep at the left
-              #   or right edge of the screen.
-              # - "always", the focused column will always be centered.
-              # - "on-overflow", focusing a column will center it if it doesn't fit
-              #   together with the previously focused column.
-              center-focused-column = "on-overflow";
-
-              preset-column-widths = [
-                { proportion = 1. / 3.; }
-                { proportion = 1. / 2.; }
-                { proportion = 2. / 3.; }
-                { proportion = 1.; }
-              ];
-              default-column-width.proportion = 1.;
-
-              focus-ring = {
-                enable = false;
-                width = 3;
-                active.color = "#${colors.base0C}ff";
-                inactive.color = "#${colors.base12}aa";
-              };
-
-              border = {
-                enable = true;
-                width = 3;
-                active.color = "#${colors.base0C}ff";
-                inactive.color = "#${colors.base12}aa";
-                urgent.color = "#${colors.base0F}ff";
-              };
-
-              shadow.enable = true;
-
-              # default-column-display = "tabbed";
-
-              tab-indicator = {
-                position = "top";
-                gaps-between-tabs = 10;
-                hide-when-single-tab = false;
-                place-within-column = false;
-                width = 4;
-                corner-radius = 2;
-                # active.color = "#${colors.base0C}ff";
-                # inactive.color = "#${colors.base12}aa";
-              };
-
-              insert-hint.display.color = "#${colors.base12}88";
-            };
-
-            window-rules = [
-              # Default appearance for all windows
-              {
-                opacity = 1.0;
-                draw-border-with-background = false;
-                geometry-corner-radius =
-                  let
-                    r = 8.0;
-                  in
-                  {
-                    top-left = r;
-                    top-right = r;
-                    bottom-left = r;
-                    bottom-right = r;
-                  };
-                clip-to-geometry = true;
-              }
-
-              # Transparent windows
-              {
-                opacity = 0.9;
-                matches = [
-                  { title = "Alacritty"; }
-                  { add-id = "org.wezfurlong.wezterm"; }
-                  { app-id = "kitty"; }
-                  { add-id = "com.mitchellh.ghostty"; }
-                ];
-              }
-              {
-                opacity = 0.95;
-                matches = [
-                  { title = "Alacritty"; }
-                  { add-id = "org.wezfurlong.wezterm"; }
-                  { app-id = "kitty"; }
-                  { add-id = "com.mitchellh.ghostty"; }
-                ];
-                excludes = [
-                  { app-id = "Alacritty"; }
-                ];
-              }
-              # Floating windows
-              {
-                matches = [
-                  { app-id = "TUI.float"; }
-                  {
-                    app-id = "firefox";
-                    title = "^Extension:";
-                  }
-                  { app-id = "Wiremix"; }
-                  { app-id = ".blueman-manager-wrapped"; }
-                ];
-                open-floating = true;
-                open-focused = true;
-              }
-              {
-                matches = [
-                  { app-id = "TUI.float.lg"; }
-                  { title = "satty"; }
-                ];
-                open-floating = true;
-                open-focused = true;
-                default-window-height.proportion = 0.7;
-                default-column-width.proportion = 0.75;
-              }
-
-              {
-                open-on-workspace = "󰬻";
-                open-focused = true;
-                matches = [ { app-id = "firefox"; } ];
-              }
-              {
-                open-on-workspace = "󰬼";
-                open-focused = true;
-                matches = [ { app-id = "code"; } ];
-              }
-              {
-                open-on-workspace = "󰬾";
-                open-focused = true;
-                matches = [
-                  { app-id = "obsidian"; }
-                  { app-id = "chrome-app.slack.com"; }
-                  { app-id = "chrome-teams.microsoft.com"; }
-                  { app-id = "chrome-meet.google.com"; }
-                ];
-              }
-
-              ## Specific fixes
-              # Move Google Meet sharing dialog to center top
-              {
-                matches = [ { title = "meet.google.com is sharing a window."; } ];
-                default-floating-position = {
-                  relative-to = "top";
-                  x = 0;
-                  y = 0;
-                };
-              }
-            ];
-
-            xwayland-satellite.path = "${lib.getExe pkgs.xwayland-satellite-unstable}";
-
-            spawn-at-startup = [
-              {
-                sh = "swaybg --mode fill --image /home/tob/Pictures/Wallpapers/Omarchy-Backgrounds/1-scenery-pink-lakeside-sunset-lake-landscape-scenic-panorama-7680x3215-144.png";
-              }
-              {
-                sh = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
-              }
-            ];
-
-            binds =
-              with config.home-manager.users.${config.antob.user.name}.lib.niri.actions;
-              let
-                mod = "Mod";
-              in
-              {
-                "${mod}+Shift+Slash" = {
-                  action = show-hotkey-overlay;
-                  hotkey-overlay.title = "Show hotkey overlay";
-                  repeat = false;
-                };
-                "${mod}+Shift+Return" = {
-                  action = spawn "${terminal}";
-                  hotkey-overlay.title = "Terminal";
-                  repeat = false;
-                };
-                "${mod}+Return" = {
-                  action = spawn "${tmuxTerminal}";
-                  hotkey-overlay.title = "Terminal (tmux)";
-                  repeat = false;
-                };
-                "${mod}+W" = {
-                  action = spawn "firefox";
-                  hotkey-overlay.title = "Web browser";
-                  repeat = false;
-                };
-                "${mod}+E" = {
-                  action = spawn-sh "nautilus --new-window";
-                  hotkey-overlay.title = "File manger";
-                  repeat = false;
-                };
-                "Super+L" = {
-                  action = spawn "sh" "-c" "loginctl lock-session && niri msg action power-off-monitors";
-                  hotkey-overlay.title = "Lock screen";
-                  repeat = false;
-                };
-
-                "${mod}+B" = {
-                  action = spawn-sh "${tuiTerminal} --class=TUI.float -e bluetui";
-                  hotkey-overlay.title = "Bluetooth";
-                  repeat = false;
-                };
-
-                "${mod}+T" = {
-                  action = spawn-sh "${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}";
-                  hotkey-overlay.title = "Activity";
-                  repeat = false;
-                };
-
-                # Open/close the Overview: a zoomed-out view of workspaces and windows.
-                "${mod}+O" = {
-                  action = toggle-overview;
-                  hotkey-overlay.title = "Show overview";
-                  repeat = false;
-                };
-
-                "${mod}+Q" = {
-                  action = close-window;
-                  repeat = false;
-                };
-
-                # Menues
-                "${mod}+D" = {
-                  action = spawn-sh "rofi -show drun -show-icons";
-                  hotkey-overlay.title = "App launcher";
-                  repeat = false;
-                };
-                "${mod}+X" = {
-                  action = spawn-sh "${dm-system}";
-                  hotkey-overlay.title = "System menu";
-                  repeat = false;
-                };
-                "${mod}+Shift+W" = {
-                  action = spawn-sh "${dm-firefox-profile}";
-                  hotkey-overlay.title = "Select Firefox profile";
-                  repeat = false;
-                };
-                "${mod}+P" = {
-                  action = spawn-sh "${dm-vpn}";
-                  hotkey-overlay.title = "Show VPN menu";
-                  repeat = false;
-                };
-                "${mod}+Ctrl+E" = {
-                  action = spawn-sh "rofimoji --prompt Emojis --action copy";
-                  hotkey-overlay.title = "Emoji selector";
-                  repeat = false;
-                };
-
-                # Focus column/window
-                "${mod}+Left".action = focus-column-left;
-                "${mod}+Down".action = focus-window-down;
-                "${mod}+Up".action = focus-window-up;
-                "${mod}+Right".action = focus-column-right;
-                "${mod}+Home".action = focus-column-first;
-                "${mod}+End".action = focus-column-last;
-
-                "Alt+Tab".action = focus-window-previous;
-
-                # Move column/window
-                "${mod}+Shift+Left".action = move-column-left-or-to-monitor-left;
-                "${mod}+Shift+Right".action = move-column-right-or-to-monitor-right;
-
-                "${mod}+Shift+Down".action = move-window-down-or-to-workspace-down;
-                "${mod}+Shift+Up".action = move-window-up-or-to-workspace-up;
-                "${mod}+Ctrl+Home".action = move-column-to-first;
-                "${mod}+Ctrl+End".action = move-column-to-last;
-
-                # Focus monitor
-                "${mod}+Alt+Left".action = focus-monitor-left;
-                "${mod}+Alt+Down".action = focus-monitor-down;
-                "${mod}+Alt+Up".action = focus-monitor-up;
-                "${mod}+Alt+Right".action = focus-monitor-right;
-
-                # Move workspace to monitor
-                "${mod}+Alt+Home".action = move-workspace-to-monitor-left;
-                "${mod}+Alt+Page_Down".action = move-workspace-to-monitor-down;
-                "${mod}+Alt+Page_Up".action = move-workspace-to-monitor-up;
-                "${mod}+Alt+End".action = move-workspace-to-monitor-right;
-
-                # Move column to monitor
-                "${mod}+Alt+Shift+Left".action = move-column-to-monitor-left;
-                "${mod}+Alt+Shift+Down".action = move-column-to-monitor-down;
-                "${mod}+Alt+Shift+Up".action = move-column-to-monitor-up;
-                "${mod}+Alt+Shift+Right".action = move-column-to-monitor-right;
-
-                # Move window to monitor
-                "${mod}+Alt+Ctrl+Left".action = move-window-to-monitor-left;
-                "${mod}+Alt+Ctrl+Down".action = move-window-to-monitor-down;
-                "${mod}+Alt+Ctrl+Up".action = move-window-to-monitor-up;
-                "${mod}+Alt+Ctrl+Right".action = move-window-to-monitor-right;
-
-                # Focus workspace
-                "${mod}+Grave".action = focus-workspace-down;
-                "${mod}+Shift+Grave".action = focus-workspace-up;
-                "${mod}+Page_Down".action = focus-workspace-down;
-                "${mod}+Page_Up".action = focus-workspace-up;
-
-                # Move column to workspace
-                "${mod}+Ctrl+Page_Down".action = move-column-to-workspace-down;
-                "${mod}+Ctrl+Page_Up".action = move-column-to-workspace-up;
-
-                # // Alternatively, there are commands to move just a single window:
-                # // ${mod}+Ctrl+Page_Down { move-window-to-workspace-down; }
-                # // ...
-
-                # Move workspace up or down
-                "${mod}+Shift+Page_Down".action = move-workspace-down;
-                "${mod}+Shift+Page_Up".action = move-workspace-up;
-
-                # // You can bind mouse wheel scroll ticks using the following syntax.
-                # // These binds will change direction based on the natural-scroll setting.
-                # //
-                # // To avoid scrolling through workspaces really fast, you can use
-                # // the cooldown-ms property. The bind will be rate-limited to this value.
-                # // You can set a cooldown on any bind, but it's most useful for the wheel.
-                "${mod}+WheelScrollDown" = {
-                  action = focus-workspace-down;
-                  cooldown-ms = 150;
-                };
-                "${mod}+WheelScrollUp" = {
-                  action = focus-workspace-up;
-                  cooldown-ms = 150;
-                };
-                "${mod}+Ctrl+WheelScrollDown" = {
-                  action = move-column-to-workspace-down;
-                  cooldown-ms = 150;
-                };
-                "${mod}+Ctrl+WheelScrollUp" = {
-                  action = move-column-to-workspace-up;
-                  cooldown-ms = 150;
-                };
-
-                # Shortcuts for named workspaces
-                "${mod}+1".action = focus-workspace "󰬺";
-                "${mod}+2".action = focus-workspace "󰬻";
-                "${mod}+3".action = focus-workspace "󰬼";
-                "${mod}+4".action = focus-workspace "󰬽";
-                "${mod}+5".action = focus-workspace "󰬾";
-                "${mod}+6".action = focus-workspace "󰬿";
-                "${mod}+7".action = focus-workspace "󰭀";
-                "${mod}+8".action = focus-workspace "󰭁";
-
-                "${mod}+Shift+1".action.move-window-to-workspace = "󰬺";
-                "${mod}+Shift+2".action.move-window-to-workspace = "󰬻";
-                "${mod}+Shift+3".action.move-window-to-workspace = "󰬼";
-                "${mod}+Shift+4".action.move-window-to-workspace = "󰬽";
-                "${mod}+Shift+5".action.move-window-to-workspace = "󰬾";
-                "${mod}+Shift+6".action.move-window-to-workspace = "󰬿";
-                "${mod}+Shift+7".action.move-window-to-workspace = "󰭀";
-                "${mod}+Shift+8".action.move-window-to-workspace = "󰭁";
-
-                # The wonky format used here is to work-around https://github.com/sodiboo/niri-flake/issues/944
-                "${mod}+Ctrl+Shift+1".action.move-column-to-workspace = [ "󰬺" ];
-                "${mod}+Ctrl+Shift+2".action.move-column-to-workspace = [ "󰬻" ];
-                "${mod}+Ctrl+Shift+3".action.move-column-to-workspace = [ "󰬼" ];
-                "${mod}+Ctrl+Shift+4".action.move-column-to-workspace = [ "󰬽" ];
-                "${mod}+Ctrl+Shift+5".action.move-column-to-workspace = [ "󰬾" ];
-                "${mod}+Ctrl+Shift+6".action.move-column-to-workspace = [ "󰬿" ];
-                "${mod}+Ctrl+Shift+7".action.move-column-to-workspace = [ "󰭀" ];
-                "${mod}+Ctrl+Shift+8".action.move-column-to-workspace = [ "󰭁" ];
-
-                "${mod}+Comma".action = consume-window-into-column;
-                "${mod}+Period".action = expel-window-from-column;
-
-                # There are also commands that consume or expel a single window to the side.
-                "${mod}+BracketLeft".action = consume-or-expel-window-left;
-                "${mod}+BracketRight".action = consume-or-expel-window-right;
-
-                # Resize columns
-                "${mod}+R".action = switch-preset-column-width;
-                "${mod}+Shift+0".action = reset-window-height;
-                "${mod}+M".action = maximize-column;
-                "${mod}+Shift+M".action = expand-column-to-available-width;
-                "${mod}+F".action = fullscreen-window;
-                "${mod}+C".action = center-column;
-
-                # // Finer width adjustments.
-                # // This command can also:
-                # // * set width in pixels: "1000"
-                # // * adjust width in pixels: "-5" or "+5"
-                # // * set width as a percentage of screen width: "25%"
-                # // * adjust width as a percentage of screen width: "-10%" or "+10%"
-                # // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
-                # // set-column-width "100" will make the column occupy 200 physical screen pixels.
-                "${mod}+Minus".action = set-column-width "-10%";
-                "${mod}+Equal".action = set-column-width "+10%";
-
-                # // Finer height adjustments when in column with other windows.
-                "${mod}+Shift+Minus".action = set-window-height "-10%";
-                "${mod}+Shift+Equal".action = set-window-height "+10%";
-
-                # // Move the focused window between the floating and the tiling layout.
-                "${mod}+V".action = toggle-window-floating;
-                "${mod}+Shift+V".action = switch-focus-between-floating-and-tiling;
-
-                # // Toggle tabbed column display mode.
-                # // Windows in this column will appear as vertical tabs,
-                # // rather than stacked on top of each other.
-                "${mod}+Y".action = toggle-column-tabbed-display;
-
-                "${mod}+A" = {
-                  action = spawn-sh "${cmd-annotate}";
-                  hotkey-overlay.title = "Annotate image in clipboard";
-                };
-                "${mod}+U" = {
-                  action = spawn-sh "${cmd-toggle-swayidle}";
-                  hotkey-overlay.title = "Toggle locking on idle";
-                };
-                "Print" = {
-                  action = spawn-sh "${cmd-screenshot}";
-                  hotkey-overlay.title = "Screenshot of region";
-                };
-                "Shift+Print" = {
-                  action = spawn-sh "niri msg action screenshot-window";
-                  hotkey-overlay.title = "Screenshot of active window";
-                };
-                "Alt+Print" = {
-                  # Action `screenshot-screen` not supported in `niri-flake`.
-                  action = spawn-sh "niri msg action screenshot-screen";
-                  hotkey-overlay.title = "Screenshot of active screen";
-                };
-
-                # // The quit action will show a confirmation dialog to avoid accidental exits.
-                "${mod}+Shift+Q".action = quit;
-
-                # // Powers off the monitors. To turn them back on, do any input like
-                # // moving the mouse or pressing any other key.
-                "${mod}+Shift+P".action = power-off-monitors;
-
-                # Brightness controls
-                XF86MonBrightnessUp = {
-                  action = spawn-sh "${osdclient} --brightness raise";
-                  hotkey-overlay.title = "Brightness up";
-                };
-                XF86MonBrightnessDown = {
-                  action = spawn-sh "${osdclient} --brightness lower";
-                  hotkey-overlay.title = "Brightness down";
-                };
-                "Alt+XF86MonBrightnessUp" = {
-                  action = spawn-sh "${osdclient} --brightness +1";
-                  hotkey-overlay.title = "Brightness up precise";
-                };
-                "Alt+XF86MonBrightnessDown" = {
-                  action = spawn-sh "${osdclient} --brightness -1";
-                  hotkey-overlay.title = "Brightness down precise";
-                };
-
-                # Volume controls
-                XF86AudioRaiseVolume = {
-                  action = spawn-sh "${osdclient} --output-volume raise";
-                  hotkey-overlay.title = "Volume up";
-                  allow-when-locked = true;
-                };
-                XF86AudioLowerVolume = {
-                  action = spawn-sh "${osdclient} --output-volume lower";
-                  hotkey-overlay.title = "Volume down";
-                  allow-when-locked = true;
-                };
-                "Alt+XF86AudioRaiseVolume" = {
-                  action = spawn-sh "${osdclient} --output-volume +1";
-                  hotkey-overlay.title = "Volume up precise";
-                  allow-when-locked = true;
-                };
-                "Alt+XF86AudioLowerVolume" = {
-                  action = spawn-sh "${osdclient} --output-volume -1";
-                  hotkey-overlay.title = "Volume down precise";
-                  allow-when-locked = true;
-                };
-                XF86AudioMute = {
-                  action = spawn-sh "${osdclient} --output-volume mute-toggle";
-                  hotkey-overlay.title = "Mute";
-                  allow-when-locked = true;
-                };
-                XF86AudioMicMute = {
-                  action = spawn-sh "${osdclient} --input-volume mute-toggle";
-                  hotkey-overlay.title = "Mute microphone";
-                  allow-when-locked = true;
-                };
-              };
-
-            environment = {
-              ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-              NIXOS_OZONE_WL = "1";
-              QT_QPA_PLATFORMTHEME = "qt6ct";
-              QT_QPA_PLATFORM = "wayland;xcb";
-              QT_STYLE_OVERRIDE = "kvantum";
-              SDL_VIDEODRIVER = "wayland";
-              MOZ_ENABLE_WAYLAND = "1";
-              OZONE_PLATFORM = "wayland";
-            };
-          };
-
-          dconf.settings = {
-            "org/gnome/desktop/interface" = {
-              color-scheme = "prefer-dark";
-              gtk-theme = gtkCfg.theme.name;
-              cursor-theme = gtkCfg.cursor.name;
-              cursor-size = gtkCfg.cursor.size;
-            };
-          };
-        };
-
-      };
-
-      environment.systemPackages = with pkgs; [
-        gnome-calculator
-        imv
-        mpv
-        sushi
-        brightnessctl
-        swayosd
-        jq
-        impala
-        bluetui
-        wiremix
-        pamixer
-        swaybg
-        xwayland-satellite-unstable
-        wayland-utils
-        wl-clipboard
-        libqalculate
-      ];
-
-      services.displayManager = {
-        autoLogin = {
-          enable = config.antob.user.autoLogin;
-          user = config.antob.user.name;
-        };
-        sddm = {
+  config = mkIf cfg.enable {
+    programs.niri = {
+      enable = true;
+    };
+
+    # xdg-desktop-portal-gnome FileChooser call depends on Nautilus
+    services.dbus.packages = [ pkgs.nautilus ];
+
+    antob = {
+      desktop.addons = {
+        gtk = enabled;
+        nautilus = enabled;
+        dms-shell = enabled;
+        rofi = {
           enable = true;
-          wayland.enable = true;
+          launchPrefix = "niri msg action spawn -- ";
         };
       };
-    })
-  ];
+
+      home.extraOptions = {
+        xdg.configFile."niri/config.kdl".text = concatStringsSep "\n" [
+          /* kdl */ ''
+            input {
+              keyboard {
+                xkb {
+                  layout "se,se"
+                  model ""
+                  rules ""
+                  variant "us,"
+                  options "caps:ctrl_modifier,grp:win_space_toggle"
+                }
+                repeat-delay 200
+                repeat-rate 40
+                track-layout "global"
+              }
+              touchpad {
+                tap
+                dwt
+                natural-scroll
+              }
+              focus-follows-mouse max-scroll-amount="0%"
+            }
+            screenshot-path "~/Pictures/Screenshots/%Y-%m-%dT%H:%M:%S.png"
+            prefer-no-csd
+            overview { zoom 0.5; }
+            layout {
+              gaps 16
+              struts {
+                left 32
+                right 32
+                top 0
+                bottom 0
+              }
+              focus-ring { off; }
+              border {
+                width 2
+                urgent-color "#${colors.base0F}ff"
+                active-color "#${colors.base0C}ff"
+                inactive-color "#${colors.base12}aa"
+              }
+              shadow {
+                on
+                offset x=0.0 y=5.0
+                softness 30.0
+                spread 5.0
+                draw-behind-window false
+                color "#00000070"
+              }
+              tab-indicator {
+                gap 5.0
+                width 4
+                length total-proportion=0.5
+                position "top"
+                gaps-between-tabs 10
+                corner-radius 2
+              }
+              insert-hint {
+                color "#${colors.base12}88"
+              }
+              default-column-width {
+                proportion 1.0
+              }
+              preset-column-widths {
+                proportion 0.33
+                proportion 0.50
+                proportion 0.67
+                proportion 1.00
+              }
+              center-focused-column "on-overflow"
+              always-center-single-column
+            }
+            cursor {
+              xcursor-theme "${gtkCfg.cursor.name}"
+              xcursor-size ${toString gtkCfg.cursor.size}
+              hide-when-typing
+              hide-after-inactive-ms 5000
+            }
+            hotkey-overlay { skip-at-startup; }
+            environment {
+              QT_QPA_PLATFORM "wayland"
+              QT_QPA_PLATFORMTHEME "gtk3"
+              ELECTRON_OZONE_PLATFORM_HINT "auto"
+            }
+            window-rule {
+              draw-border-with-background false
+              geometry-corner-radius 4
+              clip-to-geometry true
+              opacity 1.0
+              open-maximized false
+            }
+            window-rule {
+              match title="Alacritty"
+              match app-id="org.wezfurlong.wezterm"
+              match app-id="kitty"
+              match app-id="com.mitchellh.ghostty"
+              opacity 0.90
+            }
+            window-rule {
+              match title="Alacritty"
+              match app-id="org.wezfurlong.wezterm"
+              match app-id="kitty"
+              match app-id="com.mitchellh.ghostty"
+              exclude app-id="Alacritty"
+              opacity 0.95
+            }
+            window-rule {
+              match app-id="TUI.float"
+              match app-id="firefox" title="^Extension:"
+              open-floating true
+              open-focused true
+            }
+            window-rule {
+              match app-id="TUI.float.lg"
+              default-column-width { proportion 0.75; }
+              default-window-height { proportion 0.70; }
+              open-floating true
+              open-focused true
+            }
+            window-rule {
+              match title="meet.google.com is sharing a window."
+              default-floating-position relative-to="top" x=0 y=0
+            }
+            // Apps: blur them all without xray for a better look
+            window-rule {
+              background-effect {
+                blur true
+                xray false
+              }
+            }
+            debug {
+              // Allows notification actions and window activation from Noctalia.
+              honor-xdg-activation-with-invalid-serial
+            }
+            gestures {
+              hot-corners {
+                off
+              }
+            }
+            xwayland-satellite {
+              path "${lib.getExe pkgs.xwayland-satellite}"
+            }
+            binds {
+              // Monitor focus
+              Alt+Down { focus-monitor-down; }
+              Alt+Up { focus-monitor-up; }
+              Alt+Left { focus-monitor-left; }
+              Alt+Right { focus-monitor-right; }
+
+              // Workspace focus
+              Mod+1 { focus-workspace 1; }
+              Mod+2 { focus-workspace 2; }
+              Mod+3 { focus-workspace 3; }
+              Mod+4 { focus-workspace 4; }
+              Mod+5 { focus-workspace 5; }
+              Mod+6 { focus-workspace 6; }
+              Mod+7 { focus-workspace 7; }
+              Mod+8 { focus-workspace 8; }
+              "Mod+Page_Down" { focus-workspace-down; }
+              "Mod+Page_Up" { focus-workspace-up; }
+              Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+              Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+              Alt+Grave { focus-workspace-previous; }
+              Mod+Grave { spawn-sh "${cmd-cycle-workspace} forward"; }
+              Mod+Shift+Grave { spawn-sh "${cmd-cycle-workspace} backward"; }
+              // Workspace move
+              Mod+Ctrl+Up { move-workspace-up; }
+              Mod+Ctrl+Down { move-workspace-down; }
+              Mod+Alt+Up { move-workspace-to-monitor-up; }
+              Mod+Alt+Down { move-workspace-to-monitor-down; }
+              Mod+Alt+Left { move-workspace-to-monitor-left; }
+              Mod+Alt+Right { move-workspace-to-monitor-right; }
+
+              // Column focus
+              Mod+Home { focus-column-first; }
+              Mod+End { focus-column-last; }
+              Mod+Left { focus-column-left; }
+              Mod+Right { focus-column-right; }
+              Mod+Tab { focus-column-right-or-first; }
+              Mod+Shift+Tab { focus-column-left-or-last; }
+              // Column move
+              Mod+Alt+Shift+Up { move-column-to-monitor-up; }
+              Mod+Alt+Shift+Down { move-column-to-monitor-down; }
+              Mod+Alt+Shift+Left { move-column-to-monitor-left; }
+              Mod+Alt+Shift+Right { move-column-to-monitor-right; }
+              Mod+Shift+Left { move-column-left-or-to-monitor-left; }
+              Mod+Shift+Right { move-column-right-or-to-monitor-right; }
+              Mod+Ctrl+Shift+1 { move-column-to-workspace 1; }
+              Mod+Ctrl+Shift+2 { move-column-to-workspace 2; }
+              Mod+Ctrl+Shift+3 { move-column-to-workspace 3; }
+              Mod+Ctrl+Shift+4 { move-column-to-workspace 4; }
+              Mod+Ctrl+Shift+5 { move-column-to-workspace 5; }
+              Mod+Ctrl+Shift+6 { move-column-to-workspace 6; }
+              Mod+Ctrl+Shift+7 { move-column-to-workspace 7; }
+              Mod+Ctrl+Shift+8 { move-column-to-workspace 8; }
+              "Mod+Ctrl+Page_Down" { move-column-to-workspace-down; }
+              "Mod+Ctrl+Page_Up" { move-column-to-workspace-up; }
+              Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+              Mod+Ctrl+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
+              Mod+Ctrl+End { move-column-to-last; }
+              Mod+Ctrl+Home { move-column-to-first; }
+              Mod+C { center-column; }
+
+              // Window focus
+              Alt+Tab { focus-window-previous; }
+              Mod+Down { focus-window-or-workspace-down; }
+              Mod+Up { focus-window-or-workspace-up; }
+              // Window move
+              Mod+Shift+1 { move-window-to-workspace 1; }
+              Mod+Shift+2 { move-window-to-workspace 2; }
+              Mod+Shift+3 { move-window-to-workspace 3; }
+              Mod+Shift+4 { move-window-to-workspace 4; }
+              Mod+Shift+5 { move-window-to-workspace 5; }
+              Mod+Shift+6 { move-window-to-workspace 6; }
+              Mod+Shift+7 { move-window-to-workspace 7; }
+              Mod+Shift+8 { move-window-to-workspace 8; }
+              Mod+Shift+Up { move-window-up-or-to-workspace-up; }
+              Mod+Shift+Down { move-window-down-or-to-workspace-down; }
+              Mod+Alt+Ctrl+Up { move-window-to-monitor-up; }
+              Mod+Alt+Ctrl+Down { move-window-to-monitor-down; }
+              Mod+Alt+Ctrl+Left { move-window-to-monitor-left; }
+              Mod+Alt+Ctrl+Right { move-window-to-monitor-right; }
+              Mod+BracketLeft { consume-or-expel-window-left; }
+              Mod+BracketRight { consume-or-expel-window-right; }
+              Mod+Period { expel-window-from-column; }
+              // Window resize
+              Mod+Equal { set-column-width "+10%"; }
+              Mod+F { fullscreen-window; }
+              Mod+M { maximize-column; }
+              Mod+Minus { set-column-width "-10%"; }
+              Mod+R { switch-preset-column-width; }
+              Mod+Shift+0 { reset-window-height; }
+              Mod+Shift+M { expand-column-to-available-width; }
+              Mod+Shift+Equal { set-window-height "+10%"; }
+              Mod+Shift+Minus { set-window-height "-10%"; }
+
+              // Misc
+              Mod+Q repeat=false { close-window; }
+              Mod+Shift+Q { quit; }
+              Mod+Shift+P { power-off-monitors; }
+              Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+              Mod+V { toggle-window-floating; }
+              Mod+Y { toggle-column-tabbed-display; }
+
+              // Apps
+              Mod+O hotkey-overlay-title="Show overview" repeat=false { toggle-overview; }
+              Mod+E hotkey-overlay-title="File manger" repeat=false { spawn-sh "nautilus --new-window"; }
+              Mod+P hotkey-overlay-title="Show VPN menu" repeat=false { spawn-sh "${dm-vpn}"; }
+              Mod+Return hotkey-overlay-title="Terminal (tmux)" repeat=false { spawn "${tmuxTerminal}" "tmux-attach-unused"; }
+              Mod+Shift+Return hotkey-overlay-title="Terminal" repeat=false { spawn "${terminal}"; }
+              Mod+Shift+Slash hotkey-overlay-title="Show hotkey overlay" repeat=false { show-hotkey-overlay; }
+              Mod+Shift+W hotkey-overlay-title="Select Firefox profile" repeat=false { spawn-sh "${dm-firefox-profile}"; }
+              Mod+T hotkey-overlay-title="Activity" repeat=false { spawn-sh "${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}"; }
+              Mod+W hotkey-overlay-title="Web browser" repeat=false { spawn "firefox"; }
+          ''
+          (lib.optionalString dmsEnabled /* kdl */ ''
+            // DMS bindings
+            XF86AudioRaiseVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
+            XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+            XF86AudioMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }
+            XF86MonBrightnessUp allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "increment" "5" ""; }
+            XF86MonBrightnessDown allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "decrement" "5" ""; }
+            XF86AudioMicMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "micmute"; }
+            Print { spawn "dms" "ipc" "call" "niri" "screenshot"; }
+            Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn "dms" "ipc" "call" "inhibit" "toggle"; }
+            // Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn "noctalia-shell" "ipc" "call" "bluetooth" "togglePanel"; }
+            Mod+Ctrl+E hotkey-overlay-title="Emoji selector" repeat=false { spawn "dms" "ipc" "call" "spotlight" "toggleQuery" ":e "; }
+            Mod+D hotkey-overlay-title="App launcher" repeat=false { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+            Mod+X hotkey-overlay-title="System menu" repeat=false { spawn "dms" "ipc" "call" "widget" "toggle" "powerMenuButton"; }
+            Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn "dms" "ipc" "call" "lock" "lock"; }
+            Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn "dms" "ipc" "call" "settings" "focusOrToggle"; }
+          '')
+          (lib.optionalString noctaliaEnabled /* kdl */ ''
+            // Noctalia bindings
+            XF86AudioRaiseVolume { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
+            XF86AudioLowerVolume { spawn "noctalia-shell" "ipc" "call" "volume" "decrease"; }
+            XF86AudioMute { spawn "noctalia-shell" "ipc" "call" "volume" "muteOutput"; }
+            XF86MonBrightnessUp { spawn "noctalia-shell" "ipc" "call" "brightness" "increase"; }
+            XF86MonBrightnessDown { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
+            XF86AudioMicMute { spawn "noctalia-shell" "ipc" "call" "volume" "muteInput"; }
+            Print { spawn "noctalia-shell" "ipc" "call" "plugin:screen-shot-and-record" "screenshot"; }
+            Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn "noctalia-shell" "ipc" "call" "idleInhibitor" "toggle"; }
+            Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn "noctalia-shell" "ipc" "call" "bluetooth" "togglePanel"; }
+            Mod+Ctrl+E hotkey-overlay-title="Emoji selector" repeat=false { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+            Mod+D hotkey-overlay-title="App launcher" repeat=false { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+            Mod+X hotkey-overlay-title="System menu" repeat=false { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
+            Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+            Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+          '')
+          " }"
+          (lib.optionalString dmsEnabled /* kdl */ ''
+            // Set the overview wallpaper on the backdrop.
+            layer-rule {
+              match namespace="dms:blurwallpaper"
+              place-within-backdrop true
+            }
+
+            // Include DMS settings
+            include "dms/outputs.kdl"
+          '')
+          (lib.optionalString noctaliaEnabled /* kdl */ ''
+            // Blur everywhere without xray for a better look
+            layer-rule {
+              match namespace="^noctalia-(background|launcher-overlay|dock)-.*$"
+              background-effect {
+                xray false
+              }
+            }
+
+            // Set the overview wallpaper on the backdrop.
+            layer-rule {
+              match namespace="^noctalia-overview*"
+              place-within-backdrop true
+            }
+
+            // Launch Noctalia at startup
+            spawn-sh-at-startup "noctalia-shell"
+          '')
+        ];
+
+        dconf.settings = {
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+            gtk-theme = gtkCfg.theme.name;
+            cursor-theme = gtkCfg.cursor.name;
+            cursor-size = gtkCfg.cursor.size;
+          };
+        };
+      };
+    };
+
+    antob.persistence.home.directories = mkIf dmsEnabled [
+      ".config/niri/dms"
+    ];
+
+    # Desktop portal
+    xdg.portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-gnome
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      config.common = {
+        default = [
+          "gnome"
+          "gtk"
+        ];
+        "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      };
+    };
+
+    environment.systemPackages = with pkgs; [
+      gnome-calculator
+      imv
+      mpv
+      jq
+      impala
+      bluetui
+      wiremix
+      pamixer
+      wayland-utils
+      wl-clipboard
+      libqalculate
+    ];
+
+    services.displayManager = {
+      autoLogin = {
+        enable = config.antob.user.autoLogin;
+        user = config.antob.user.name;
+      };
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+    };
+  };
 }

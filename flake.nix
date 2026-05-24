@@ -68,12 +68,21 @@
     # Hyprnix
     hyprnix.url = "github:hyprwm/hyprnix";
 
-    # Niri
-    niri.url = "github:sodiboo/niri-flake";
-
     # MangoWC
     mango = {
       url = "github:DreamMaoMao/mango?ref=refs/tags/0.11.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Noctalia Shell
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # DMS plugins
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

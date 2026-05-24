@@ -22,14 +22,8 @@ in
     };
 
     desktop = {
-      hyprland = {
-        enable = true;
-        enableCache = true;
-      };
-      addons = {
-        hypridle.lockScreen = false;
-        keyring = enabled;
-      };
+      niri = enabled;
+      addons.keyring = enabled;
     };
 
     virtualisation = {
