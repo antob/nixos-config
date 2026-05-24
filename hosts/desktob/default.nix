@@ -64,7 +64,10 @@ in
     cli-apps = {
       llama-cpp = enabled;
       pi-coding-agent = enabled;
-      voxtype = enabled;
+      voxtype = {
+        enable = true;
+        package = pkgs.voxtype-vulkan;
+      };
     };
 
     hardware = {
