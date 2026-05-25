@@ -58,7 +58,7 @@ in
           PubkeyAcceptedKeyTypes +ssh-rsa
           User ${config.antob.user.name}
         '';
-        settings = {
+        matchBlocks = {
           "*" = {
             forwardAgent = true;
             addKeysToAgent = "no";
@@ -77,10 +77,13 @@ in
             user = "root";
           };
           pihole.hostname = "pihole.lan";
-          "192.168.* *.lan laptob*" = {
-            UserKnownHostsFile = "/dev/null";
-            StrictHostKeyChecking = "no";
-            LogLevel = "ERROR";
+          locals = {
+            host = "192.168.* *.lan laptob*";
+            extraOptions = {
+              UserKnownHostsFile = "/dev/null";
+              StrictHostKeyChecking = "no";
+              LogLevel = "ERROR";
+            };
           };
         };
         includes = [ "hosts" ];
