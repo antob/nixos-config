@@ -183,10 +183,6 @@ in
                 xray false
               }
             }
-            debug {
-              // Allows notification actions and window activation from Noctalia.
-              honor-xdg-activation-with-invalid-serial
-            }
             gestures {
               hot-corners {
                 off
@@ -297,7 +293,7 @@ in
               Mod+V { toggle-window-floating; }
               Mod+Y { toggle-column-tabbed-display; }
 
-              // Apps
+              // Apps & menus
               Mod+O hotkey-overlay-title="Show overview" repeat=false { toggle-overview; }
               Mod+E hotkey-overlay-title="File manger" repeat=false { spawn-sh "nautilus --new-window"; }
               Mod+P hotkey-overlay-title="Show VPN menu" repeat=false { spawn-sh "${dm-vpn}"; }
@@ -307,6 +303,8 @@ in
               Mod+Shift+W hotkey-overlay-title="Select Firefox profile" repeat=false { spawn-sh "${dm-firefox-profile}"; }
               Mod+T hotkey-overlay-title="Activity" repeat=false { spawn-sh "${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}"; }
               Mod+W hotkey-overlay-title="Web browser" repeat=false { spawn "firefox"; }
+              Mod+Ctrl+E hotkey-overlay-title="Emoji selector" repeat=false { spawn-sh "rofimoji --prompt Emojis --action copy"; }
+              Mod+D hotkey-overlay-title="App launcher" repeat=false { spawn-sh "rofi -show drun -show-icons"; }
           ''
           (lib.optionalString dmsEnabled /* kdl */ ''
             // DMS bindings
@@ -318,9 +316,6 @@ in
             XF86AudioMicMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "micmute"; }
             Print { spawn "dms" "ipc" "call" "niri" "screenshot"; }
             Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn "dms" "ipc" "call" "inhibit" "toggle"; }
-            // Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn "noctalia-shell" "ipc" "call" "bluetooth" "togglePanel"; }
-            Mod+Ctrl+E hotkey-overlay-title="Emoji selector" repeat=false { spawn "dms" "ipc" "call" "spotlight" "toggleQuery" ":e "; }
-            Mod+D hotkey-overlay-title="App launcher" repeat=false { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
             Mod+X hotkey-overlay-title="System menu" repeat=false { spawn "dms" "ipc" "call" "widget" "toggle" "powerMenuButton"; }
             Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn "dms" "ipc" "call" "lock" "lock"; }
             Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn "dms" "ipc" "call" "settings" "focusOrToggle"; }
@@ -336,8 +331,6 @@ in
             Print { spawn "noctalia-shell" "ipc" "call" "plugin:screen-shot-and-record" "screenshot"; }
             Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn "noctalia-shell" "ipc" "call" "idleInhibitor" "toggle"; }
             Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn "noctalia-shell" "ipc" "call" "bluetooth" "togglePanel"; }
-            Mod+Ctrl+E hotkey-overlay-title="Emoji selector" repeat=false { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
-            Mod+D hotkey-overlay-title="App launcher" repeat=false { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
             Mod+X hotkey-overlay-title="System menu" repeat=false { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
             Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
             Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
@@ -366,6 +359,11 @@ in
             layer-rule {
               match namespace="^noctalia-overview*"
               place-within-backdrop true
+            }
+
+            debug {
+              // Allows notification actions and window activation from Noctalia.
+              honor-xdg-activation-with-invalid-serial
             }
 
             // Launch Noctalia at startup
@@ -416,6 +414,7 @@ in
       wayland-utils
       wl-clipboard
       libqalculate
+      libnotify
     ];
 
     services.displayManager = {
