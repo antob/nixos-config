@@ -85,6 +85,9 @@
       url = "github:AvengeMedia/dms-plugin-registry";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Monique - Graphical monitor configurator
+    monique.url = "github:ToRvaLDz/monique";
   };
 
   outputs =
