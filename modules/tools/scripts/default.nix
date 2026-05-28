@@ -22,6 +22,7 @@ in
       (cp ./getsong.nix { })
       (cp ./sfx.nix { })
       (cp ./timer.nix { })
+      (cp ./worktree-manager.nix { })
     ];
   };
 }
