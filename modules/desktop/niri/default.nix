@@ -48,7 +48,7 @@ in
       desktop.addons = {
         gtk = enabled;
         nautilus = enabled;
-        dms-shell = enabled;
+        noctalia-shell = enabled;
         rofi = {
           enable = true;
           launchPrefix = "niri msg action spawn -- ";
