@@ -29,13 +29,14 @@ in
     ];
 
     environment.variables = {
-      PATH = "${userHome}/.cache/.bun/bin";
+      PATH = "${userHome}/.cache/.bun/bin:${userHome}/.local/bin";
       RTK_TELEMETRY_DISABLED = 1;
     };
 
     antob.home.extraOptions = {
       home.activation.piAgentLink = entryAfter [ "writeBoundary" ] ''
         ln -sfn ${userHome}/Projects/pi-agent-config ${userHome}/.pi/agent
+        ln -sfn ${userHome}/Projects/pi-agent-config/skills ${userHome}/.agents/skills
       '';
     };
 
@@ -43,7 +44,6 @@ in
       home.directories = [
         ".pi"
         ".agents"
-        ".gsd"
         ".cache/bun"
         ".cache/.bun"
         ".local/share/rtk"
