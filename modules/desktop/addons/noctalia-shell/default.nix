@@ -38,13 +38,13 @@ in
         };
       };
 
+      antob.tools.swappy.enable = true;
+
       environment.systemPackages = with pkgs; [
         inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-        swappy
-        wf-recorder
         grim
         slurp
-        hyprpicker
+        wf-recorder
         wl-clipboard
         tesseract
         imagemagick
@@ -55,9 +55,6 @@ in
         ffmpeg
         gifski
         jq
-        # python3
-        # python3Packages.pygobject
-        xdg-desktop-portal
       ];
 
       antob.persistence.home.directories = [
