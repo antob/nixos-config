@@ -34,7 +34,6 @@ in
 
   options.antob.desktop.niri = with types; {
     enable = mkEnableOption "Enable Niri.";
-    mainOutput = mkOpt types.str "eDP-1" "The name of the main output.";
   };
 
   config = mkIf cfg.enable {
@@ -48,6 +47,7 @@ in
       desktop.addons = {
         gtk = enabled;
         nautilus = enabled;
+        # dms-shell = enabled;
         noctalia-shell = enabled;
         rofi = {
           enable = true;
@@ -397,6 +397,7 @@ in
     };
 
     antob.persistence.home.directories = [
+      ".config/niri"
       ".config/niri/dms"
       ".config/monique"
     ];
