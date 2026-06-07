@@ -12,7 +12,7 @@
     nixpkgs-next.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # NixPkgs Unstable (kept one step behind)
-    nixpkgs-prev.url = "github:nixos/nixpkgs/549bd84d6279f9852cae6225e372cc67fb91a4c1";
+    nixpkgs-prev.url = "github:nixos/nixpkgs/29916453413845e54a65b8a1cf996842300cd299";
 
     # Home Manager
     home-manager = {
