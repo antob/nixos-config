@@ -83,7 +83,5 @@ in
         ".cache/workmux"
       ];
     };
-
-    antob.cli-apps.agent-browser.enable = true;
   };
 }
