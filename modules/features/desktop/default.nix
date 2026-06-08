@@ -76,6 +76,7 @@ in
       # remmina # Remote Desktop Client
       obsidian
       discord
+      mqtt-explorer
     ];
 
     antob.persistence.home.directories = [
@@ -83,6 +84,7 @@ in
       ".config/irb"
       ".config/obsidian"
       ".config/chromium"
+      ".config/MQTT-Explorer"
     ];
   };
 }
