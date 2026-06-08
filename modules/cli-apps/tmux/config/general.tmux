@@ -125,7 +125,7 @@ bind-key "C-s" run-shell "sesh connect \"$(
 
 # Hooks
 set-hook -g after-new-session "select-layout main-vertical"
-set-hook -g after-new-window "select-layout main-vertical \; rename-window 'Tab'"
+#set-hook -g after-new-window "select-layout main-vertical \; rename-window 'Tab'"
 #set-hook -g after-split-window "select-layout \; swap-pane -U"
 set-hook -g after-split-window "select-layout"
 set-hook -g after-kill-pane "select-layout"

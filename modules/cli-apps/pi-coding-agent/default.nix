@@ -11,6 +11,10 @@ let
   cfg = config.antob.cli-apps.pi-coding-agent;
   userHome = "/home/${config.antob.user.name}";
   entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
+  system = pkgs.stdenv.hostPlatform.system;
+  llm-pkgs = inputs.llm-agents.packages.${system};
+  jailed-lib = inputs.jailed-agents.lib.${system};
+  jail = jailed-lib.internals.jail;
 in
 {
   options.antob.cli-apps.pi-coding-agent = with types; {
@@ -26,7 +30,31 @@ in
       uv
       libsixel
       rtk
+      llm-pkgs.workmux
+      (jailed-lib.makeJailedPi {
+        name = "jpi";
+        extraPkgs = with pkgs; [
+          nodejs
+          python3
+          rtk
+        ];
+        extraReadwriteDirs = [ "~/.local/share/rtk" ];
+        extraReadonlyDirs = [ "/nix/store" ];
+        env = {
+          RTK_TELEMETRY_DISABLED = 1;
+        };
+        baseJailOptions = with jail.combinators; [
+          network
+          time-zone
+          no-new-session
+          (fwd-env "PATH")
+        ];
+      })
     ];
+
+    environment.shellAliases = {
+      wt = "workmux";
+    };
 
     environment.variables = {
       PATH = "${userHome}/.cache/.bun/bin:${userHome}/.local/bin";
@@ -34,9 +62,13 @@ in
     };
 
     antob.home.extraOptions = {
+      xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
+        nerdfont: true
+        worktree_dir: ./.worktrees
+      '';
+
       home.activation.piAgentLink = entryAfter [ "writeBoundary" ] ''
-        ln -sfn ${userHome}/Projects/pi-agent-config ${userHome}/.pi/agent
-        ln -sfn ${userHome}/Projects/pi-agent-config/skills ${userHome}/.agents/skills
+        ln -sfn ${userHome}/.pi/agent/skills ${userHome}/.agents/skills
       '';
     };
 
@@ -47,6 +79,8 @@ in
         ".cache/bun"
         ".cache/.bun"
         ".local/share/rtk"
+        ".local/state/workmux"
+        ".cache/workmux"
       ];
     };
 

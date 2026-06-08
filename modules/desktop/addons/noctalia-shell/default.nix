@@ -53,7 +53,7 @@ in
         translate-shell
         wl-screenrec
         ffmpeg
-        gifski
+        # gifski
         jq
       ];
 

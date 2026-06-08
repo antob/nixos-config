@@ -88,6 +88,12 @@
 
     # Monique - Graphical monitor configurator
     monique.url = "github:ToRvaLDz/monique";
+
+    # Jailed Agents - A collection of agents running in isolated environments
+    jailed-agents.url = "github:andersonjoseph/jailed-agents";
+
+    # LLM Agents - A collection of agents for various LLMs
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =
