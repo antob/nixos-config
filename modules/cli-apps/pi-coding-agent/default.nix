@@ -13,8 +13,66 @@ let
   entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
   system = pkgs.stdenv.hostPlatform.system;
   llm-pkgs = inputs.llm-agents.packages.${system};
-  jailed-lib = inputs.jailed-agents.lib.${system};
-  jail = jailed-lib.internals.jail;
+
+  pushState =
+    key: toPush: state:
+    state // { ${key} = state.${key} ++ [ toPush ]; };
+
+  jail = inputs.jail-nix.lib.extend {
+    inherit pkgs;
+    basePermissions =
+      combinators: with combinators; [
+        (unsafe-add-raw-args "--proc /proc")
+        (unsafe-add-raw-args "--dev /dev")
+        (unsafe-add-raw-args "--tmpfs /tmp")
+        (unsafe-add-raw-args "--tmpfs ~")
+        (ro-bind "${pkgs.bash}/bin/sh" "/bin/sh")
+        (add-path "/bin")
+        (ro-bind "/usr/bin/env" "/usr/bin/env")
+        (ro-bind "/etc/zoneinfo" "/etc/zoneinfo")
+        (pushState "additionalRuntimeClosures" pkgs.bash)
+        (add-pkg-deps [ pkgs.coreutils ])
+        (readonly "/nix/store")
+        fake-passwd
+      ];
+  };
+
+  jailed-pi = jail "jpi" llm-pkgs.pi (
+    with jail.combinators;
+    [
+      network
+      time-zone
+      no-new-session
+      mount-cwd
+      (fwd-env "PATH")
+      (readwrite (noescape "~/.pi"))
+      (readwrite (noescape "~/.local/share/rtk"))
+      (add-pkg-deps (
+        with pkgs;
+        [
+          bashInteractive
+          curl
+          wget
+          jq
+          git
+          which
+          ripgrep
+          gnugrep
+          gawkInteractive
+          ps
+          findutils
+          gzip
+          unzip
+          gnutar
+          diffutils
+          gnused
+          nodejs
+          # python3
+          rtk
+        ]
+      ))
+    ]
+  );
 in
 {
   options.antob.cli-apps.pi-coding-agent = with types; {
@@ -23,33 +81,14 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      # pi-coding-agent
+      llm-pkgs.pi
+      jailed-pi
       nodejs
       bun
       python3
       uv
-      libsixel
       rtk
       llm-pkgs.workmux
-      (jailed-lib.makeJailedPi {
-        name = "jpi";
-        extraPkgs = with pkgs; [
-          nodejs
-          python3
-          rtk
-        ];
-        extraReadwriteDirs = [ "~/.local/share/rtk" ];
-        extraReadonlyDirs = [ "/nix/store" ];
-        env = {
-          RTK_TELEMETRY_DISABLED = 1;
-        };
-        baseJailOptions = with jail.combinators; [
-          network
-          time-zone
-          no-new-session
-          (fwd-env "PATH")
-        ];
-      })
     ];
 
     environment.shellAliases = {
@@ -57,7 +96,7 @@ in
     };
 
     environment.variables = {
-      PATH = "${userHome}/.cache/.bun/bin:${userHome}/.local/bin";
+      # PATH = "${userHome}/.cache/.bun/bin:${userHome}/.local/bin";
       RTK_TELEMETRY_DISABLED = 1;
     };
 
