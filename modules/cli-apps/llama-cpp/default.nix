@@ -12,11 +12,12 @@ in
 {
   options.antob.cli-apps.llama-cpp = with types; {
     enable = mkEnableOption "Whether or not to enable llama.cpp.";
+    package = mkOpt package pkgs.llama-cpp "The llama-cpp package to use.";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      llama-cpp-rocm
+    environment.systemPackages = [
+      cfg.package
     ];
 
     antob.persistence = {

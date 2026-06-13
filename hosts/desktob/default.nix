@@ -56,7 +56,10 @@ in
     };
 
     cli-apps = {
-      llama-cpp = enabled;
+      llama-cpp = {
+        enable = true;
+        package = pkgs.llama-cpp-rocm;
+      };
       pi-coding-agent = enabled;
       voxtype = {
         enable = true;
