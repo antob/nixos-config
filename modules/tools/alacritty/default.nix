@@ -32,7 +32,7 @@ in
               y = 9;
             };
             decorations = "None";
-            startup_mode = "Maximized";
+            # startup_mode = "Maximized";
           };
 
           font = {

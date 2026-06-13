@@ -11,7 +11,7 @@ let
   cfg = config.antob.desktop.addons.dms-shell;
 in
 {
-  imports = [ inputs.dms-plugin-registry.modules.default ];
+  imports = [ inputs.dms-plugin-registry.nixosModules.default ];
 
   options.antob.desktop.addons.dms-shell = with types; {
     enable = mkEnableOption "Enable DankMaterialShell.";
