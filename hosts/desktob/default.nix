@@ -60,7 +60,7 @@ in
         enable = true;
         package = pkgs.llama-cpp-rocm;
       };
-      pi-coding-agent = enabled;
+      llm-agents = enabled;
       voxtype = {
         enable = true;
         package = pkgs.voxtype-vulkan;

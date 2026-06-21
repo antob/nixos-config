@@ -8,7 +8,7 @@
 
 with lib;
 let
-  cfg = config.antob.cli-apps.pi-coding-agent;
+  cfg = config.antob.cli-apps.llm-agents;
   userHome = "/home/${config.antob.user.name}";
   entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
   system = pkgs.stdenv.hostPlatform.system;
@@ -113,8 +113,8 @@ let
     );
 in
 {
-  options.antob.cli-apps.pi-coding-agent = with types; {
-    enable = mkEnableOption "Whether or not to enable pi-coding-agent.";
+  options.antob.cli-apps.llm-agents = with types; {
+    enable = mkEnableOption "Whether or not to enable LLM agents.";
   };
 
   config = mkIf cfg.enable {

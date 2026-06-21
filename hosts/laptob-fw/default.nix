@@ -39,7 +39,7 @@ in
     };
 
     cli-apps = {
-      pi-coding-agent = enabled;
+      llm-agents = enabled;
     };
 
     services.tailscale = {
