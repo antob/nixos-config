@@ -13,66 +13,104 @@ let
   entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
   system = pkgs.stdenv.hostPlatform.system;
   llm-pkgs = inputs.llm-agents.packages.${system};
+  jail = inputs.jail-nix.lib.init pkgs;
 
-  pushState =
-    key: toPush: state:
-    state // { ${key} = state.${key} ++ [ toPush ]; };
+  commonJailOptions = with jail.combinators; [
+    network
+    time-zone
+    no-new-session
+    mount-cwd
+    notifications
+    wayland
+    (fwd-env "PATH")
+    (readonly "/nix/store")
+    (readonly "/usr/bin/env")
+    (readonly "/etc/zoneinfo")
+    (try-fwd-env "LD_LIBRARY_PATH")
+    (set-env "COLORTERM" "truecolor")
 
-  jail = inputs.jail-nix.lib.extend {
-    inherit pkgs;
-    basePermissions =
-      combinators: with combinators; [
-        (unsafe-add-raw-args "--proc /proc")
-        (unsafe-add-raw-args "--dev /dev")
-        (unsafe-add-raw-args "--tmpfs /tmp")
-        (unsafe-add-raw-args "--tmpfs ~")
-        (ro-bind "${pkgs.bash}/bin/sh" "/bin/sh")
-        (add-path "/bin")
-        (ro-bind "/usr/bin/env" "/usr/bin/env")
-        (ro-bind "/etc/zoneinfo" "/etc/zoneinfo")
-        (pushState "additionalRuntimeClosures" pkgs.bash)
-        (add-pkg-deps [ pkgs.coreutils ])
-        (readonly "/nix/store")
-        fake-passwd
-      ];
-  };
+    (readwrite (noescape "~/.local/share/rtk"))
 
-  jailed-pi = jail "jpi" llm-pkgs.pi (
-    with jail.combinators;
-    [
-      network
-      time-zone
-      no-new-session
-      mount-cwd
-      (fwd-env "PATH")
-      (readwrite (noescape "~/.pi"))
-      (readwrite (noescape "~/.local/share/rtk"))
-      (add-pkg-deps (
-        with pkgs;
-        [
-          bashInteractive
-          curl
-          wget
-          jq
-          git
-          which
-          ripgrep
-          gnugrep
-          gawkInteractive
-          ps
-          findutils
-          gzip
-          unzip
-          gnutar
-          diffutils
-          gnused
-          nodejs
-          # python3
-          rtk
+    # Ruby/Rails
+    (try-fwd-env "BUNDLE_PATH")
+    (try-fwd-env "GEM_HOME")
+    (try-fwd-env "GEM_PATH")
+    (try-fwd-env "RUBYLIB")
+    (readonly-paths-from-var "BUNDLE_PATH" " ")
+    (readonly-paths-from-var "GEM_HOME" " ")
+    (readonly-paths-from-var "GEM_PATH" ":")
+
+    # Python
+    (try-fwd-env "PYTHONPATH")
+    (readonly-paths-from-var "VIRTUAL_ENV" " ")
+  ];
+
+  commonPkgs = with pkgs; [
+    bashInteractive
+    curl
+    wget
+    jq
+    git
+    which
+    ripgrep
+    gnugrep
+    gawkInteractive
+    ps
+    findutils
+    libnotify
+    wl-clipboard
+    gzip
+    unzip
+    gnutar
+    diffutils
+    gnused
+    nodejs
+    rtk
+  ];
+
+  claude-code-pkg =
+    let
+      raw = llm-pkgs.claude-code;
+    in
+    pkgs.writeShellScriptBin "claude" ''
+      exec ${raw}/bin/claude --dangerously-skip-permissions "$@"
+    '';
+
+  # --- The Sandboxes ---
+  makeJailedPi =
+    {
+      extraPkgs ? [ ],
+    }:
+    jail "jpi" llm-pkgs.pi (
+      with jail.combinators;
+      (
+        commonJailOptions
+        ++ [
+          (readwrite (noescape "~/.pi"))
+
+          (add-pkg-deps commonPkgs)
+          (add-pkg-deps extraPkgs)
         ]
-      ))
-    ]
-  );
+      )
+    );
+
+  makeJailedClaude =
+    {
+      extraPkgs ? [ ],
+    }:
+    jail "jclaude" claude-code-pkg (
+      with jail.combinators;
+      (
+        commonJailOptions
+        ++ [
+          (readwrite (noescape "~/.config/claude"))
+          (try-fwd-env "CLAUDE_CONFIG_DIR")
+
+          (add-pkg-deps commonPkgs)
+          (add-pkg-deps extraPkgs)
+        ]
+      )
+    );
 in
 {
   options.antob.cli-apps.pi-coding-agent = with types; {
@@ -82,7 +120,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       llm-pkgs.pi
-      jailed-pi
+      (makeJailedPi { })
+      llm-pkgs.claude-code
+      (makeJailedClaude { })
       nodejs
       bun
       python3
@@ -98,6 +138,7 @@ in
     environment.variables = {
       # PATH = "${userHome}/.cache/.bun/bin:${userHome}/.local/bin";
       RTK_TELEMETRY_DISABLED = 1;
+      CLAUDE_CONFIG_DIR = "~/.config/claude";
     };
 
     antob.home.extraOptions = {
@@ -120,6 +161,7 @@ in
         ".local/share/rtk"
         ".local/state/workmux"
         ".cache/workmux"
+        ".config/claude"
       ];
     };
   };
