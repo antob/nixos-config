@@ -13,13 +13,17 @@ let
   entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
   system = pkgs.stdenv.hostPlatform.system;
   llm-pkgs = inputs.llm-agents.packages.${system};
-  jail = inputs.jail-nix.lib.init pkgs;
+  jail = inputs.jail-nix.lib.extend {
+    inherit pkgs;
+    additionalCombinators = import ./combinators.nix { inherit lib; };
+  };
 
   commonJailOptions = with jail.combinators; [
     network
     time-zone
     no-new-session
     mount-cwd
+    mount-git-root
     notifications
     wayland
     (fwd-env "PATH")
@@ -43,6 +47,9 @@ let
     # Python
     (try-fwd-env "PYTHONPATH")
     (readonly-paths-from-var "VIRTUAL_ENV" " ")
+
+    # Node.js
+    (try-readonly-path-from-git-root "node_modules")
   ];
 
   commonPkgs = with pkgs; [
@@ -136,9 +143,8 @@ in
     };
 
     environment.variables = {
-      # PATH = "${userHome}/.cache/.bun/bin:${userHome}/.local/bin";
       RTK_TELEMETRY_DISABLED = 1;
-      CLAUDE_CONFIG_DIR = "~/.config/claude";
+      CLAUDE_CONFIG_DIR = "${userHome}/.config/claude";
     };
 
     antob.home.extraOptions = {
@@ -156,8 +162,6 @@ in
       home.directories = [
         ".pi"
         ".agents"
-        ".cache/bun"
-        ".cache/.bun"
         ".local/share/rtk"
         ".local/state/workmux"
         ".cache/workmux"
