@@ -65,6 +65,7 @@ in
         enable = true;
         package = pkgs.voxtype-vulkan;
       };
+      lumen = enabled;
     };
 
     hardware = {
@@ -104,6 +105,7 @@ in
       GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
       OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
       OPENCODE_API_KEY = "$(cat ${secrets.opencode_api_key.path})";
+      OPENAI_API_KEY = "$(cat ${secrets.openai_api_key.path})";
     };
   };
 
@@ -158,6 +160,9 @@ in
         owner = "tob";
       };
       opencode_api_key = {
+        owner = "tob";
+      };
+      openai_api_key = {
         owner = "tob";
       };
     };

@@ -95,6 +95,12 @@
 
     # LLM Agents - A collection of agents for various LLMs
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    # Lumen - A fast terminal diff viewer and code review TUI, written in Rust.
+    lumen = {
+      url = "github:jnsahaj/lumen";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
