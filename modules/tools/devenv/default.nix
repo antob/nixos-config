@@ -18,11 +18,15 @@ in
     nix.settings = {
       keep-outputs = true;
       keep-derivations = true;
-      substituters = [
-        "https://devenv.cachix.org/"
-      ];
-      trusted-public-keys = [
-        "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+    };
+
+    antob = {
+      # home.extraOptions.programs.zsh.initContent = ''
+      #   eval "$(${getExe pkgs.devenv} hook zsh)"
+      # '';
+
+      persistence.home.directories = [
+        ".local/share/devenv"
       ];
     };
 
