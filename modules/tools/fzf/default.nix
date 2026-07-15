@@ -26,13 +26,19 @@ in
 
         defaultCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
 
-        fileWidgetCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
-        fileWidgetOptions = [
-          "--tmux 90% --preview '${pkgs.bat}/bin/bat -n --color=always --line-range :500 {}'"
-        ];
+        fileWidget = {
+          command = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
+          options = [
+            "--tmux 90% --preview '${pkgs.bat}/bin/bat -n --color=always --line-range :500 {}'"
+          ];
+        };
 
-        changeDirWidgetCommand = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
-        changeDirWidgetOptions = [ "--preview '${pkgs.eza}/bin/eza --tree --color=always {} | head -200'" ];
+        changeDirWidget = {
+          command = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
+          options = [ "--preview '${pkgs.eza}/bin/eza --tree --color=always {} | head -200'" ];
+        };
+
+        historyWidget.command = "";
       };
 
       programs.zsh.initContent = mkOrder 200 ''
