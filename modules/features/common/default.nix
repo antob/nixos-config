@@ -134,6 +134,7 @@ in
       usbutils
       pciutils
       gnumake
+      e2fsprogs
       cifs-utils # Mount SMB shares
       speedtest-rs
       file
