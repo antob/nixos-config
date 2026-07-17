@@ -27,6 +27,12 @@ in
         avahi = enabled;
       };
 
+      desktop = {
+        addons = {
+          udisks2 = enabled;
+        };
+      };
+
       home.extraOptions = {
         # Default apps
         xdg.mimeApps.defaultApplications = {
@@ -60,6 +66,8 @@ in
         };
       };
     };
+
+    services.gvfs.enable = true;
 
     environment.systemPackages = with pkgs; [
       arandr

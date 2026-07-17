@@ -164,6 +164,7 @@ in
             window-rule {
               match app-id="TUI.float"
               match app-id="firefox" title="^Extension:"
+              match app-id="org.gnome.NautilusPreviewer"
               open-floating true
               open-focused true
             }
@@ -253,6 +254,7 @@ in
               Mod+Ctrl+End { move-column-to-last; }
               Mod+Ctrl+Home { move-column-to-first; }
               Mod+C { center-column; }
+              Mod+Ctrl+C { center-visible-columns; }
 
               // Window focus
               Alt+Tab { focus-window-previous; }
