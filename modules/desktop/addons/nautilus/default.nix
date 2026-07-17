@@ -17,7 +17,6 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       nautilus
-      sushi
     ];
 
     services.gnome.sushi.enable = false;
