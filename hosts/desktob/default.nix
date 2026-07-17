@@ -19,6 +19,7 @@ in
     features = {
       common = enabled;
       desktop = enabled;
+      gaming = enabled;
     };
 
     desktop = {

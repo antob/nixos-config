@@ -49,6 +49,17 @@ in
     ];
   };
 
+  # Mount data disk
+  fileSystems."/mnt/data" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "ext4";
+    options = [
+      "noatime"
+      "nofail"
+      "x-gvfs-show"
+    ];
+  };
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.enableRedistributableFirmware = true;
 
