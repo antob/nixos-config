@@ -11,6 +11,8 @@ let
   cfg = config.antob.desktop.niri;
   gtkCfg = config.antob.desktop.addons.gtk;
   colors = config.antob.color-scheme.colors;
+  userName = config.antob.user.name;
+  userHome = "/home/${userName}";
 
   dmsEnabled = config.antob.desktop.addons.dms-shell.enable;
   noctaliaEnabled = config.antob.desktop.addons.noctalia-shell.enable;
@@ -402,6 +404,13 @@ in
       ".config/niri"
       ".config/niri/dms"
       ".config/monique"
+    ];
+
+    # Ensure included conf files are present
+    systemd.tmpfiles.rules = [
+      "f ${userHome}/.config/niri/monitors.kdl 0644 ${userName} users -"
+      "d ${userHome}/.config/niri/dms 0755 ${userName} users -"
+      "f ${userHome}/.config/niri/dms/outputs.kdl 0644 ${userName} users -"
     ];
 
     # Desktop portal
