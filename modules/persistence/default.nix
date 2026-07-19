@@ -68,6 +68,7 @@ in
         "/var/lib/systemd/backlight"
         "/var/lib/boltd"
         "/var/cache"
+        "/var/lib/logrotate"
       ];
       files = cfg.files ++ [
         "/etc/machine-id"
@@ -75,7 +76,6 @@ in
         "/etc/ssh/ssh_host_rsa_key.pub"
         "/etc/ssh/ssh_host_ed25519_key"
         "/etc/ssh/ssh_host_ed25519_key.pub"
-        "/var/lib/logrotate.status"
       ];
       users."${userName}" = {
         inherit (cfg.home) files directories;
@@ -89,5 +89,11 @@ in
         inherit (cfg.safe.home) files directories;
       };
     };
+
+    # Make logrotate use a persistent state file.
+    services.logrotate.extraArgs = lib.mkAfter [
+      "--state"
+      "/var/lib/logrotate/logrotate.status"
+    ];
   };
 }
