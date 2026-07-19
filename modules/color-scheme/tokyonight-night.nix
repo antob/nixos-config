@@ -11,7 +11,8 @@
   base09 = "#FF9E64";
   base0A = "#E0AF68";
   base0B = "#41A6B5";
-  base0C = "#7DCFFF";
+  # base0C = "#7DCFFF";
+  base0C = "#83a598";
   base0D = "#7AA2F7";
   base0E = "#BB9AF7";
   base0F = "#D18616";
