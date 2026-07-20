@@ -86,7 +86,13 @@ in
         includes = [ "hosts" ];
       };
 
-      persistence.safe.home.directories = [ ".ssh" ];
+      persistence.home.directories = [
+        {
+          directory = ".ssh";
+          mode = "0700";
+        }
+      ];
+
       user.extraOptions.openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
   };

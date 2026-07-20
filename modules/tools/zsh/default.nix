@@ -104,6 +104,6 @@ in
       };
     };
 
-    antob.persistence.safe.home.directories = [ ".local/share/zsh" ];
+    antob.persistence.home.directories = [ ".local/share/zsh" ];
   };
 }

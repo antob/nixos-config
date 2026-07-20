@@ -61,28 +61,19 @@ in
         "Pictures/${cfg.icon.fileName or (builtins.baseNameOf cfg.icon)}".source = cfg.icon;
       };
 
-      persistence = {
-        home = {
-          directories = [
-            ".cache"
-            ".local/share/Trash"
-            ".local/share/zoxide"
-            "Downloads"
-            "persist"
-          ];
-        };
-
-        safe.home = {
-          directories = [
-            ".local/share/password-store"
-            "Projects"
-            "Documents"
-            "Pictures"
-            "Videos"
-            "Music"
-          ];
-        };
-      };
+      persistence.home.directories = [
+        ".cache"
+        ".local/share/Trash"
+        ".local/share/zoxide"
+        "Downloads"
+        ".local/share/password-store"
+        "Projects"
+        "Documents"
+        "Pictures"
+        "Videos"
+        "Music"
+        "persist"
+      ];
     };
 
     environment.systemPackages = [ propagatedIcon ];

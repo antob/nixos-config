@@ -11,84 +11,88 @@ let
   userName = config.antob.user.name;
 in
 {
-  imports = [ inputs.impermanence.nixosModules.impermanence ];
+  imports = [ inputs.preservation.nixosModules.preservation ];
 
   options.antob.persistence = with types; {
-    enable = mkEnableOption "Enable persistence using impermanence.";
+    enable = mkEnableOption "Enable persistence storage.";
     path = mkOpt str "/persist" "Path to persistent folder.";
-    files = mkOpt (listOf (
-      either str attrs
-    )) [ ] "A list of files to be managed by impermanence's <option>files</option>.";
-    directories = mkOpt (listOf (
-      either str attrs
-    )) [ ] "A list of directories to be managed by impermanence's <option>directories</option>.";
+    files = mkOpt (listOf anything) [ ] "A list of files to be stored in persistent storage.";
+    directories =
+      mkOpt (listOf anything) [ ]
+        "A list of directories to be stored in persistent storage.";
     home = {
-      files = mkOpt (listOf (
-        either str attrs
-      )) [ ] "A list of files to be managed by impermanence's home-manager <option>files</option>.";
+      files =
+        mkOpt (listOf anything) [ ]
+          "A list of files in user home to be stored in persistant storage.";
       directories =
-        mkOpt (listOf (either str attrs)) [ ]
-          "A list of directories to be managed by impermanence's home-manager <option>directories</option>.";
-    };
-    safe = {
-      files = mkOpt (listOf (
-        either str attrs
-      )) [ ] "A list of backed up files to be managed by impermanence's <option>files</option>.";
-      directories =
-        mkOpt (listOf (either str attrs)) [ ]
-          "A list of backed up directories to be managed by impermanence's <option>directories</option>.";
-      home = {
-        files =
-          mkOpt (listOf (either str attrs)) [ ]
-            "A list of backed up files to be managed by impermanence's home-manager <option>files</option>.";
-        directories =
-          mkOpt (listOf (either str attrs)) [ ]
-            "A list of backed up directories to be managed by impermanence's home-manager <option>directories</option>.";
-      };
+        mkOpt (listOf anything) [ ]
+          "A list of directories in user home to be stored in persistant storage.";
     };
   };
 
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
-      "d ${cfg.path}/safe 0755 root root -"
       "d ${cfg.path}/var/log 0755 root root -"
       "d ${cfg.path}/var/lib/nixos 0755 root root -"
       "d ${cfg.path}/var/lib/systemd/coredump 0755 root root -"
     ];
 
-    # Necessary for user-specific impermanence
-    # programs.fuse.userAllowOther = true;
-
-    environment.persistence."${cfg.path}" = {
-      hideMounts = true;
-      directories = cfg.directories ++ [
-        "/var/log"
-        "/var/lib/nixos"
-        "/var/lib/systemd/coredump"
-        "/var/lib/systemd/backlight"
-        "/var/lib/boltd"
-        "/var/cache"
-        "/var/lib/logrotate"
-      ];
-      files = cfg.files ++ [
-        "/etc/machine-id"
-        "/etc/ssh/ssh_host_rsa_key"
-        "/etc/ssh/ssh_host_rsa_key.pub"
-        "/etc/ssh/ssh_host_ed25519_key"
-        "/etc/ssh/ssh_host_ed25519_key.pub"
-      ];
-      users."${userName}" = {
-        inherit (cfg.home) files directories;
+    preservation = {
+      enable = true;
+      preserveAt."${cfg.path}" = {
+        commonMountOptions = [
+          "x-gvfs-hide"
+          "x-gdu.hide"
+        ];
+        files = [
+          {
+            file = "/etc/machine-id";
+            inInitrd = true;
+          }
+          {
+            file = "/etc/ssh/ssh_host_rsa_key";
+            how = "symlink";
+            inInitrd = true;
+            configureParent = true;
+          }
+          {
+            file = "/etc/ssh/ssh_host_ed25519_key";
+            how = "symlink";
+            inInitrd = true;
+            configureParent = true;
+          }
+          {
+            file = "/var/lib/systemd/random-seed";
+            how = "symlink";
+            inInitrd = true;
+            configureParent = true;
+          }
+        ];
+        directories = cfg.directories ++ [
+          "/var/log"
+          "/var/cache"
+          {
+            directory = "/var/lib/nixos";
+            inInitrd = true;
+          }
+          "/var/lib/boltd"
+          "/var/lib/logrotate"
+          "/var/lib/fwupd"
+          "/var/lib/libvirt"
+          "/var/lib/systemd/coredump"
+          "/var/lib/systemd/backlight"
+          "/var/lib/systemd/timers"
+          "/var/lib/systemd/rfkill"
+        ];
+        users."${userName}" = {
+          inherit (cfg.home) files directories;
+        };
       };
     };
 
-    environment.persistence."${cfg.path}/safe" = {
-      hideMounts = true;
-      inherit (cfg.safe) files directories;
-      users."${userName}" = {
-        inherit (cfg.safe.home) files directories;
-      };
-    };
+    # systemd-machine-id-commit.service would fail, but it is not relevant
+    # in this specific setup for a persistent machine-id so we disable it
+    systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 
     # Make logrotate use a persistent state file.
     services.logrotate.extraArgs = lib.mkAfter [

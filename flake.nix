@@ -23,8 +23,8 @@
     # Hardware Configuration
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    # Impermanence
-    impermanence.url = "github:nix-community/impermanence";
+    # Preservation
+    preservation.url = "github:nix-community/preservation";
 
     # Nix User Repository (NUR)
     nur = {
