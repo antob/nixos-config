@@ -31,12 +31,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d ${cfg.path}/var/log 0755 root root -"
-      "d ${cfg.path}/var/lib/nixos 0755 root root -"
-      "d ${cfg.path}/var/lib/systemd/coredump 0755 root root -"
-    ];
-
     preservation = {
       enable = true;
       preserveAt."${cfg.path}" = {
@@ -61,12 +55,6 @@ in
             inInitrd = true;
             configureParent = true;
           }
-          {
-            file = "/var/lib/systemd/random-seed";
-            how = "symlink";
-            inInitrd = true;
-            configureParent = true;
-          }
         ];
         directories = cfg.directories ++ [
           "/var/log"
@@ -79,10 +67,10 @@ in
           "/var/lib/logrotate"
           "/var/lib/fwupd"
           "/var/lib/libvirt"
-          "/var/lib/systemd/coredump"
-          "/var/lib/systemd/backlight"
-          "/var/lib/systemd/timers"
-          "/var/lib/systemd/rfkill"
+          {
+            directory = "/var/lib/systemd";
+            inInitrd = true;
+          }
         ];
         users."${userName}" = {
           inherit (cfg.home) files directories;
@@ -90,6 +78,28 @@ in
       };
     };
 
+    systemd.tmpfiles.settings.preservation = {
+      "/home/${userName}/.config".d = {
+        user = userName;
+        group = "users";
+        mode = "0755";
+      };
+      "/home/${userName}/.local".d = {
+        user = userName;
+        group = "users";
+        mode = "0755";
+      };
+      "/home/${userName}/.local/share".d = {
+        user = userName;
+        group = "users";
+        mode = "0755";
+      };
+      "/home/${userName}/.local/state".d = {
+        user = userName;
+        group = "users";
+        mode = "0755";
+      };
+    };
     # systemd-machine-id-commit.service would fail, but it is not relevant
     # in this specific setup for a persistent machine-id so we disable it
     systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
