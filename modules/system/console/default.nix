@@ -12,7 +12,7 @@ in
 {
   options.antob.system.console = with types; {
     enable = mkEnableOption "Whether or not to manage console settings.";
-    setFont = mkBoolOpt true "Whether or not to set custom console font.";
+    setFont = mkBoolOpt false "Whether or not to set custom console font.";
   };
 
   config = mkIf cfg.enable {

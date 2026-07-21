@@ -31,9 +31,4 @@
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
-  # Enable DHCP on the wireless link
-  networking = {
-    useDHCP = lib.mkDefault true;
-  };
 }

@@ -20,11 +20,6 @@ with lib;
       common = enabled;
     };
 
-    tools = {
-      fhs = enabled;
-    };
-
-    system.console.setFont = mkForce false;
     hardware.networking.enable = mkForce false;
 
     # Disable SSH connectivity. Connect through Tailscale only.
@@ -68,7 +63,10 @@ with lib;
   };
 
   # Bootloader.
-  boot.loader.grub.enable = true;
+  boot.loader = {
+    grub.enable = true;
+    systemd-boot.enable = false;
+  };
 
   # Sops secrets
   sops = {

@@ -28,6 +28,7 @@ in
         rustup = enabled;
         fzf = enabled;
         scripts = enabled;
+        fhs = enabled;
       };
 
       cli-apps = {
@@ -164,9 +165,27 @@ in
     services = {
       upower.enable = true;
       dbus.enable = true;
+      fwupd.enable = true;
       # Disable for now to avoid failed systemd
       # units (`bin.mount` and `usr-bin.mount`) on startup
       # envfs.enable = true;
+    };
+
+    hardware.graphics.enable = true;
+
+    # Bootloader.
+    boot.loader = {
+      systemd-boot = {
+        enable = mkDefault true;
+        consoleMode = "max";
+        configurationLimit = 10;
+        editor = false;
+      };
+
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/efi";
+      };
     };
 
     location = {

@@ -142,21 +142,6 @@ in
     "net.ipv6.conf.all.forwarding" = true;
   };
 
-  # Bootloader.
-  boot.loader = {
-    systemd-boot = {
-      enable = true;
-      consoleMode = "max";
-      configurationLimit = 5;
-      editor = false;
-    };
-
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/efi";
-    };
-  };
-
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;

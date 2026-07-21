@@ -66,10 +66,7 @@ in
     };
 
     hardware = {
-      graphics = {
-        enable = true;
-        enable32Bit = true;
-      };
+      graphics.enable32Bit = true;
       xone.enable = true;
     };
 

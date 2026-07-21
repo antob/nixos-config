@@ -19,7 +19,7 @@ in
   antob = {
     features = {
       common = enabled;
-      desktop = enabled;
+      laptop = enabled;
     };
 
     desktop = {
@@ -27,51 +27,23 @@ in
       addons.keyring = enabled;
     };
 
-    virtualisation.virt-manager = enabled;
-
-    tools = {
-      fhs = enabled;
-      atuin = enabled;
-      # easyeffects = {
-      #   enable = true;
-      #   preset = "fw13";
-      # };
-    };
-
-    cli-apps = {
-      llm-agents = enabled;
-    };
+    cli-apps.llm-agents = enabled;
 
     services.tailscale = {
       enable = true;
       keyfile = secrets.tailscale_auth_key.path;
     };
 
-    hardware = {
-      systemd-networking = {
-        enable = true;
-        hostName = "laptob-fw";
-        # Derived from `head -c 8 /etc/machine-id`
-        hostId = "6278643e";
-      };
-      fingerprint = enabled;
-      bluetooth = enabled;
-      zsa-voyager = enabled;
-      yubikey = enabled;
-      ledger = enabled;
-    };
-
-    system = {
-      info.laptop = true;
-      console.setFont = mkForce false;
+    hardware.systemd-networking = {
+      enable = true;
+      hostName = "laptob-fw";
+      # Derived from `head -c 8 /etc/machine-id`
+      hostId = "6278643e";
     };
 
     persistence = {
       enable = true;
       path = "/nix/persist";
-      directories = [
-        "/var/lib/powertop"
-      ];
       home.directories = [
         ".config/vice"
         ".RetroDebugger"
@@ -91,40 +63,11 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    powertop
-    vulkan-tools
     nvtopPackages.amd
     mesa-demos
-    acpi
     s-tui
-    quickemu
-    nfs-utils # Needed for mounting NFS shares
-    iio-sensor-proxy # To enable automatic brightness in Gnome
     calibre
   ];
-
-  services = {
-    fwupd.enable = true;
-    logind.settings.Login = {
-      HandleLidSwitch = "suspend-then-hibernate";
-      HandleLidSwitchExternalPower = "suspend";
-    };
-  };
-
-  # Bootloader.
-  boot.loader = {
-    systemd-boot = {
-      enable = true;
-      consoleMode = "max";
-      configurationLimit = 10;
-      editor = false;
-    };
-
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/efi";
-    };
-  };
 
   # Sops secrets
   sops = {
@@ -142,48 +85,6 @@ in
       };
     };
   };
-
-  # NFS shares
-  services.rpcbind.enable = true;
-  systemd.mounts = [
-    {
-      type = "nfs4";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "192.168.1.2:/mnt/tank/share/public";
-      where = "/mnt/share/public";
-    }
-    {
-      type = "nfs4";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "192.168.1.2:/mnt/tank/share/private";
-      where = "/mnt/share/private";
-    }
-  ];
-
-  systemd.automounts = [
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/share/public";
-    }
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/share/private";
-    }
-  ];
-
-  # Power optimizer daemons. Choose one.
-  services.power-profiles-daemon.enable = true;
-  services.tlp.enable = false;
 
   system.stateVersion = "22.11";
 }

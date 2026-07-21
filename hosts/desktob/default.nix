@@ -28,8 +28,6 @@ in
     };
 
     virtualisation = {
-      virt-manager = enabled;
-
       docker.enable = false;
       docker.storageDriver = "btrfs";
 
@@ -38,7 +36,6 @@ in
     };
 
     tools = {
-      fhs = enabled;
       atuin = enabled;
       alacritty.fontSize = 13;
       kitty.fontSize = 13;
@@ -76,14 +73,8 @@ in
         # Derived from `head -c 8 /etc/machine-id`
         hostId = "672fb36e";
       };
-      bluetooth = enabled;
-      zsa-voyager = enabled;
-      yubikey = enabled;
-      ledger = enabled;
       ddcutil = enabled;
     };
-
-    system.console.setFont = mkForce false;
 
     persistence = {
       enable = true;
@@ -107,39 +98,15 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    vulkan-tools
     nvtopPackages.amd
     mesa-demos
     rocmPackages.rocminfo
-    acpi
     s-tui
-    quickemu
-    nfs-utils # Needed for mounting NFS shares
-    iio-sensor-proxy # To enable automatic brightness in Gnome
     calibre
   ];
 
   # Enable ROCm support in nixpkgs
   nixpkgs.config.rocmSupport = true;
-
-  services = {
-    fwupd.enable = true;
-  };
-
-  # Bootloader.
-  boot.loader = {
-    systemd-boot = {
-      enable = true;
-      consoleMode = "max";
-      configurationLimit = 10;
-      editor = false;
-    };
-
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/efi";
-    };
-  };
 
   # Sops secrets
   sops = {
@@ -162,44 +129,6 @@ in
       };
     };
   };
-
-  # NFS shares
-  services.rpcbind.enable = true;
-  systemd.mounts = [
-    {
-      type = "nfs4";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "192.168.1.2:/mnt/tank/share/public";
-      where = "/mnt/share/public";
-    }
-    {
-      type = "nfs4";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "192.168.1.2:/mnt/tank/share/private";
-      where = "/mnt/share/private";
-    }
-  ];
-
-  systemd.automounts = [
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/share/public";
-    }
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/share/private";
-    }
-  ];
 
   system.stateVersion = "22.11";
 }

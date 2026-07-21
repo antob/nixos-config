@@ -114,7 +114,6 @@ with lib;
     inetutils
     procs
     unzip
-    fwupd
     killall
     doggo
     dmidecode

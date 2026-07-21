@@ -27,10 +27,15 @@ in
         avahi = enabled;
       };
 
-      desktop = {
-        addons = {
-          udisks2 = enabled;
-        };
+      desktop.addons.udisks2 = enabled;
+
+      virtualisation.virt-manager = enabled;
+
+      hardware = {
+        bluetooth = enabled;
+        zsa-voyager = enabled;
+        yubikey = enabled;
+        ledger = enabled;
       };
 
       home.extraOptions = {
@@ -70,6 +75,48 @@ in
     services = {
       gvfs.enable = true;
       chrony.enable = true;
+
+      # NFS shares
+      rpcbind.enable = true;
+    };
+
+    systemd = {
+      # NFS shares
+      mounts = [
+        {
+          type = "nfs4";
+          mountConfig = {
+            Options = "noatime";
+          };
+          what = "192.168.1.2:/mnt/tank/share/public";
+          where = "/mnt/share/public";
+        }
+        {
+          type = "nfs4";
+          mountConfig = {
+            Options = "noatime";
+          };
+          what = "192.168.1.2:/mnt/tank/share/private";
+          where = "/mnt/share/private";
+        }
+      ];
+
+      automounts = [
+        {
+          wantedBy = [ "multi-user.target" ];
+          automountConfig = {
+            TimeoutIdleSec = "600";
+          };
+          where = "/mnt/share/public";
+        }
+        {
+          wantedBy = [ "multi-user.target" ];
+          automountConfig = {
+            TimeoutIdleSec = "600";
+          };
+          where = "/mnt/share/private";
+        }
+      ];
     };
 
     environment.systemPackages = with pkgs; [
@@ -89,6 +136,10 @@ in
       discord
       mqtt-explorer
       rustdesk-flutter
+      vulkan-tools
+      acpi
+      quickemu
+      nfs-utils # Needed for mounting NFS shares
     ];
 
     antob.persistence = {
@@ -102,5 +153,8 @@ in
         ".config/rustdesk"
       ];
     };
+
+    # Enable DHCP on the wireless link
+    networking.useDHCP = lib.mkDefault true;
   };
 }

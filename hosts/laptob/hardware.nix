@@ -34,14 +34,5 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-  powerManagement = {
-    cpuFreqGovernor = lib.mkDefault "powersave";
-    powertop.enable = true;
-  };
-
   hardware.enableRedistributableFirmware = true;
-  hardware.graphics.enable = true;
-
-  # Enable DHCP on the wireless link
-  networking.useDHCP = lib.mkDefault true;
 }
