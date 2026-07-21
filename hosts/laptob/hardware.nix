@@ -21,19 +21,15 @@
       "nfs4"
     ];
 
-    # initrd = {
-    #   availableKernelModules = [
-    #     "xhci_pci"
-    #     "thunderbolt"
-    #     "nvme"
-    #     "usb_storage"
-    #     "sd_mod"
-    #   ];
-    #   kernelModules = [ ];
-    # };
-
-    # kernelModules = [ "kvm-amd" ];
-    # extraModulePackages = [ ];
+    initrd = {
+      availableKernelModules = [
+        "xhci_pci"
+        "thunderbolt"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+      ];
+    };
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
@@ -44,16 +40,8 @@
   };
 
   hardware.enableRedistributableFirmware = true;
-
-  # high-resolution display
-  #hardware.video.hidpi.enable = true;
-
   hardware.graphics.enable = true;
 
   # Enable DHCP on the wireless link
-  networking = {
-    useDHCP = lib.mkDefault true;
-    # networking.interfaces.enp193s0f3u1c2.useDHCP = lib.mkDefault true;
-    # networking.interfaces.wlp1s0.useDHCP = lib.mkDefault true;
-  };
+  networking.useDHCP = lib.mkDefault true;
 }

@@ -19,36 +19,36 @@ in
   antob = {
     features = {
       common = enabled;
-      # desktop = enabled;
+      desktop = enabled;
     };
 
-    # desktop = {
-    #   niri = enabled;
-    #   addons.keyring = enabled;
-    # };
-    #
-    # virtualisation.virt-manager = enabled;
+    desktop = {
+      niri = enabled;
+      addons.keyring = enabled;
+    };
+
+    virtualisation.virt-manager = enabled;
 
     tools = {
       fhs = enabled;
-      # atuin = enabled;
+      atuin = enabled;
     };
 
-    # cli-apps = {
-    #   llm-agents = enabled;
-    # };
+    cli-apps = {
+      llm-agents = enabled;
+    };
 
-    # services.tailscale = {
-    #   enable = true;
-    #   keyfile = secrets.tailscale_auth_key.path;
-    # };
+    services.tailscale = {
+      enable = true;
+      keyfile = secrets.tailscale_auth_key.path;
+    };
 
     hardware = {
       systemd-networking = {
         enable = true;
         hostName = "laptob";
         # Derived from `head -c 8 /etc/machine-id`
-        hostId = "6278643e";
+        hostId = "ac07b4e8";
       };
       fingerprint = enabled;
       bluetooth = enabled;
@@ -71,29 +71,26 @@ in
         ".config/vice"
         ".RetroDebugger"
         ".C64Debugger"
-        # ".nuget"
-        # ".microsoft"
-        # ".dotnet"
         ".aws"
       ];
     };
 
-    # system.env = {
-    #   GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
-    #   OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
-    # };
+    system.env = {
+      GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
+      OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
+    };
   };
 
-  # environment.systemPackages = with pkgs; [
-  #   powertop
-  #   vulkan-tools
-  #   mesa-demos
-  #   acpi
-  #   s-tui
-  #   quickemu
-  #   nfs-utils # Needed for mounting NFS shares
-  #   iio-sensor-proxy # To enable automatic brightness in Gnome
-  # ];
+  environment.systemPackages = with pkgs; [
+    powertop
+    vulkan-tools
+    mesa-demos
+    acpi
+    s-tui
+    quickemu
+    nfs-utils # Needed for mounting NFS shares
+    iio-sensor-proxy # To enable automatic brightness in Gnome
+  ];
 
   services = {
     fwupd.enable = true;
@@ -119,56 +116,56 @@ in
   };
 
   # Sops secrets
-  # sops = {
-  #   defaultSopsFile = ../common/secrets.yaml;
-  #   secrets = {
-  #     tailscale_auth_key = { };
-  #     github_copilot_token = {
-  #       owner = "tob";
-  #     };
-  #     openrouter_api_key = {
-  #       owner = "tob";
-  #     };
-  #   };
-  # };
+  sops = {
+    defaultSopsFile = ../common/secrets.yaml;
+    secrets = {
+      tailscale_auth_key = { };
+      github_copilot_token = {
+        owner = "tob";
+      };
+      openrouter_api_key = {
+        owner = "tob";
+      };
+    };
+  };
 
-  # # NFS shares
-  # services.rpcbind.enable = true;
-  # systemd.mounts = [
-  #   {
-  #     type = "nfs4";
-  #     mountConfig = {
-  #       Options = "noatime";
-  #     };
-  #     what = "192.168.1.2:/mnt/tank/share/public";
-  #     where = "/mnt/share/public";
-  #   }
-  #   {
-  #     type = "nfs4";
-  #     mountConfig = {
-  #       Options = "noatime";
-  #     };
-  #     what = "192.168.1.2:/mnt/tank/share/private";
-  #     where = "/mnt/share/private";
-  #   }
-  # ];
-  #
-  # systemd.automounts = [
-  #   {
-  #     wantedBy = [ "multi-user.target" ];
-  #     automountConfig = {
-  #       TimeoutIdleSec = "600";
-  #     };
-  #     where = "/mnt/share/public";
-  #   }
-  #   {
-  #     wantedBy = [ "multi-user.target" ];
-  #     automountConfig = {
-  #       TimeoutIdleSec = "600";
-  #     };
-  #     where = "/mnt/share/private";
-  #   }
-  # ];
+  # NFS shares
+  services.rpcbind.enable = true;
+  systemd.mounts = [
+    {
+      type = "nfs4";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "192.168.1.2:/mnt/tank/share/public";
+      where = "/mnt/share/public";
+    }
+    {
+      type = "nfs4";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "192.168.1.2:/mnt/tank/share/private";
+      where = "/mnt/share/private";
+    }
+  ];
+
+  systemd.automounts = [
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/share/public";
+    }
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/share/private";
+    }
+  ];
 
   # Power optimizer daemons. Choose one.
   services.power-profiles-daemon.enable = true;

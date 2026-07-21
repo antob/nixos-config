@@ -47,8 +47,9 @@ in
     shortEmail = mkOpt str "tob@antob.se" "The short email of the user.";
     icon = mkOpt (nullOr package) defaultIcon "The profile picture to use for the user.";
     hashedPassword =
-      mkOpt str "$y$j9T$wjUKjUTgvrxCg7HVJIrl2/$A0nvjyLzv869pQYmjyuIgXafrZDk2Lzg9B/nA/W4609"
-        "Hash of the user password password. To generate a hashed password run `mkpasswd`.";
+      mkOpt str
+        "$6$fiUqUwx2M4O9FLP7$K3x8sAjSmpjyn6Rjjk/abv3QgONKU.sQ/QUWtcafiZ6WNXE/UzVv6QeOEwCXkBHy5iJV6tg2ai0p2ApA/rABs0"
+        "Hash of the user password `changeme`. To generate a hashed password run `mkpasswd -m sha-512`.";
     autoLogin = mkBoolOpt true "Whether or not to autologin user.";
     extraGroups = mkOpt (listOf str) [ ] "Groups for the user to be assigned.";
     extraOptions = mkOpt attrs { } "Extra options passed to <option>users.users.<name></option>.";

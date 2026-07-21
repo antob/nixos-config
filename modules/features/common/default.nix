@@ -158,6 +158,7 @@ in
       ffmpeg
       imagemagick
       hexyl
+      ssh-to-pgp
     ];
 
     services = {

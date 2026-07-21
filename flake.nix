@@ -143,6 +143,13 @@
       formatter = forEachSystem (pkgs: pkgs.nixfmt-tree);
 
       nixosConfigurations = {
+        laptob = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          modules = commonModules ++ [
+            ./hosts/laptob
+          ];
+        };
+
         laptob-fw = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
           modules = commonModules ++ [

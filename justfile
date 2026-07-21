@@ -30,7 +30,7 @@ iso type="install":
     nix build .#nixosConfigurations.{{ type }}-iso.config.system.build.isoImage
 
 # Install flake to remote host
-install host flake *ARGS:
+install flake host *ARGS:
     nixos-anywhere --flake .#{{ flake }} {{ host }} {{ ARGS }}
 
 ###################################
