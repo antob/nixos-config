@@ -1,0 +1,178 @@
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
+with lib;
+let
+  secrets = config.sops.secrets;
+in
+{
+  imports = with inputs; [
+    nur.modules.nixos.default
+    ./hardware.nix
+    ../../modules
+  ];
+
+  antob = {
+    features = {
+      common = enabled;
+      # desktop = enabled;
+    };
+
+    # desktop = {
+    #   niri = enabled;
+    #   addons.keyring = enabled;
+    # };
+    #
+    # virtualisation.virt-manager = enabled;
+
+    tools = {
+      fhs = enabled;
+      # atuin = enabled;
+    };
+
+    # cli-apps = {
+    #   llm-agents = enabled;
+    # };
+
+    # services.tailscale = {
+    #   enable = true;
+    #   keyfile = secrets.tailscale_auth_key.path;
+    # };
+
+    hardware = {
+      systemd-networking = {
+        enable = true;
+        hostName = "laptob";
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "6278643e";
+      };
+      fingerprint = enabled;
+      bluetooth = enabled;
+      zsa-voyager = enabled;
+      yubikey = enabled;
+      ledger = enabled;
+    };
+
+    system = {
+      info.laptop = true;
+      console.setFont = mkForce false;
+    };
+
+    persistence = {
+      enable = true;
+      directories = [
+        "/var/lib/powertop"
+      ];
+      home.directories = [
+        ".config/vice"
+        ".RetroDebugger"
+        ".C64Debugger"
+        # ".nuget"
+        # ".microsoft"
+        # ".dotnet"
+        ".aws"
+      ];
+    };
+
+    # system.env = {
+    #   GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
+    #   OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
+    # };
+  };
+
+  # environment.systemPackages = with pkgs; [
+  #   powertop
+  #   vulkan-tools
+  #   mesa-demos
+  #   acpi
+  #   s-tui
+  #   quickemu
+  #   nfs-utils # Needed for mounting NFS shares
+  #   iio-sensor-proxy # To enable automatic brightness in Gnome
+  # ];
+
+  services = {
+    fwupd.enable = true;
+    logind.settings.Login = {
+      HandleLidSwitch = "suspend-then-hibernate";
+      HandleLidSwitchExternalPower = "suspend";
+    };
+  };
+
+  # Bootloader.
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "max";
+      configurationLimit = 10;
+      editor = false;
+    };
+
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/efi";
+    };
+  };
+
+  # Sops secrets
+  # sops = {
+  #   defaultSopsFile = ../common/secrets.yaml;
+  #   secrets = {
+  #     tailscale_auth_key = { };
+  #     github_copilot_token = {
+  #       owner = "tob";
+  #     };
+  #     openrouter_api_key = {
+  #       owner = "tob";
+  #     };
+  #   };
+  # };
+
+  # # NFS shares
+  # services.rpcbind.enable = true;
+  # systemd.mounts = [
+  #   {
+  #     type = "nfs4";
+  #     mountConfig = {
+  #       Options = "noatime";
+  #     };
+  #     what = "192.168.1.2:/mnt/tank/share/public";
+  #     where = "/mnt/share/public";
+  #   }
+  #   {
+  #     type = "nfs4";
+  #     mountConfig = {
+  #       Options = "noatime";
+  #     };
+  #     what = "192.168.1.2:/mnt/tank/share/private";
+  #     where = "/mnt/share/private";
+  #   }
+  # ];
+  #
+  # systemd.automounts = [
+  #   {
+  #     wantedBy = [ "multi-user.target" ];
+  #     automountConfig = {
+  #       TimeoutIdleSec = "600";
+  #     };
+  #     where = "/mnt/share/public";
+  #   }
+  #   {
+  #     wantedBy = [ "multi-user.target" ];
+  #     automountConfig = {
+  #       TimeoutIdleSec = "600";
+  #     };
+  #     where = "/mnt/share/private";
+  #   }
+  # ];
+
+  # Power optimizer daemons. Choose one.
+  services.power-profiles-daemon.enable = true;
+  services.tlp.enable = false;
+
+  system.stateVersion = "22.11";
+}

@@ -71,10 +71,8 @@ in
       path = "/nix/persist";
       directories = [
         "/var/lib/powertop"
-        "/var/lib/chrony"
       ];
       home.directories = [
-        ".config/rustdesk"
         ".config/vice"
         ".RetroDebugger"
         ".C64Debugger"
@@ -101,7 +99,6 @@ in
     s-tui
     quickemu
     nfs-utils # Needed for mounting NFS shares
-    rustdesk-flutter
     iio-sensor-proxy # To enable automatic brightness in Gnome
     calibre
   ];
@@ -112,7 +109,6 @@ in
       HandleLidSwitch = "suspend-then-hibernate";
       HandleLidSwitchExternalPower = "suspend";
     };
-    chrony.enable = true;
   };
 
   # Bootloader.
@@ -146,9 +142,6 @@ in
       };
     };
   };
-
-  # To be able to access ESP32 devices through the serial port
-  antob.user.extraGroups = [ "dialout" ];
 
   # NFS shares
   services.rpcbind.enable = true;

@@ -67,7 +67,10 @@ in
       };
     };
 
-    services.gvfs.enable = true;
+    services = {
+      gvfs.enable = true;
+      chrony.enable = true;
+    };
 
     environment.systemPackages = with pkgs; [
       arandr
@@ -85,14 +88,19 @@ in
       obsidian
       discord
       mqtt-explorer
+      rustdesk-flutter
     ];
 
-    antob.persistence.home.directories = [
-      ".config/discord"
-      ".config/irb"
-      ".config/obsidian"
-      ".config/chromium"
-      ".config/MQTT-Explorer"
-    ];
+    antob.persistence = {
+      directories = [ "/var/lib/chrony" ];
+      home.directories = [
+        ".config/discord"
+        ".config/irb"
+        ".config/obsidian"
+        ".config/chromium"
+        ".config/MQTT-Explorer"
+        ".config/rustdesk"
+      ];
+    };
   };
 }

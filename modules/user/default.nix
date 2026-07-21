@@ -93,7 +93,11 @@ in
 
         shell = mkIf config.antob.tools.zsh.enable pkgs.zsh;
 
-        extraGroups = [ "wheel" ] ++ cfg.extraGroups;
+        extraGroups = [
+          "wheel"
+          "dialout"
+        ]
+        ++ cfg.extraGroups;
       }
       // cfg.extraOptions;
     };

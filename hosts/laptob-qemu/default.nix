@@ -35,7 +35,6 @@ with lib;
 
   services = {
     fwupd.enable = true;
-    chrony.enable = true;
   };
 
   services.tlp.enable = false;
