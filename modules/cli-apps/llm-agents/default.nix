@@ -9,7 +9,9 @@
 with lib;
 let
   cfg = config.antob.cli-apps.llm-agents;
-  userHome = "/home/${config.antob.user.name}";
+  user = config.antob.user.name;
+  group = config.antob.user.group;
+  userHome = "/home/${user}";
   entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
   system = pkgs.stdenv.hostPlatform.system;
   llm-pkgs = inputs.llm-agents.packages.${system};
@@ -34,6 +36,7 @@ let
     (set-env "COLORTERM" "truecolor")
 
     (readwrite (noescape "~/.local/share/rtk"))
+    (readwrite (noescape "~/.cache/codebase-memory-mcp"))
 
     # Ruby/Rails
     (try-fwd-env "BUNDLE_PATH")
@@ -73,6 +76,10 @@ let
     gnused
     nodejs
     rtk
+    bun
+    python3
+    uv
+    codebase-memory-mcp
   ];
 
   claude-code-pkg =
@@ -125,18 +132,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = [
       llm-pkgs.pi
       (makeJailedPi { })
       llm-pkgs.claude-code
       (makeJailedClaude { })
-      nodejs
-      bun
-      python3
-      uv
-      rtk
       llm-pkgs.workmux
-    ];
+    ]
+    ++ commonPkgs;
 
     environment.shellAliases = {
       wt = "workmux";
@@ -158,15 +161,23 @@ in
       '';
     };
 
-    antob.persistence = {
-      home.directories = [
-        ".pi"
-        ".agents"
-        ".local/share/rtk"
-        ".local/state/workmux"
-        ".cache/workmux"
-        ".config/claude"
-      ];
+    fileSystems."${userHome}/.pi/agent" = {
+      device = "${userHome}/Projects/pi-agent-config";
+      options = [ "bind" ];
+      fsType = "none";
     };
+
+    systemd.tmpfiles.rules = [
+      "d ${userHome}/.pi 0755 ${user} ${group} -"
+      "d ${userHome}/.agents 0755 ${user} ${group} -"
+    ];
+
+    antob.persistence.home.directories = [
+      ".pi"
+      ".local/share/rtk"
+      ".local/state/workmux"
+      ".cache/workmux"
+      ".config/claude"
+    ];
   };
 }
