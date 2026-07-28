@@ -27,6 +27,8 @@ in
       addons.keyring = enabled;
     };
 
+    tools.atuin = enabled;
+
     cli-apps.llm-agents = enabled;
 
     services.tailscale = {
