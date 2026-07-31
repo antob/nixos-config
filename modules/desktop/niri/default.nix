@@ -335,6 +335,7 @@ in
             XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
             XF86AudioMicMute { spawn-sh "noctalia msg mic-mute"; }
             Print { spawn-sh "noctalia msg screenshot-region"; }
+            Shift+Print { spawn-sh "noctalia msg panel-toggle oldirtty/color_picker:panel"; }
             Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn-sh "noctalia msg caffeine-toggle"; }
             Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn-sh "noctalia msg panel-open control-center bluetooth"; }
             Mod+X hotkey-overlay-title="System menu" repeat=false { spawn-sh "noctalia msg panel-open session"; }
