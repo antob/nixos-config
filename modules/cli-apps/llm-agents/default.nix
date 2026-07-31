@@ -12,7 +12,6 @@ let
   user = config.antob.user.name;
   group = config.antob.user.group;
   userHome = "/home/${user}";
-  entryAfter = inputs.home-manager.lib.hm.dag.entryAfter;
   system = pkgs.stdenv.hostPlatform.system;
   llm-pkgs = inputs.llm-agents.packages.${system};
   jail = inputs.jail-nix.lib.extend {
@@ -155,10 +154,6 @@ in
         nerdfont: true
         worktree_dir: ./.worktrees
       '';
-
-      home.activation.piAgentLink = entryAfter [ "writeBoundary" ] ''
-        ln -sfn ${userHome}/.pi/agent/skills ${userHome}/.agents/skills
-      '';
     };
 
     fileSystems."${userHome}/.pi/agent" = {
@@ -169,7 +164,6 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${userHome}/.pi 0755 ${user} ${group} -"
-      "d ${userHome}/.agents 0755 ${user} ${group} -"
     ];
 
     antob.persistence.home.directories = [
