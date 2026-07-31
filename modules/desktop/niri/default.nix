@@ -15,7 +15,7 @@ let
   userHome = "/home/${userName}";
 
   dmsEnabled = config.antob.desktop.addons.dms-shell.enable;
-  noctaliaEnabled = config.antob.desktop.addons.noctalia-shell.enable;
+  noctaliaEnabled = config.antob.desktop.addons.noctalia.enable;
 
   terminal = "${pkgs.kitty}/bin/kitty";
   tmuxTerminal = "${pkgs.kitty}/bin/kitty";
@@ -49,8 +49,7 @@ in
       desktop.addons = {
         gtk = enabled;
         nautilus = enabled;
-        # dms-shell = enabled;
-        noctalia-shell = enabled;
+        noctalia = enabled;
         rofi = {
           enable = true;
           launchPrefix = "niri msg action spawn -- ";

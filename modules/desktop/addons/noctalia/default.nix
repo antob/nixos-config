@@ -8,11 +8,11 @@
 
 with lib;
 let
-  cfg = config.antob.desktop.addons.noctalia-shell;
+  cfg = config.antob.desktop.addons.noctalia;
 in
 {
-  options.antob.desktop.addons.noctalia-shell = with types; {
-    enable = mkEnableOption "Enable Noctalia shell.";
+  options.antob.desktop.addons.noctalia = with types; {
+    enable = mkEnableOption "Enable Noctalia.";
     enableCache = mkEnableOption "Enable Noctalia shell build cache.";
   };
 
@@ -45,6 +45,7 @@ in
         slurp
         wf-recorder
         wl-clipboard
+        hyprpicker
         tesseract
         imagemagick
         zbar
