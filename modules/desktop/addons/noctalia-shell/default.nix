@@ -1,4 +1,3 @@
-# noctalia-shell ipc call state all | jq .settings > modules/desktop/addons/noctalia-shell/settings.json
 {
   config,
   lib,
@@ -32,9 +31,9 @@ in
           inputs.noctalia.homeModules.default
         ];
 
-        programs.noctalia-shell = {
+        programs.noctalia = {
           enable = true;
-          # settings = ./settings.json;
+          # settings = ./settings.toml;
         };
       };
 
@@ -58,7 +57,7 @@ in
       ];
 
       antob.persistence.home.directories = [
-        ".config/noctalia"
+        ".local/state/noctalia"
       ];
     })
   ];

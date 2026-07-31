@@ -74,12 +74,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Noctalia Shell
-    noctalia = {
-      # url = "github:noctalia-dev/noctalia-shell"; # v5 alpha
-      url = "github:noctalia-dev/noctalia/legacy-v4";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Noctalia
+    noctalia.url = "github:noctalia-dev/noctalia/cachix";
 
     # DMS plugins
     dms-plugin-registry = {

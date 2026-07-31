@@ -328,18 +328,18 @@ in
           '')
           (lib.optionalString noctaliaEnabled /* kdl */ ''
             // Noctalia bindings
-            XF86AudioRaiseVolume { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
-            XF86AudioLowerVolume { spawn "noctalia-shell" "ipc" "call" "volume" "decrease"; }
-            XF86AudioMute { spawn "noctalia-shell" "ipc" "call" "volume" "muteOutput"; }
-            XF86MonBrightnessUp { spawn "noctalia-shell" "ipc" "call" "brightness" "increase"; }
-            XF86MonBrightnessDown { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
-            XF86AudioMicMute { spawn "noctalia-shell" "ipc" "call" "volume" "muteInput"; }
-            Print { spawn-sh "grim -g \"$(slurp)\" - | swappy -f -"; }
-            Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn "noctalia-shell" "ipc" "call" "idleInhibitor" "toggle"; }
-            Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn "noctalia-shell" "ipc" "call" "bluetooth" "togglePanel"; }
-            Mod+X hotkey-overlay-title="System menu" repeat=false { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
-            Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-            Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+            XF86AudioRaiseVolume { spawn-sh "noctalia msg volume-up"; }
+            XF86AudioLowerVolume { spawn-sh "noctalia msg volume-down"; }
+            XF86AudioMute { spawn-sh "noctalia msg volume-mute"; }
+            XF86MonBrightnessUp { spawn-sh "noctalia msg brightness-up"; }
+            XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
+            XF86AudioMicMute { spawn-sh "noctalia msg mic-mute"; }
+            Print { spawn-sh "noctalia msg screenshot-region"; }
+            Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn-sh "noctalia msg caffeine-toggle"; }
+            Mod+B hotkey-overlay-title="Bluetooth" repeat=false { spawn-sh "noctalia msg panel-open control-center bluetooth"; }
+            Mod+X hotkey-overlay-title="System menu" repeat=false { spawn-sh "noctalia msg panel-open session"; }
+            Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn-sh "noctalia msg session lock"; }
+            Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn-sh "noctalia msg settings-toggle"; }
             Mod+Ctrl+P hotkey-overlay-title="Display Manager" repeat=false { spawn "monique"; }
           '')
           " }"
@@ -364,12 +364,13 @@ in
 
             // Set the overview wallpaper on the backdrop.
             layer-rule {
-              match namespace="^noctalia-overview*"
+              match namespace="^noctalia-backdrop"
               place-within-backdrop true
             }
 
             window-rule {
               match app-id="com.github.monique"
+              match app-id="dev.noctalia.Noctalia"
               default-column-width { proportion 0.75; }
               default-window-height { proportion 0.70; }
               open-floating true
@@ -385,7 +386,7 @@ in
             include "monitors.kdl"
 
             // Launch Noctalia at startup
-            spawn-sh-at-startup "noctalia-shell"
+            spawn-at-startup "noctalia"
           '')
         ];
 
