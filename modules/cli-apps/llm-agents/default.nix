@@ -141,6 +141,7 @@ in
     ++ commonPkgs;
 
     environment.shellAliases = {
+      wm = "workmux";
       wt = "workmux";
     };
 
@@ -152,7 +153,14 @@ in
     antob.home.extraOptions = {
       xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
         nerdfont: true
-        worktree_dir: ./.worktrees
+        worktree_dir: .worktrees
+        agent: "pi"
+        auto_name:
+          command: "pi -p"
+          model: "openrouter/openai/gpt-4o-mini"
+        files:
+          symlink:
+            - node_modules
       '';
     };
 
