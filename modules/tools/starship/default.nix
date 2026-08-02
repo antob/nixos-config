@@ -44,6 +44,7 @@ in
           directory = {
             truncation_length = 2;
             truncation_symbol = "…/";
+            truncate_to_repo = false;
           };
 
           git_status = {
