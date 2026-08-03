@@ -97,6 +97,9 @@
       url = "github:jnsahaj/lumen";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Copyparty - A self-hosted file sharing web server
+    copyparty.url = "github:9001/copyparty";
   };
 
   outputs =

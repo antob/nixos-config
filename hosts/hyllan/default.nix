@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 
@@ -14,6 +15,7 @@ let
 in
 {
   imports = [
+    inputs.copyparty.nixosModules.default
     ./hardware.nix
     ../../modules
     ./msmtp.nix
@@ -33,6 +35,7 @@ in
     ./music-assistant.nix
     ./beszel.nix
     ./open-webui.nix
+    ./copyparty.nix
   ];
 
   antob = {
