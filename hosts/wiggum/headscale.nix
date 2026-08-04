@@ -35,7 +35,7 @@ let
       {
         action = "accept";
         src = [ "group:admins" ];
-        dst = [ "*" ];
+        dst = [ "autogroup:self" ];
         users = [ config.antob.user.name ];
       }
     ];

@@ -40,6 +40,7 @@ in
         allowPing = true;
       };
       nftables.enable = true;
+      useNetworkd = true;
       useDHCP = false;
       usePredictableInterfaceNames = false;
       hostName = cfg.hostName;

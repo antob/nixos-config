@@ -1,13 +1,11 @@
 {
   lib,
-  inputs,
   ...
 }:
 
 with lib;
 {
-  imports = with inputs; [
-    simple-nixos-mailserver.nixosModule
+  imports = [
     ./hardware.nix
     ../../modules
     ./fail2ban.nix
@@ -17,7 +15,7 @@ with lib;
 
   antob = {
     features = {
-      common = enabled;
+      common-minimal = enabled;
     };
 
     hardware.networking.enable = mkForce false;
@@ -40,6 +38,7 @@ with lib;
   # Networking and firewall
   networking = {
     hostName = "wiggum";
+    useNetworkd = true;
     firewall = {
       enable = true;
       allowPing = true;
@@ -66,6 +65,11 @@ with lib;
   boot.loader = {
     grub.enable = true;
     systemd-boot.enable = false;
+  };
+
+  location = {
+    latitude = 60.19;
+    longitude = 24.95;
   };
 
   # Sops secrets
