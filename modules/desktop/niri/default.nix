@@ -139,6 +139,7 @@ in
               QT_QPA_PLATFORM "wayland"
               QT_QPA_PLATFORMTHEME "gtk3"
               ELECTRON_OZONE_PLATFORM_HINT "auto"
+              GDK_BACKEND "wayland,x11,*"
             }
             window-rule {
               draw-border-with-background false

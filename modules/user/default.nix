@@ -59,7 +59,7 @@ in
     antob = {
       home.file = {
         ".face".source = cfg.icon;
-        "Pictures/${cfg.icon.fileName or (builtins.baseNameOf cfg.icon)}".source = cfg.icon;
+        "Pictures/${cfg.icon.fileName or (baseNameOf cfg.icon)}".source = cfg.icon;
       };
 
       persistence.home.directories = [
@@ -79,8 +79,15 @@ in
 
     environment.systemPackages = [ propagatedIcon ];
 
-    # Enable passwordless sudo for wheel group
-    security.sudo.wheelNeedsPassword = false;
+    security.sudo = {
+      # Enable passwordless sudo for wheel group
+      wheelNeedsPassword = false;
+
+      # Set the environment variables to keep when using sudo
+      extraConfig = ''
+        Defaults env_keep += "WAYLAND_DISPLAY XDG_RUNTIME_DIR GDK_BACKEND GDK_PIXBUF_MODULE_FILE XDG_DATA_DIRS"
+      '';
+    };
 
     users = {
       mutableUsers = false;
