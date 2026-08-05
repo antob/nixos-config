@@ -12,7 +12,8 @@
     nixpkgs-next.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # NixPkgs Unstable (kept one step behind)
-    nixpkgs-prev.url = "github:nixos/nixpkgs/e73de5be04e0eff4190a1432b946d469c794e7b4";
+    nixpkgs-prev.url = "github:nixos/nixpkgs/7c43f080a7f28b2774f3b3f43234ca11661bf334";
+    # nixpkgs-prev.url = "github:nixos/nixpkgs/e73de5be04e0eff4190a1432b946d469c794e7b4";
 
     # Home Manager
     home-manager = {
@@ -67,12 +68,6 @@
 
     # Hyprnix
     hyprnix.url = "github:hyprwm/hyprnix";
-
-    # MangoWC
-    mango = {
-      url = "github:DreamMaoMao/mango?ref=refs/tags/0.11.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # Noctalia
     noctalia.url = "github:noctalia-dev/noctalia/cachix";

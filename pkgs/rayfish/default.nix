@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rayfish/rayfish";
     license = lib.licenses.mpl20;
     mainProgram = "ray";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux;
   };
 }

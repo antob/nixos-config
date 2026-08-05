@@ -30,8 +30,6 @@ let
   cmd-launch-blankscreen = lib.getExe (pkgs.callPackage ../scripts/cmd-launch-blankscreen.nix { });
 in
 {
-  imports = [ inputs.mango.nixosModules.mango ];
-
   options.antob.desktop.mango = with types; {
     enable = mkEnableOption "Enable MangoWC.";
   };
