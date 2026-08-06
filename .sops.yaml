@@ -25,6 +25,8 @@ creation_rules:
           - *laptob_fw
           - *laptob
           - *desktob
+          - *hyllan
+          - *wiggum
   - path_regex: hosts/hyllan/secrets.yaml$
     key_groups:
       - pgp:
