@@ -81,7 +81,7 @@
             @from_router remote_ip 192.168.1.1
             abort @from_router
 
-            @public_ip not remote_ip 192.168.1.0/24 127.0.0.1/8 100.64.0.0/24
+            @public_ip not remote_ip 192.168.1.0/24 127.0.0.1/8 10.0.0.0/24 100.64.0.0/24
             abort @public_ip
           }
         '';

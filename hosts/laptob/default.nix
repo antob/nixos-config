@@ -30,9 +30,12 @@ in
 
     cli-apps.llm-agents = enabled;
 
-    services.tailscale = {
-      enable = true;
-      keyfile = secrets.tailscale_auth_key.path;
+    services = {
+      wireguard = {
+        enable = true;
+        address = "10.0.0.4/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
     };
 
     hardware.systemd-networking = {
@@ -62,7 +65,10 @@ in
   sops = {
     defaultSopsFile = ../common/secrets.yaml;
     secrets = {
-      tailscale_auth_key = { };
+      wg0_private_key = {
+        sopsFile = ./secrets.yaml;
+        owner = "systemd-network";
+      };
       github_copilot_token = {
         owner = "tob";
       };

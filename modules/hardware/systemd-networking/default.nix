@@ -85,7 +85,12 @@ in
 
     services.resolved.enable = true;
 
-    # Do not wait for network connectivity (will timeout on nixos-rebuild)
-    systemd.services.systemd-networkd-wait-online.enable = mkForce false;
+    # Wait for at least one link (wired or wireless) to be online before
+    # declaring the network ready.
+    systemd.network.wait-online = {
+      enable = true;
+      anyInterface = true;
+      timeout = 30;
+    };
   };
 }

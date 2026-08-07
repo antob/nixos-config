@@ -36,6 +36,7 @@ in
     ./beszel.nix
     ./open-webui.nix
     ./copyparty.nix
+    ./wireguard.nix
   ];
 
   antob = {
@@ -63,7 +64,6 @@ in
         address = "192.168.1.2/24";
         dns = [
           "192.168.1.4"
-          "1.1.1.1"
         ];
         gateway = "192.168.1.1";
       };
@@ -72,14 +72,6 @@ in
     monitoring = {
       emailFrom = "home@antob.se";
       emailTo = "tob@antob.se";
-    };
-
-    services.tailscale = {
-      enable = true;
-      keyfile = secrets.tailscale_auth_key.path;
-      extraUpFlags = [
-        "--advertise-routes=192.168.1.0/24"
-      ];
     };
   };
 
@@ -118,19 +110,6 @@ in
         rewrite / /admin
       '';
     };
-
-    # Configure UDP GRO forwarding
-    # See https://tailscale.com/s/ethtool-config-udp-gro
-    networkd-dispatcher = {
-      enable = true;
-      rules."50-tailscale" = {
-        onState = [ "routable" ];
-        script = ''
-          NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")
-          ${pkgs.ethtool}/bin/ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
-        '';
-      };
-    };
   };
 
   # Ensure folders in ZFS pool
@@ -150,7 +129,6 @@ in
     defaultSopsFile = ./secrets.yaml;
     secrets = {
       zfs_encryption_key = { };
-      tailscale_auth_key = { };
     };
   };
 

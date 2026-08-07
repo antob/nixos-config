@@ -47,9 +47,10 @@ in
         # host = "100.64.0.8";
         # openFirewall = true;
       };
-      tailscale = {
+      wireguard = {
         enable = true;
-        keyfile = secrets.tailscale_auth_key.path;
+        address = "10.0.0.3/24";
+        privateKeyFile = secrets.wg0_private_key.path;
       };
     };
 
@@ -112,10 +113,12 @@ in
   sops = {
     defaultSopsFile = ../common/secrets.yaml;
     secrets = {
-      tailscale_auth_key = { };
+      wg0_private_key = {
+        sopsFile = ./secrets.yaml;
+        owner = "systemd-network";
+      };
       github_copilot_token = {
         # The sops file can be also overwritten per secret...
-        # sopsFile = ./secrets.yaml;
         owner = "tob";
       };
       openrouter_api_key = {
