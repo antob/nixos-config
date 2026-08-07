@@ -31,10 +31,13 @@ in
 
     cli-apps.llm-agents = enabled;
 
-    services.wireguard = {
-      enable = true;
-      address = "10.0.0.4/24";
-      privateKeyFile = secrets.wg0_private_key.path;
+    services = {
+      wireguard = {
+        enable = true;
+        address = "10.0.0.4/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
+      tailscale.enable = true;
     };
 
     hardware.systemd-networking = {

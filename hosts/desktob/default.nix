@@ -52,6 +52,7 @@ in
         address = "10.0.0.3/24";
         privateKeyFile = secrets.wg0_private_key.path;
       };
+      tailscale.enable = true;
     };
 
     cli-apps = {
