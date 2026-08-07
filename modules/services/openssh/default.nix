@@ -15,6 +15,12 @@ in
     enable = mkBoolOpt false "Whether or not to configure OpenSSH support.";
     authorizedKeys = mkOpt (listOf str) [ default-key ] "The public keys to apply.";
     port = mkOpt port 2222 "The port to listen on (in addition to 22).";
+    listenAddresses =
+      mkOpt (listOf str) [ ]
+        "IP addresses the SSH daemon should listen on. Empty (default) listens on all addresses.";
+    interfaces =
+      mkOpt (listOf str) [ ]
+        "Network interfaces to restrict the SSH firewall rules to. Empty (default) opens the ports on all interfaces.";
     permitRootLogin = mkBoolOpt false "Whether or not to permit root login.";
   };
 
@@ -34,11 +40,33 @@ in
         22
         cfg.port
       ];
+
+      listenAddresses = lib.concatLists (
+        map (
+          addr:
+          map (port: { inherit addr port; }) [
+            22
+            cfg.port
+          ]
+        ) cfg.listenAddresses
+      );
     };
 
-    networking.firewall.allowedTCPPorts = [
-      22
-      cfg.port
+    networking.firewall = mkMerge [
+      (mkIf (cfg.interfaces == [ ]) {
+        allowedTCPPorts = [
+          22
+          cfg.port
+        ];
+      })
+      (mkIf (cfg.interfaces != [ ]) {
+        interfaces = genAttrs cfg.interfaces (name: {
+          allowedTCPPorts = [
+            22
+            cfg.port
+          ];
+        });
+      })
     ];
 
     # Solve common flakiness with SSH
