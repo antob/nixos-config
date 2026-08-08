@@ -34,13 +34,10 @@ in
       '';
     };
 
-    antob.persistence = {
-      home.directories = [
-        # ".config/opencode"
-        ".local/share/opencode"
-        ".local/state/opencode"
-        ".cache/opencode"
-      ];
-    };
+    antob.persistence.home.directories = [
+      ".local/share/opencode"
+      ".local/state/opencode"
+      ".cache/opencode"
+    ];
   };
 }

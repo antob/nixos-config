@@ -18,7 +18,7 @@ in
   config = mkIf cfg.enable {
     antob = {
       user.extraGroups = [ "networkmanager" ];
-      persistence = {
+      persistence.safe = {
         directories = [ "/etc/NetworkManager/system-connections" ];
         files = [ "/etc/ipsec.d/ipsec.nm-l2tp.secrets" ];
         home.directories = [ ".cert" ];

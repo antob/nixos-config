@@ -25,6 +25,6 @@ in
     };
 
     environment.systemPackages = with pkgs; [ seahorse ];
-    antob.persistence.home.directories = [ ".local/share/keyrings" ];
+    antob.persistence.safe.home.directories = [ ".local/share/keyrings" ];
   };
 }

@@ -98,7 +98,7 @@ in
         };
     };
 
-    antob.persistence.home.directories = [
+    antob.persistence.safe.home.directories = [
       {
         directory = ".gnupg";
         mode = "0700";

@@ -39,6 +39,6 @@ in
       networkmanager.unmanaged = [ "tailscale0" ];
     };
 
-    antob.persistence.directories = [ "/var/lib/tailscale" ];
+    antob.persistence.safe.directories = [ "/var/lib/tailscale" ];
   };
 }

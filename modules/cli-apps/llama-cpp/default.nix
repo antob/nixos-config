@@ -20,11 +20,9 @@ in
       cfg.package
     ];
 
-    antob.persistence = {
-      home.directories = [
-        ".cache/llama.cpp"
-        ".cache/huggingface"
-      ];
-    };
+    antob.persistence.home.directories = [
+      ".cache/llama.cpp"
+      ".cache/huggingface"
+    ];
   };
 }

@@ -14,7 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    antob.persistence.directories = [ "/var/lib/fprint" ];
+    antob.persistence.safe.directories = [ "/var/lib/fprint" ];
     services.fprintd.enable = true;
   };
 }

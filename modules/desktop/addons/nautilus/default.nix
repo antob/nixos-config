@@ -21,12 +21,10 @@ in
 
     services.gnome.sushi.enable = false;
 
-    antob.persistence.home = {
-      directories = [
-        ".local/share/nautilus"
-        ".config/gtk-3.0" # Bookmarks
-        ".config/dconf" # Settings
-      ];
-    };
+    antob.persistence.home.directories = [
+      ".local/share/nautilus"
+      ".config/gtk-3.0" # Bookmarks
+      ".config/dconf" # Settings
+    ];
   };
 }

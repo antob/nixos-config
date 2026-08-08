@@ -35,8 +35,7 @@ in
       };
     };
 
-    antob.persistence.home.directories = [
-      ".config/atuin"
+    antob.persistence.safe.home.directories = [
       ".local/share/atuin"
     ];
   };

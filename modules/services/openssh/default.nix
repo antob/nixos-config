@@ -114,7 +114,7 @@ in
         includes = [ "hosts" ];
       };
 
-      persistence.home.directories = [
+      persistence.safe.home.directories = [
         {
           directory = ".ssh";
           mode = "0700";

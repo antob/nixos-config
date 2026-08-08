@@ -51,6 +51,8 @@ in
         ".config/vice"
         ".RetroDebugger"
         ".C64Debugger"
+      ];
+      safe.home.directories = [
         ".aws"
       ];
     };

@@ -30,7 +30,7 @@ in
         avahi.enable = mkForce false;
         networkd-vpn.enable = cfg.enableVpn;
       };
-      persistence.directories = mkIf cfg.enableWireless [ "/var/lib/iwd" ];
+      persistence.safe.directories = mkIf cfg.enableWireless [ "/var/lib/iwd" ];
     };
 
     # Networking and firewall

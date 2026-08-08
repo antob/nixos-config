@@ -30,9 +30,7 @@ in
       ];
     };
 
-    antob.persistence.home.directories = [
-      ".config/syncthing"
-      ".local/share/syncthing"
+    antob.persistence.safe.home.directories = [
       ".local/state/syncthing"
     ];
   };

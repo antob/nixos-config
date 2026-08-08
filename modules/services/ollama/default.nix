@@ -31,8 +31,6 @@ in
 
     environment.sessionVariables.OLLAMA_HOST = cfg.host;
 
-    antob.persistence = {
-      directories = [ "/var/lib/private/ollama" ];
-    };
+    antob.persistence.directories = [ "/var/lib/private/ollama" ];
   };
 }

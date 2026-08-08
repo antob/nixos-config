@@ -87,6 +87,8 @@ in
         # ".nuget"
         # ".microsoft"
         # ".dotnet"
+      ];
+      safe.home.directories = [
         ".aws"
       ];
     };
