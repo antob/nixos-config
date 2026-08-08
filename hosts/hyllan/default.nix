@@ -44,6 +44,12 @@ in
       common = enabled;
     };
 
+    tools.atuin = {
+      enable = true;
+      autoSync = false;
+      filterMode = "host";
+    };
+
     system.zfs = {
       enable = true;
       pools = [ "zpool" ];
