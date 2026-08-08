@@ -37,6 +37,7 @@ in
     ./open-webui.nix
     ./copyparty.nix
     ./wireguard.nix
+    ./backup.nix
   ];
 
   antob = {
