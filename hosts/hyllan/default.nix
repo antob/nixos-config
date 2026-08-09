@@ -11,13 +11,11 @@ let
   monCfg = config.antob.monitoring;
   emailFrom = monCfg.emailFrom;
   emailTo = monCfg.emailTo;
-  secrets = config.sops.secrets;
 in
 {
   imports = [
     inputs.copyparty.nixosModules.default
     ./hardware.nix
-    ../../modules
     ./msmtp.nix
     ./caddy.nix
     ./podman.nix

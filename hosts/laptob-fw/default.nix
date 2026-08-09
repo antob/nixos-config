@@ -13,7 +13,6 @@ in
   imports = with inputs; [
     nur.modules.nixos.default
     ./hardware.nix
-    ../../modules
   ];
 
   antob = {

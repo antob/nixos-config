@@ -9,7 +9,6 @@ with lib;
 {
   imports = [
     (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
-    ../../modules
   ];
 
   # `install-iso` adds wireless support that

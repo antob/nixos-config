@@ -11,7 +11,6 @@ with lib;
   imports = with inputs; [
     (modulesPath + "/installer/cd-dvd/installation-cd-graphical-base.nix")
     nur.modules.nixos.default
-    ../../modules
   ];
 
   # `install-iso` adds wireless support that

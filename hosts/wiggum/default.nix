@@ -11,7 +11,6 @@ in
 {
   imports = [
     ./hardware.nix
-    ../../modules
     ./fail2ban.nix
     ./caddy.nix
   ];
