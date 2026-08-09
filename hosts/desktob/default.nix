@@ -53,6 +53,13 @@ in
         privateKeyFile = secrets.wg0_private_key.path;
       };
       tailscale.enable = true;
+      restic-backup = {
+        enable = true;
+        paths = [
+          "/persist/safe"
+        ];
+        passwordFile = secrets.restic_client_backup_password.path;
+      };
     };
 
     cli-apps = {
@@ -120,8 +127,8 @@ in
         sopsFile = ./secrets.yaml;
         owner = "systemd-network";
       };
+      restic_client_backup_password = { };
       github_copilot_token = {
-        # The sops file can be also overwritten per secret...
         owner = "tob";
       };
       openrouter_api_key = {

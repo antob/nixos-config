@@ -79,6 +79,9 @@ in
       name = "private_share";
     }
     {
+      name = "restic-server";
+    }
+    {
       name = "syncthing";
       excludes = [
         "/services/syncthing/Projects"

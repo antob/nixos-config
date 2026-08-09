@@ -38,6 +38,7 @@ in
     ./copyparty.nix
     ./wireguard.nix
     ./backup.nix
+    ./restic-server.nix
   ];
 
   antob = {

@@ -38,6 +38,13 @@ in
         privateKeyFile = secrets.wg0_private_key.path;
       };
       tailscale.enable = true;
+      restic-backup = {
+        enable = true;
+        paths = [
+          "/nix/persist/safe"
+        ];
+        passwordFile = secrets.restic_client_backup_password.path;
+      };
     };
 
     hardware.systemd-networking = {
@@ -85,6 +92,7 @@ in
         sopsFile = ./secrets.yaml;
         owner = "systemd-network";
       };
+      restic_client_backup_password = { };
       github_copilot_token = {
         owner = "tob";
       };
