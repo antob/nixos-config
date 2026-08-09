@@ -6,13 +6,10 @@
   ...
 }:
 
-let
-  inherit (inputs) nixos-hardware;
-in
 {
-  imports = with nixos-hardware.nixosModules; [
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    framework-13-7040-amd
+    inputs.nixos-hardware.nixosModules.framework-13-7040-amd
     ./disk-config.nix
   ];
 

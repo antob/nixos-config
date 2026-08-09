@@ -7,9 +7,9 @@
 }:
 
 {
-  imports = with inputs.nixos-hardware.nixosModules; [
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    framework-intel-core-ultra-series3
+    inputs.nixos-hardware.nixosModules.framework-intel-core-ultra-series3
     ./disk-config.nix
   ];
 

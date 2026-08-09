@@ -6,13 +6,10 @@
   ...
 }:
 
-let
-  inherit (inputs) nixos-hardware;
-in
 {
-  imports = with nixos-hardware.nixosModules; [
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    framework-desktop-amd-ai-max-300-series
+    inputs.nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series
     ./disk-config.nix
   ];
 
