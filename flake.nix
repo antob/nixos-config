@@ -95,6 +95,9 @@
 
     # Copyparty - A self-hosted file sharing web server
     copyparty.url = "github:9001/copyparty";
+
+    # PiKVM
+    kvmd.url = "github:aostanin/kvmd.nix";
   };
 
   outputs =

@@ -90,6 +90,11 @@ in
             PublicKey = "70PciNESmE7cvtPuIORr/2paDCoTgokWoZbvblHyZGI=";
             AllowedIPs = [ "10.0.0.6" ];
           }
+          # PiKVM
+          {
+            PublicKey = "w4KKlllk8xpQXoijHViqdefKw9Ilwcl9LJt7emP6GHg=";
+            AllowedIPs = [ "10.0.0.7" ];
+          }
         ];
       };
     };

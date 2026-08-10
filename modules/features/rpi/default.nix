@@ -110,6 +110,7 @@ in
     ];
 
     nix.settings.filter-syscalls = false;
+    documentation.enable = lib.mkDefault false;
 
     # Bootloader.
     boot.loader.systemd-boot.enable = false;

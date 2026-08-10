@@ -3,11 +3,12 @@
 # # User ssh-to-pgp
 # $ nix shell nixpkgs#ssh-to-pgp
 # # Get server public key and fingerprint. Add fingerprint to this file.
-# $ ssh hyllan.lan "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o hyllan.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
-# => 26ed358df14249befc3b72618ff9d36f72f3e498
+# $ ssh hyllan.lan "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o hosts/hyllan/public_key.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
+# => 26ed358df14249befc3b72618ff9d36f72f3e498 # Add this to keys list below
 # # Import server public key
-# $ gpg --import hyllan.asc #
-# $ exit
+# $ gpg --import hosts/hyllan/public_key.asc
+# # Re-encrypt common secrets to include new key
+# $ sops updatekeys hosts/common/secrets.yaml
 # ```
 keys:
   - &admin A5D2C0275BBB60F60770159EC457E72EEC222C29
@@ -16,6 +17,7 @@ keys:
   - &desktob d0e37ed077fd839b70aa5e519d0652b758a631f8
   - &hyllan 26ed358df14249befc3b72618ff9d36f72f3e498
   - &wiggum 63195e56e676314ea266f7c2d4ea7781a7bada58
+  - &pikvm be6a80f40335f59e9d4fe001ad1dbd2e3da906d8
 
 creation_rules:
   - path_regex: hosts/common/secrets.yaml$
@@ -27,6 +29,7 @@ creation_rules:
           - *desktob
           - *hyllan
           - *wiggum
+          - *pikvm
   - path_regex: hosts/hyllan/secrets.yaml$
     key_groups:
       - pgp:
@@ -52,3 +55,8 @@ creation_rules:
       - pgp:
           - *admin
           - *wiggum
+  - path_regex: hosts/pikvm/secrets.yaml$
+    key_groups:
+      - pgp:
+          - *admin
+          - *pikvm
