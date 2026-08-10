@@ -10,6 +10,7 @@ in
 {
   options.antob.cli-apps.neovim = with types; {
     enable = mkEnableOption "Whether or not to enable neovim";
+    minimal = mkBoolOpt false "Whether or not to only do minimal install.";
   };
 
   config = mkIf cfg.enable {
@@ -18,20 +19,21 @@ in
         ./options.nix
         ./utils.nix
         ./colorscheme.nix
-        ./diagnostic.nix
         ./autocmd.nix
         ./filetypes.nix
         ./keymaps.nix
-        ./lsp
         ./plugins
+      ]
+      ++ lib.optionals (!cfg.minimal) [
         ./syntax
+        ./diagnostic.nix
+        ./lsp
       ];
-
       programs.neovim = {
         enable = true;
         vimAlias = true;
-        withRuby = true;
-        withPython3 = true;
+        withRuby = !cfg.minimal;
+        withPython3 = !cfg.minimal;
       };
     };
   };
