@@ -41,6 +41,7 @@ in
       };
       nftables.enable = true;
       useNetworkd = true;
+      networkmanager.enable = false;
       useDHCP = false;
       usePredictableInterfaceNames = false;
       hostName = cfg.hostName;
