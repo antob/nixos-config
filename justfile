@@ -29,6 +29,10 @@ deploy flake host mode="switch": (_nixos-rebuild mode flake host)
 iso type="install":
     nix build .#nixosConfigurations.{{ type }}-iso.config.system.build.isoImage
 
+# Build Raspberry Pi SD image
+build-pi-sd flake:
+    nix build .#nixosConfigurations.{{ flake }}.config.system.build.sdImage
+
 # Install flake to remote host
 install flake host *ARGS:
     nixos-anywhere --flake .#{{ flake }} {{ host }} {{ ARGS }}

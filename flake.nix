@@ -108,11 +108,8 @@
       lib = import ./lib { inherit (nixpkgs) lib; };
 
       systems = [
-        "aarch64-linux"
-        "i686-linux"
         "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
+        "aarch64-linux"
       ];
 
       forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
@@ -192,6 +189,22 @@
           specialArgs = { inherit inputs outputs lib; };
           modules = commonModules ++ [
             ./hosts/laptob-qemu
+          ];
+        };
+
+        pihole = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          system = "aarch64-linux";
+          modules = commonModules ++ [
+            ./hosts/pihole
+          ];
+        };
+
+        pikvm = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          system = "aarch64-linux";
+          modules = commonModules ++ [
+            ./hosts/pikvm
           ];
         };
       };

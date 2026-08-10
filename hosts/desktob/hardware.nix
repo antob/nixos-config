@@ -44,6 +44,9 @@
       "amd_iommu=off" # Disables IOMMU for lower latency
       "btusb.enable_autosuspend=0" # Prevent BT mouse sleep
     ];
+
+    # Enable emulated systems for cross-compilation
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   # Mount data disk
