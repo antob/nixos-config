@@ -2,7 +2,7 @@
 
 let
   secrets = config.sops.secrets;
-  iPhoneIp = "10.0.0.5";
+  iPhoneIp = "10.64.1.8";
 in
 {
   environment.systemPackages = [
@@ -23,12 +23,12 @@ in
         [Interface]
         PrivateKey = $(cat "$2")
         Address = $1
-        DNS = 10.0.0.6
+        DNS = 10.64.1.4
 
         [Peer]
         PublicKey = EvX7LhoS7FH6OI/EZBX4OPYnMk5ojKRvA/7Iu87FSnA=
         Endpoint = $endpoint:51820
-        AllowedIPs = 10.0.0.0/24
+        AllowedIPs = 10.64.1.0/24
         PersistentKeepalive = 25
       EOF
       )"
@@ -65,43 +65,43 @@ in
           ListenPort = 51820;
         };
         wireguardPeers = [
+          # PiKVM
+          {
+            PublicKey = "w4KKlllk8xpQXoijHViqdefKw9Ilwcl9LJt7emP6GHg=";
+            AllowedIPs = [ "10.64.1.3" ];
+          }
+          # Pi-hole
+          {
+            PublicKey = "70PciNESmE7cvtPuIORr/2paDCoTgokWoZbvblHyZGI=";
+            AllowedIPs = [ "10.64.1.4" ];
+          }
           # Wiggum
           {
             PublicKey = "dg98PnxFsAP04LS6m4HK/2knuqhlYMfNxtuaYH/YDHA=";
-            AllowedIPs = [ "10.0.0.2" ];
+            AllowedIPs = [ "10.64.1.5" ];
           }
           # Desktob
           {
             PublicKey = "bnsImaGQClT8/kL/4BoyOcpmtlXi6deeyZeOJxiGljE=";
-            AllowedIPs = [ "10.0.0.3" ];
+            AllowedIPs = [ "10.64.1.6" ];
           }
           # Laptob-fw
           {
             PublicKey = "9z3cCj7FV6S4JWhslfipclPrErGYjOvYGu3JJQ8Od0k=";
-            AllowedIPs = [ "10.0.0.4" ];
+            AllowedIPs = [ "10.64.1.7" ];
           }
           # iPhone
           {
             PublicKey = "0scRw9cc8EKrjajRUYRcAsB/Gc2Pj1ww84Ot5/0bWmo=";
             AllowedIPs = [ iPhoneIp ];
           }
-          # Pi-hole
-          {
-            PublicKey = "70PciNESmE7cvtPuIORr/2paDCoTgokWoZbvblHyZGI=";
-            AllowedIPs = [ "10.0.0.6" ];
-          }
-          # PiKVM
-          {
-            PublicKey = "w4KKlllk8xpQXoijHViqdefKw9Ilwcl9LJt7emP6GHg=";
-            AllowedIPs = [ "10.0.0.7" ];
-          }
         ];
       };
     };
     networks.wg0 = {
       matchConfig.Name = "wg0";
-      address = [ "10.0.0.1/24" ];
-      dns = [ "10.0.0.6" ];
+      address = [ "10.64.1.2/24" ];
+      dns = [ "10.64.1.4" ];
       networkConfig = {
         IPMasquerade = "ipv4";
         IPv4Forwarding = true;

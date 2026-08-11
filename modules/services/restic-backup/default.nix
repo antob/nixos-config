@@ -10,7 +10,7 @@ in
 {
   options.antob.services.restic-backup = with types; {
     enable = mkEnableOption "Whether to back up this machine to the restic server.";
-    serverAddress = mkOpt str "10.0.0.1" "Address of the restic REST server.";
+    serverAddress = mkOpt str "10.64.1.2" "Address of the restic REST server.";
     serverPort = mkOpt port 8000 "Port of the restic REST server.";
     repoName =
       mkOpt str config.networking.hostName

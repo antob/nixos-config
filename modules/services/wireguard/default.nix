@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "Whether or not to enable Wireguard.";
     privateKeyFile = mkOpt str "" "Path to this node's WireGuard private key file.";
     address = mkOpt str "" "IP address (CIDR) of this node in the mesh, e.g. 10.9.0.1/24.";
-    dns = mkOpt str "10.0.0.6" "DNS server used to resolve tunnel-scoped domains via wg0.";
+    dns = mkOpt str "10.64.1.4" "DNS server used to resolve tunnel-scoped domains via wg0.";
     domains = mkOpt (listOf str) [
       "~antob.net"
     ] "Route-only routing domains resolved through the tunnel.";
@@ -43,7 +43,7 @@ in
           {
             publicKey = "EvX7LhoS7FH6OI/EZBX4OPYnMk5ojKRvA/7Iu87FSnA=";
             allowedIPs = [
-              "10.0.0.0/24"
+              "10.64.1.0/24"
             ];
             endpoint = "wg.antob.se:51820";
             persistentKeepalive = 25;

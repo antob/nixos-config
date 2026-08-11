@@ -33,7 +33,7 @@ in
     services = {
       wireguard = {
         enable = true;
-        address = "10.0.0.4/24";
+        address = "10.64.1.7/24";
         privateKeyFile = secrets.wg0_private_key.path;
       };
       tailscale.enable = true;

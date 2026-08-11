@@ -25,12 +25,12 @@ in
     services = {
       openssh = {
         enable = true;
-        listenAddresses = [ "10.0.0.2" ]; # bind to the wg0 IP
+        listenAddresses = [ "10.64.1.5" ]; # bind to the wg0 IP
         interfaces = [ "wg0" ]; # open firewall only on wg0
       };
       wireguard = {
         enable = true;
-        address = "10.0.0.2/24";
+        address = "10.64.1.5/24";
         privateKeyFile = secrets.wg0_private_key.path;
       };
     };
