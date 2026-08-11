@@ -37,6 +37,7 @@ in
     ./wireguard.nix
     ./backup.nix
     ./restic-server.nix
+    ./nix-cache.nix
   ];
 
   antob = {
