@@ -44,8 +44,4 @@ in
   networking.firewall.allowedTCPPorts = [ port ];
 
   sops.secrets.vaultwarden_env_variables = { };
-
-  systemd.tmpfiles.rules = [
-    "d ${dataDir} 0750 ${config.users.users.vaultwarden.name} ${config.users.groups.vaultwarden.name} -"
-  ];
 }
