@@ -1403,13 +1403,13 @@
       "locked": {
         "lastModified": 1785807953,
         "narHash": "sha256-rXO+UsZ+dlCf1Raxk9J5m44HygGkKDeN7gh14OjQwU0=",
-        "owner": "aostanin",
+        "owner": "antob",
         "repo": "kvmd.nix",
         "rev": "4cc28dc16f5fb254cc4e25d639cc5bef221fef60",
         "type": "github"
       },
       "original": {
-        "owner": "aostanin",
+        "owner": "antob",
         "repo": "kvmd.nix",
         "type": "github"
       }

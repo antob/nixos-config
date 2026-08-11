@@ -97,7 +97,7 @@
     copyparty.url = "github:9001/copyparty";
 
     # PiKVM
-    kvmd.url = "github:aostanin/kvmd.nix";
+    kvmd.url = "github:antob/kvmd.nix";
   };
 
   outputs =

@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   inputs,
   ...
 }:
@@ -43,8 +44,12 @@ in
   services.kvmd = {
     enable = true;
     janus.enable = true;
-    htpasswdFile = secrets.pikvm_gui_password.path;
+    # Install apacheHttpd for htpasswd command
+    # htpasswd -5 -c filepath username
+    htpasswdFile = secrets.pikvm_gui_htpasswd.path;
   };
+
+  systemd.network.wait-online.enable = mkForce false;
 
   # Sops secrets
   sops = {
@@ -53,7 +58,9 @@ in
       wg0_private_key = {
         owner = "systemd-network";
       };
-      pikvm_gui_password = { };
+      pikvm_gui_htpasswd = {
+        owner = "kvmd";
+      };
     };
   };
 
