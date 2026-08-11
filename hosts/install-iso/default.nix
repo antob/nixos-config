@@ -74,7 +74,7 @@ with lib;
           catppuccin = {
             src = builtins.fetchurl {
               url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
-              sha256 = "sha256:1algv6hb3sz02cy6y3hnxpa61qi3nanqg39gsgmjys62yc3xngj6";
+              sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
               name = "catppuccin.tmTheme";
             };
           };
