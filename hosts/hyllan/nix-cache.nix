@@ -15,7 +15,7 @@ in
       bindAddress = "127.0.0.1";
       port = port;
       secretKeyFile = secrets.nix-cache-private-key.path;
-      extraParams = "--priority 30";
+      extraParams = "--priority 50";
     };
 
     caddy.antobProxies."${subdomain}" = {

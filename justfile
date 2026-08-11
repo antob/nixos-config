@@ -103,7 +103,8 @@ repair-store *paths:
 ###################################
 # Internal recipes
 ###################################
+default_subst := env('DEFAULT_SUBST', '')
 
 # generic nixos-rebuild
 _nixos-rebuild mode flake="" host="":
-    nixos-rebuild {{ mode }} --flake .#{{ if flake == "" { `hostname` } else { flake } }} --sudo {{ if host == "" { "" } else { "--target-host " + host } }}
+    nixos-rebuild {{ mode }} --flake .#{{ if flake == "" { `hostname` } else { flake } }} --sudo {{ if host == "" { "" } else { "--target-host " + host } }} {{ if default_subst == "" { "" } else { "--option substituters https://cache.nixos.org" } }}
