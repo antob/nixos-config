@@ -34,6 +34,13 @@ in
 
   sops.secrets.nix-cache-private-key = { };
 
+  # Configure nix to allow building as the nix-serve user.
+  # `qemu-user` is needed to build packages for other architectures.
+  nix.settings = {
+    extra-sandbox-paths = [ "${pkgs.qemu-user}" ];
+    trusted-users = [ user ];
+  };
+
   # Manually create the nix-serve user and group to be able to build as that user on hyllan.
   systemd.services.nix-serve.serviceConfig.DynamicUser = lib.mkForce false;
   users.groups."${group}" = { };
