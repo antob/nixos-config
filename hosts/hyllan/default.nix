@@ -110,12 +110,9 @@ in
       };
     };
 
-    caddy.antobProxies.pihole = {
+    caddy.antobProxies."pihole-web" = {
       hostName = "192.168.1.4";
       port = 80;
-      extraHandleConfig = ''
-        rewrite / /admin
-      '';
     };
   };
 
