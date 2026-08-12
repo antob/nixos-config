@@ -45,7 +45,6 @@ in
       useDHCP = false;
       usePredictableInterfaceNames = false;
       hostName = cfg.hostName;
-      # Derived from `head -c 8 /etc/machine-id`
       hostId = cfg.hostId;
 
       # Wireless config

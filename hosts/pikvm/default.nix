@@ -20,9 +20,9 @@ in
     features.rpi = enabled;
     hardware.systemd-networking = {
       enable = true;
+      hostName = "pikvm";
       enableWireless = false;
       enableVpn = false;
-      hostName = "pikvm";
       # Derived from `head -c 8 /etc/machine-id`
       hostId = "e3df0975";
       staticIp = {
