@@ -23,10 +23,10 @@ in
       enableZshIntegration = true;
     };
 
-    nix.extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
-    '';
+    nix.settings = {
+      keep-outputs = true;
+      keep-derivations = true;
+    };
 
     antob.persistence.home.directories = [ ".local/share/direnv" ];
   };
