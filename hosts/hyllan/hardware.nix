@@ -29,6 +29,9 @@
     kernelParams = [
       "nohibernate"
     ];
+
+    # Enable emulated systems for cross-compilation
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   fileSystems = {
