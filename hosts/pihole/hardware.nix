@@ -12,10 +12,13 @@ with lib;
 
   sdImage.compressImage = false;
 
-  boot.supportedFilesystems = mkForce [
-    "vfat"
-    "ext4"
-  ];
+  boot = {
+    initrd.allowMissingModules = true;
+    supportedFilesystems = mkForce [
+      "vfat"
+      "ext4"
+    ];
+  };
 
   hardware.enableRedistributableFirmware = true;
   nixpkgs.hostPlatform = "aarch64-linux";

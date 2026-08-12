@@ -18,6 +18,7 @@ keys:
   - &hyllan 26ed358df14249befc3b72618ff9d36f72f3e498
   - &wiggum 63195e56e676314ea266f7c2d4ea7781a7bada58
   - &pikvm be6a80f40335f59e9d4fe001ad1dbd2e3da906d8
+  - &pihole 66ca420e1b65118bff214d00509ec5aed5fa6f86
 
 creation_rules:
   - path_regex: hosts/common/secrets.yaml$
@@ -30,6 +31,7 @@ creation_rules:
           - *hyllan
           - *wiggum
           - *pikvm
+          - *pihole
   - path_regex: hosts/hyllan/secrets.yaml$
     key_groups:
       - pgp:
@@ -60,3 +62,8 @@ creation_rules:
       - pgp:
           - *admin
           - *pikvm
+  - path_regex: hosts/pihole/secrets.yaml$
+    key_groups:
+      - pgp:
+          - *admin
+          - *pihole
