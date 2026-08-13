@@ -69,9 +69,6 @@
     # Hyprnix
     hyprnix.url = "github:hyprwm/hyprnix";
 
-    # Noctalia
-    noctalia.url = "github:noctalia-dev/noctalia/cachix";
-
     # DMS plugins
     dms-plugin-registry = {
       url = "github:AvengeMedia/dms-plugin-registry";
