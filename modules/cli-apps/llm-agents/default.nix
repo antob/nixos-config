@@ -81,12 +81,12 @@ let
     codebase-memory-mcp
   ];
 
-  claude-code-pkg =
+  pi-pkg =
     let
-      raw = llm-pkgs.claude-code;
+      raw = llm-pkgs.pi;
     in
-    pkgs.writeShellScriptBin "claude" ''
-      exec ${raw}/bin/claude --dangerously-skip-permissions "$@"
+    pkgs.writeShellScriptBin "pi" ''
+      exec ${raw}/bin/pi --approve "$@"
     '';
 
   # --- The Sandboxes ---
@@ -94,7 +94,7 @@ let
     {
       extraPkgs ? [ ],
     }:
-    jail "jpi" llm-pkgs.pi (
+    jail "jpi" pi-pkg (
       with jail.combinators;
       (
         commonJailOptions
@@ -106,6 +106,14 @@ let
         ]
       )
     );
+
+  claude-code-pkg =
+    let
+      raw = llm-pkgs.claude-code;
+    in
+    pkgs.writeShellScriptBin "claude" ''
+      exec ${raw}/bin/claude --dangerously-skip-permissions "$@"
+    '';
 
   makeJailedClaude =
     {
