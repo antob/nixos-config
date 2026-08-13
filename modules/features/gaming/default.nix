@@ -74,8 +74,8 @@ in
     # See https://github.com/NixOS/nixpkgs/issues/351516
     services.ananicy = {
       enable = true;
-      package = pkgs.ananicy-cpp;
-      rulesProvider = pkgs.ananicy-rules-cachyos;
+      package = pkgs.pkgs-prev.ananicy-cpp;
+      rulesProvider = pkgs.pkgs-prev.ananicy-rules-cachyos;
     };
 
     antob = {

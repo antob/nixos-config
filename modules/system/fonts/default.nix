@@ -46,7 +46,7 @@ in
           hack-font # Without nerd-fonts patch, for kitty
           roboto-mono
           monaspace
-          jetbrains-mono
+          pkgs-prev.jetbrains-mono
         ]
         ++ cfg.fonts;
     };

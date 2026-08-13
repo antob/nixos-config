@@ -26,8 +26,8 @@
     };
   };
 
-  nixpkgs-next = final: _: {
-    nixpkgs-next = import inputs.nixpkgs-next {
+  pkgs-next = final: _: {
+    pkgs-next = import inputs.nixpkgs-next {
       system = final.system;
       config = {
         allowUnfreePredicate = (pkg: true);
@@ -36,8 +36,8 @@
     };
   };
 
-  nixpkgs-prev = final: _: {
-    nixpkgs-prev = import inputs.nixpkgs-prev {
+  pkgs-prev = final: _: {
+    pkgs-prev = import inputs.nixpkgs-prev {
       system = final.system;
       config = {
         allowUnfreePredicate = (pkg: true);

@@ -44,8 +44,8 @@ in
         git:
           autoFetch: false
           overrideGpg: true
-          pagers:
-            - pager: delta --dark --paging=never
+          diffRenderers:
+            - command: delta --dark --paging=never
         update:
           method: never
         promptToReturnFromSubprocess: false
