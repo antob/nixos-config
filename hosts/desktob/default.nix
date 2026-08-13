@@ -72,7 +72,7 @@ in
         enable = true;
         package = pkgs.voxtype-vulkan;
       };
-      lumen = enabled;
+      # lumen = enabled;
     };
 
     hardware = {

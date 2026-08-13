@@ -36,7 +36,7 @@ in
         tmux = enabled;
         yazi = enabled;
         nix-search-tv = enabled;
-        sqlit = enabled;
+        # sqlit = enabled;
       };
 
       # virtualisation.podman = enable = mkDefault true;

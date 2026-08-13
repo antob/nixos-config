@@ -29,7 +29,7 @@ in
         neovim = enabled;
         tmux = enabled;
         yazi = enabled;
-        sqlit = enabled;
+        # sqlit = enabled;
       };
 
       hardware = {
