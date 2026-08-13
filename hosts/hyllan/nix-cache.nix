@@ -14,6 +14,47 @@ let
   dataDir = "/mnt/tank/services/nix-cache";
   user = "nix-serve";
   group = "nix-serve";
+
+  repoUrl = "https://github.com/antob/nixos-config";
+  workDir = "/tmp/nix-cache-build";
+  buildHosts = [
+    "desktob"
+    "laptob-fw"
+    "hyllan"
+    "wiggum"
+    "pihole"
+    "pikvm"
+  ];
+
+  # Nightly pre-build of the target hosts' toplevels into the cache store.
+  buildScript = pkgs.writeShellScript "nix-cache-build" ''
+    set -u
+    store="${dataDir}"
+    work="${workDir}"
+
+    rm -rf "$work"
+    if ! git clone --depth 1 --branch main "${repoUrl}" "$work"; then
+      echo "Failed to clone ${repoUrl}"
+      exit 1
+    fi
+    cd "$work"
+
+    if ! nix --store "$store" flake update; then
+      echo "Failed to update flake"
+      exit 1
+    fi
+
+    for host in ${lib.concatStringsSep " " buildHosts}; do
+      echo "=== Started build for host $host"
+      if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --no-link; then
+        echo "=== Build succeeded for host $host"
+      else
+        echo "=== Build failed for host $host"
+      fi
+    done
+
+    exit 0
+  '';
 in
 {
   services = {
@@ -58,5 +99,30 @@ in
 
   systemd.tmpfiles.rules = [
     "d ${dataDir} 0755 ${user} ${group} -"
+    "d ${workDir} 0755 ${user} ${group} -"
   ];
+
+  systemd.timers.nix-cache-build = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "03:00";
+    };
+  };
+
+  systemd.services.nix-cache-build = {
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    path = with pkgs; [
+      git
+      nix
+    ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = user;
+      Group = group;
+      TimeoutStartSec = "infinity";
+      ExecStart = buildScript;
+    };
+    unitConfig.RequiresMountsFor = [ dataDir ];
+  };
 }
