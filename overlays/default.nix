@@ -3,14 +3,15 @@
 }:
 {
   # For every flake input, aliases 'pkgs.inputs.${flake}' to
-  # 'inputs.${flake}.packages.${pkgs.system}' or
-  # 'inputs.${flake}.legacyPackages.${pkgs.system}'
+  # 'inputs.${flake}.packages.${pkgs.stdenv.hostPlatform.system}' or
+  # 'inputs.${flake}.legacyPackages.${pkgs.stdenv.hostPlatform.system}'
   flake-inputs = final: _: {
     inputs = builtins.mapAttrs (
       _: flake:
       let
-        legacyPackages = (flake.legacyPackages or { }).${final.system} or { };
-        packages = (flake.packages or { }).${final.system} or { };
+        system = final.stdenv.hostPlatform.system;
+        legacyPackages = (flake.legacyPackages or { }).${system} or { };
+        packages = (flake.packages or { }).${system} or { };
       in
       if legacyPackages != { } then legacyPackages else packages
     ) inputs;
@@ -18,7 +19,7 @@
 
   stable = final: _: {
     stable = import inputs.nixpkgs-stable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config = {
         allowUnfreePredicate = (pkg: true);
         allowUnfree = true;
@@ -28,7 +29,7 @@
 
   pkgs-next = final: _: {
     pkgs-next = import inputs.nixpkgs-next {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config = {
         allowUnfreePredicate = (pkg: true);
         allowUnfree = true;
@@ -38,7 +39,7 @@
 
   pkgs-prev = final: _: {
     pkgs-prev = import inputs.nixpkgs-prev {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config = {
         allowUnfreePredicate = (pkg: true);
         allowUnfree = true;
