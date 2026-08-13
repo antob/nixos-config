@@ -23,7 +23,7 @@ let
     "hyllan"
     "wiggum"
     "pihole"
-    "pikvm"
+    # "pikvm"
   ];
 
   # Nightly pre-build of the target hosts' toplevels into the cache store.
@@ -33,19 +33,21 @@ let
     work="${workDir}"
 
     rm -rf "$work"
+    echo "=== Fetching nixos-config from ${repoUrl} into $work"
     if ! git clone --depth 1 --branch main "${repoUrl}" "$work"; then
       echo "Failed to clone ${repoUrl}"
       exit 1
     fi
     cd "$work"
 
+    echo "=== Updating flake"
     if ! nix --store "$store" flake update; then
       echo "Failed to update flake"
       exit 1
     fi
 
     for host in ${lib.concatStringsSep " " buildHosts}; do
-      echo "=== Started build for host $host"
+      echo "=== Starting build for host $host"
       if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --no-link; then
         echo "=== Build succeeded for host $host"
       else
@@ -64,7 +66,7 @@ in
       bindAddress = "127.0.0.1";
       port = port;
       secretKeyFile = secrets.nix-cache-private-key.path;
-      extraParams = "--priority 50 --store ${dataDir}";
+      extraParams = "--priority 30 --store ${dataDir}";
     };
 
     caddy.antobProxies."${subdomain}" = {
