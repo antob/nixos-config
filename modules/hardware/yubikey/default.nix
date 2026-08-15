@@ -22,6 +22,7 @@ in
     services.udev.packages = with pkgs; [ yubikey-personalization ];
     environment.systemPackages = [
       reload-yubikey
+      pkgs.yubikey-manager
     ];
 
     services.udev.extraRules = ''
