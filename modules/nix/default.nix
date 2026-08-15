@@ -48,7 +48,11 @@ in
     '';
   };
 
-  sops.secrets.nix_access_tokens.sopsFile = ../../hosts/common/secrets.yaml;
+  sops.secrets.nix_access_tokens = {
+    sopsFile = ../../hosts/common/secrets.yaml;
+    group = "nixbld";
+    mode = "0440";
+  };
 
   antob.persistence.home.directories = [
     ".local/share/nix"

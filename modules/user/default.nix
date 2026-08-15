@@ -108,6 +108,7 @@ in
         extraGroups = [
           "wheel"
           "dialout"
+          "nixbld"
         ]
         ++ cfg.extraGroups;
       }

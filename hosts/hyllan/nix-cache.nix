@@ -88,8 +88,9 @@ in
   systemd.services.nix-serve.serviceConfig.DynamicUser = lib.mkForce false;
   users.groups."${group}" = { };
   users.users."${user}" = {
-    group = group;
     isNormalUser = true;
+    group = group;
+    extraGroups = [ "nixbld" ];
   };
 
   fileSystems = {
