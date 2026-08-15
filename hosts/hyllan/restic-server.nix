@@ -12,6 +12,7 @@ let
     lib.genAttrs names (name: {
       repository = "${dataDir}/${name}";
       passwordFile = secrets.restic_client_backup_password.path;
+      user = "restic";
       paths = null;
       pruneOpts = [
         "--keep-daily 7"
@@ -38,10 +39,14 @@ in
   networking.firewall.interfaces.wg0.allowedTCPPorts = [ 8000 ];
 
   # Retention backup repos runs server-side. Jobs are prune-only (paths = null).
-  services.restic.backups = mkResticBackups [ "desktob" ];
+  services.restic.backups = mkResticBackups [
+    "desktob"
+    "laptob-fw"
+  ];
 
   sops.secrets.restic_client_backup_password = {
     sopsFile = ../common/secrets.yaml;
+    owner = "restic";
   };
 
   fileSystems = {
