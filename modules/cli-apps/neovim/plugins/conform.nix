@@ -56,8 +56,6 @@
           prettier = {
             command = "${lib.getExe pkgs.prettier}",
             args = {
-              "--trailing-comma",
-              "none",
               "--stdin-filepath",
               "$FILENAME",
             },
@@ -86,6 +84,13 @@
               "--fix",
               "--stderr",
             },
+            -- Only run standardrb if the gem is actually available in the project
+            condition = function(_, ctx)
+              vim.fn.system(
+                "cd " .. vim.fn.shellescape(ctx.dirname) .. " && bundle exec standardrb --version >/dev/null 2>&1"
+              )
+              return vim.v.shell_error == 0
+            end,
           },
           herb_format = {
             command = "${pkgs.herb-tools}/bin/herb-format",
