@@ -1,5 +1,13 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 with lib;
+let
+  cfg = config.antob.cli-apps.neovim.plugins.llamaVim;
+in
 {
   options.antob.cli-apps.neovim.plugins.llamaVim = with types; {
     enable = mkBoolOpt false "Whether or not to install and configure llama-vim.";
