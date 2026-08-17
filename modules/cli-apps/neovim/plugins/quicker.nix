@@ -1,14 +1,15 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [
       quicker-nvim
     ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       vim.keymap.set("n", "<leader>q", function()
         require("quicker").toggle()
       end, {

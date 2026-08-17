@@ -73,6 +73,10 @@ in
         package = pkgs.voxtype-vulkan;
       };
       # lumen = enabled;
+      neovim.plugins = {
+        copilotLua.enable = true;
+        llamaVim.enable = false;
+      };
     };
 
     hardware = {

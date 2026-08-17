@@ -1,16 +1,17 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [
       luasnip
       friendly-snippets
       blink-cmp
     ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       require("luasnip.loaders.from_vscode").lazy_load()
       require("blink.cmp").setup({
         signature = { enabled = true },

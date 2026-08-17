@@ -1,12 +1,13 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [ gitsigns-nvim ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       require("gitsigns").setup({
         current_line_blame = true,
         current_line_blame_opts = {

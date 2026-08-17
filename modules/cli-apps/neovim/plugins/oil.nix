@@ -1,12 +1,13 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [ oil-nvim ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       require("oil").setup({
         default_file_explorer = true,
         lsp_file_methods = {

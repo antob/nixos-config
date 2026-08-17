@@ -1,11 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [
       snacks-nvim
     ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       require("snacks").setup({
         bigfile = { enabled = true },
         dashboard = { enabled = false },

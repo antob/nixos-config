@@ -1,15 +1,16 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [
       nvim-treesitter.withAllGrammars
       nvim-treesitter-textobjects
     ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       require("nvim-treesitter-textobjects").setup({
         select = {
           lookahead = true,

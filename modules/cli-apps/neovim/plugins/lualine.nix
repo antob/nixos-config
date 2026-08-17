@@ -1,12 +1,13 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [ lualine-nvim ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       local custom_theme = require("lualine.themes.ayu_mirage")
       -- custom_theme.normal.c.bg = "#292c3c"
       -- custom_theme.inactive.c.bg = "#292c3c"

@@ -1,14 +1,15 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  programs.neovim = {
+  antob.home.extraOptions.programs.neovim = {
     plugins = with pkgs.vimPlugins; [
       mini-nvim
     ];
 
-    initLua = /* lua */ ''
+    initLua = lib.mkOrder 200 /* lua */ ''
       require("mini.misc").setup({})
       require("mini.surround").setup({})
       -- require("mini.pairs").setup({})

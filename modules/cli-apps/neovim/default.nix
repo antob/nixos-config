@@ -13,6 +13,10 @@ in
     minimal = mkBoolOpt false "Whether or not to only do minimal install.";
   };
 
+  imports = [
+    ./plugins
+  ];
+
   config = mkIf cfg.enable {
     antob.home.extraOptions = {
       imports = [
@@ -22,7 +26,6 @@ in
         ./autocmd.nix
         ./filetypes.nix
         ./keymaps.nix
-        ./plugins
       ]
       ++ lib.optionals (!cfg.minimal) [
         ./syntax
