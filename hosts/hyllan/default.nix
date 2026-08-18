@@ -57,7 +57,13 @@ in
       auto-snapshot.enable = false;
     };
 
-    virtualisation.docker.storageDriver = "btrfs";
+    virtualisation = {
+      docker.enable = false;
+      docker.storageDriver = "btrfs";
+
+      podman.enable = true;
+      podman.storageDriver = "btrfs";
+    };
 
     hardware.systemd-networking = {
       enable = true;
