@@ -24,6 +24,11 @@ in
       environmentVariables = {
         OLLAMA_ORIGINS = "*";
         OLLAMA_KEEP_ALIVE = "1h";
+        OLLAMA_FLASH_ATTENTION = "1";
+        OLLAMA_KV_CACHE_TYPE = "f16";
+        OLLAMA_NUM_PARALLEL = "1";
+        OLLAMA_CONTEXT_LENGTH = "65536";
+        OLLAMA_MAX_LOADED_MODELS = "2";
       };
     };
 
