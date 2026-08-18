@@ -13,7 +13,7 @@ in
 {
   options.antob.services.openssh = with types; {
     enable = mkBoolOpt false "Whether or not to configure OpenSSH support.";
-    authorizedKeys = mkOpt (listOf str) [ defaultKey ] "The public keys to apply.";
+    authorizedKeys = mkOpt (listOf str) [ ] "The public keys to apply.";
     port = mkOpt port 2222 "The port to listen on (in addition to 22).";
     listenAddresses =
       mkOpt (listOf str) [ ]
@@ -115,7 +115,7 @@ in
         }
       ];
 
-      user.extraOptions.openssh.authorizedKeys.keys = cfg.authorizedKeys;
+      user.extraOptions.openssh.authorizedKeys.keys = [ defaultKey ] ++ cfg.authorizedKeys;
     };
   };
 }
