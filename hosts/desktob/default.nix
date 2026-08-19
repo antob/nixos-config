@@ -44,6 +44,7 @@ in
     services = {
       ollama = {
         enable = true;
+        package = pkgs.ollama-vulkan;
         # host = "100.64.0.8";
         # openFirewall = true;
       };
@@ -65,7 +66,7 @@ in
     cli-apps = {
       llama-cpp = {
         enable = true;
-        package = pkgs.llama-cpp-rocm;
+        package = pkgs.llama-cpp-vulkan;
       };
       llm-agents = enabled;
       voxtype = {

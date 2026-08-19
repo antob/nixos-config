@@ -12,6 +12,7 @@ in
 {
   options.antob.services.ollama = with types; {
     enable = mkEnableOption "Whether or not to enable Ollama.";
+    package = mkOpt package pkgs.ollama "The ollama package to use.";
     host = mkOpt str "127.0.0.1" "The host address which the ollama server HTTP interface listens to.";
     port = mkOpt int 11434 "Which port the ollama server listens to.";
     openFirewall = mkBoolOpt false "Whether or not to open the port in the firewall.";
@@ -20,7 +21,7 @@ in
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      package = pkgs.ollama-vulkan;
+      package = cfg.package;
       host = cfg.host;
       port = cfg.port;
       environmentVariables = {
