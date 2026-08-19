@@ -72,7 +72,7 @@ in
         enable = true;
         package = pkgs.voxtype-vulkan;
       };
-      # lumen = enabled;
+      lumen = enabled;
       neovim.plugins = {
         copilotLua.enable = true;
         llamaVim.enable = false;
@@ -86,7 +86,7 @@ in
         # Derived from `head -c 8 /etc/machine-id`
         hostId = "672fb36e";
       };
-      ddcutil = enabled;
+      # ddcutil = enabled;
     };
 
     persistence = {
