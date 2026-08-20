@@ -26,7 +26,10 @@ in
       };
 
       cli-apps = {
-        neovim = enabled;
+        neovim = {
+          enable = true;
+          minimal = true;
+        };
         tmux = enabled;
         yazi = enabled;
         # sqlit = enabled;

@@ -15,7 +15,7 @@ in
     model = mkOpt str "qwen2.5-coder-7B" "The model to use for completions.";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && !config.antob.cli-apps.neovim.minimal) {
     antob.home.extraOptions.programs.neovim = {
       plugins = with pkgs.vimPlugins; [
         llama-vim

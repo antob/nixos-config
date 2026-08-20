@@ -14,7 +14,7 @@ in
     enableAtStartup = mkBoolOpt true "Whether to start with inline suggestions enabled (maps to suggestion.enabled).";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && !config.antob.cli-apps.neovim.minimal) {
     antob.home.extraOptions.programs.neovim = {
       plugins = with pkgs.vimPlugins; [
         copilot-lua
