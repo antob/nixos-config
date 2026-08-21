@@ -3,16 +3,16 @@
 # Share needs ZFS managed mountpoint:
 # $ sudo zfs create -o mountpoint=/mnt/tank/share/public zpool/public_share
 #
-# Set share property:
-# $ sudo zfs set sharenfs="rw=192.168.1.0/24,all_squash" zpool/public_share
+# Set share property (WireGuard-only access over 10.64.1.0/24):
+# $ sudo zfs set sharenfs="rw=10.64.1.0/24,all_squash" zpool/public_share
 #
 # Set owner (root is squashed to nobody:nogroup)
 # $ sudo chown nobody:nogroup /mnt/tank/share/public
 #
-# Private share, specific user on specific host
+# Private share, WireGuard-only, restricted to desktob (10.64.1.6) and laptob-fw (10.64.1.7)
 # $ sudo zfs create -o mountpoint=/mnt/tank/share/private -o encryption=on -o keyformat=raw -o keylocation=file:///run/secrets/zfs_encryption_key zpool/private_share
 # $ sudo chown tob /mnt/tank/share/private
-# $ sudo zfs set sharenfs="rw=laptob,root_squash" zpool/private_share
+# $ sudo zfs set sharenfs="rw=10.64.1.6:10.64.1.7,root_squash" zpool/private_share
 #
 # Check exported shares:
 # $ showmount -e <nfs-server>
