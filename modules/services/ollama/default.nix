@@ -139,7 +139,6 @@ in
           esac
       }
 
-      _ollama
       compdef _ollama ollama
     '';
   };
