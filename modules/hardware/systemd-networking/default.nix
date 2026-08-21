@@ -63,7 +63,7 @@ in
       networks = {
         "10-lan" = {
           matchConfig.Name = "eth0";
-          networkConfig.DHCP = "yes";
+          networkConfig.DHCP = mkIf cfg.staticIp.enable "no";
           linkConfig.RequiredForOnline = "no";
 
           address = mkIf cfg.staticIp.enable [ cfg.staticIp.address ];
