@@ -143,7 +143,15 @@ in
     ];
 
     antob.persistence = {
-      directories = [ "/var/lib/chrony" ];
+      directories = [
+        {
+          directory = "/var/lib/chrony";
+          user = "chrony";
+          group = "chrony";
+          mode = "0750";
+        }
+      ];
+
       home.directories = [
         ".config/discord"
         ".config/irb"
