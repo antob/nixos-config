@@ -5,57 +5,96 @@ All custom options live under the `antob.*` namespace.
 
 ---
 
+## Where to Look (read this before scanning)
+
+- This repo is the source of truth for all config. Never run `find`, `ls -R`, or
+  `grep -r` across `/nix/store`, `/`, or the whole filesystem. Those trees are huge
+  and slow.
+- Do not build to resolve questions. `just build / switch / test / boot / deploy`
+  and `nixos-rebuild ...` write to the store and change running system state. Only
+  run them when the user explicitly asks you to. Never run them to inspect current
+  configuration.
+- `result` is an ignored symlink at the repo root pointing to the most recent local
+  build. The path encodes the host: `/nix/store/<hash>-nixos-system-<host>-...`.
+  Check it with `realpath result`, and trust it only if it names the host you are
+  working on (it may point to another host built previously). If it is missing or
+  names a different host, do not rebuild. Ask the user to build the host you need.
+- `flake.nix` declares the inputs/channels and which host subsystems they use.
+- `flake.lock` pins every input to a committed revision. For a one-off lookup:
+  ```bash
+  jq -r '.nodes.<name>.locked.rev' flake.lock   # e.g. nixpkgs, nixpkgs-stable
+  ```
+- `modules/`, `hosts/`, `pkgs/`, `overlays/`, and `lib/` hold the actual config.
+  Start there, never in the store. If you must touch `/nix/store`, start from the
+  `result` symlink or a concretely named store path, never from the `/nix/store`
+  root.
+
+---
+
 ## Build / Lint / Format Commands
 
 The primary task runner is `just` (see `justfile`).
 
-| Command | Description |
-|---|---|
-| `just build [host]` | Build current or named host config (`nixos-rebuild build`) |
-| `just switch [host]` | Apply config to running system (`nixos-rebuild switch`) |
-| `just test [host]` | Apply without creating boot entry (`nixos-rebuild test`) |
-| `just boot [host]` | Apply on next boot (`nixos-rebuild boot`) |
-| `just deploy <host> <target> [mode]` | Remote deploy via SSH |
-| `just fmt` | Format all `.nix` files (`nix fmt`, uses `nixfmt-tree`) |
-| `just iso [type]` | Build install or minimal ISO |
+| Command                            | Description                                                |
+| ---------------------------------- | ---------------------------------------------------------- |
+| `just build [host]`                | Build current or named host config (`nixos-rebuild build`) |
+| `just switch [host]`               | Apply config to running system (`nixos-rebuild switch`)      |
+| `just test [host]`                 | Apply without creating boot entry (`nixos-rebuild test`)     |
+| `just boot [host]`                 | Apply on next boot (`nixos-rebuild boot`)                    |
+| `just deploy <host> <target> [mode]` | Remote deploy via SSH                                      |
+| `just fmt`                         | Format all `.nix` files (`nix fmt`, uses `nixfmt-tree`)        |
+| `just iso [type]`                  | Build install or minimal ISO                               |
 
-There is **no test suite** and **no CI**. Correctness is validated by `nixos-rebuild build` (dry run) or `nixos-rebuild test` on the target machine.
+These commands write to the store and change system state. Do not run them to
+gather information; ask the user when you need a host built or switched.
 
-To validate a specific host config without switching:
-
-```bash
-just build <hostname>          # e.g. just build laptob-fw
-```
-
-To check formatting:
-
-```bash
-nix fmt                        # formats all .nix files via nixfmt-tree
-```
+There is **no test suite** and **no CI**. Correctness is validated by
+`nixos-rebuild build` (dry run) or `nixos-rebuild test` on the target machine.
 
 ---
 
 ## Repository Structure
 
 ```text
-flake.nix          # Flake entry: all inputs and outputs
-justfile           # Task runner
-hosts/             # Per-machine NixOS configs (desktob, laptob-fw, hyllan, wiggum, …)
-  common/          # Shared secrets (sops-encrypted secrets.yaml)
-modules/           # All custom NixOS/HM modules under antob.*
-  apps/            # GUI applications
-  cli-apps/        # CLI tools
-  desktop/         # Window managers (hyprland, niri, gnome, cosmic…)
-    addons/        # Shared WM addons (waybar, mako, rofi, gtk…)
-  features/        # High-level feature flags (common, desktop)
-  hardware/        # Hardware modules (audio, bluetooth, networking…)
-  home/            # Home Manager integration wrapper
-  services/        # Services (openssh, tailscale, ollama, syncthing…)
-  system/          # System-level (fonts, locale, time, zfs…)
-  tools/           # User tools (zsh, git, starship, helix, neovim…)
-overlays/          # nixpkgs overlays (stable, next, prev, additions, modifications)
-pkgs/              # Custom packages
-lib/               # Custom library functions extending nixpkgs lib
+flake.nix       # Flake entry: all inputs and outputs
+flake.lock      # Pins every input to a locked revision
+justfile        # Task runner
+docs/           # Documentation (empty at present)
+result          # Ignored symlink to the most recent local build in /nix/store
+
+hosts/                     # Per-machine NixOS configs
+  common/                  # Shared secrets (sops-encrypted secrets.yaml)
+  <host>/                  # e.g. desktob, laptob, laptob-fw, hyllan, wiggum, pihole, pikvm
+    default.nix            # Host options entry point
+    hardware.nix           # Machine hardware config
+    disk-config.nix        # Partition layout (desktop/laptop family)
+    secrets.yaml           # Host sops secrets
+    public_key.asc         # SSH/age public key
+
+modules/                   # All custom NixOS/HM modules under antob.*
+  apps/                    # GUI applications (firefox, vscode, thunderbird, …)
+  cli-apps/                # CLI tools (neovim, helix, tmux, yazi, llm-agents, …)
+  color-scheme/            # Color schemes (catppuccin, gruvbox, tokyonight, …)
+  debug/                   # Debug helpers (track-changes)
+  desktop/                 # Window managers (hyprland, niri, cosmic, gnome, plasma, mango, …)
+    addons/                #   Shared WM addons (waybar, mako, rofi, gtk), keyring, …)
+    scripts/               #   Shared WM scripts
+  features/                # High-level presets (common, common-minimal, desktop, gaming, laptop, rpi)
+  hardware/                # audio, bluetooth, fingerprint, ledger, networking, ddcutil, yubikey, …
+  home/                    # Home Manager integration wrapper
+  monitoring/              # Monitoring email defaults
+  nix/                     # nixpkgs settings, overlay wiring, nix access tokens
+  persistence/             # Persistent storage (preservation module)
+  security/                # Hardening (gpg)
+  services/                # avahi, openssh, tailscale, ollama, syncthing, restic-backup, …
+  system/                  # console, env, fonts, info, locale, time, zfs
+  tools/                   # CLI/user tools (zsh, git, starship, alacritty, fzf, …)
+  user/                    # Default user account, default icon
+  virtualisation/          # docker, podman, virt-manager
+
+overlays/                  # nixpkgs overlays (stable, pkgs-next, pkgs-prev, additions, modifications, flake-inputs)
+pkgs/                      # Custom packages
+lib/                       # Custom library functions extending nixpkgs lib
 ```
 
 ---
@@ -64,7 +103,7 @@ lib/               # Custom library functions extending nixpkgs lib
 
 ### Formatting
 
-- **2 spaces** for indentation throughout — no tabs.
+- **2 spaces** for indentation throughout, no tabs.
 - Formatter: `nixfmt-tree` (wrapper around `nixfmt`). Run `just fmt` before committing.
 - File names: `kebab-case` (e.g. `open-webui.nix`, `color-scheme/`).
 - Variable names: `camelCase` for local bindings (`cfg`, `gtkCfg`, `emailFrom`).
@@ -130,6 +169,7 @@ lib.enabled      # { enable = true; }
 lib.disabled     # { enable = false; }
 lib.relativeToRoot  # lib.path.append from repo root
 lib.scanPaths    # auto-discover .nix files in a directory (exclude default.nix)
+lib.getFiles     # list plain files under a path
 lib.mkSslProxy   # Caddy vhost builder with Let's Encrypt DNS challenge
 lib.mkProxy      # Caddy vhost builder with internal TLS
 ```
@@ -176,7 +216,7 @@ modules via `lib.scanPaths`:
 ```
 
 This auto-discovers all `.nix` files except `default.nix`. Adding a new module only
-requires placing a file in the correct directory — no import list to update.
+requires placing a file in the correct directory, with no import list to update.
 
 ### Home Manager Integration
 
@@ -203,8 +243,8 @@ alternate channels as top-level attrs on `pkgs`:
 
 ```nix
 pkgs.stable.<pkg>        # from nixpkgs-stable
-pkgs.nixpkgs-next.<pkg>  # from nixpkgs-next (newer unstable)
-pkgs.nixpkgs-prev.<pkg>  # from nixpkgs-prev (pinned previous)
+pkgs.pkgs-next.<pkg>     # from nixpkgs-next (newer unstable)
+pkgs.pkgs-prev.<pkg>     # from nixpkgs-prev (pinned previous)
 ```
 
 Use these when a specific package version is needed from a different channel.
@@ -232,20 +272,20 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 
 ## Naming Conventions Summary
 
-| Thing | Convention | Example |
-|---|---|---|
-| File names | `kebab-case` | `open-webui.nix` |
-| Directory names | `kebab-case` | `cli-apps/` |
-| Local Nix bindings | `camelCase` | `cfg`, `gtkCfg` |
-| NixOS options | `camelCase` | `hostName`, `storageDriver` |
-| Custom option namespace | `antob.*` | `antob.tools.git.enable` |
-| Host names | `kebab-case` | `laptob-fw`, `desktob` |
+| Thing                   | Convention | Example                 |
+| ----------------------- | ---------- | ----------------------- |
+| File names              | `kebab-case` | `open-webui.nix`          |
+| Directory names         | `kebab-case` | `cli-apps/`               |
+| Local Nix bindings      | `camelCase`  | `cfg`, `gtkCfg`             |
+| NixOS options           | `camelCase`  | `hostName`, `storageDriver` |
+| Custom option namespace | `antob.*`    | `antob.tools.git.enable`  |
+| Host names              | `kebab-case` | `laptob-fw`, `desktob`      |
 
 ---
 
 ## Key Architectural Decisions
 
-- **`antob.*` namespace** — all custom options are under `antob` to prevent conflicts with upstream NixOS options.
-- **Feature flags** — `antob.features.common` and `antob.features.desktop` act as presets enabling many sub-modules at once. Hosts opt into presets.
-- **Impermanence** — root filesystem is ephemeral. Persistent data lives in `/persist` (system) and `/persist/safe` (user, backed up).
-- **No CI** — validate with `just build <host>` locally; no automated test pipeline exists.
+- **`antob.*` namespace** all custom options live under `antob`, to prevent conflicts with upstream NixOS options.
+- **Feature presets** the `antob.features.*` modules act as presets. `common`, `common-minimal`, `desktop`, `gaming`, `laptop`, and `rpi` enable many sub-modules at once. Hosts opt into presets instead of enabling every module individually.
+- **Impermanence.** Root filesystem is ephemeral. Persistent data lives at `antob.persistence.path` (default `/persist`), and the `.safe` subfolder is additionally backed up offsite. Some hosts override the path (e.g. `laptob-fw` uses `/nix/persist`). System and user state is preserved via the `preservation` module, not written into the ephemeral root.
+- **No CI.** Validate with `just build <host>` locally; there is no automated test pipeline.
