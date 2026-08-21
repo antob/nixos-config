@@ -3,6 +3,18 @@ default:
     @just --list
 
 ###################################
+# Read-only store lookups
+###################################
+
+# Resolve the current result symlink to the most recent local build's store path
+store-result:
+    realpath result
+
+# Print the pinned revision of a flake input. Usage: `just store-rev nixpkgs`
+store-rev input:
+    jq -r ".nodes[\"{{ input }}\"].locked.rev" flake.lock
+
+###################################
 # Various `nixos-rebuild` commands
 ###################################
 

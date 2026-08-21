@@ -16,18 +16,23 @@ All custom options live under the `antob.*` namespace.
   configuration.
 - `result` is an ignored symlink at the repo root pointing to the most recent local
   build. The path encodes the host: `/nix/store/<hash>-nixos-system-<host>-...`.
-  Check it with `realpath result`, and trust it only if it names the host you are
-  working on (it may point to another host built previously). If it is missing or
-  names a different host, do not rebuild. Ask the user to build the host you need.
+  Resolve it with `realpath result` or `just store-result`, and trust it only if it
+  names the host you are working on (it may point to another host built previously).
+  If it is missing or names a different host, do not rebuild. Ask the user to build
+  the host you need.
 - `flake.nix` declares the inputs/channels and which host subsystems they use.
-- `flake.lock` pins every input to a committed revision. For a one-off lookup:
+- `flake.lock` pins every input to a committed revision. For a one-off lookup use
+  `just store-rev <input>` (e.g. `nixpkgs`, `nixpkgs-stable`), or read it directly:
   ```bash
-  jq -r '.nodes.<name>.locked.rev' flake.lock   # e.g. nixpkgs, nixpkgs-stable
+  jq -r '.nodes.<name>.locked.rev' flake.lock
   ```
+  `just bump-prev` re-pins `nixpkgs-prev` to the locked rev of the current system.
 - `modules/`, `hosts/`, `pkgs/`, `overlays/`, and `lib/` hold the actual config.
   Start there, never in the store. If you must touch `/nix/store`, start from the
   `result` symlink or a concretely named store path, never from the `/nix/store`
-  root.
+  root. The `store-*` steps are the only allowed store-adjacent lookups; the
+  `build/switch/test/boot/deploy` steps are state-changing and off-limits for
+  info-gathering.
 
 ---
 
@@ -45,8 +50,17 @@ The primary task runner is `just` (see `justfile`).
 | `just fmt`                         | Format all `.nix` files (`nix fmt`, uses `nixfmt-tree`)        |
 | `just iso [type]`                  | Build install or minimal ISO                               |
 
-These commands write to the store and change system state. Do not run them to
-gather information; ask the user when you need a host built or switched.
+Read-only store lookups (safe to run):
+
+| Command                | Description                                                |
+| ---------------------- | ---------------------------------------------------------- |
+| `just store-result`    | Resolve `result` symlink to the most recent local build      |
+| `just store-rev <input>` | Print the pinned revision of a flake input from `flake.lock` |
+
+These `store-*` commands only read state and change nothing. The `build / switch /
+test / boot / deploy / iso` commands write to the store and change system state; do
+not run them to gather information. Ask the user when you need a host built or
+switched.
 
 There is **no test suite** and **no CI**. Correctness is validated by
 `nixos-rebuild build` (dry run) or `nixos-rebuild test` on the target machine.
