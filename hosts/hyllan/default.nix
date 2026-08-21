@@ -137,9 +137,6 @@ in
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    secrets = {
-      zfs_encryption_key = { };
-    };
   };
 
   environment.systemPackages = with pkgs; [

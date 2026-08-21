@@ -10,19 +10,13 @@
 # $ sudo chown nobody:nogroup /mnt/tank/share/public
 #
 # Private share, WireGuard-only, restricted to desktob (10.64.1.6) and laptob-fw (10.64.1.7)
-# $ sudo zfs create -o mountpoint=/mnt/tank/share/private -o encryption=on -o keyformat=raw -o keylocation=file:///run/secrets/zfs_encryption_key zpool/private_share
+# $ sudo zfs create -o mountpoint=/mnt/tank/share/private zpool/private_share
 # $ sudo chown tob /mnt/tank/share/private
+# $ sudo chmod -R u=rwX,go= /mnt/tank/share/private
 # $ sudo zfs set sharenfs="rw=10.64.1.6:10.64.1.7,root_squash" zpool/private_share
 #
 # Check exported shares:
 # $ showmount -e <nfs-server>
-#
-# For some reason the datasets will be unavailable after boot.
-# For now, set property `canmount` to `noauto` and manually mount
-# the datasets after reboot:
-# $ sudo zfs mount zpool/public_share
-# $ sudo zfs mount zpool/private_share
-# $ sudo zfs share -a
 
 {
   services.nfs.server = {
