@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   secrets = config.sops.secrets;
@@ -42,6 +47,16 @@ in
       device = "zpool/hass";
       fsType = "zfs";
     };
+  };
+
+  # hyllan has no bluez daemon, so nothing powers the Bluetooth adapter on at
+  # boot. Bring hci0 up explicitly before the hass container starts.
+  # One-shot only: do not enable services.bluetooth here,
+  # the daemon would hold the management channel and break raw-socket access.
+  systemd.services.bluetooth-power-on = {
+    description = "Power on Bluetooth adapter before Home Assistant starts";
+    before = [ "podman-hass.service" ];
+    serviceConfig.ExecStart = "${pkgs.bluez}/bin/hciconfig hci0 up";
   };
 
   # Mosquitto, MQTT broker
