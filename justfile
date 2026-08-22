@@ -55,7 +55,7 @@ install flake host *ARGS:
 
 # Lock nixpkgs-prev to locked rev of the nixpkgs input
 bump-prev:
-    rev=`jq -r '.nodes.nixpkgs.locked.rev' flake.lock`; if ! grep -Eq '^[0-9a-f]{40}$' - <<< "$rev"; then echo "bump-prev: no 40-hex rev for 'nixpkgs' in flake.lock (got: $rev)" >&2; exit 1; fi; sed -i "s/\(^[ \t]*nixpkgs-prev.url .*\/nixpkgs\/\).*/\1$rev\";/" flake.nix; if ! grep -q "nixpkgs-prev.url .*nixpkgs/$rev\";" flake.nix; then echo "bump-prev: could not update nixpkgs-prev.url in flake.nix" >&2; exit 1; fi
+    rev=`jq -r '.nodes[.nodes.root.inputs.nixpkgs].locked.rev' flake.lock`; sed -i "s/\(^[ \t]*nixpkgs-prev.url .*\/nixpkgs\/\).*/\1$rev\";/" flake.nix
 
 # Update all the flake inputs
 up:
