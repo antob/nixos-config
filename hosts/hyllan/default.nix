@@ -59,10 +59,10 @@ in
 
     virtualisation = {
       docker.enable = false;
-      docker.storageDriver = "btrfs";
+      docker.storageDriver = "overlay";
 
       podman.enable = true;
-      podman.storageDriver = "btrfs";
+      podman.storageDriver = "overlay";
     };
 
     hardware.systemd-networking = {
