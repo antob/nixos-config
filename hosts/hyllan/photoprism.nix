@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 let
   secrets = config.sops.secrets;
@@ -12,8 +12,8 @@ in
       enable = true;
       port = port;
       passwordFile = secrets.photoprism_admin_password.path;
-      originalsPath = "/var/lib/private/photoprism/originals";
-      importPath = "/var/lib/private/photoprism/import";
+      originalsPath = "/var/lib/photoprism/originals";
+      importPath = "/var/lib/photoprism/import";
       address = "127.0.0.1";
       settings = {
         PHOTOPRISM_ADMIN_USER = "admin";
@@ -56,11 +56,27 @@ in
       fsType = "zfs";
     };
 
-    "/var/lib/private/photoprism" = {
+    "/var/lib/photoprism" = {
       device = dataDir;
       fsType = "none";
       options = [ "bind" ];
     };
+  };
+
+  users.users.photoprism = {
+    uid = 319;
+    group = "photoprism";
+    description = "Photoprism daemon user";
+    isSystemUser = true;
+  };
+  users.groups.photoprism = {
+    gid = 319;
+  };
+
+  systemd.services.photoprism.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    User = "photoprism";
+    Group = "photoprism";
   };
 
   systemd.tmpfiles.rules = [
