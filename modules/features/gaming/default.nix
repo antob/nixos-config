@@ -76,6 +76,7 @@ in
       enable = true;
       package = pkgs.ananicy-cpp;
       rulesProvider = pkgs.ananicy-rules-cachyos;
+      settings.cgroup_realtime_workaround = lib.mkForce false;
     };
 
     antob = {
