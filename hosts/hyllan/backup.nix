@@ -8,7 +8,7 @@
 let
   secrets = config.sops.secrets;
   baseMountPoint = "/mnt/restic-snapshot";
-  baseRepo = "s3:hel1.your-objectstorage.com/antob-hyllan-backups";
+  baseRepo = lib.hyllanBackupsBaseRepo;
 
   mkResticBackups =
     backups:
@@ -106,5 +106,7 @@ in
         serviceConfig.PrivateTmp = lib.mkForce false;
       });
 
-  sops.secrets.restic_env_file = { };
+  sops.secrets.restic_env_file = {
+    sopsFile = ../common/secrets.yaml;
+  };
 }

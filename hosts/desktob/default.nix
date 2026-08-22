@@ -39,7 +39,10 @@ in
       atuin = enabled;
       alacritty.fontSize = 13;
       kitty.fontSize = 13;
-      rescue = enabled;
+      rescue = {
+        enable = true;
+        resticEnvFile = secrets.restic_env_file.path;
+      };
     };
 
     services = {

@@ -23,6 +23,9 @@ lib.extend (
       enable = false;
     };
 
+    # Base S3 repository for the hyllan offsite restic backups
+    hyllanBackupsBaseRepo = "s3:hel1.your-objectstorage.com/antob-hyllan-backups";
+
     # use path relative to the root of the project
     relativeToRoot = lib.path.append ../.;
     scanPaths =
