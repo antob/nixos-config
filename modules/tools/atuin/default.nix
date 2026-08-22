@@ -26,7 +26,7 @@ in
         sync_frequency = "5m";
         sync_address = "https://atuin.antob.net";
         update_check = false;
-        search_mode = "skim";
+        search_mode = "daemon-fuzzy";
         filter_mode = cfg.filterMode;
         filter_mode_shell_up_key_binding = "host";
         show_tabs = false;
