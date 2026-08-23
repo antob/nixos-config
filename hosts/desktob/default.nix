@@ -49,8 +49,8 @@ in
       ollama = {
         enable = true;
         package = pkgs.ollama-vulkan;
-        # host = "100.64.0.8";
-        # openFirewall = true;
+        host = "0.0.0.0";
+        openFirewallInterfaces = [ "wg0" ];
       };
       wireguard = {
         enable = true;

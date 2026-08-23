@@ -16,6 +16,7 @@ in
     host = mkOpt str "127.0.0.1" "The host address which the ollama server HTTP interface listens to.";
     port = mkOpt int 11434 "Which port the ollama server listens to.";
     openFirewall = mkBoolOpt false "Whether or not to open the port in the firewall.";
+    openFirewallInterfaces = mkOpt (listOf str) [ ] "Interface names on which to open the port.";
   };
 
   config = mkIf cfg.enable {
@@ -30,10 +31,21 @@ in
         OLLAMA_IGPU_ENABLE = "1"; # For Vulkan backend, enable iGPU support.
         OLLAMA_NUM_PARALLEL = "2";
         OLLAMA_MAX_LOADED_MODELS = "2";
+        OLLAMA_NO_CLOUD = "1";
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    # Open the port only on specific interfaces (e.g. wg0) when requested.
+    networking.firewall.interfaces = mkIf (cfg.openFirewallInterfaces != [ ]) (
+      listToAttrs (
+        map (iface: {
+          name = iface;
+          value = {
+            allowedTCPPorts = [ cfg.port ];
+          };
+        }) cfg.openFirewallInterfaces
+      )
+    );
 
     environment.sessionVariables.OLLAMA_HOST = cfg.host;
 
