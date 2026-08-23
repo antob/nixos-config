@@ -14,4 +14,5 @@
   m68k-lsp-server = pkgs.callPackage ./m68k-lsp-server { };
   rayfish = pkgs.callPackage ./rayfish { };
   iroh-lan = pkgs.callPackage ./iroh-lan { };
+  etherwake = pkgs.callPackage ./etherwake { };
 }
