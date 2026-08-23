@@ -14,6 +14,11 @@ store-result:
 store-rev input:
     jq -r ".nodes[\"{{ input }}\"].locked.rev" flake.lock
 
+# Print the store path of the pinned nixpkgs source (resolution only, no build).
+# Use this as the root for rg/read lookups instead of scanning /nix/store.
+nixpkgs-src:
+    nix eval --raw nixpkgs#path
+
 ###################################
 # Various `nixos-rebuild` commands
 ###################################

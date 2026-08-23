@@ -23,9 +23,11 @@ All custom options live under the `antob.*` namespace.
 - `flake.nix` declares the inputs/channels and which host subsystems they use.
 - `flake.lock` pins every input to a committed revision. For a one-off lookup use
   `just store-rev <input>` (e.g. `nixpkgs`, `nixpkgs-stable`), or read it directly:
+
   ```bash
   jq -r '.nodes.<name>.locked.rev' flake.lock
   ```
+
   `just bump-prev` re-pins `nixpkgs-prev` to the locked rev of the current system.
 - `modules/`, `hosts/`, `pkgs/`, `overlays/`, and `lib/` hold the actual config.
   Start there, never in the store. If you must touch `/nix/store`, start from the
@@ -56,14 +58,67 @@ Read-only store lookups (safe to run):
 | ---------------------- | ---------------------------------------------------------- |
 | `just store-result`    | Resolve `result` symlink to the most recent local build      |
 | `just store-rev <input>` | Print the pinned revision of a flake input from `flake.lock` |
+| `just nixpkgs-src`       | Print the store path of the pinned nixpkgs source             |
 
-These `store-*` commands only read state and change nothing. The `build / switch /
+These `store-*` / `nixpkgs-src` commands only read state and change nothing. The `build / switch /
 test / boot / deploy / iso` commands write to the store and change system state; do
 not run them to gather information. Ask the user when you need a host built or
 switched.
 
 There is **no test suite** and **no CI**. Correctness is validated by
 `nixos-rebuild build` (dry run) or `nixos-rebuild test` on the target machine.
+
+---
+
+## Reading nixpkgs source & option definitions (fast)
+
+To understand what an upstream option does or where a package is defined, do NOT
+grep/find across `/nix/store` or the whole filesystem. Those trees are huge and
+slow. The pinned nixpkgs source already exists in the store; resolve it to a
+concrete path first, then search only inside that path.
+
+```bash
+NIXPKGS=$(just nixpkgs-src)   # e.g. /nix/store/<hash>-source (pure eval, <1s)
+```
+
+Then grep/read against `$NIXPKGS` directly, never against `/nix/store` itself:
+
+```bash
+rg -l "options\\.programs\\.vscode" "$NIXPKGS/nixos/modules/programs"
+less "$NIXPKGS/nixos/modules/programs/vscode.nix"
+```
+
+Useful directories inside the source:
+
+| Path                              | Contents                                         |
+| --------------------------------- | ------------------------------------------------ |
+| `nixos/modules/`                  | NixOS module/option definitions                  |
+| `nixos/modules/services/`         | Service options (`systemd`, `web`, …)             |
+| `nixos/modules/programs/`         | Program options (`vscode.nix`, `firefox.nix`, …) |
+| `pkgs/top-level/all-packages.nix` | Central package attribute map                    |
+| `pkgs/by-name/`                   | Package definitions keyed by name                |
+| `lib/`                            | nixpkgs `lib` helpers (`mkOption`, `mkIf`, …)    |
+| `nixos/modules/misc/`             | Core system options (`system.nixos`, …)          |
+
+To inspect what an option resolves to (not just its default), evaluate the
+configuration read-only instead of building:
+
+```bash
+nix eval --json .#nixosConfigurations.desktob.config.services.openssh.enable
+```
+
+Prints `true`/`false` (use `--json` for non-string option values; `--raw` only
+prints strings). This runs a full evaluation (~10s the first time, cached
+afterwards) but writes nothing to the store. Prefer `nix eval` over
+`nixos-rebuild build` when answering "what value does option X have on host
+Y?".
+
+The alternate channels (`nixpkgs-stable`, `nixpkgs-next`, `nixpkgs-prev`) are
+separate flake inputs and have their own store paths. When a question targets
+those specifically, look in `overlays/default.nix` to see how they are wired
+to `pkgs.stable.*` / `pkgs.pkgs-next.*` / `pkgs.pkgs-prev.*`, then resolve the
+evaluated package set the same way (e.g. `nix eval --raw
+.#nixosConfigurations.desktob.pkgs.stable.path`).
 
 ---
 
