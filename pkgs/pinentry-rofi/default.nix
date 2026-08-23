@@ -170,7 +170,7 @@ pkgs.writeShellScriptBin "pinentry-rofi" ''
       if [ "$XDG_SESSION_TYPE" != "tty" ] ; then
           main
       else
-          exec pinentry-tty "$@"
+          exec ${pkgs.pinentry-tty}/bin/pinentry-tty "$@"
       fi
   fi
 ''
