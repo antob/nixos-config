@@ -62,7 +62,9 @@ in
   services = {
     nix-serve = {
       enable = true;
-      package = pkgs.nix-serve-ng;
+      # lix engine (nixpkgs unstable) crashes on aborted nar fetch. stable channel
+      # binds classic nix 2.28.7 instead, no abort crash.
+      package = pkgs.stable.nix-serve-ng;
       bindAddress = "127.0.0.1";
       port = port;
       secretKeyFile = secrets.nix-cache-private-key.path;
