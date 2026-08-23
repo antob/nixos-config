@@ -90,6 +90,7 @@ in
         hostName = "desktob";
         # Derived from `head -c 8 /etc/machine-id`
         hostId = "672fb36e";
+        enableWoL = true;
       };
       # ddcutil = enabled;
     };

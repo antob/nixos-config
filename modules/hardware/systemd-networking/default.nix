@@ -15,6 +15,7 @@ in
     hostId = mkOpt str "" "The system host ID.";
     enableWireless = mkBoolOpt true "Whether or not to enable wireless support";
     enableVpn = mkBoolOpt true "Whether or not to enable VPN config";
+    enableWoL = mkBoolOpt false "Whether or not to enable Wake-on-LAN on eth0";
     staticIp = {
       enable = mkBoolOpt false "Whether or not to configure static IP on eth0";
       address = mkOpt str "" "Static IP address";
@@ -46,6 +47,12 @@ in
       usePredictableInterfaceNames = false;
       hostName = cfg.hostName;
       hostId = cfg.hostId;
+
+      # Wake-on-LAN policy on the wired interface.
+      interfaces.eth0.wakeOnLan = mkIf cfg.enableWoL {
+        enable = true;
+        policy = [ "magic" ];
+      };
 
       # Wireless config
       wireless.iwd = mkIf cfg.enableWireless {
