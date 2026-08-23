@@ -137,6 +137,9 @@ in
         owner = "systemd-network";
       };
       restic_client_backup_password = { };
+      restic_env_file = {
+        sopsFile = ../common/secrets.yaml;
+      };
       github_copilot_token = {
         owner = "tob";
       };
