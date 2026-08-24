@@ -2,6 +2,7 @@ set -g default-terminal 'tmux-256color'
 
 set -as terminal-overrides ',*:Setulc=\E[58::2::::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'
 set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
+set -as terminal-overrides ',*:Eneks=\E[>1u'
 set -as terminal-features ',*:usstyle'
 set -as terminal-features ',*:RGB:extkeys'
 set -as terminal-features ',alacritty*:RGB:extkeys:sixel'
@@ -88,25 +89,25 @@ bind \\ split-window -h -c "#{pane_current_path}"
 # Reload config file
 bind C-r source-file ~/.config/tmux/tmux.conf
 # Cycle layout
-bind -n \uE000 next-layout
+bind -n C-S-l next-layout
 # Spawn new pane
-bind -n \uE010 split-window -v -c "#{pane_current_path}"
+bind -n C-S-Enter split-window -v -c "#{pane_current_path}"
 # Focus next pane
 bind -n C-S-Right select-pane -Z -t :.+
 # Focus previous pane
 bind -n C-S-Left select-pane -Z -t :.-
 # Toggle pane zoom
-bind -n \uE011 resize-pane -Z
+bind -n C-S-m resize-pane -Z
 # Spawn new window
-bind -n \uE020 new-window -c "#{pane_current_path}"
+bind -n C-S-t new-window -c "#{pane_current_path}"
 # Focus previous window
-bind -n \uE021 previous-window
+bind -n C-S-[ previous-window
 # Focus next window
-bind -n \uE022 next-window
+bind -n C-S-] next-window
 # Move focused window left
-bind -n \uE023 swap-window -t -1
+bind -n C-S-M-[ swap-window -t -1
 # Move focused window right
-bind -n \uE024 swap-window -t +1
+bind -n C-S-M-] swap-window -t +1
 
 bind-key "C-s" run-shell "sesh connect \"$(
 	sesh list --icons -t | fzf-tmux -p 55%,60% \

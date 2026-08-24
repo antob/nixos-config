@@ -10,8 +10,6 @@ let
   cfg = config.antob.cli-apps.tmux;
   configFiles = getFiles ./config;
   colors = config.antob.color-scheme.colors;
-  alacritty = config.antob.tools.alacritty.enable;
-  kitty = config.antob.tools.kitty.enable;
 
   plugins = with pkgs; [
     tmuxPlugins.sensible
@@ -39,7 +37,6 @@ in
 {
   options.antob.cli-apps.tmux = with types; {
     enable = mkBoolOpt false "Whether or not to enable tmux.";
-    addTerminalKeybindings = mkBoolOpt true "Whether or not to add keybindings to terminals in tmux.";
   };
 
   config = mkIf cfg.enable {
@@ -59,94 +56,6 @@ in
         extraConfig = builtins.concatStringsSep "\n" (map lib.strings.fileContents configFiles);
 
         inherit plugins;
-      };
-
-      programs.alacritty.settings.keyboard.bindings = lib.mkIf (cfg.addTerminalKeybindings && alacritty) [
-        ## Make Alacritty send Control+Shift keys
-        # Cycle layout
-        {
-          key = "l";
-          mods = "Control|Shift";
-          chars = "\\uE000";
-        }
-        # Spawn new pane
-        {
-          key = "Return";
-          mods = "Control|Shift";
-          chars = "\\uE010";
-        }
-        # Toggle pane zoom
-        {
-          key = "m";
-          mods = "Control|Shift";
-          chars = "\\uE011";
-        }
-        # Spawn new window
-        {
-          key = "t";
-          mods = "Control|Shift";
-          chars = "\\uE020";
-        }
-        # Focus previous window
-        {
-          key = "{";
-          mods = "Control|Shift";
-          chars = "\\uE021";
-        }
-        # Focus next window
-        {
-          key = "}";
-          mods = "Control|Shift";
-          chars = "\\uE022";
-        }
-        # Move window left
-        {
-          key = "{";
-          mods = "Control|Shift|Alt";
-          chars = "\\uE023";
-        }
-        # Move window right
-        {
-          key = "}";
-          mods = "Control|Shift|Alt";
-          chars = "\\uE024";
-        }
-        # Make Alacritty send Shift+Enter for new line in tmux
-        {
-          key = "Return";
-          mods = "Shift";
-          chars = "\\u001b[13;2u";
-        }
-      ];
-
-      programs.kitty.keybindings = lib.mkIf (cfg.addTerminalKeybindings && kitty) {
-        # Pass Shift+Enter through tmux to inner applications
-        "shift+enter" = "send_text all \\x1b[13;2u";
-
-        ## Make Kitty send Control+Shift keys
-        # Cycle layout
-        "ctrl+shift+l" = "send_text all \\uE000";
-
-        # Spawn new pane
-        "ctrl+shift+enter" = "send_text all \\uE010";
-
-        # Toggle pane zoom
-        "ctrl+shift+m" = "send_text all \\uE011";
-
-        # Spawn new window
-        "ctrl+shift+t" = "send_text all \\uE020";
-
-        # Focus previous window
-        "ctrl+shift+[" = "send_text all \\uE021";
-
-        # Focus next window
-        "ctrl+shift+]" = "send_text all \\uE022";
-
-        # Move focused window left
-        "ctrl+shift+alt+[" = "send_text all \\uE023";
-
-        # Move focused window right
-        "ctrl+shift+alt+]" = "send_text all \\uE024";
       };
     };
 

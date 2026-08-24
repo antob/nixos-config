@@ -37,7 +37,7 @@ in
 
           font = {
             normal = {
-              family = "Hack Nerd Font";
+              family = "Jetbrains Mono";
               style = "Regular";
             };
             size = cfg.fontSize;
