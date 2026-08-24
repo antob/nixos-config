@@ -29,6 +29,9 @@ let
   dm-firefox-profile = lib.getExe (
     pkgs.callPackage ../scripts/dm-firefox-profile.nix { inherit config; }
   );
+  dm-herdr-session = lib.getExe (
+    pkgs.callPackage ../scripts/dm-herdr-session.nix { inherit config; }
+  );
   cmd-cycle-workspace = lib.getExe (pkgs.callPackage ./scripts/cmd-cycle-workspace.nix { });
 in
 {
@@ -305,6 +308,7 @@ in
               Mod+P hotkey-overlay-title="Show VPN menu" repeat=false { spawn-sh "${dm-vpn}"; }
               Mod+Return hotkey-overlay-title="Terminal (tmux)" repeat=false { spawn "${tmuxTerminal}" "tmux-attach-unused"; }
               Mod+Shift+Return hotkey-overlay-title="Terminal" repeat=false { spawn "${terminal}"; }
+              Mod+Alt+Return hotkey-overlay-title="Herdr" repeat=false { spawn-sh "${dm-herdr-session}"; }
               Mod+Shift+Slash hotkey-overlay-title="Show hotkey overlay" repeat=false { show-hotkey-overlay; }
               Mod+Shift+W hotkey-overlay-title="Select Firefox profile" repeat=false { spawn-sh "${dm-firefox-profile}"; }
               Mod+T hotkey-overlay-title="Activity" repeat=false { spawn-sh "${tuiTerminal} --class=TUI.float.lg -e ${lib.getExe pkgs.bottom}"; }
@@ -444,6 +448,7 @@ in
       wl-clipboard
       libqalculate
       libnotify
+      (pkgs.callPackage ../scripts/dm-herdr-session.nix { inherit config; })
     ];
 
     services.displayManager = {
