@@ -82,6 +82,7 @@ in
         copilotLua.enable = true;
         llamaVim.enable = false;
       };
+      herdr = enabled;
     };
 
     hardware = {

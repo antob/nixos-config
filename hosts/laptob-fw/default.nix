@@ -28,7 +28,11 @@ in
 
     tools.atuin = enabled;
 
-    cli-apps.llm-agents = enabled;
+    cli-apps = {
+      llm-agents = enabled;
+      herdr = enabled;
+      lumen = enabled;
+    };
 
     services = {
       wireguard = {
