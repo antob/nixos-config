@@ -71,7 +71,7 @@ in
         "10-lan" = {
           matchConfig.Name = "eth0";
           networkConfig.DHCP = mkIf cfg.staticIp.enable "no";
-          linkConfig.RequiredForOnline = "no";
+          linkConfig.RequiredForOnline = "yes";
 
           address = mkIf cfg.staticIp.enable [ cfg.staticIp.address ];
           dns = mkIf cfg.staticIp.enable cfg.staticIp.dns;
