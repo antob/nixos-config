@@ -448,7 +448,6 @@ in
       wl-clipboard
       libqalculate
       libnotify
-      (pkgs.callPackage ../scripts/dm-herdr-session.nix { inherit config; })
     ];
 
     services.displayManager = {

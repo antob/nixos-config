@@ -16,6 +16,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       herdr
+      (writeShellScriptBin "herdr-kitty" ''
+        ${pkgs.kitty}/bin/kitty --config $HOME/.config/kitty/kitty-no-bindings.conf ${pkgs.herdr}/bin/herdr "$@";
+      '')
     ];
 
     # antob.home.extraOptions = {
@@ -32,14 +35,22 @@ in
     #     version_check = false
     #
     #     [worktrees]
-    #     directory = "./.worktrees"
+    #     directory = "~/.herdr/worktrees"
     #
     #     [ui]
-    #     sidebar_start_collapsed = true
-    #     sidebar_collapsed_mode = "hidden"
+    #     pane_scrollbars = false
     #     pane_gaps = false
     #     hide_tab_bar_when_single_tab = true
     #     tab_bar_position = "bottom"
+    #
+    #     [ui.toast]
+    #     delivery = "system"
+    #
+    #     [ui.toast.herdr]
+    #     position = "top-right"
+    #
+    #     [ui.toast.clipboard]
+    #     enabled = false
     #
     #     [ui.sound]
     #     enabled = true
