@@ -21,7 +21,9 @@
     };
 
     # Hardware Configuration
-    nixos-hardware.url = "github:nixos/nixos-hardware";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
+    # Pinned version used by Rpi builds to avoid rebuilding the kernel on every update.
+    nixos-hardware-pi.url = "github:NixOS/nixos-hardware/0471accf8d0a8210b31d947497d179ecc99e0021";
 
     # Preservation
     preservation.url = "github:nix-community/preservation";

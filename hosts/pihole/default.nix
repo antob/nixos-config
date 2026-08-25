@@ -191,8 +191,6 @@ in
     ];
   };
 
-  systemd.network.wait-online.enable = mkForce false;
-
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
