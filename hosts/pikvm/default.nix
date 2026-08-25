@@ -49,8 +49,6 @@ in
     htpasswdFile = secrets.pikvm_gui_htpasswd.path;
   };
 
-  systemd.network.wait-online.enable = mkForce false;
-
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets.yaml;
