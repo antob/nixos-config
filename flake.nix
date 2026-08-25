@@ -211,6 +211,14 @@
             ./hosts/pikvm
           ];
         };
+
+        pidesk = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs lib; };
+          system = "aarch64-linux";
+          modules = commonModules ++ [
+            ./hosts/pidesk
+          ];
+        };
       };
     };
 }

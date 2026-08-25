@@ -95,6 +95,11 @@ in
             PublicKey = "0scRw9cc8EKrjajRUYRcAsB/Gc2Pj1ww84Ot5/0bWmo=";
             AllowedIPs = [ iPhoneIp ];
           }
+          # PiDesk
+          {
+            PublicKey = "ygE5P5AyxzGPZh5ljlaJ51pnBFOA2xyXRcfkqe92dBI=";
+            AllowedIPs = [ "10.64.1.9" ];
+          }
         ];
       };
     };

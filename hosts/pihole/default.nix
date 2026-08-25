@@ -119,6 +119,7 @@ in
             "10.64.1.3      pikvm.antob.net"
             "192.168.1.3    pikvm.lan"
             "10.64.1.5      wiggum.antob.net"
+            "10.64.1.9      pidesk.antob.net"
           ];
           upstreams = [
             "1.1.1.1"
