@@ -25,6 +25,17 @@ in
 
         [list]
         json-schema = 2
+
+        [aliases]
+        ls = "wt list {{ args }}"
+        move-changes = ''''
+        if git diff --quiet HEAD && test -z "$(git ls-files --others --exclude-standard)"; then
+          wt switch --create {{ to }} --execute="{{ args }}"
+        else
+          git stash push --include-untracked --quiet
+          wt switch --create {{ to }} --execute="git stash pop --index; {{ args }}"
+        fi
+        ''''
       '';
 
       programs.zsh.initContent = ''
