@@ -30,7 +30,6 @@ in
 
     cli-apps = {
       llm-agents = enabled;
-      herdr = enabled;
       lumen = enabled;
     };
 

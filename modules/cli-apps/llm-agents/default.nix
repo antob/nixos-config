@@ -150,12 +150,6 @@ in
 
     environment.shellAliases = {
       wm = "workmux";
-      wt = "workmux";
-    };
-
-    environment.variables = {
-      RTK_TELEMETRY_DISABLED = 1;
-      CLAUDE_CONFIG_DIR = "${userHome}/.config/claude";
     };
 
     antob.home.extraOptions = {
@@ -170,6 +164,16 @@ in
           symlink:
             - node_modules
       '';
+    };
+
+    antob.cli-apps = {
+      herdr = enabled;
+      worktrunk = enabled;
+    };
+
+    environment.variables = {
+      RTK_TELEMETRY_DISABLED = 1;
+      CLAUDE_CONFIG_DIR = "${userHome}/.config/claude";
     };
 
     fileSystems."${userHome}/.pi/agent" = {
