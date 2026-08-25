@@ -23,6 +23,14 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
+    # If the tunnel fails to start, retry rather than fail permanently.
+    systemd.services.wg-quick-wg0 = {
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = 5;
+      };
+    };
+
     networking.wg-quick.interfaces = {
       wg0 = {
         autostart = true;
