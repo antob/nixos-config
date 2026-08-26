@@ -31,6 +31,7 @@ in
 
   environment.systemPackages = with pkgs; [
     etherwake
+    (pkgs.callPackage ../../modules/tools/scripts/wake-desktob.nix { })
   ];
 
   # Sops secrets
