@@ -39,6 +39,7 @@ in
       firewall = {
         enable = true;
         allowPing = true;
+        allowedUDPPorts = [ 5353 ];
       };
       nftables.enable = true;
       useNetworkd = true;
@@ -70,7 +71,10 @@ in
       networks = {
         "10-lan" = {
           matchConfig.Name = "eth0";
-          networkConfig.DHCP = mkIf cfg.staticIp.enable "no";
+          networkConfig = {
+            DHCP = mkIf cfg.staticIp.enable "no";
+            MulticastDNS = true;
+          };
           linkConfig.RequiredForOnline = "yes";
 
           address = mkIf cfg.staticIp.enable [ cfg.staticIp.address ];
@@ -85,6 +89,7 @@ in
           networkConfig = {
             DHCP = "yes";
             IgnoreCarrierLoss = "3s";
+            MulticastDNS = true;
           };
         };
       };
