@@ -26,7 +26,7 @@ in
   };
 
   fileSystems = {
-    "/var/lib/private/esphome" = {
+    "/var/lib/esphome" = {
       device = dataDir;
       fsType = "none";
       options = [ "bind" ];
@@ -36,4 +36,7 @@ in
   systemd.tmpfiles.rules = [
     "d ${dataDir} 0750 esphome esphome -"
   ];
+
+  # mDNS so the dashboard can discover devices by name on the LAN.
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 }
