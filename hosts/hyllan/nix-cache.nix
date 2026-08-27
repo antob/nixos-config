@@ -22,6 +22,7 @@ let
     "laptob-fw"
     "hyllan"
     "wiggum"
+    "pidesk"
     "pihole"
     # "pikvm"
   ];
