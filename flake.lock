@@ -113,11 +113,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788171199,
-        "narHash": "sha256-OMUm/LWaY8yLjRE7YYwgt8mFjptFcmi4PTGNZWayVqM=",
+        "lastModified": 1788195575,
+        "narHash": "sha256-D9M8QWSNl9BIc6H1mwPaDe4rgb2RAeBAWnujGO6T3Uc=",
         "owner": "antob",
         "repo": "clipperd",
-        "rev": "79e74de2bb23a5cbe65cf24f565166ea6907f851",
+        "rev": "370b7ef529f51acb7a6907498af65f0d94267657",
         "type": "github"
       },
       "original": {

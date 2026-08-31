@@ -100,7 +100,7 @@
       inputs.nixos-hardware.follows = "nixos-hardware-pi";
     };
 
-    # Clipperd
+    # Clipperd - Clipboard sync between iPhone and Linux
     clipperd = {
       url = "github:antob/clipperd";
       inputs.nixpkgs.follows = "nixpkgs";
