@@ -8,6 +8,7 @@
 with lib;
 let
   secrets = config.sops.secrets;
+  wgIp = "10.64.1.7";
 in
 {
   imports = with inputs; [
@@ -42,7 +43,7 @@ in
     services = {
       wireguard = {
         enable = true;
-        address = "10.64.1.7/24";
+        address = "${wgIp}/24";
         privateKeyFile = secrets.wg0_private_key.path;
       };
       tailscale.enable = true;
@@ -52,6 +53,10 @@ in
           "/nix/persist/safe"
         ];
         passwordFile = secrets.restic_client_backup_password.path;
+      };
+      clipperd = {
+        enable = true;
+        bindIp = wgIp;
       };
     };
 

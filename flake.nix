@@ -99,6 +99,12 @@
       url = "github:aostanin/kvmd.nix";
       inputs.nixos-hardware.follows = "nixos-hardware-pi";
     };
+
+    # Clipperd
+    clipperd = {
+      url = "github:antob/clipperd";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

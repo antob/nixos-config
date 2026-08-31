@@ -106,6 +106,26 @@
         "type": "github"
       }
     },
+    "clipperd": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788171199,
+        "narHash": "sha256-OMUm/LWaY8yLjRE7YYwgt8mFjptFcmi4PTGNZWayVqM=",
+        "owner": "antob",
+        "repo": "clipperd",
+        "rev": "79e74de2bb23a5cbe65cf24f565166ea6907f851",
+        "type": "github"
+      },
+      "original": {
+        "owner": "antob",
+        "repo": "clipperd",
+        "type": "github"
+      }
+    },
     "copyparty": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -1653,6 +1673,7 @@
     "root": {
       "inputs": {
         "betterfox": "betterfox",
+        "clipperd": "clipperd",
         "copyparty": "copyparty",
         "disko": "disko",
         "dms-plugin-registry": "dms-plugin-registry",
