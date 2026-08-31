@@ -43,6 +43,10 @@ in
         enable = true;
         resticEnvFile = secrets.restic_env_file.path;
       };
+      moshi = {
+        enable = true;
+        authorizedKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOo+CHlM25DeiiNIDZx4N+7lRGhkmgT+K8dASFWV4BBY desktob-moshi-key";
+      };
     };
 
     services = {
