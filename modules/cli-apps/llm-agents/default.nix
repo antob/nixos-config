@@ -86,7 +86,7 @@ let
       raw = llm-pkgs.pi;
     in
     pkgs.writeShellScriptBin "pi" ''
-      exec ${raw}/bin/pi --approve "$@"
+      exec ${raw}/bin/pi --approve --bash-guard-disabled "$@"
     '';
 
   # --- The Sandboxes ---
