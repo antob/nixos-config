@@ -84,13 +84,14 @@ bind-key -n TripleClick1Pane \
 # Splits
 bind '|' split-window -v -c "#{pane_current_path}"
 bind \\ split-window -h -c "#{pane_current_path}"
+bind -n C-S-Down split-window -v -c "#{pane_current_path}"
 
 # Reload config file
 bind C-r source-file ~/.config/tmux/tmux.conf
 # Cycle layout
 bind -n \uE000 next-layout
 # Spawn new pane
-bind -n \uE010 split-window -v -c "#{pane_current_path}"
+bind -n \uE010 split-window -h -c "#{pane_current_path}"
 # Focus next pane
 bind -n C-S-Right select-pane -Z -t :.+
 # Focus previous pane
@@ -124,12 +125,17 @@ bind-key "C-s" run-shell "sesh connect \"$(
 )\""
 
 # Hooks
-set-hook -g after-new-session "select-layout main-vertical"
+#set-hook -g after-new-session "select-layout main-vertical"
 #set-hook -g after-new-window "select-layout main-vertical \; rename-window 'Tab'"
 #set-hook -g after-split-window "select-layout \; swap-pane -U"
-set-hook -g after-split-window "select-layout"
-set-hook -g after-kill-pane "select-layout"
-set-hook -g pane-exited "select-layout"
+#set-hook -g after-split-window "select-layout"
+#set-hook -g after-kill-pane "select-layout"
+#set-hook -g pane-exited "select-layout"
+
+# Even out panes after splitting or killing a pane
+set-hook -g after-split-window "select-layout -E"
+set-hook -g after-kill-pane "select-layout -E"
+set-hook -g pane-exited "select-layout -E"
 
 #set -g destroy-unattached on  # destroy orphaned sessions
 set -g detach-on-destroy on   # exit from tmux when closing a session
