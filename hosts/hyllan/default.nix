@@ -57,13 +57,7 @@ in
       auto-snapshot.enable = false;
     };
 
-    virtualisation = {
-      docker.enable = false;
-      docker.storageDriver = "overlay";
-
-      podman.enable = true;
-      podman.storageDriver = "overlay";
-    };
+    virtualisation.podman.enable = true;
 
     hardware.systemd-networking = {
       enable = true;

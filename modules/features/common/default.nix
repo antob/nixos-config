@@ -39,8 +39,7 @@ in
         # sqlit = enabled;
       };
 
-      # virtualisation.podman = enable = mkDefault true;
-      virtualisation.docker.enable = mkDefault true;
+      virtualisation.podman.enable = mkDefault true;
 
       hardware = {
         networking = enabled;

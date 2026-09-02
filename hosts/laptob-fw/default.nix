@@ -27,6 +27,11 @@ in
       addons.keyring = enabled;
     };
 
+    virtualisation = {
+      docker.enable = true;
+      podman.enable = false;
+    };
+
     tools = {
       atuin = enabled;
       moshi = {

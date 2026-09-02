@@ -23,6 +23,7 @@ with lib;
     # persistence = enabled;
 
     virtualisation.docker.enable = false;
+    virtualisation.podman.enable = false;
   };
 
   environment.systemPackages = with pkgs; [

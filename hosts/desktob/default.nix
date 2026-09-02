@@ -28,13 +28,7 @@ in
       addons.keyring = enabled;
     };
 
-    virtualisation = {
-      docker.enable = false;
-      docker.storageDriver = "btrfs";
-
-      podman.enable = true;
-      podman.storageDriver = "btrfs";
-    };
+    virtualisation.podman.storageDriver = "btrfs";
 
     tools = {
       atuin = enabled;
