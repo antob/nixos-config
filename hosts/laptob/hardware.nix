@@ -30,6 +30,9 @@
         "sd_mod"
       ];
     };
+
+    # Enable emulated systems for cross-compilation
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

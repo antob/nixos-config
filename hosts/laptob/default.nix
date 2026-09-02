@@ -7,6 +7,7 @@
 with lib;
 let
   secrets = config.sops.secrets;
+  wgIp = "10.64.1.7";
 in
 {
   imports = with inputs; [
@@ -25,15 +26,38 @@ in
       addons.keyring = enabled;
     };
 
-    tools.atuin = enabled;
+    virtualisation.podman.storageDriver = "btrfs";
 
-    cli-apps.llm-agents = enabled;
+    tools = {
+      atuin = enabled;
+      moshi = {
+        enable = true;
+        authorizedKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnfv7tfiunPUyPl6xJmbzMPAOiYWYSSCANvSOLKrzSe laptob-moshi-key";
+      };
+    };
+
+    cli-apps = {
+      llm-agents = enabled;
+      lumen = enabled;
+    };
 
     services = {
       wireguard = {
         enable = true;
-        address = "10.64.1.7/24";
+        address = "${wgIp}/24";
         privateKeyFile = secrets.wg0_private_key.path;
+      };
+      tailscale.enable = true;
+      restic-backup = {
+        enable = true;
+        paths = [
+          "/persist/safe"
+        ];
+        passwordFile = secrets.restic_client_backup_password.path;
+      };
+      clipperd = {
+        enable = true;
+        bindIp = wgIp;
       };
     };
 
@@ -41,7 +65,7 @@ in
       enable = true;
       hostName = "laptob";
       # Derived from `head -c 8 /etc/machine-id`
-      hostId = "ac07b4e8";
+      hostId = "6278643e";
     };
 
     persistence = {
