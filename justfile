@@ -36,7 +36,7 @@ boot flake="": (_nixos-rebuild "boot" flake)
 test flake="": (_nixos-rebuild "test" flake)
 
 # Deploy flake to remote host
-deploy flake host mode="switch": (_nixos-rebuild mode flake host)
+deploy mode flake host=(flake + ".lan"): (_nixos-rebuild mode flake host)
 
 ###################################
 # Various install commands
@@ -52,7 +52,7 @@ build-pi-sd flake:
 
 # Install flake to remote host
 install flake host *ARGS:
-    nixos-anywhere --flake .#{{ flake }} {{ host }} {{ ARGS }}
+    nixos-anywhere --flake .#{{ flake }} {{ host }} --no-use-machine-substituters --no-substitute-on-destination {{ ARGS }}
 
 ###################################
 # Various flake commands
@@ -108,7 +108,6 @@ gcroot:
 # Verify all the store entries
 # Nix Store can contains corrupted entries if the nix store object has been modified unexpectedly.
 # This command will verify all the store entries,
-
 # and we need to fix the corrupted entries manually via `sudo nix store delete <store-path-1> <store-path-2> ...`
 verify-store:
     nix store verify --all
