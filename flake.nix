@@ -151,13 +151,6 @@
           ];
         };
 
-        laptob-fw = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          modules = commonModules ++ [
-            ./hosts/laptob-fw
-          ];
-        };
-
         desktob = lib.nixosSystem {
           specialArgs = { inherit inputs outputs lib; };
           modules = commonModules ++ [

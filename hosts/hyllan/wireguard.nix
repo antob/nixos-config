@@ -85,7 +85,7 @@ in
             PublicKey = "bnsImaGQClT8/kL/4BoyOcpmtlXi6deeyZeOJxiGljE=";
             AllowedIPs = [ "10.64.1.6" ];
           }
-          # Laptob-fw
+          # Laptob
           {
             PublicKey = "9z3cCj7FV6S4JWhslfipclPrErGYjOvYGu3JJQ8Od0k=";
             AllowedIPs = [ "10.64.1.7" ];

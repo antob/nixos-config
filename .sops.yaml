@@ -39,11 +39,6 @@ creation_rules:
       - pgp:
           - *admin
           - *hyllan
-  - path_regex: hosts/laptob-fw/secrets.yaml$
-    key_groups:
-      - pgp:
-          - *admin
-          - *laptob_fw
   - path_regex: hosts/laptob/secrets.yaml$
     key_groups:
       - pgp:

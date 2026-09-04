@@ -19,7 +19,7 @@ let
   workDir = "/tmp/nix-cache-build";
   buildHosts = [
     "desktob"
-    "laptob-fw"
+    "laptob"
     "hyllan"
     "wiggum"
     "pidesk"

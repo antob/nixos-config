@@ -36,34 +36,34 @@ in
         port = 7171
         cert_pem = """
         -----BEGIN CERTIFICATE-----
-        MIIBizCCATCgAwIBAgIUcBk7Pu4YEsdSjcH4q0lxrlzFYH0wCgYIKoZIzj0EAwIw
+        MIIBhDCCASqgAwIBAgIUZQ3yY7QcNXjYmyhH+RL/t7fyrU8wCgYIKoZIzj0EAwIw
         KTEUMBIGA1UEAwwLQ2xpcHBlcmQgQ0ExETAPBgNVBAoMCENsaXBwZXJkMB4XDTI2
-        MDgzMTA4MjYwOVoXDTI4MDgzMDA4MjYwOVowHjEcMBoGA1UEAwwTbGFwdG9iLWZ3
-        LmFudG9iLm5ldDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABNuRIX8Bpmofe79p
-        3Q6hevj9otwHnP5is6HSNVAlnTHqghq9k0iqRnSHAhFVf4liNJRR/y5exTU+hNzw
-        2adxNoOjQTA/MD0GA1UdEQQ2MDSCE2xhcHRvYi1mdy5hbnRvYi5uZXSCEWRlc2t0
-        b2IuYW50b2IubmV0hwR/AAABhwQKQAEHMAoGCCqGSM49BAMCA0kAMEYCIQDasdjJ
-        49np37xKcpbNwkfFBhlwm/9SjfRTV0Xv68j6ygIhAI2qGWP2o6VNJ+Zyy3NjgS7z
-        pzSsagetagYwH4ZUDBIz
+        MDkwNDA2NTYyOFoXDTI4MDkwMzA2NTYyOFowGzEZMBcGA1UEAwwQbGFwdG9iLmFu
+        dG9iLm5ldDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABBDysX1bn8eqgX6wugfS
+        ZzlC4Fy9k5kx3/9hj0ZR2BtoOfuBoynWPud3VVEKPxehX1d/PbclTHnaovulJbyJ
+        lMCjPjA8MDoGA1UdEQQzMDGCEGxhcHRvYi5hbnRvYi5uZXSCEWRlc2t0b2IuYW50
+        b2IubmV0hwR/AAABhwQKQAEHMAoGCCqGSM49BAMCA0gAMEUCIECCChmcZUiyBb6J
+        yzT9Le18bsGTfpuBzswm7FKn21cfAiEA+L6PHVe5h+ZCDYumOASSJf2v3ZWGU8BA
+        kq1vcemqwdU=
         -----END CERTIFICATE-----
         """
         key_pem_file = "${secrets.clipperd_cert_key.path}"
         ca_cert_pem = """
         -----BEGIN CERTIFICATE-----
-        MIIBhjCCASygAwIBAgIUX2gyimk5Og/JklaRQLgwvYjeAaUwCgYIKoZIzj0EAwIw
+        MIIBhTCCASygAwIBAgIUbgthDCnnPmx8iaj974GXRo3bh04wCgYIKoZIzj0EAwIw
         KTEUMBIGA1UEAwwLQ2xpcHBlcmQgQ0ExETAPBgNVBAoMCENsaXBwZXJkMB4XDTI0
         MDEwMTAwMDAwMFoXDTM1MDEwMTAwMDAwMFowKTEUMBIGA1UEAwwLQ2xpcHBlcmQg
         Q0ExETAPBgNVBAoMCENsaXBwZXJkMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE
-        LJXnWuMCb8UpdiI7gINrmWOgiFKB4i6JiIfHRj3O6f8hGhCCS79WIzlTI0SlaNWE
-        2HPE/+Jk4i/DcfftthiLCaMyMDAwHQYDVR0OBBYEFEuQAn98G2kHJP9IkH/LOm0+
-        kFMuMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhANrpVtA6TsU4
-        TkgrqbwQgNNlutKnnzNvw0tnInCIaE5cAiAjI87QriXMC43rOOshKUkyyZ1D5SVa
-        2mP6nkH1w87HjQ==
+        FkeDdK1EzzdkuNOZ2afOr83yTHcNt5xfaoYSzl9/k5nw2lBzM83EvsE7XW5aGIek
+        e/7s/ZZPyTSJhzjjYP1oQqMyMDAwHQYDVR0OBBYEFAwy0hL0XTQ2Kq8IE+kcH6+t
+        Znn+MA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgXudHiJ7SvnET
+        PZ+mW0ny13d7IVRZn+HqsI3PtVt5Xq0CIHiv8p9u0um1ffoUjMGUn1ceQ5j26r4o
+        x1yo3/CyjlLI
         -----END CERTIFICATE-----
         """
         bind_ip = "${cfg.bindIp}"
         cert_names = [
-            "laptob-fw.antob.net",
+            "laptob.antob.net",
             "desktob.antob.net",
         ]
       '';

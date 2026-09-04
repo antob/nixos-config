@@ -113,7 +113,7 @@ in
             "10.64.1.2      hyllan.antob.net"
             "192.168.1.2    hyllan.lan"
             "10.64.1.8      iphone.antob.net"
-            "10.64.1.7      laptob-fw.antob.net"
+            "10.64.1.7      laptob.antob.net"
             "10.64.1.4      pihole.antob.net"
             "192.168.1.4    pihole.lan"
             "10.64.1.3      pikvm.antob.net"

@@ -133,7 +133,7 @@ result          # Ignored symlink to the most recent local build in /nix/store
 
 hosts/                     # Per-machine NixOS configs
   common/                  # Shared secrets (sops-encrypted secrets.yaml)
-  <host>/                  # e.g. desktob, laptob, laptob-fw, hyllan, wiggum, pihole, pikvm
+  <host>/                  # e.g. desktob, laptob, laptob, hyllan, wiggum, pihole, pikvm
     default.nix            # Host options entry point
     hardware.nix           # Machine hardware config
     disk-config.nix        # Partition layout (desktop/laptop family)
@@ -348,7 +348,7 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 | Local Nix bindings      | `camelCase`  | `cfg`, `gtkCfg`             |
 | NixOS options           | `camelCase`  | `hostName`, `storageDriver` |
 | Custom option namespace | `antob.*`    | `antob.tools.git.enable`  |
-| Host names              | `kebab-case` | `laptob-fw`, `desktob`      |
+| Host names              | `kebab-case` | `laptob`, `desktob`         |
 
 ---
 
@@ -356,5 +356,5 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 
 - **`antob.*` namespace** all custom options live under `antob`, to prevent conflicts with upstream NixOS options.
 - **Feature presets** the `antob.features.*` modules act as presets. `common`, `common-minimal`, `desktop`, `gaming`, `laptop`, and `rpi` enable many sub-modules at once. Hosts opt into presets instead of enabling every module individually.
-- **Impermanence.** Root filesystem is ephemeral. Persistent data lives at `antob.persistence.path` (default `/persist`), and the `.safe` subfolder is additionally backed up offsite. Some hosts override the path (e.g. `laptob-fw` uses `/nix/persist`). System and user state is preserved via the `preservation` module, not written into the ephemeral root.
+- **Impermanence.** Root filesystem is ephemeral. Persistent data lives at `antob.persistence.path` (default `/persist`), and the `.safe` subfolder is additionally backed up offsite. Some hosts override the path. System and user state is preserved via the `preservation` module, not written into the ephemeral root.
 - **No CI.** Validate with `just build <host>` locally; there is no automated test pipeline.
