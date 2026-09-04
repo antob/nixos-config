@@ -28,6 +28,7 @@ in
 
         [aliases]
         ls = "wt list {{ args }}"
+        rm = "wt remove {{ args }}"
         move-changes = ''''
         if git diff --quiet HEAD && test -z "$(git ls-files --others --exclude-standard)"; then
           wt switch --create {{ to }} --execute="{{ args }}"
