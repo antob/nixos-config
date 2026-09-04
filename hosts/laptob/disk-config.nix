@@ -25,7 +25,7 @@ in
   disko.devices = {
     disk = {
       main = {
-        device = mkDefault "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4d281d97";
+        device = mkDefault "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b42f9e49e";
         type = "disk";
         content = {
           type = "gpt";

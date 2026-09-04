@@ -31,11 +31,19 @@
       ];
     };
 
+    kernelModules = [ "kvm-intel" ];
+
     # Enable emulated systems for cross-compilation
     binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
+  hardware.intelgpu = {
+    vaapiDriver = "intel-media-driver";
+    driver = "xe";
+  };
+
+  hardware.cpu.intel.npu.enable = true;
   hardware.enableRedistributableFirmware = true;
 }
