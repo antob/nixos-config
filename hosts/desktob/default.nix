@@ -95,7 +95,7 @@ in
         hostId = "672fb36e";
         enableWoL = true;
       };
-      # ddcutil = enabled;
+      ddcutil = enabled;
     };
 
     persistence = {

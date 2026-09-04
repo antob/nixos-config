@@ -52,6 +52,17 @@
 
   # Modifies existing packages
   modifications = final: prev: {
+    # ddcci-driver fails to build on newer kernels (e.g. 7.2.2) with GCC 15:
+    # it calls kernel string functions without including <linux/string.h>, and
+    # kernel 7.x removed strncpy() entirely in favor of strscpy().
+    linuxPackages_latest = prev.linuxPackages_latest.extend (lfinal: lprev: {
+      ddcci-driver = lprev.ddcci-driver.overrideAttrs (oldAttrs: {
+        patches = (oldAttrs.patches or [ ]) ++ [
+          ./patches/ddcci-driver-linux-string-h.patch
+        ];
+      });
+    });
+
     dmenu = prev.dmenu.overrideAttrs (oldAttrs: {
       src = prev.fetchFromGitHub {
         owner = "antob";

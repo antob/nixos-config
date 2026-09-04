@@ -122,7 +122,7 @@ in
     environment.systemPackages = with pkgs; [
       arandr
       ungoogled-chromium
-      libreoffice-still
+      libreoffice-stable
       gimp
       mpv
       imv
