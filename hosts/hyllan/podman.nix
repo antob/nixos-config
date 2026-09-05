@@ -10,10 +10,6 @@ in
     virtualisation.docker.enable = mkForce false;
   };
 
-  virtualisation.oci-containers = {
-    backend = "podman";
-  };
-
   fileSystems = {
     "${dataDir}" = {
       device = "zpool/docker";
