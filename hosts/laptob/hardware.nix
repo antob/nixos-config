@@ -16,6 +16,12 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
 
+    # Hibernation: resume from the swapfile on /.swapvol
+    # The offset must match the physical start of the swapfile, recalculate with:
+    #   sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
+    resumeDevice = "/dev/mapper/system";
+    kernelParams = [ "resume_offset=60630272" ];
+
     supportedFilesystems = [
       "nfs"
       "nfs4"

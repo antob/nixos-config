@@ -56,6 +56,9 @@ in
       };
     };
 
+    # Hibernate after 2h of sleep. Before that the laptop stays in s2idle.
+    systemd.sleep.settings.Sleep.HibernateDelaySec = "2h";
+
     # Set the PPD profile at boot, once the daemon is available.
     systemd.services.ppd-ac-profile = {
       description = "Set power-profiles-daemon profile based on AC state";

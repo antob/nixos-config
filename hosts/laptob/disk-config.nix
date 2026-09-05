@@ -4,6 +4,18 @@ let
   impermanence = config.antob.persistence.enable;
   phase1Systemd = config.boot.initrd.systemd.enable;
   wipeScript = ''
+    # Safety: never wipe the root subvolume when a hibernation image is
+    # present on the swap area, resuming it requires the old root.
+    # swsusp writes the signature "S1SUSPEND" into the swap header page.
+    resume_offset=$(cat /sys/power/resume_offset)
+    if [ "$resume_offset" != "0" ]; then
+      sig=$(dd if=/dev/mapper/system bs=1 skip=$((resume_offset * 4096 + 4086)) count=9 2>/dev/null)
+      if [ "$sig" = "S1SUSPEND" ]; then
+        echo "Hibernation image detected; skipping rollback"
+        exit 0
+      fi
+    fi
+
     mkdir /tmp -p
     MNTPOINT=$(mktemp -d)
     (
@@ -93,7 +105,9 @@ in
                     };
                     "@swap" = {
                       mountpoint = "/.swapvol";
-                      swap.swapfile.size = "12G";
+                      # If swapfile size changes the resume_offset
+                      # in hardware.nix must be recalculated.
+                      swap.swapfile.size = "64G";
                       mountOptions = [ "noatime" ];
                     };
                   };
@@ -123,6 +137,10 @@ in
       after = [
         "dev-disk-by\\x2dlabel-system.device"
         "systemd-cryptsetup@system.service"
+        # Run after the hibernation resume attempt. On a successful resume
+        # the initrd is abandoned, so this service never runs. On a normal
+        # boot this prevents racing with the resume device check.
+        "systemd-hibernate-resume.service"
       ];
       before = [ "sysroot.mount" ];
       unitConfig.DefaultDependencies = "no";
