@@ -38,6 +38,7 @@ in
     ./backup.nix
     ./restic-server.nix
     ./nix-cache.nix
+    ./lan-guard.nix
   ];
 
   antob = {
