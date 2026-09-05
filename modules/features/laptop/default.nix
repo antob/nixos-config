@@ -31,7 +31,7 @@ in
     ];
 
     powerManagement = {
-      cpuFreqGovernor = lib.mkDefault "powersave";
+      cpuFreqGovernor = mkDefault "powersave";
       powertop.enable = true;
     };
 
@@ -51,20 +51,16 @@ in
       '';
 
       logind.settings.Login = {
-        HandleLidSwitch = "suspend-then-hibernate";
-        HandleLidSwitchExternalPower = "suspend";
+        HandleLidSwitch = mkDefault "suspend";
+        HandleLidSwitchExternalPower = mkDefault "suspend";
       };
     };
-
-    # Hibernate after 2h of sleep. Before that the laptop stays in s2idle.
-    systemd.sleep.settings.Sleep.HibernateDelaySec = "2h";
 
     # Set the PPD profile at boot, once the daemon is available.
     systemd.services.ppd-ac-profile = {
       description = "Set power-profiles-daemon profile based on AC state";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "power-profiles-daemon.service" ];
       after = [ "power-profiles-daemon.service" ];
-      requires = [ "power-profiles-daemon.service" ];
       serviceConfig.Type = "oneshot";
       script = ''
         ac_online=0

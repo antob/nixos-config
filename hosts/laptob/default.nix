@@ -92,6 +92,14 @@ in
     ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="27c6", ATTR{idProduct}=="609c", ATTR{authorized}="0", ATTR{authorized}="1"
   '';
 
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend-then-hibernate";
+    HandleLidSwitchExternalPower = "suspend";
+  };
+
+  # Hibernate after 4h of sleep.
+  systemd.sleep.settings.Sleep.HibernateDelaySec = "4h";
+
   # Sops secrets
   sops = {
     defaultSopsFile = ../common/secrets.yaml;
