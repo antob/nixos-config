@@ -126,7 +126,7 @@ in
     mesa-demos
     rocmPackages.rocminfo
     s-tui
-    calibre
+    pkgs-prev.calibre
   ];
 
   # Enable ROCm support in nixpkgs
