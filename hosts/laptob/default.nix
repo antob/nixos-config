@@ -86,6 +86,12 @@ in
     };
   };
 
+  # Framework-specific fix for the Goodix fingerprint reader which comes back
+  # in a bad state after suspend/hibernate resume.
+  services.udev.extraRules = mkIf config.antob.hardware.fingerprint.enable ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="27c6", ATTR{idProduct}=="609c", ATTR{authorized}="0", ATTR{authorized}="1"
+  '';
+
   # Sops secrets
   sops = {
     defaultSopsFile = ../common/secrets.yaml;
