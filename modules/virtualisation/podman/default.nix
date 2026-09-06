@@ -34,15 +34,22 @@ in
         "${matchAll}".allowedUDPPorts = [ 53 ];
       };
 
-    virtualisation.oci-containers.backend = "podman";
+    virtualisation = {
+      oci-containers.backend = "podman";
 
-    virtualisation.containers.storage.settings = {
-      storage = {
-        driver = cfg.storageDriver;
-        # graphroot = lib.mkIf config.antob.persistence.enable "${config.antob.persistence.path}/var/lib/containers/storage";
-        graphroot = "/var/lib/containers/storage";
-        runroot = "/run/containers/storage";
-        # rootless_storage_path = lib.mkIf config.antob.persistence.enable "${config.antob.persistence.path}/home/${config.antob.user.name}/.local/share/containers";
+      containers = {
+        storage.settings.storage = {
+          driver = cfg.storageDriver;
+          graphroot = "/var/lib/containers/storage";
+          runroot = "/run/containers/storage";
+        };
+        registries.settings = {
+          unqualified-search-registries = [ "docker.io" ];
+          registry = [
+            { location = "docker.io"; }
+            { location = "quay.io"; }
+          ];
+        };
       };
     };
 
