@@ -17,25 +17,8 @@ in
     antob.persistence.safe.directories = [ "/var/lib/fprint" ];
     services.fprintd.enable = true;
 
-    # Restart fprintd after resume.
-    systemd.services.fprintd-resume-stop = {
-      description = "Stop fprintd after resume";
-      after = [
-        "suspend.target"
-        "hibernate.target"
-        "suspend-then-hibernate.target"
-        "hybrid-sleep.target"
-      ];
-      wantedBy = [
-        "suspend.target"
-        "hibernate.target"
-        "suspend-then-hibernate.target"
-        "hybrid-sleep.target"
-      ];
-      serviceConfig.Type = "oneshot";
-      script = ''
-        systemctl stop fprintd.service || true
-      '';
-    };
+    # Noctalia drives fprintd itself over D-Bus; pam_fprintd in the login
+    # stack would stall password unlock for its 30s timeout.
+    security.pam.services.login.fprintAuth = false;
   };
 }
