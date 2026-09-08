@@ -91,5 +91,13 @@
     -- Prevents conflicts with keymaps for tree-sitter movements.
     vim.g.loaded_ruby_provider = 0
     vim.g.no_ruby_maps = 1
+
+    -- Disable keymaps from built in python provider.
+    -- Prevents conflicts with keymaps for tree-sitter movements.
+    vim.g.no_python_maps = 1
+
+    -- Disable keymaps from built in rust provider.
+    -- Prevents conflicts with keymaps for tree-sitter movements.
+    vim.g.no_rust_maps = 1
   '';
 }
