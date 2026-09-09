@@ -97,12 +97,16 @@ in
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend-then-hibernate";
-    HandleLidSwitchExternalPower = "suspend";
+    HandleLidSwitchExternalPower = "suspend-then-hibernate";
     HandleSuspendKey = "suspend-then-hibernate";
   };
 
-  # Hibernate after 4h of sleep.
-  systemd.sleep.settings.Sleep.HibernateDelaySec = "4h";
+  # Hibernate after 4h of sleep. Don't count down while on AC power,
+  # but still hibernate once unplugged.
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "4h";
+    HibernateOnACPower = "no";
+  };
 
   # Sops secrets
   sops = {
