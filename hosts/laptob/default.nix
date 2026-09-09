@@ -98,6 +98,7 @@ in
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend-then-hibernate";
     HandleLidSwitchExternalPower = "suspend";
+    HandleSuspendKey = "suspend-then-hibernate";
   };
 
   # Hibernate after 4h of sleep.
