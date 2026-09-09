@@ -2,6 +2,7 @@
   lib,
   config,
   inputs,
+  pkgs,
   ...
 }:
 with lib;
@@ -27,6 +28,8 @@ in
     };
 
     virtualisation.podman.storageDriver = "btrfs";
+
+    security.secure-boot.enable = true;
 
     tools = {
       atuin = enabled;
