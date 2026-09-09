@@ -61,15 +61,14 @@ let
 in
 {
   services = {
-    nix-serve = {
+    harmonia.cache = {
       enable = true;
-      # lix engine (nixpkgs unstable) crashes on aborted nar fetch. stable channel
-      # binds classic nix 2.28.7 instead, no abort crash.
-      package = pkgs.stable.nix-serve-ng;
-      bindAddress = "127.0.0.1";
-      port = port;
-      secretKeyFile = secrets.nix-cache-private-key.path;
-      extraParams = "--priority 30 --store ${dataDir}";
+      signKeyPaths = [ secrets.nix-cache-private-key.path ];
+      settings = {
+        bind = "127.0.0.1:${toString port}";
+        real_nix_store = "${dataDir}/nix/store";
+        priority = 50;
+      };
     };
 
     caddy.antobProxies."${subdomain}" = {
@@ -88,7 +87,6 @@ in
   };
 
   # Manually create the nix-serve user and group to be able to build as that user on hyllan.
-  systemd.services.nix-serve.serviceConfig.DynamicUser = lib.mkForce false;
   users.groups."${group}" = { };
   users.users."${user}" = {
     isNormalUser = true;
