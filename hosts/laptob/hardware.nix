@@ -20,7 +20,11 @@
     # The offset must match the physical start of the swapfile, recalculate with:
     #   sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
     resumeDevice = "/dev/mapper/system";
-    kernelParams = [ "resume_offset=60630272" ];
+    kernelParams = [
+      "resume_offset=60630272"
+      # Fixes suspend-then-hibernate.
+      "rtc_cmos.use_acpi_alarm=1"
+    ];
 
     supportedFilesystems = [
       "nfs"
