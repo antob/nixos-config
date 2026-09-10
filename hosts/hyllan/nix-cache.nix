@@ -17,6 +17,7 @@ let
 
   repoUrl = "https://github.com/antob/nixos-config";
   workDir = "/tmp/nix-cache-build";
+  rootsDir = "${dataDir}/roots";
   buildHosts = [
     "desktob"
     "laptob"
@@ -47,14 +48,23 @@ let
       exit 1
     fi
 
+    failed=0
     for host in ${lib.concatStringsSep " " buildHosts}; do
       echo "=== Starting build for host $host"
-      if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --no-link; then
+      if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --out-link "${rootsDir}/$host"; then
         echo "=== Build succeeded for host $host"
       else
-        echo "=== Build failed for host $host"
+        echo "=== Build failed for host $host, keeping its previous root"
+        failed=1
       fi
     done
+
+    if [ "$failed" -eq 0 ]; then
+      echo "=== Running garbage collection"
+      nix --store "$store" store gc || echo "Garbage collection failed"
+    else
+      echo "=== Skipping garbage collection: at least one host failed to build"
+    fi
 
     exit 0
   '';
@@ -67,7 +77,7 @@ in
       settings = {
         bind = "127.0.0.1:${toString port}";
         real_nix_store = "${dataDir}/nix/store";
-        priority = 50;
+        priority = 30;
       };
     };
 
@@ -103,6 +113,7 @@ in
 
   systemd.tmpfiles.rules = [
     "d ${dataDir} 0755 ${user} ${group} -"
+    "d ${rootsDir} 0755 ${user} ${group} -"
     "d ${workDir} 0755 ${user} ${group} -"
   ];
 
