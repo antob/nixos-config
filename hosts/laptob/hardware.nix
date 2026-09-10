@@ -49,6 +49,11 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
+  # UCSI driver on this Framework holds a phantom USB-C power source after
+  # unplug, fooling systemd's AC detection. Reload the driver after each
+  # resume so suspend-then-hibernate actually hibernates on schedule.
+  antob.hardware.ucsi-reset.enable = true;
+
   hardware.intelgpu = {
     vaapiDriver = "intel-media-driver";
     driver = "xe";
