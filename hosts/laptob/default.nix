@@ -16,6 +16,11 @@ in
     ./hardware.nix
   ];
 
+  # Upstream fix for the suspend-then-hibernate timerfd race
+  nixpkgs.overlays = [
+    (import ../../overlays/systemd-suspend-then-hibernate-timerfd-fix.nix)
+  ];
+
   antob = {
     features = {
       common = enabled;
