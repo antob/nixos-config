@@ -95,6 +95,23 @@ in
     ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="27c6", ATTR{idProduct}=="609c", ATTR{authorized}="0", ATTR{authorized}="1", RUN+="${pkgs.systemd}/bin/systemctl try-restart fprintd.service"
   '';
 
+  # Make fprintd's own startup wait until the reader is actually enumerated before it opens
+  systemd.services.fprintd.serviceConfig.ExecStartPre =
+    mkIf config.antob.hardware.fingerprint.enable "${pkgs.writeShellScript "wait-for-goodix-reader" ''
+      for _ in $(seq 1 30); do
+        for f in /sys/bus/usb/devices/*/idVendor; do
+          dir=$(${pkgs.coreutils}/bin/dirname "$f")
+          vendor=$(${pkgs.coreutils}/bin/cat "$f" 2>/dev/null)
+          product=$(${pkgs.coreutils}/bin/cat "$dir/idProduct" 2>/dev/null)
+          if [ "$vendor" = "27c6" ] && [ "$product" = "609c" ]; then
+            exit 0
+          fi
+        done
+        sleep 0.1
+      done
+      exit 0
+    ''}";
+
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend-then-hibernate";
     HandleLidSwitchExternalPower = "suspend-then-hibernate";
