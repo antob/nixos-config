@@ -19,13 +19,8 @@ in
   # Upstream fix for the suspend-then-hibernate timerfd race
   nixpkgs.overlays = [
     (import ../../overlays/systemd-suspend-then-hibernate-timerfd-fix.nix)
+    (import ../../overlays/libvirt-disable-xen.nix)
   ];
-
-  # We only use libvirtd/virt-manager for qemu:///system, never Xen. Disabling
-  # Xen support drops the xen -> openvswitch dependency chain, whose test
-  # suite (PMD/ALB tests requiring specific multi-core CPU topology) is flaky
-  # to the point of unbuildable in the nightly cache-build's Nix sandbox.
-  virtualisation.libvirtd.package = pkgs.libvirt.override { enableXen = false; };
 
   antob = {
     features = {
