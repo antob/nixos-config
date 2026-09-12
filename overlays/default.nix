@@ -79,6 +79,15 @@
             "test_connection_pool_timeout_during_response"
           ];
         });
+
+        # Same upstream repo (pydantic/httpx2) and same flakiness: a
+        # keepalive ping is expected within a fixed 0.1s/0.2s window, which
+        # is flaky under the load of a full nightly system build.
+        httpx2 = pyPrev.httpx2.overridePythonAttrs (oldAttrs: {
+          disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
+            "test_keepalive_ping"
+          ];
+        });
       })
     ];
   };
