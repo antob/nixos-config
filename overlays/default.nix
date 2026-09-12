@@ -67,5 +67,19 @@
         sha256 = "sha256-OHvRuex2k72FJiVaMZkcmbpoKIgqpZzxrAImgg8XVeI=";
       };
     });
+
+    pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+      (pyFinal: pyPrev: {
+        # httpcore2 2.9.1's trio connection-pool-timeout tests race a 10ms
+        # deadline against the pool cleaning itself up, which is flaky under
+        # the load of a full nightly system build.
+        httpcore2 = pyPrev.httpcore2.overridePythonAttrs (oldAttrs: {
+          disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
+            "test_connection_pool_timeout_during_request"
+            "test_connection_pool_timeout_during_response"
+          ];
+        });
+      })
+    ];
   };
 }
