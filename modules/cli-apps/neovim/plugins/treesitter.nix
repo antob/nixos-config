@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf (!config.antob.cli-apps.neovim.minimal) {
+  config = lib.mkIf (config.antob.cli-apps.neovim.enable && !config.antob.cli-apps.neovim.minimal) {
     antob.home.extraOptions.programs.neovim = {
       plugins = with pkgs.vimPlugins; [
         nvim-treesitter.withAllGrammars

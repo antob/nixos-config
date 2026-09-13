@@ -1,64 +1,71 @@
-{ pkgs, lib, ... }:
 {
-  antob.home.extraOptions.programs.neovim = {
-    plugins = with pkgs.vimPlugins; [
-      snacks-nvim
-    ];
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  config = lib.mkIf config.antob.cli-apps.neovim.enable {
+    antob.home.extraOptions.programs.neovim = {
+      plugins = with pkgs.vimPlugins; [
+        snacks-nvim
+      ];
 
-    initLua = lib.mkOrder 200 /* lua */ ''
-      require("snacks").setup({
-        bigfile = { enabled = true },
-        dashboard = { enabled = false },
-        explorer = { enabled = false },
-        indent = { enabled = false },
-        input = { enabled = false },
-        scratch = { enabled = true },
+      initLua = lib.mkOrder 200 /* lua */ ''
+        require("snacks").setup({
+          bigfile = { enabled = true },
+          dashboard = { enabled = false },
+          explorer = { enabled = false },
+          indent = { enabled = false },
+          input = { enabled = false },
+          scratch = { enabled = true },
 
-        picker = {
-          enabled = true,
-          ui_select = true,
-          win = {
-            -- input window
-            input = {
-              keys = {
-                ["<Esc>"] = { "close", mode = { "n", "i" } },
+          picker = {
+            enabled = true,
+            ui_select = true,
+            win = {
+              -- input window
+              input = {
+                keys = {
+                  ["<Esc>"] = { "close", mode = { "n", "i" } },
+                },
+              },
+            },
+            sources = {
+              explorer = {
+                hidden = true,
+              },
+              files = {
+                hidden = true,
+              },
+              grep = {
+                hidden = true,
               },
             },
           },
-          sources = {
-            explorer = {
-              hidden = true,
-            },
-            files = {
-              hidden = true,
-            },
-            grep = {
-              hidden = true,
-            },
-          },
-        },
 
-        notifier = { enabled = true },
-        quickfile = { enabled = false },
-        scope = { enabled = false },
-        scroll = { enabled = false },
-        statuscolumn = { enabled = false },
-        words = { enabled = false },
-        styles = {
-          lazygit = {
-            wo = { winhighlight = "FloatBorder:PmenuBorder" },
-            height = 0.99,
-            width = 0.99,
+          notifier = { enabled = true },
+          quickfile = { enabled = false },
+          scope = { enabled = false },
+          scroll = { enabled = false },
+          statuscolumn = { enabled = false },
+          words = { enabled = false },
+          styles = {
+            lazygit = {
+              wo = { winhighlight = "FloatBorder:PmenuBorder" },
+              height = 0.99,
+              width = 0.99,
+            },
+            zoom_indicator = {
+              text = " 󰊓 ",
+              row = 0,
+            },
           },
-          zoom_indicator = {
-            text = " 󰊓 ",
-            row = 0,
-          },
-        },
-      })
+        })
 
-      -- Make SnacksPickerBorder use the PmenuExtra highlight group
-      vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuExtra" })
-    '';
+        -- Make SnacksPickerBorder use the PmenuExtra highlight group
+        vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuExtra" })
+      '';
+    };
   };
 }
