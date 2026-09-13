@@ -118,11 +118,19 @@ in
     HandleSuspendKey = "suspend-then-hibernate";
   };
 
-  # Hibernate after 4h of sleep. Don't count down while on AC power,
-  # but still hibernate once unplugged.
+  # Hibernate after 4h of sleep.
   systemd.sleep.settings.Sleep = {
     HibernateDelaySec = "4h";
     HibernateOnACPower = "no";
+  };
+
+  # Belt-and-suspenders backstop for https://github.com/systemd/systemd/issues/38193:
+  # forces a real hibernate if suspend-then-hibernate slept past
+  # HibernateDelaySec on battery without ever attempting to hibernate itself.
+  # Keep in sync with HibernateDelaySec above.
+  antob.hardware.suspend-then-hibernate-watchdog = {
+    enable = true;
+    hibernateDelaySec = 4 * 60 * 60;
   };
 
   # Sops secrets
