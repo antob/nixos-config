@@ -47,7 +47,7 @@ iso type="install":
     nix build .#nixosConfigurations.{{ type }}-iso.config.system.build.isoImage
 
 # Build Raspberry Pi SD image
-build-pi-sd flake:
+build-sd-image flake:
     nix build .#nixosConfigurations.{{ flake }}.config.system.build.sdImage
 
 # Install flake to remote host

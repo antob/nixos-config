@@ -16,6 +16,7 @@ in
 
   antob = {
     features.rpi = enabled;
+
     hardware.systemd-networking = {
       enable = true;
       hostName = "pidesk";

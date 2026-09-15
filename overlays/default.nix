@@ -52,13 +52,6 @@
 
   # Modifies existing packages
   modifications = final: prev: {
-    # flashrom 1.8.0's cmocka tests are flaky on aarch64-linux,
-    # breaking raspberrypi-eeprom for pi builds.
-    # https://github.com/NixOS/nixpkgs/issues/558302
-    flashrom = prev.flashrom.overrideAttrs (oldAttrs: {
-      doCheck = false;
-    });
-
     dmenu = prev.dmenu.overrideAttrs (oldAttrs: {
       src = prev.fetchFromGitHub {
         owner = "antob";

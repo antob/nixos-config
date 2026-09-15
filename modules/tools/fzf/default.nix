@@ -19,6 +19,7 @@ in
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
+        enableNushellIntegration = false;
 
         defaultOptions = import ./themes/tokyonight-night.nix ++ [
           "--tmux 80%"

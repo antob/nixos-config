@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -10,6 +11,38 @@ let
   cfg = config.antob.features.rpi;
 in
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+    inputs.disko.nixosModules.disko
+
+    ../../user
+    ../../home
+    ../../nix
+    ../../persistence
+    ../../color-scheme
+
+    ../../tools/kitty
+    ../../tools/git
+    ../../tools/zsh
+    ../../tools/starship
+    ../../tools/eza
+    ../../tools/fzf
+    ../../cli-apps/neovim
+    ../../cli-apps/tmux
+    ../../services/openssh
+    ../../system/locale
+    ../../system/time
+
+    ../../hardware/systemd-networking
+    ../../services/wireguard
+
+    # transitive deps
+    ../../security/gpg
+    ../../hardware/networking
+    ../../services/avahi
+    ../../services/networkd-vpn
+  ];
+
   options.antob.features.rpi = with types; {
     enable = mkBoolOpt false "Whether or not to enable Raspberry Pi configuration.";
   };
@@ -61,19 +94,23 @@ in
           };
         };
       };
+
+      home.extraOptions.home.enableNixpkgsReleaseCheck = false;
     };
 
-    environment.variables = {
-      EDITOR = "nvim";
-    };
+    environment = {
+      variables = {
+        EDITOR = "nvim";
+      };
 
-    # Make hosts file writeable
-    environment.etc.hosts.mode = "0644";
+      # Make hosts file writeable
+      etc.hosts.mode = "0644";
 
-    environment.shellAliases = {
-      sudo = "sudo "; # Fixes missing alias doing `sudo`
-      cat = "bat -p";
-      speedtest = "speedtest-rs";
+      shellAliases = {
+        sudo = "sudo "; # Fixes missing alias doing `sudo`
+        cat = "bat -p";
+        speedtest = "speedtest-rs";
+      };
     };
 
     environment.systemPackages = with pkgs; [
@@ -85,15 +122,8 @@ in
       jq
       inetutils
       impala
-
-      # raspberrypi-eeprom is used to update the pi firmware,
-      # but since nixos has a different filesystem structure,
-      # the firmware partition must be manually mounted first
-      # sudo mount /dev/disk/by-label/FIRMWARE /mnt
-      # sudo BOOTFS=/mnt rpi-eeprom-update -a
       libraspberrypi
       raspberrypi-eeprom
-
       procs
       unzip
       dust
@@ -119,5 +149,9 @@ in
       latitude = mkDefault 57.7;
       longitude = mkDefault 11.8;
     };
+
+    # Silences the upstream 26.05 default-value
+    # warning and opts into the recommended 26.11 default.
+    boot.zfs.forceImportRoot = false;
   };
 }
