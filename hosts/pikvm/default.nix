@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  inputs,
   ...
 }:
 
@@ -10,9 +9,7 @@ let
   secrets = config.sops.secrets;
 in
 {
-  imports = with inputs; [
-    kvmd.nixosModules.default
-    kvmd.nixosModules.v2-hdmi-rpi4
+  imports = [
     ./hardware.nix
   ];
 
@@ -23,7 +20,6 @@ in
       hostName = "pikvm";
       enableWireless = false;
       enableVpn = false;
-      # Derived from `head -c 8 /etc/machine-id`
       hostId = "e3df0975";
       staticIp = {
         enable = true;

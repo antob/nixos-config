@@ -142,16 +142,16 @@ in
     nix.settings.filter-syscalls = false;
     documentation.enable = lib.mkDefault false;
 
-    # Bootloader.
-    boot.loader.systemd-boot.enable = false;
-
     location = {
       latitude = mkDefault 57.7;
       longitude = mkDefault 11.8;
     };
 
-    # Silences the upstream 26.05 default-value
-    # warning and opts into the recommended 26.11 default.
-    boot.zfs.forceImportRoot = false;
+    # Bootloader.
+    boot = {
+      loader.systemd-boot.enable = false;
+      zfs.forceImportRoot = false;
+      supportedFilesystems.zfs = false;
+    };
   };
 }

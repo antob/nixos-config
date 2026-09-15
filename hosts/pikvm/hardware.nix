@@ -1,25 +1,17 @@
 {
   lib,
-  modulesPath,
+  inputs,
+  nixos-raspberrypi,
   ...
 }:
 
 with lib;
 {
-  imports = [
-    "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
+  imports = with inputs; [
+    nixos-raspberrypi.nixosModules.sd-image
+    kvmd.nixosModules.default
+    kvmd.nixosModules.v2-hdmi-rpi4
   ];
 
   sdImage.compressImage = false;
-
-  boot = {
-    initrd.allowMissingModules = true;
-    supportedFilesystems = mkForce [
-      "vfat"
-      "ext4"
-    ];
-  };
-
-  hardware.enableRedistributableFirmware = true;
-  nixpkgs.hostPlatform = "aarch64-linux";
 }

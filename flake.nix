@@ -22,8 +22,6 @@
 
     # Hardware Configuration
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    # Pinned version used by Rpi builds to avoid rebuilding the kernel on every update.
-    nixos-hardware-pi.url = "github:NixOS/nixos-hardware/0471accf8d0a8210b31d947497d179ecc99e0021";
 
     # Preservation
     preservation.url = "github:nix-community/preservation";
@@ -98,10 +96,7 @@
     };
 
     # PiKVM
-    kvmd = {
-      url = "github:aostanin/kvmd.nix";
-      inputs.nixos-hardware.follows = "nixos-hardware-pi";
-    };
+    kvmd.url = "github:aostanin/kvmd.nix";
 
     # Clipperd - Clipboard sync between iPhone and Linux
     clipperd = {
@@ -129,6 +124,8 @@
       inherit (self) outputs;
       lib = import ./lib { inherit (nixpkgs) lib; };
       rpiLib = import ./lib { inherit (inputs.nixos-raspberrypi.inputs.nixpkgs) lib; };
+      rpiNixosSystem = inputs.nixos-raspberrypi.lib.nixosSystem;
+      rpiNixosInstaller = inputs.nixos-raspberrypi.lib.nixosInstaller;
 
       systems = [
         "x86_64-linux"
@@ -209,34 +206,43 @@
           ];
         };
 
-        pihole = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          system = "aarch64-linux";
-          modules = commonModules ++ [
-            ./hosts/pihole
-          ];
-        };
-
-        pikvm = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          system = "aarch64-linux";
-          modules = commonModules ++ [
-            ./hosts/pikvm
-          ];
-        };
-
-        pidesk = inputs.nixos-raspberrypi.lib.nixosSystem {
+        pihole = rpiNixosSystem {
           specialArgs = {
             inherit inputs outputs;
             lib = rpiLib;
           };
+          system = "aarch64-linux";
+          modules = [
+            ./modules/features/rpi
+            ./hosts/pihole
+          ];
+        };
+
+        pikvm = rpiNixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            lib = rpiLib;
+          };
+          system = "aarch64-linux";
+          modules = [
+            ./modules/features/rpi
+            ./hosts/pikvm
+          ];
+        };
+
+        pidesk = rpiNixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            lib = rpiLib;
+          };
+          system = "aarch64-linux";
           modules = [
             ./modules/features/rpi
             ./hosts/pidesk
           ];
         };
 
-        rpi4-installer = inputs.nixos-raspberrypi.lib.nixosInstaller {
+        rpi4-installer = rpiNixosInstaller {
           system = "aarch64-linux";
           specialArgs = {
             inherit inputs outputs;
