@@ -21,7 +21,7 @@ in
       enable = true;
       hostName = "pidesk";
       enableVpn = false;
-      hostId = "c99ced58";
+      hostId = "b4a80555";
     };
     services.wireguard = {
       enable = true;
