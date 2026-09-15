@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf (config.antob.cli-apps.neovim.enable && !config.antob.cli-apps.neovim.minimal) {
+  config = lib.mkIf (config.antob.cli-apps.neovim.enable && !config.antob.cli-apps.neovim.minimal && !config.antob.cli-apps.neovim.localConfig) {
     antob.home.extraOptions = {
       home.packages = with pkgs; [
         rumdl

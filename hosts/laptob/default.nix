@@ -7,7 +7,7 @@
 }:
 with lib;
 let
-  secrets = config.sops.secrets;
+  inherit (config.sops) secrets;
   wgIp = "10.64.1.7";
 in
 {
@@ -42,6 +42,7 @@ in
     cli-apps = {
       llm-agents = enabled;
       lumen = enabled;
+      neovim.localConfig = true;
     };
 
     services = {

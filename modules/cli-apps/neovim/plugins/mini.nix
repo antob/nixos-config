@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.antob.cli-apps.neovim.enable {
+  config = lib.mkIf (config.antob.cli-apps.neovim.enable && !config.antob.cli-apps.neovim.localConfig) {
     antob.home.extraOptions.programs.neovim = {
       plugins = with pkgs.vimPlugins; [
         mini-nvim

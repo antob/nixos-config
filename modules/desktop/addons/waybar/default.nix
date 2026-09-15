@@ -191,7 +191,6 @@ in
               tooltip-format-discharging = "{power:>1.0f}W↓ {capacity}%";
               tooltip-format-charging = "{power:>1.0f}W↑ {capacity}%";
               interval = 5;
-              # on-click = "omarchy-menu power";
               states = {
                 warning = 20;
                 critical = 10;
