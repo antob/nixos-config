@@ -10,7 +10,7 @@
 let
   subdomain = "nix-cache";
   port = 5000;
-  secrets = config.sops.secrets;
+  inherit (config.sops) secrets;
   dataDir = "/mnt/tank/services/nix-cache";
   user = "nix-serve";
   group = "nix-serve";
@@ -25,7 +25,7 @@ let
     "wiggum"
     "pidesk"
     "pihole"
-    # "pikvm"
+    "pikvm"
   ];
 
   # Nightly pre-build of the target hosts' toplevels into the cache store.
@@ -51,6 +51,10 @@ let
     failed=0
     for host in ${lib.concatStringsSep " " buildHosts}; do
       echo "=== Starting build for host $host"
+      if [ "$host" = "pikvm" ]; then
+        echo "=== Pre-fetching PiKVM kernel from aostanin.cachix.org"
+        ./scripts/fetch-pikvm-kernel.sh --store "$store" pikvm || echo "=== Pre-fetch failed, will build kernel from source if needed"
+      fi
       if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --out-link "${rootsDir}/$host"; then
         echo "=== Build succeeded for host $host"
       else
@@ -83,7 +87,7 @@ in
 
     caddy.antobProxies."${subdomain}" = {
       hostName = "127.0.0.1";
-      port = port;
+      inherit port;
     };
   };
 
@@ -100,7 +104,7 @@ in
   users.groups."${group}" = { };
   users.users."${user}" = {
     isNormalUser = true;
-    group = group;
+    inherit group;
     extraGroups = [ "nixbld" ];
   };
 
@@ -111,33 +115,36 @@ in
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "d ${dataDir} 0755 ${user} ${group} -"
-    "d ${rootsDir} 0755 ${user} ${group} -"
-    "d ${workDir} 0755 ${user} ${group} -"
-  ];
-
-  systemd.timers.nix-cache-build = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "03:00";
-    };
-  };
-
-  systemd.services.nix-cache-build = {
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-    path = with pkgs; [
-      git
-      nix
+  systemd = {
+    tmpfiles.rules = [
+      "d ${dataDir} 0755 ${user} ${group} -"
+      "d ${rootsDir} 0755 ${user} ${group} -"
+      "d ${workDir} 0755 ${user} ${group} -"
     ];
-    serviceConfig = {
-      Type = "oneshot";
-      User = user;
-      Group = group;
-      TimeoutStartSec = "infinity";
-      ExecStart = buildScript;
+
+    timers.nix-cache-build = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "03:00";
+      };
     };
-    unitConfig.RequiresMountsFor = [ dataDir ];
+
+    services.nix-cache-build = {
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      path = with pkgs; [
+        git
+        nix
+        jq
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = user;
+        Group = group;
+        TimeoutStartSec = "infinity";
+        ExecStart = buildScript;
+      };
+      unitConfig.RequiresMountsFor = [ dataDir ];
+    };
   };
 }

@@ -55,6 +55,13 @@ install flake host *ARGS:
     nixos-anywhere --flake .#{{ flake }} {{ host }} --no-use-machine-substituters --no-substitute-on-destination {{ ARGS }}
 
 ###################################
+# Varuious utility commands 
+###################################
+
+fetch-pikvm-kernel host="pikvm":
+    ./scripts/fetch-pikvm-kernel.sh {{ host }}
+
+###################################
 # Various flake commands
 ###################################
 
