@@ -218,6 +218,7 @@ in
           stdenv.cc.cc.lib
           fontconfig
           freetype
+          icu
         ];
       };
 
