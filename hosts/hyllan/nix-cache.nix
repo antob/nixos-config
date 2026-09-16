@@ -52,8 +52,8 @@ let
     for host in ${lib.concatStringsSep " " buildHosts}; do
       echo "=== Starting build for host $host"
       if [ "$host" = "pikvm" ]; then
-        echo "=== Pre-fetching PiKVM kernel from aostanin.cachix.org"
-        ./scripts/fetch-pikvm-kernel.sh --store "$store" pikvm || echo "=== Pre-fetch failed, will build kernel from source if needed"
+        echo "--- Pre-fetching PiKVM kernel from aostanin.cachix.org"
+        ./scripts/fetch-pikvm-kernel.sh --store "$store" pikvm || echo "--- Pre-fetch failed, will build kernel from source if needed"
       fi
       if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --out-link "${rootsDir}/$host"; then
         echo "=== Build succeeded for host $host"
@@ -133,6 +133,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = with pkgs; [
+        bash
         git
         nix
         jq
