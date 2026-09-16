@@ -281,6 +281,11 @@ in
         };
       };
 
+      antob.persistence.home.directories = [
+        ".local/share/nvim"
+        ".local/state/nvim"
+      ];
+
       fileSystems."${userHome}/.config/nvim" = {
         device = "${userHome}/Projects/nvim-config";
         options = [ "bind" ];
