@@ -9,7 +9,7 @@ let
   cfg = config.antob.cli-apps.neovim;
 
   user = config.antob.user.name;
-  group = config.antob.user.group;
+  inherit (config.antob.user) group;
   userHome = "/home/${user}";
 
   # Inspired from https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/nix-ld.nix

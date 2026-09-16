@@ -62,15 +62,15 @@
     let
       email = "tob@antob.se";
       dataDir = "/mnt/tank/services/caddy";
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       cfg = config.services.caddy;
     in
     {
       services.caddy = with lib; {
         enable = true;
-        email = email;
+        inherit email;
         # acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
-        dataDir = dataDir;
+        inherit dataDir;
         package = pkgs.caddy.withPlugins {
           plugins = [ "github.com/caddy-dns/digitalocean@v0.0.0-20250606074528-04bde2867106" ];
           hash = "sha256-3xunCVNUgHfVsmv/s2coozVWjIO9SlRvpJOuYp7i4EA=";
