@@ -38,16 +38,18 @@ in
       ];
       substituters = [
         "https://nix-community.cachix.org"
-        "https://nix-cache.antob.net"
+        "http://nix-cache.hyllan.lan"
         "https://nixos-raspberrypi.cachix.org"
       ];
       trusted-substituters = [
         "https://nix-community.cachix.org"
+        "http://nix-cache.hyllan.lan"
         "https://nix-cache.antob.net"
         "https://nixos-raspberrypi.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nix-cache.hyllan.lan-1:yrIa59Q68kwhCAU42Fh8p6FelDTyfcTWFEBDHRgY9C0="
         "nix-cache.antob.net-1:yrIa59Q68kwhCAU42Fh8p6FelDTyfcTWFEBDHRgY9C0="
         "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
       ];

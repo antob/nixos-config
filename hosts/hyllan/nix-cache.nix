@@ -85,9 +85,15 @@ in
       };
     };
 
-    caddy.antobProxies."${subdomain}" = {
-      hostName = "127.0.0.1";
-      inherit port;
+    caddy = {
+      antobProxies."${subdomain}" = {
+        hostName = "127.0.0.1";
+        inherit port;
+      };
+
+      virtualHosts."nix-cache.hyllan.lan:80".extraConfig = ''
+        reverse_proxy 127.0.0.1:${toString port}
+      '';
     };
   };
 
