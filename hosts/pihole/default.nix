@@ -7,7 +7,7 @@
 
 with lib;
 let
-  secrets = config.sops.secrets;
+  inherit (config.sops) secrets;
   piholeFtl = config.services.pihole-ftl;
 in
 {
