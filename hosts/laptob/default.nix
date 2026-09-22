@@ -125,15 +125,6 @@ in
     HibernateOnACPower = "no";
   };
 
-  # Belt-and-suspenders backstop for https://github.com/systemd/systemd/issues/38193:
-  # forces a real hibernate if suspend-then-hibernate slept past
-  # HibernateDelaySec on battery without ever attempting to hibernate itself.
-  # Keep in sync with HibernateDelaySec above.
-  antob.hardware.suspend-then-hibernate-watchdog = {
-    enable = true;
-    hibernateDelaySec = 4 * 60 * 60;
-  };
-
   # Sops secrets
   sops = {
     defaultSopsFile = ../common/secrets.yaml;
