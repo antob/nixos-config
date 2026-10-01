@@ -38,7 +38,6 @@ in
       ];
       substituters = [
         "https://nix-community.cachix.org"
-        "http://nix-cache.hyllan.lan"
         "https://nixos-raspberrypi.cachix.org"
       ];
       trusted-substituters = [
