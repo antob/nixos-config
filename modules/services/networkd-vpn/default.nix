@@ -7,7 +7,7 @@
 with lib;
 let
   cfg = config.antob.services.networkd-vpn;
-  secrets = config.sops.secrets;
+  inherit (config.sops) secrets;
 in
 {
   options.antob.services.networkd-vpn = with types; {
@@ -16,9 +16,26 @@ in
     vpns = mkOption {
       type = attrsOf (submodule {
         options = {
+          type = mkOption {
+            type = enum [
+              "systemd"
+              "snx"
+            ];
+            default = "systemd";
+            description = ''
+              How the VPN is controlled. `systemd` starts/stops `unitName`,
+              `snx` connects/disconnects the snx-rs profile `snxProfile`.
+            '';
+          };
           unitName = mkOption {
-            type = str;
-            description = "Systemd unit name.";
+            type = nullOr str;
+            default = null;
+            description = "Systemd unit name (type `systemd`).";
+          };
+          snxProfile = mkOption {
+            type = nullOr str;
+            default = null;
+            description = "snx-rs profile name or UUID (type `snx`).";
           };
           label = mkOption {
             type = str;
@@ -33,13 +50,29 @@ in
             unitName = "wg-quick-mullvad0";
             label = "Mullvad";
           };
+          "snx-work" = {
+            type = "snx";
+            snxProfile = "Work";
+            label = "Work";
+          };
         };
       '';
-      description = "Declarative specification of vpn interfaces.";
+      description = ''
+        Declarative specification of vpn interfaces. The attribute name must
+        match the network interface the VPN creates; it is used to detect
+        whether the VPN is active.
+      '';
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = mapAttrsToList (name: vpn: {
+      assertion = if vpn.type == "systemd" then vpn.unitName != null else vpn.snxProfile != null;
+      message = "antob.services.networkd-vpn.vpns.${name}: type `${vpn.type}` requires `${
+        if vpn.type == "systemd" then "unitName" else "snxProfile"
+      }` to be set.";
+    }) cfg.vpns;
+
     antob.services.networkd-vpn.vpns = {
       protonvpn0 = {
         label = "Proton VPN (Sweden)";

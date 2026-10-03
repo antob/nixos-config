@@ -33,6 +33,7 @@ in
 
     tools = {
       atuin = enabled;
+      checkpoint-vpn = enabled;
     };
 
     cli-apps = {

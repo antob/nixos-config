@@ -38,6 +38,7 @@ in
         enable = true;
         resticEnvFile = secrets.restic_env_file.path;
       };
+      checkpoint-vpn = enabled;
     };
 
     services = {

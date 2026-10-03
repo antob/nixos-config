@@ -1,15 +1,35 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   vpns = config.antob.services.networkd-vpn.vpns;
+  snxctl = "${pkgs.snx-rs}/bin/snxctl";
+  vpnCommand =
+    action: vpn:
+    if vpn.type == "snx" then
+      "${snxctl} -p ${lib.escapeShellArg vpn.snxProfile} ${
+        if action == "start" then "connect" else "disconnect"
+      }"
+    else
+      "sudo systemctl ${action} ${lib.escapeShellArg "${vpn.unitName}.service"}";
+  vpnCases =
+    action:
+    builtins.concatStringsSep "\n" (
+      builtins.attrValues (
+        builtins.mapAttrs (
+          name: value: "      ${lib.escapeShellArg value.label}) ${vpnCommand action value} ;;"
+        ) vpns
+      )
+    );
   labelsStr = builtins.concatStringsSep "\n" (
     builtins.attrValues (builtins.mapAttrs (name: value: value.label) vpns)
   );
   ifAndLabelsStr = builtins.concatStringsSep " " (
     builtins.attrValues (builtins.mapAttrs (name: value: "'${name}|${value.label}'") vpns)
-  );
-  labelToUnitName = builtins.concatStringsSep " " (
-    builtins.attrValues (builtins.mapAttrs (name: value: "['${value.label}']='${value.unitName}'") vpns)
   );
 in
 pkgs.writeShellScriptBin "dm-networkd-vpn" ''
@@ -30,7 +50,6 @@ pkgs.writeShellScriptBin "dm-networkd-vpn" ''
   declare CONNECTION_STATE=false
   declare MENU_TITLE=""
   declare PICKED_ENTRY=""
-  declare -rA label_to_unit=(${labelToUnitName})
 
   usage(){
       cat <<- EOF
@@ -108,12 +127,16 @@ pkgs.writeShellScriptBin "dm-networkd-vpn" ''
   }
 
   activate_connection(){
-    sudo systemctl start "''${label_to_unit[$PICKED_ENTRY]}.service"
+    case "$PICKED_ENTRY" in
+  ${vpnCases "start"}
+    esac
     return 0
   }
 
   deactivate_connection(){
-    sudo systemctl stop "''${label_to_unit[$PICKED_ENTRY]}.service"
+    case "$PICKED_ENTRY" in
+  ${vpnCases "stop"}
+    esac
     return 0
   }
 

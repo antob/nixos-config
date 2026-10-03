@@ -34,6 +34,14 @@ in
     # update the firewall rule to allow keepalive traffic
     networking.firewall.checkReversePath = "loose";
 
+    # List the profiles in the dm-networkd-vpn menu. The attribute name must
+    # match `if-name` in the profile, it is used to detect an active tunnel.
+    antob.services.networkd-vpn.vpns.snx-puzzel = mkIf config.antob.services.networkd-vpn.enable {
+      type = "snx";
+      snxProfile = "Puzzel";
+      label = "Puzzel";
+    };
+
     antob.home.extraOptions = {
       xdg.configFile."snx-rs/puzzel.conf".text = /* bash */ ''
         profile-name=Puzzel
@@ -47,6 +55,7 @@ in
         search-domains=prod.local,dev.local
         set-routing-domains=true
         tunnel-type=ipsec
+        if-name=snx-puzzel
         ike-persist=true
         ike-lifetime=604800
       '';
