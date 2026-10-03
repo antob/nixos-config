@@ -24,7 +24,13 @@ in
       ];
     };
 
-    environment.systemPackages = with pkgs; [ seahorse ];
+    services.dbus.packages = with pkgs; [ gcr_3 ];
+
+    environment.systemPackages = with pkgs; [
+      seahorse
+      libsecret
+    ];
+
     antob.persistence.safe.home.directories = [ ".local/share/keyrings" ];
   };
 }
