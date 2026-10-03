@@ -12,6 +12,10 @@ let
   port = 5000;
   inherit (config.sops) secrets;
   dataDir = "/mnt/tank/services/nix-cache";
+  # Pre-compressed file binary cache, served statically by Caddy in front of harmonia.
+  # Harmonia streams NARs file by file from the HDD pool, which is seek-bound for paths
+  # with many small files (e.g. nixpkgs source).
+  cacheDir = "${dataDir}/binary-cache";
   user = "nix-serve";
   group = "nix-serve";
 
@@ -63,6 +67,34 @@ let
       fi
     done
 
+    echo "=== Copying roots and flake inputs to file binary cache"
+    cacheUrl="file://${cacheDir}?compression=zstd&parallel-compression=true&secret-key=$CREDENTIALS_DIRECTORY/sign-key"
+    roots=$(readlink ${rootsDir}/*)
+    inputs=$(nix --store "$store" flake archive --json --dry-run | jq -r '.. | .path? // empty')
+    if nix --store "$store" copy --to "$cacheUrl" $roots \
+      && nix --store "$store" flake archive --to "$cacheUrl"; then
+      echo "=== Pruning file binary cache"
+      cd ${cacheDir} || exit 1
+      if nix --store "$store" path-info -r $roots $inputs \
+        | sed 's|^/nix/store/\([a-z0-9]*\)-.*|\1.narinfo|' | sort -u > "$work/live-narinfos" \
+        && [ -s "$work/live-narinfos" ]; then
+        find . -maxdepth 1 -name '*.narinfo' -printf '%f\n' | sort \
+          | comm -23 - "$work/live-narinfos" | xargs -r rm -f
+        find . -maxdepth 1 -name '*.narinfo' -exec sed -n 's|^URL: ||p' {} + | sort -u > "$work/live-nars"
+        find nar -type f | sort | comm -23 - "$work/live-nars" | xargs -r rm -f
+      else
+        echo "Failed to compute live paths, skipping prune"
+      fi
+      cd "$work" || exit 1
+    else
+      echo "Failed to copy to file binary cache"
+    fi
+
+    # Publish the lock this run built from, so clients can pin to it for full cache hits
+    # (`just up-cached`). Published even if some hosts failed; those hosts will miss.
+    echo "=== Publishing flake.lock"
+    cp flake.lock ${cacheDir}/.flake.lock.tmp && mv ${cacheDir}/.flake.lock.tmp ${cacheDir}/flake.lock
+
     if [ "$failed" -eq 0 ]; then
       echo "=== Running garbage collection"
       nix --store "$store" store gc || echo "Garbage collection failed"
@@ -71,6 +103,21 @@ let
     fi
 
     exit 0
+  '';
+
+  # Serve narinfos and compressed NARs from the file cache when present, else fall
+  # through to harmonia. nix-cache-info is left to harmonia (it carries the priority).
+  staticCacheConfig = ''
+    @nixCacheStatic {
+      path *.narinfo /nar/*.nar.zst /flake.lock
+      file {
+        root ${cacheDir}
+      }
+    }
+    handle @nixCacheStatic {
+      root * ${cacheDir}
+      file_server
+    }
   '';
 in
 {
@@ -89,9 +136,11 @@ in
       antobProxies."${subdomain}" = {
         hostName = "127.0.0.1";
         inherit port;
+        extraHandleConfig = staticCacheConfig;
       };
 
       virtualHosts."nix-cache.hyllan.lan:80".extraConfig = ''
+        ${staticCacheConfig}
         reverse_proxy 127.0.0.1:${toString port}
       '';
     };
@@ -125,6 +174,7 @@ in
     tmpfiles.rules = [
       "d ${dataDir} 0755 ${user} ${group} -"
       "d ${rootsDir} 0755 ${user} ${group} -"
+      "d ${cacheDir} 0755 ${user} ${group} -"
       "d ${workDir} 0755 ${user} ${group} -"
     ];
 
@@ -150,6 +200,8 @@ in
         Group = group;
         TimeoutStartSec = "infinity";
         ExecStart = buildScript;
+        # Signing key for the file binary cache, readable by the unprivileged build user.
+        LoadCredential = "sign-key:${secrets.nix-cache-private-key.path}";
       };
       unitConfig.RequiresMountsFor = [ dataDir ];
     };

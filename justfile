@@ -77,6 +77,12 @@ up:
 upp input:
     nix flake update {{ input }}
 
+# Use the flake.lock last built by the nix-cache on hyllan (full cache hits)
+up-cached:
+    curl -fsS http://nix-cache.hyllan.lan/flake.lock -o flake.lock.cached && jq -e .nodes.root flake.lock.cached > /dev/null && mv flake.lock.cached flake.lock || { rm -f flake.lock.cached; exit 1; }
+    # Re-lock only inputs that differ from flake.nix (e.g. nixpkgs-prev after bump-prev)
+    nix flake lock
+
 # Update all Nixpkgs inputs
 up-nix:
     nix flake update nixpkgs nixpkgs-stable
