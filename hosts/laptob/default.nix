@@ -33,10 +33,6 @@ in
 
     tools = {
       atuin = enabled;
-      moshi = {
-        enable = true;
-        authorizedKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnfv7tfiunPUyPl6xJmbzMPAOiYWYSSCANvSOLKrzSe laptob-moshi-key";
-      };
     };
 
     cli-apps = {
