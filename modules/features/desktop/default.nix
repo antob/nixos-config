@@ -33,6 +33,7 @@ in
 
       hardware = {
         bluetooth = enabled;
+        webcam = enabled;
         zsa-voyager = enabled;
         yubikey = enabled;
         ledger = enabled;
@@ -127,8 +128,6 @@ in
       mpv
       imv
       vlc
-      v4l-utils
-      guvcview # webcam tool
       gnome-calculator
       evince
       # remmina # Remote Desktop Client
