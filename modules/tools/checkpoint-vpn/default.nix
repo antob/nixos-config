@@ -39,7 +39,7 @@ in
     antob.services.networkd-vpn.vpns.snx-puzzel = mkIf config.antob.services.networkd-vpn.enable {
       type = "snx";
       snxProfile = "Puzzel";
-      label = "Puzzel";
+      label = "Puzzel VPN";
     };
 
     antob.home.extraOptions = {
@@ -52,7 +52,7 @@ in
         login-type=vpn_O365
         user-name=tobias.lindholm@puzzel.com
         keychain=true
-        search-domains=prod.local,dev.local
+        search-domains=prod.local,dev.local,puzzel.com
         set-routing-domains=true
         tunnel-type=ipsec
         if-name=snx-puzzel
