@@ -1,0 +1,16 @@
+{
+  "settings.hide_inactive.label": "Hide when inactive",
+  "settings.hide_inactive.description": "Hide the widget when no VPN is connected.",
+  "settings.show_label.label": "Show VPN name",
+  "settings.show_label.description": "Show the name of the active VPN next to the icon.",
+  "settings.active_color.label": "Active color",
+  "settings.active_color.description": "Icon color while a VPN is connected.",
+  "settings.inactive_color.label": "Inactive color",
+  "settings.inactive_color.description": "Icon color while no VPN is connected.",
+  "settings.poll_interval_ms.label": "Poll interval (ms)",
+  "settings.poll_interval_ms.description": "How often to check the VPN interfaces.",
+  "tooltip.connected": "Connected",
+  "tooltip.disconnected": "Disconnected",
+  "tooltip.none": "No VPNs configured",
+  "notifications.config_error": "VPN Status: could not load vpns.json"
+}
