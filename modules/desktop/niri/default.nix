@@ -398,6 +398,7 @@ in
         dconf.settings = {
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
+            accent-color = "teal";
             gtk-theme = gtkCfg.theme.name;
             cursor-theme = gtkCfg.cursor.name;
             cursor-size = gtkCfg.cursor.size;
