@@ -22,6 +22,7 @@ in
             "$username"
             "$hostname"
             "$directory"
+            "$nix_shell"
             "$git_branch"
             "$git_commit"
             "$git_state"
@@ -59,6 +60,12 @@ in
             staged = "";
             renamed = "";
             deleted = "";
+          };
+
+          nix_shell = {
+            format = "[$symbol nix]($style) ";
+            symbol = "❄";
+            style = "bold blue";
           };
         };
       };
