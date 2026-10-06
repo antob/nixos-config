@@ -80,6 +80,12 @@
     # Bubblewrap-based sandboxing utilities
     jail-nix.url = "sourcehut:~alexdavid/jail.nix";
 
+    # Pi Coding Agent
+    pi-coding-agent = {
+      url = "github:earendil-works/pi/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # LLM Agents - A collection of agents for various LLMs
     llm-agents.url = "github:numtide/llm-agents.nix";
 

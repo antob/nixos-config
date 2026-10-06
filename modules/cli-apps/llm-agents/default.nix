@@ -9,10 +9,11 @@
 with lib;
 let
   cfg = config.antob.cli-apps.llm-agents;
+  inherit (pkgs.stdenv.hostPlatform) system;
+  inherit (config.antob.user) group;
   user = config.antob.user.name;
-  group = config.antob.user.group;
   userHome = "/home/${user}";
-  system = pkgs.stdenv.hostPlatform.system;
+  piPackage = inputs.pi-coding-agent.packages.${system}.pi;
   llm-pkgs = inputs.llm-agents.packages.${system};
   jail = inputs.jail-nix.lib.extend {
     inherit pkgs;
@@ -81,13 +82,9 @@ let
     codebase-memory-mcp
   ];
 
-  pi-pkg =
-    let
-      raw = llm-pkgs.pi;
-    in
-    pkgs.writeShellScriptBin "pi" ''
-      exec ${raw}/bin/pi --approve --bash-guard-disabled "$@"
-    '';
+  pi-pkg = pkgs.writeShellScriptBin "pi" ''
+    exec ${piPackage}/bin/pi --approve --bash-guard-disabled "$@"
+  '';
 
   # --- The Sandboxes ---
   makeJailedPi =
@@ -140,7 +137,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      llm-pkgs.pi
+      piPackage
       (makeJailedPi { })
       llm-pkgs.claude-code
       (makeJailedClaude { })
