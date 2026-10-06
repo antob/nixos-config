@@ -136,41 +136,65 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      piPackage
-      (makeJailedPi { })
-      llm-pkgs.claude-code
-      (makeJailedClaude { })
-      llm-pkgs.workmux
-    ]
-    ++ commonPkgs;
+    environment = {
+      systemPackages = [
+        piPackage
+        (makeJailedPi { })
+        llm-pkgs.claude-code
+        (makeJailedClaude { })
+        llm-pkgs.workmux
+      ]
+      ++ commonPkgs;
 
-    environment.shellAliases = {
-      wm = "workmux";
+      shellAliases = {
+        wm = "workmux";
+      };
+
+      variables = {
+        RTK_TELEMETRY_DISABLED = 1;
+        CLAUDE_CONFIG_DIR = "${userHome}/.config/claude";
+      };
     };
 
-    antob.home.extraOptions = {
-      xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
-        nerdfont: true
-        worktree_dir: .worktrees
-        agent: "pi"
-        auto_name:
-          command: "pi -p"
-          model: "openrouter/openai/gpt-4o-mini"
-        files:
-          symlink:
-            - node_modules
-      '';
-    };
+    antob = {
+      home.extraOptions = {
+        xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
+          nerdfont: true
+          agent: "pi"
+          auto_name:
+            command: "pi -p"
+            model: "openrouter/openai/gpt-4o-mini"
+          panes:
+           - focus: true
+           - focus: false
+             split: horizontal
+          files:
+            copy:
+              - .envrc
+              - .env
+            symlink:
+              - node_modules
+              - .devenv
+              - .venv
+          post_create:
+            - direnv allow
+            - direnv exec . true
+          auto_update_check: false
+        '';
+      };
 
-    antob.cli-apps = {
-      herdr = enabled;
-      worktrunk = enabled;
-    };
+      cli-apps = {
+        herdr = enabled;
+        worktrunk = enabled;
+      };
 
-    environment.variables = {
-      RTK_TELEMETRY_DISABLED = 1;
-      CLAUDE_CONFIG_DIR = "${userHome}/.config/claude";
+      persistence.home.directories = [
+        ".pi"
+        ".local/share/rtk"
+        ".local/state/workmux"
+        ".cache/workmux"
+        ".config/claude"
+      ];
     };
 
     fileSystems."${userHome}/.pi/agent" = {
@@ -181,14 +205,6 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${userHome}/.pi 0755 ${user} ${group} -"
-    ];
-
-    antob.persistence.home.directories = [
-      ".pi"
-      ".local/share/rtk"
-      ".local/state/workmux"
-      ".cache/workmux"
-      ".config/claude"
     ];
   };
 }
