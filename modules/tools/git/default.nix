@@ -166,7 +166,7 @@ in
     antob.persistence.home.directories = [ ".local/state/lazygit" ];
 
     environment.shellAliases = {
-      gh = "git hist";
+      gl = "git hist";
       gb = "git branch";
       gco = "git checkout";
       gc = "git commit --verbose";
