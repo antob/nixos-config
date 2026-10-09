@@ -22,6 +22,8 @@ in
       loadInNixShell = true;
       enableZshIntegration = true;
       direnvrcExtra = /* bash */ ''
+        export DEVENV_TASKS_QUIET=1
+
         # Work around nix-direnv touching the watched .rc file, which makes
         # every other shell in the directory reload.
         _nix_refresh_gcroots() {
