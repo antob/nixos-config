@@ -29,9 +29,11 @@ let
       extraConfig = ''
         set -g @catppuccin_flavor "frappe"
         set -g @catppuccin_status_left_separator "█"
+        # No-break space: kitty widens nerd font icons into a following regular space
+        set -g @catppuccin_window_right_separator " "
         set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
-        set -ogq @catppuccin_window_text " #W"
-        set -ogq @catppuccin_window_current_text " #W"
+        set -ogq @catppuccin_window_text " #W#{?@workmux_status, #{@workmux_status},}"
+        set -ogq @catppuccin_window_current_text " #W#{?@workmux_status, #{@workmux_status},}"
       '';
     }
   ];

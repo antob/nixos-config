@@ -160,6 +160,11 @@ in
       home.extraOptions = {
         xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
           nerdfont: true
+          status_icons:
+            working: "󰚩"
+            waiting: "󰭹"
+            done: "󰗠"
+          status_format: false
           agent: "pi"
           auto_name:
             command: "pi -p"
