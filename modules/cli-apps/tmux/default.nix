@@ -25,8 +25,14 @@ let
       '';
     }
     {
-      plugin = tmuxPlugins.catppuccin;
+      plugin = tmuxPlugins.continuum;
       extraConfig = ''
+        set -g @continuum-restore 'on'
+      '';
+    }
+    {
+      plugin = tmuxPlugins.catppuccin;
+      extraConfig = /* tmux */ ''
         set -g @catppuccin_flavor "frappe"
         set -g @catppuccin_status_left_separator "█"
         # No-break space: kitty widens nerd font icons into a following regular space
