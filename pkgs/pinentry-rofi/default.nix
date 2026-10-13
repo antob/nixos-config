@@ -167,7 +167,8 @@ pkgs.writeShellScriptBin "pinentry-rofi" ''
   }
 
   if [ "$0" = "$BASH_SOURCE" ]; then
-      if [ "$XDG_SESSION_TYPE" != "tty" ] ; then
+      # Fall back to the display vars when XDG_SESSION_TYPE is unset (avoids an unbound variable abort)
+      if [ "''${XDG_SESSION_TYPE:-}" != "tty" ] && [ -n "''${WAYLAND_DISPLAY:-}''${DISPLAY:-}" ] ; then
           main
       else
           exec ${pkgs.pinentry-tty}/bin/pinentry-tty "$@"

@@ -50,6 +50,11 @@ in
         extraConfig = ''
           pinentry-program ${pinentry.path}
         '';
+        # The HM integration runs `updatestartuptty` in every shell, so a tty/ssh shell
+        # would redirect SSH pinentry prompts to an invisible tty. Handled below instead.
+        enableBashIntegration = false;
+        enableZshIntegration = false;
+        enableFishIntegration = false;
       };
 
       programs =
@@ -65,6 +70,21 @@ in
           bash.profileExtra = fixGpg;
           fish.loginShellInit = fixGpg;
           zsh.loginExtra = fixGpg;
+
+          # Only graphical shells may retarget the agent's startup env (used for SSH pinentry)
+          bash.initExtra = ''
+            GPG_TTY="$(tty)"
+            export GPG_TTY
+            [[ -n $WAYLAND_DISPLAY ]] && gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
+          '';
+          zsh.initContent = ''
+            export GPG_TTY=$TTY
+            [[ -n $WAYLAND_DISPLAY ]] && gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
+          '';
+          fish.interactiveShellInit = ''
+            set -gx GPG_TTY (tty)
+            set -q WAYLAND_DISPLAY; and gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
+          '';
 
           gpg = {
             enable = true;
