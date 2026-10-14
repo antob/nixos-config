@@ -55,7 +55,7 @@ in
       (writeShellScriptBin "tmux-attach-unused" ''
         tmux attach 2> /dev/null -t $(tmux ls 2> /dev/null | grep -v attached | cut -f1 -d: | grep -E "^[0-9]+$" | head -1) || tmux
       '')
-      sesh
+      pkgs-prev.sesh
       wl-clipboard
     ];
 

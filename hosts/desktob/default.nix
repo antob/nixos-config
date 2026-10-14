@@ -120,7 +120,7 @@ in
     mesa-demos
     rocmPackages.rocminfo
     s-tui
-    pkgs-prev.calibre
+    calibre
   ];
 
   # Only use 5GHz WiFi. iwd only roams on weak signal, so once it lands on
