@@ -63,6 +63,7 @@ in
       programs.tmux = {
         enable = true;
         clock24 = true;
+        terminal = "tmux-256color";
         historyLimit = 100000;
         extraConfig = builtins.concatStringsSep "\n" (map lib.strings.fileContents configFiles);
 
