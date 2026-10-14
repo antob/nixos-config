@@ -12,12 +12,12 @@ store-result:
 
 # Print the pinned revision of a flake input. Usage: `just store-rev nixpkgs`
 store-rev input:
-    jq -r ".nodes[\"{{ input }}\"].locked.rev" flake.lock
+    jq -er --arg i "{{ input }}" '.nodes[.nodes.root.inputs[$i]].locked.rev' flake.lock
 
-# Print the store path of the pinned nixpkgs source (resolution only, no build).
+# Print the store path of this flake's pinned nixpkgs source, or of another input
 # Use this as the root for rg/read lookups instead of scanning /nix/store.
-nixpkgs-src:
-    nix eval --raw nixpkgs#path
+nixpkgs-src input="nixpkgs":
+    nix eval --raw --impure --expr '(builtins.getFlake (toString ./.)).inputs.{{ input }}.outPath'
 
 ###################################
 # Various `nixos-rebuild` commands

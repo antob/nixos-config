@@ -58,7 +58,7 @@ Read-only store lookups (safe to run):
 | ---------------------- | ---------------------------------------------------------- |
 | `just store-result`    | Resolve `result` symlink to the most recent local build      |
 | `just store-rev <input>` | Print the pinned revision of a flake input from `flake.lock` |
-| `just nixpkgs-src`       | Print the store path of the pinned nixpkgs source             |
+| `just nixpkgs-src [input]` | Print the store path of the pinned nixpkgs (or another input) source from `flake.lock` |
 
 These `store-*` / `nixpkgs-src` commands only read state and change nothing. The `build / switch /
 test / boot / deploy / iso` commands write to the store and change system state; do
@@ -78,7 +78,7 @@ slow. The pinned nixpkgs source already exists in the store; resolve it to a
 concrete path first, then search only inside that path.
 
 ```bash
-NIXPKGS=$(just nixpkgs-src)   # e.g. /nix/store/<hash>-source (pure eval, <1s)
+NIXPKGS=$(just nixpkgs-src)   # e.g. /nix/store/<hash>-source (eval only, no build)
 ```
 
 Then grep/read against `$NIXPKGS` directly, never against `/nix/store` itself:
