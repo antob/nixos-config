@@ -60,12 +60,12 @@ in
           '';
         };
 
-        initContent =
+        initContent = lib.mkMerge [
           (lib.mkOrder 550 ''
             # Fix slow text paste
             DISABLE_MAGIC_FUNCTIONS="true"
           '')
-          // (lib.mkOrder 1000 ''
+          (lib.mkOrder 1000 ''
             # Use vim bindings.
             #set -o vi
 
@@ -95,7 +95,8 @@ in
             setopt PROMPT_CR
             setopt PROMPT_SP
             export PROMPT_EOL_MARK=""
-          '');
+          '')
+        ];
 
         oh-my-zsh = {
           enable = true;
