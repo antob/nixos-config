@@ -123,6 +123,11 @@ in
     pkgs-prev.calibre
   ];
 
+  # Only use 5GHz WiFi. iwd only roams on weak signal, so once it lands on
+  # 2.4GHz (e.g. after resume or a router reboot) it never moves back to 5GHz.
+  # Keeping off 2.4GHz also leaves that band to the Bolt/Bluetooth mouse.
+  networking.wireless.iwd.settings.Rank.BandModifier2_4GHz = "0.0";
+
   # Enable ROCm support in nixpkgs
   nixpkgs.config.rocmSupport = true;
 
