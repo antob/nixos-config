@@ -16,4 +16,5 @@
   iroh-lan = pkgs.callPackage ./iroh-lan { };
   etherwake = pkgs.callPackage ./etherwake { };
   moshi-hook = pkgs.callPackage ./moshi-hook { };
+  dmenu-antob = pkgs.callPackage ./dmenu-antob { };
 }
