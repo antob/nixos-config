@@ -25,12 +25,6 @@ let
       '';
     }
     {
-      plugin = tmuxPlugins.continuum;
-      extraConfig = ''
-        set -g @continuum-restore 'on'
-      '';
-    }
-    {
       plugin = tmuxPlugins.catppuccin;
       extraConfig = /* tmux */ ''
         set -g @catppuccin_flavor "frappe"
@@ -40,6 +34,15 @@ let
         set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
         set -ogq @catppuccin_window_text " #W#{?@workmux_status, #{@workmux_status},}"
         set -ogq @catppuccin_window_current_text " #W#{?@workmux_status, #{@workmux_status},}"
+      '';
+    }
+    {
+      plugin = tmuxPlugins.continuum;
+      extraConfig = ''
+        # Must be set before continuum loads: it appends its autosave hook to status-right
+        set -g status-right "#{E:@catppuccin_status_session}"
+        set -g @continuum-restore 'on'
+        set -g @continuum-save-interval '5'
       '';
     }
   ];
