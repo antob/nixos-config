@@ -23,7 +23,7 @@ in
     };
 
     desktop = {
-      niri = enabled;
+      hyprland = enabled;
       addons.keyring = enabled;
     };
 
