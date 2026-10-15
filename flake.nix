@@ -65,9 +65,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hyprnix
-    hyprnix.url = "github:hyprwm/hyprnix";
-
     # DMS plugins
     dms-plugin-registry = {
       url = "github:AvengeMedia/dms-plugin-registry";
