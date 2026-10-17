@@ -121,6 +121,7 @@ in
     rocmPackages.rocminfo
     s-tui
     calibre
+    spotify
   ];
 
   # Only use 5GHz WiFi. iwd only roams on weak signal, so once it lands on
