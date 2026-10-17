@@ -831,6 +831,10 @@ in
 
     environment.loginShellInit = ''
       if uwsm check may-start -q; then
+        # Load Home Manager session vars before uwsm snapshots the environment;
+        # login zsh only sources them from ~/.zprofile, which runs after this.
+        hmVars="/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"
+        [ -r "$hmVars" ] && . "$hmVars"
         exec uwsm start hyprland-uwsm.desktop
       fi
     '';
