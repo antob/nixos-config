@@ -559,7 +559,27 @@ in
             hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close active window" })
             hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating" })
             hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen(), { description = "Full screen" })
-            hl.bind(mainMod .. " + M", hl.dsp.window.fullscreen({ mode = "maximized" }), { description = "Maximize window" })
+            -- Toggle the column between full width and its previous width (scrolling),
+            -- or maximize (other layouts). Previous widths are keyed by window stable_id.
+            local prevColumnWidth = {}
+            hl.bind(mainMod .. " + M", perLayout({
+              scrolling = function()
+                local w = hl.get_active_window()
+                local col = w and w.layout and w.layout.column
+                if not col then
+                  return
+                end
+                local prev = prevColumnWidth[w.stable_id]
+                if col.width >= 0.999 and prev then
+                  prevColumnWidth[w.stable_id] = nil
+                  hl.dispatch(hl.dsp.layout("colresize " .. prev))
+                elseif col.width < 0.999 then
+                  prevColumnWidth[w.stable_id] = col.width
+                  hl.dispatch(hl.dsp.layout("colresize 1.0"))
+                end
+              end,
+              default = hl.dsp.window.fullscreen({ mode = "maximized" }),
+            }), { description = "Toggle full-width column / maximize window" })
 
             -- Switch focus between floating and tiled windows
             hl.bind(mainMod .. " + SHIFT + V", function()
@@ -691,9 +711,6 @@ in
 
             -- Cycle through scrolling:explicit_column_widths (default 0.333, 0.5, 0.667, 1,0
             hl.bind(mainMod .. " + R", perLayout({ scrolling = hl.dsp.layout("colresize +conf") }), { description = "Switch preset column width" })
-
-            -- Widen the column to fill the space not used by other visible columns
-            hl.bind(mainMod .. " + SHIFT + M", perLayout({ scrolling = hl.dsp.layout("fit expand") }), { description = "Expand column to available width" })
 
             -- Workspaces ------------------------------------------------------------------
 
