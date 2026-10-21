@@ -52,8 +52,29 @@
 
   # Modifies existing packages
   modifications = final: prev: {
-    # TODO: Temporary workaround for sops-nix. Remove whenthis PR lands:
-    # https://github.com/Mic92/sops-nix/issues/983
-    buildGo125Module = prev.buildGoModule;
+    # TODO: Temporary workaround until nixpkgs signs these out-of-tree modules.
+    # The kernel module aggregator now expects a kmodigest `.ko.cer` next to
+    # every external module, but packages that install `.ko` files without
+    # `modules_install` never produce one.
+    linuxPackages = prev.linuxPackages.extend final.signExternalKernelModules;
+    linuxPackages_latest = prev.linuxPackages_latest.extend final.signExternalKernelModules;
+
+    signExternalKernelModules =
+      _: kprev:
+      let
+        signModules =
+          drv:
+          drv.overrideAttrs (old: {
+            nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.buildPackages.kmodigest ];
+            postInstall = (old.postInstall or "") + ''
+              find $out/lib/modules -name '*.ko' -exec kmodigest {} \;
+            '';
+          });
+      in
+      {
+        ddcci-driver = signModules kprev.ddcci-driver;
+        framework-laptop-kmod = signModules kprev.framework-laptop-kmod;
+        xpad-noone = signModules kprev.xpad-noone;
+      };
   };
 }

@@ -7,7 +7,7 @@
     lua-language-server
     nixd
     bash-language-server
-    pkgs-prev.typescript-language-server
+    typescript-language-server
     vscode-langservers-extracted
     shfmt
     ruff
