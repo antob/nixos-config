@@ -35,7 +35,10 @@
     ];
 
     # Enable emulated systems for cross-compilation
-    binfmt.emulatedSystems = [ "aarch64-linux" ];
+    binfmt = {
+      emulatedSystems = [ "aarch64-linux" ];
+      preferStaticEmulators = true;
+    };
   };
 
   fileSystems = {
@@ -56,9 +59,10 @@
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware = {
+    enableRedistributableFirmware = true;
+    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  hardware.enableRedistributableFirmware = true;
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  hardware.graphics.enable = true;
+    graphics.enable = true;
+  };
 }
