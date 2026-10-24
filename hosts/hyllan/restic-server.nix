@@ -23,6 +23,9 @@ in
     extraFlags = [ "--no-auth" ];
   };
 
+  # restic for operators and backup-status (which pipes itself here over ssh).
+  environment.systemPackages = [ pkgs.restic ];
+
   networking.firewall.interfaces.wg0.allowedTCPPorts = [ 8000 ];
 
   # Retention prune for all repos in the server dataDir. Runs as the restic

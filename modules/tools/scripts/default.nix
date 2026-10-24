@@ -17,6 +17,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
+      (cp ./backup-status { })
       (cp ./bb.nix { })
       (cp ./catbin.nix { })
       (cp ./getsong.nix { })
