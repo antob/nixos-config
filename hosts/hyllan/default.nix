@@ -32,7 +32,7 @@ in
     ./atuin.nix
     ./music-assistant.nix
     ./beszel.nix
-    ./open-webui.nix
+    # ./open-webui.nix
     ./copyparty.nix
     ./wireguard.nix
     ./backup.nix
