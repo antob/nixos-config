@@ -83,6 +83,6 @@ in
   };
 
   systemd.tmpfiles.rules = [
-    "d ${dataDir} 0750 root root -"
+    "d ${dataDir} 0700 restic restic -"
   ];
 }
