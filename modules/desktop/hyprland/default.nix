@@ -326,7 +326,7 @@ in
             hl.window_rule({
               name = "default-opacity",
               match = { class = ".*" },
-              opacity = "1.0 0.95",
+              opacity = "0.95 0.95",
             })
 
             -- No transparency on specific windows
@@ -337,7 +337,7 @@ in
             })
             hl.window_rule({
               name = "opaque-apps",
-              match = { class = "^(firefox|Alacritty|kitty)$" },
+              match = { class = "^(firefox|Alacritty)$" },
               opacity = "1 1",
             })
 

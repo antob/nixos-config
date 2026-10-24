@@ -30,7 +30,7 @@ in
           shell_integration no-rc
 
           allow_remote_control socket-only
-          background_opacity 1.0
+          background_opacity 0.95
           clear_all_shortcuts yes
           confirm_os_window_close 0
           cursor_shape beam
