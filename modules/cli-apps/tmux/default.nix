@@ -32,8 +32,11 @@ let
         # No-break space: kitty widens nerd font icons into a following regular space
         set -g @catppuccin_window_right_separator " "
         set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
-        set -ogq @catppuccin_window_text " #W#{?@workmux_status, #{@workmux_status},}"
-        set -ogq @catppuccin_window_current_text " #W#{?@workmux_status, #{@workmux_status},}"
+        set -ogq @catppuccin_window_text " #{?#{m:* pi *, #{P:#{@agent} }},#[fg=#{@thm_blue}]π ,}#{?#{m:* claude *, #{P:#{@agent} }},#[fg=#{@thm_peach}]✻ ,}#[fg=#{@thm_fg}]#W#{?@workmux_status, #{@workmux_status},}"
+        set -ogq @catppuccin_window_current_text " #{?#{m:* pi *, #{P:#{@agent} }},#[fg=#{@thm_blue}]π ,}#{?#{m:* claude *, #{P:#{@agent} }},#[fg=#{@thm_peach}]✻ ,}#[fg=#{@thm_fg}]#W#{?@workmux_status, #{@workmux_status},}"
+        set -g @catppuccin_window_current_number_color "#{@thm_teal}"
+        # tmux 3.8 defaults to underscore
+        set -g window-status-current-style default
       '';
     }
     {
