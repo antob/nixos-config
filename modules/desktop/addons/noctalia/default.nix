@@ -9,6 +9,8 @@ with lib;
 let
   cfg = config.antob.desktop.addons.noctalia;
   vpnCfg = config.antob.services.networkd-vpn;
+  inherit (config.antob.color-scheme) colors;
+  theme = import ./themes/doomed-cyan.nix { inherit colors; };
 
   # Input for the vpn-status plugin: the VPNs to watch and the menu opened on click.
   vpnStatusConfig = builtins.toJSON {
@@ -30,8 +32,6 @@ in
         enable = true;
       };
 
-      antob.tools.swappy.enable = true;
-
       environment.systemPackages = with pkgs; [
         grim
         slurp
@@ -48,10 +48,23 @@ in
         # gifski
         jq
       ];
+      antob = {
+        tools.swappy.enable = true;
 
-      antob.persistence.home.directories = [
-        ".local/state/noctalia"
-      ];
+        persistence.home.directories = [
+          ".local/state/noctalia"
+        ];
+
+        home.configFile = {
+          "noctalia/palettes/${theme.name}.json".text = builtins.toJSON theme.palette;
+
+          "noctalia/theme.toml".text = /* toml */ ''
+            [theme]
+            source = "custom"
+            custom_palette = "${theme.name}"
+          '';
+        };
+      };
     }
 
     (mkIf vpnCfg.enable {
