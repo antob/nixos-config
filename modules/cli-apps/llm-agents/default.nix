@@ -83,7 +83,7 @@ let
   ];
 
   pi-pkg = pkgs.writeShellScriptBin "pi" ''
-    exec ${piPackage}/bin/pi --approve --bash-guard-disabled "$@"
+    exec ${piPackage}/bin/pi --approve "$@"
   '';
 
   # --- The Sandboxes ---
