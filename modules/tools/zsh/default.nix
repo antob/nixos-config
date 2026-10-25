@@ -87,6 +87,19 @@ in
             }
             precmd_functions+=(restore_cursor)
 
+            # Sync SSH_CONNECTION from tmux so starship shows the hostname only over SSH
+            function sync_tmux_ssh_env() {
+              [[ -n $TMUX ]] || return
+              local line
+              line=$(tmux show-environment SSH_CONNECTION 2>/dev/null)
+              if [[ $line == SSH_CONNECTION=* ]]; then
+                export SSH_CONNECTION=''${line#SSH_CONNECTION=}
+              else
+                unset SSH_CONNECTION
+              fi
+            }
+            precmd_functions=(sync_tmux_ssh_env $precmd_functions)
+
             # Customize ZSH highligh colors
             typeset -A ZSH_HIGHLIGHT_STYLES
             ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
