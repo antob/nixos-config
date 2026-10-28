@@ -143,6 +143,7 @@ in
         (makeJailedPi { })
         llm-pkgs.claude-code
         (makeJailedClaude { })
+        llm-pkgs.claude-desktop
         llm-pkgs.workmux
       ]
       ++ commonPkgs;
@@ -202,6 +203,7 @@ in
         ".local/state/workmux"
         ".cache/workmux"
         ".config/claude"
+        ".config/Claude"
       ];
     };
 
