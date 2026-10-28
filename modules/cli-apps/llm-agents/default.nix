@@ -123,6 +123,7 @@ let
         ++ [
           (readwrite (noescape "~/.config/claude"))
           (try-fwd-env "CLAUDE_CONFIG_DIR")
+          (try-fwd-env "CLAUDE_CODE_TMUX_TRUECOLOR")
 
           (add-pkg-deps commonPkgs)
           (add-pkg-deps extraPkgs)
@@ -153,6 +154,7 @@ in
       variables = {
         RTK_TELEMETRY_DISABLED = 1;
         CLAUDE_CONFIG_DIR = "${userHome}/.config/claude";
+        CLAUDE_CODE_TMUX_TRUECOLOR = 1;
       };
     };
 
