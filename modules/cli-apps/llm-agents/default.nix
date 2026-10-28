@@ -178,6 +178,7 @@ in
           files:
             copy:
               - .envrc
+              - .envrc.local
               - .env
             symlink:
               - node_modules
