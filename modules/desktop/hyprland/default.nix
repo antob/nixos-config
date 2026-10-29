@@ -370,6 +370,11 @@ in
               tag = "+floating-window",
             })
             hl.window_rule({
+              name = "tag-floating-share-picker",
+              match = { title = "^Select what to share$" },
+              tag = "+floating-window",
+            })
+            hl.window_rule({
               name = "tag-floating-dialogs",
               match = {
                 class = "(xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus)",
