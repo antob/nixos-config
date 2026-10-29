@@ -99,7 +99,7 @@ in
             -- Force all apps to use Wayland
             hl.env("GDK_BACKEND", "wayland,x11,*")
             hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-            hl.env("QT_STYLE_OVERRIDE", "kvantum")
+            hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
             hl.env("SDL_VIDEODRIVER", "wayland")
             hl.env("MOZ_ENABLE_WAYLAND", "1")
             hl.env("ELECTRON_OZONE_PLATFORM_HINT", "wayland")
@@ -764,7 +764,7 @@ in
         home.file.".config/uwsm/env".text = ''
           # Hint electron apps to use wayland
           export NIXOS_OZONE_WL=1;
-          export QT_QPA_PLATFORMTHEME=qt6ct;
+          export QT_QPA_PLATFORMTHEME=gtk3
 
           # Cursor size
           export XCURSOR_SIZE=16
@@ -773,7 +773,6 @@ in
           # Force all apps to use Wayland
           export GDK_BACKEND="wayland,x11,*"
           export QT_QPA_PLATFORM="wayland;xcb"
-          export QT_STYLE_OVERRIDE=kvantum
           export SDL_VIDEODRIVER=wayland
           export MOZ_ENABLE_WAYLAND=1
           export ELECTRON_OZONE_PLATFORM_HINT=wayland
@@ -793,7 +792,7 @@ in
       system.env = {
         # Hint electron apps to use wayland
         NIXOS_OZONE_WL = "1";
-        QT_QPA_PLATFORMTHEME = "qt6ct";
+        QT_QPA_PLATFORMTHEME = "gtk3";
       };
     };
 
