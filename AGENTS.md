@@ -35,22 +35,59 @@ All custom options live under the `antob.*` namespace.
   root. The `store-*` steps are the only allowed store-adjacent lookups; the
   `build/switch/test/boot/deploy` steps are state-changing and off-limits for
   info-gathering.
+- Flakes only see files tracked by git. A new file you create is invisible to
+  `nix eval` / builds until it is added. Run `git add -N <file>` (intent-to-add,
+  stages no content) or tell the user it must be added before they rebuild.
+
+---
+
+## Working With the User
+
+- The user builds and switches hosts themselves. When a change is ready, say which
+  host needs `just build` / `just switch` and stop there. Verify with `nix eval`.
+- When the user pastes a build failure, find the failing derivation (the first
+  `Cannot build` line; the rest are dependents). Usual fixes, in order of preference:
+  use `pkgs-prev.<pkg>` or `pkgs.stable.<pkg>`, or add a scoped override in the
+  `modifications` overlay (`overlays/default.nix`) such as `doCheck = false` or a
+  pinned `src`. Mark temporary workarounds with a `TODO:` and the upstream issue/PR.
+- "Investigate, do not fix" means read-only: no file edits, no service restarts,
+  no deletions. Report findings and wait.
+- Much of the work is live debugging of the running machine (network, input
+  devices, printers, services), not just config edits. Usually the local host is
+  `desktob`; check with `hostname`. Prefer read-only diagnostics (`journalctl`,
+  `systemctl status`, `ip`, `iwctl`, `resolvectl`) and ask before changing state.
+- Other hosts are reachable as `ssh <host>.lan` (e.g. `hyllan.lan`, `laptob.lan`,
+  `pihole.lan`). Only SSH in when the task concerns that host.
+- After the user switches, confirm the change actually landed before
+  re-debugging: Home Manager files under `~/.config` are symlinks into the store,
+  so `readlink -f` shows the deployed version. Many apps (tmux, workmux, waybar,
+  compositors) also need a reload or restart to pick up new config.
+- Remember impermanence: new state an app writes (config dirs, caches, databases)
+  is lost on reboot unless persisted via the `preservation` module. Check this
+  whenever adding an app or debugging "settings don't survive a reboot".
 
 ---
 
 ## Build / Lint / Format Commands
 
-The primary task runner is `just` (see `justfile`).
+The primary task runner is `just` (see `justfile`; the user often types `j`).
 
-| Command                            | Description                                                |
-| ---------------------------------- | ---------------------------------------------------------- |
-| `just build [host]`                | Build current or named host config (`nixos-rebuild build`) |
-| `just switch [host]`               | Apply config to running system (`nixos-rebuild switch`)      |
-| `just test [host]`                 | Apply without creating boot entry (`nixos-rebuild test`)     |
-| `just boot [host]`                 | Apply on next boot (`nixos-rebuild boot`)                    |
-| `just deploy <host> <target> [mode]` | Remote deploy via SSH                                      |
-| `just fmt`                         | Format all `.nix` files (`nix fmt`, uses `nixfmt-tree`)        |
-| `just iso [type]`                  | Build install or minimal ISO                               |
+| Command                              | Description                                                  |
+| ------------------------------------ | ------------------------------------------------------------ |
+| `just build [host]`                  | Build current or named host config (`nixos-rebuild build`)   |
+| `just switch [host]`                 | Apply config to running system (`nixos-rebuild switch`)      |
+| `just test [host]`                   | Apply without creating boot entry (`nixos-rebuild test`)     |
+| `just boot [host]`                   | Apply on next boot (`nixos-rebuild boot`)                    |
+| `just deploy <mode> <host> [target]` | Remote deploy via SSH (`target` defaults to `<host>.lan`)    |
+| `just fmt`                           | Format all `.nix` files (`nix fmt`, uses `nixfmt-tree`)      |
+| `just iso [type]`                    | Build install or minimal ISO                                 |
+| `just build-sd-image <host>`         | Build a Raspberry Pi SD image                                |
+| `just up` / `just upp <input>`       | Update all inputs / one input                                |
+| `just up-cached`                     | Fetch the `flake.lock` last built by hyllan's nightly cache  |
+| `just bump-prev`                     | Pin `nixpkgs-prev` to the currently locked `nixpkgs` rev     |
+
+Typical update flow: `just bump-prev && just up-cached && just build`, then switch
+and commit `flake.nix` + `flake.lock` together.
 
 Read-only store lookups (safe to run):
 
@@ -65,8 +102,12 @@ test / boot / deploy / iso` commands write to the store and change system state;
 not run them to gather information. Ask the user when you need a host built or
 switched.
 
-There is **no test suite** and **no CI**. Correctness is validated by
-`nixos-rebuild build` (dry run) or `nixos-rebuild test` on the target machine.
+There is **no test suite** and **no CI**. Correctness is validated by the user
+running `just build` / `just test`. The closest thing to CI is the nightly
+`nix-cache-build` job on hyllan (`hosts/hyllan/nix-cache.nix`, 03:00): it clones
+`main` from the remote, builds the listed hosts into a separate store, serves them
+from `http://nix-cache.hyllan.lan` and publishes its `flake.lock`. Uncommitted or
+unpushed local changes are not in that build.
 
 ---
 
@@ -120,6 +161,34 @@ to `pkgs.stable.*` / `pkgs.pkgs-next.*` / `pkgs.pkgs-prev.*`, then resolve the
 evaluated package set the same way (e.g. `nix eval --raw
 .#nixosConfigurations.desktob.pkgs.stable.path`).
 
+To check which version of a package a host actually gets (e.g. after the user
+updated inputs), evaluate it instead of guessing from the lock:
+
+```bash
+nix eval --raw .#nixosConfigurations.desktob.pkgs.hyprland.version
+nix eval --raw .#nixosConfigurations.desktob.config.boot.kernelPackages.kernel.drvPath
+```
+
+---
+
+## Raspberry Pi Hosts (pihole, pikvm, pidesk)
+
+These are built with `inputs.nixos-raspberrypi.lib.nixosSystem`, not
+`lib.nixosSystem`. They evaluate against nixos-raspberrypi's own (older, stable)
+nixpkgs and do **not** import the shared `commonModules` / full `./modules` tree.
+Their module list is only `./modules/features/rpi` plus the host directory.
+
+- `modules/features/rpi/default.nix` is self-sufficient: it imports exactly the
+  `antob.*` modules RPi hosts need, including transitive deps (e.g. `tools/git`
+  needs `security/gpg`). Add new RPi import wiring there, never in shared leaf
+  modules.
+- Options that only exist in newer nixpkgs (or in flake inputs not imported here)
+  break RPi evaluation, even when unused. Keep that in mind when editing modules
+  that `features/rpi` imports.
+- Kernels come from `nixos-raspberrypi.cachix.org`. If a build starts compiling
+  `linux-config-*` / the kernel, the derivation drifted from upstream's cached
+  one; check `nixos-raspberrypi`'s transitive `nixpkgs` node in `flake.lock`.
+
 ---
 
 ## Repository Structure
@@ -128,12 +197,14 @@ evaluated package set the same way (e.g. `nix eval --raw
 flake.nix       # Flake entry: all inputs and outputs
 flake.lock      # Pins every input to a locked revision
 justfile        # Task runner
-docs/           # Documentation (empty at present)
+scripts/        # Standalone helper scripts used by just recipes
 result          # Ignored symlink to the most recent local build in /nix/store
 
 hosts/                     # Per-machine NixOS configs
   common/                  # Shared secrets (sops-encrypted secrets.yaml)
-  <host>/                  # e.g. desktob, laptob, laptob, hyllan, wiggum, pihole, pikvm
+  <host>/                  # desktob (desktop), laptob (laptop), hyllan (home server,
+                           #   nix cache, restic server), wiggum, pihole, pikvm, pidesk
+                           #   (RPi), laptob-qemu, install-iso, minimal-iso
     default.nix            # Host options entry point
     hardware.nix           # Machine hardware config
     disk-config.nix        # Partition layout (desktop/laptop family)
@@ -357,4 +428,5 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 - **`antob.*` namespace** all custom options live under `antob`, to prevent conflicts with upstream NixOS options.
 - **Feature presets** the `antob.features.*` modules act as presets. `common`, `common-minimal`, `desktop`, `gaming`, `laptop`, and `rpi` enable many sub-modules at once. Hosts opt into presets instead of enabling every module individually.
 - **Impermanence.** Root filesystem is ephemeral. Persistent data lives at `antob.persistence.path` (default `/persist`), and the `.safe` subfolder is additionally backed up offsite. Some hosts override the path. System and user state is preserved via the `preservation` module, not written into the ephemeral root.
-- **No CI.** Validate with `just build <host>` locally; there is no automated test pipeline.
+- **No CI.** The user validates with `just build <host>` locally; hyllan's nightly cache build is the only automated build.
+- **Shell scripts as commands.** User-facing scripts live in `modules/tools/scripts/` as Nix-wrapped commands (one file or folder per command, e.g. `backup-status/`), not as loose files in `scripts/`.
