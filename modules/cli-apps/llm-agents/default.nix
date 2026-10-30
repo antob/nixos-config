@@ -164,7 +164,6 @@ in
         xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
           nerdfont: true
           status_icons:
-            working: "󰚩"
             waiting: "󰭹"
             done: "󰗠"
           status_format: false
@@ -189,6 +188,9 @@ in
             - direnv allow
             - direnv exec . true
           auto_update_check: false
+          sidebar:
+            width: 40
+            sort: window
         '';
       };
 
