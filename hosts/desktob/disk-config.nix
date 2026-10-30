@@ -2,7 +2,6 @@
 with lib;
 let
   impermanence = config.antob.persistence.enable;
-  phase1Systemd = config.boot.initrd.systemd.enable;
   wipeScript = ''
     mkdir /tmp -p
     MNTPOINT=$(mktemp -d)
@@ -113,8 +112,7 @@ in
 
   boot.initrd = mkIf impermanence {
     supportedFilesystems = [ "btrfs" ];
-    postDeviceCommands = mkIf (!phase1Systemd) (mkBefore wipeScript);
-    systemd.services.restore-root = mkIf phase1Systemd {
+    systemd.services.restore-root = {
       description = "Rollback btrfs rootfs";
       wantedBy = [ "initrd.target" ];
       requires = [

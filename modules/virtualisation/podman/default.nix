@@ -38,10 +38,12 @@ in
       oci-containers.backend = "podman";
 
       containers = {
-        storage.settings.storage = {
-          driver = cfg.storageDriver;
-          graphroot = "/var/lib/containers/storage";
-          runroot = "/run/containers/storage";
+        storage = {
+          settings.storage.driver = cfg.storageDriver;
+          rootful.settings.storage = {
+            graphroot = "/var/lib/containers/storage";
+            runroot = "/run/containers/storage";
+          };
         };
         registries.settings = {
           unqualified-search-registries = [ "docker.io" ];

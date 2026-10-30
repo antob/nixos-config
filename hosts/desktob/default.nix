@@ -120,7 +120,7 @@ in
     mesa-demos
     rocmPackages.rocminfo
     s-tui
-    pkgs-prev.calibre
+    calibre
     spotify
   ];
 

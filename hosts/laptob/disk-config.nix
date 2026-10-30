@@ -2,7 +2,6 @@
 with lib;
 let
   impermanence = config.antob.persistence.enable;
-  phase1Systemd = config.boot.initrd.systemd.enable;
   wipeScript = ''
     # Safety: never wipe the root subvolume when a hibernation image is
     # present on the swap area, resuming it requires the old root.
@@ -127,8 +126,7 @@ in
 
   boot.initrd = mkIf impermanence {
     supportedFilesystems = [ "btrfs" ];
-    postDeviceCommands = mkIf (!phase1Systemd) (mkBefore wipeScript);
-    systemd.services.restore-root = mkIf phase1Systemd {
+    systemd.services.restore-root = {
       description = "Rollback btrfs rootfs";
       wantedBy = [ "initrd.target" ];
       requires = [

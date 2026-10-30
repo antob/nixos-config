@@ -12,7 +12,7 @@
     nixpkgs-next.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # NixPkgs Unstable (kept one step behind)
-    nixpkgs-prev.url = "github:nixos/nixpkgs/7fd4004d0511991fff3a0524856a9be09e28c5f0";
+    nixpkgs-prev.url = "github:nixos/nixpkgs/02c087f3fe673c9e317f206a627cb6b910336dbe";
 
     # Home Manager
     home-manager = {
@@ -109,7 +109,7 @@
 
     # Lanzaboote - Secure boot
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v1.1.0";
+      url = "github:nix-community/lanzaboote/v1.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
