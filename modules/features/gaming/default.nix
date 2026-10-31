@@ -8,38 +8,75 @@
 with lib;
 let
   cfg = config.antob.features.gaming;
+
+  setPlatformProfile = pkgs.writeShellScript "set-platform-profile" ''
+    for f in /sys/class/platform-profile/*/profile; do
+      echo "$1" > "$f"
+    done
+  '';
+
+  # TODO: mangoapp segfaults when GLFW 3.4 picks Wayland, which gamescope's --expose-wayland causes.
+  # https://github.com/flightlessmango/MangoHud/issues/1261
+  mangohudWrapped = pkgs.symlinkJoin {
+    name = "mangohud-${pkgs.mangohud.version}";
+    paths = [ pkgs.mangohud ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/mangoapp --unset WAYLAND_DISPLAY
+    '';
+  };
 in
 {
   options.antob.features.gaming = with types; {
     enable = mkBoolOpt false "Whether or not to enable gaming configuration.";
+    display = {
+      width = mkOpt (nullOr int) null "Default gamescope game and output width.";
+      height = mkOpt (nullOr int) null "Default gamescope game and output height.";
+      refresh = mkOpt (nullOr int) null "Default gamescope game refresh rate.";
+    };
   };
 
   config = mkIf cfg.enable {
 
     programs = {
-      steam.enable = true;
-      gamemode.enable = true;
+      steam = {
+        enable = true;
+        extraCompatPackages = [ pkgs.proton-ge-bin ];
+        protontricks.enable = true;
+      };
+      gamemode = {
+        enable = true;
+        settings.custom = {
+          start = "${setPlatformProfile} performance";
+          end = "${setPlatformProfile} balanced";
+        };
+      };
       gamescope = {
         enable = true;
         # capSysNice = true;
+        # Without size flags gamescope defaults to 1280x720. Launch options override these per game.
         args = [
           "--fullscreen"
-          "--nested-width 1920"
-          "--nested-height 1080"
-          "--output-width 1920"
-          "--output-height 1080"
-          "--max-scale 1"
           "--force-grab-cursor"
           "--backend wayland"
           "--expose-wayland"
           "--adaptive-sync"
           "--nested-unfocused-refresh 30"
-        ];
+        ]
+        ++ optionals (cfg.display.width != null) [
+          "--nested-width ${toString cfg.display.width}"
+          "--output-width ${toString cfg.display.width}"
+        ]
+        ++ optionals (cfg.display.height != null) [
+          "--nested-height ${toString cfg.display.height}"
+          "--output-height ${toString cfg.display.height}"
+        ]
+        ++ optional (cfg.display.refresh != null) "--nested-refresh ${toString cfg.display.refresh}";
       };
     };
 
     environment.systemPackages = with pkgs; [
-      mangohud
+      mangohudWrapped
       (heroic.override {
         extraPkgs =
           pkgs': with pkgs'; [
@@ -49,7 +86,6 @@ in
       })
       # lutris # install lutris launcher
       # mumble # install voice-chat
-      protonup-qt # GUI for installing custom Proton versions like GE_Proton
       (retroarch.withCores (
         cores: with cores; [
           vice-x64
@@ -61,9 +97,15 @@ in
       # teamspeak_client # install voice-chat
     ];
 
-    environment.sessionVariables = {
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.local/share/Steam/compatibilitytools.d";
-    };
+    boot.kernelModules = [ "ntsync" ];
+
+    users.groups.gamemode = { };
+
+    # Let gamemode's start/end scripts switch the platform power profile.
+    services.udev.extraRules = ''
+      KERNEL=="ntsync", MODE="0666"
+      SUBSYSTEM=="platform-profile", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chgrp gamemode /sys%p/profile", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys%p/profile"
+    '';
 
     hardware = {
       graphics.enable32Bit = true;
@@ -80,6 +122,8 @@ in
     };
 
     antob = {
+      user.extraGroups = [ "gamemode" ];
+
       home.extraOptions.xdg = {
         configFile."MangoHud/MangoHud.conf".text = ''
           horizontal

@@ -20,7 +20,14 @@ in
     features = {
       common = enabled;
       desktop = enabled;
-      gaming = enabled;
+      gaming = {
+        enable = true;
+        display = {
+          width = 2560;
+          height = 1440;
+          refresh = 165;
+        };
+      };
     };
 
     desktop = {

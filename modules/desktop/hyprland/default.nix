@@ -135,7 +135,7 @@ in
                 -- Set to true enable resizing windows by clicking and dragging on borders and gaps
                 resize_on_border = false,
 
-                -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
+                -- Async page flips fail on amdgpu here ("failed to commit: Invalid argument") and freeze the game.
                 allow_tearing = false,
 
                 layout = "scrolling",
@@ -282,6 +282,7 @@ in
                 disable_hyprland_logo = true,
                 disable_splash_rendering = true,
                 focus_on_activate = true,
+                vrr = 2, -- fullscreen only
               },
 
               xwayland = {
@@ -338,6 +339,12 @@ in
             hl.window_rule({
               name = "opaque-apps",
               match = { class = "^(firefox|Alacritty)$" },
+              opacity = "1 1",
+            })
+
+            hl.window_rule({
+              name = "opaque-games",
+              match = { class = "^(gamescope|steam_app_.*)$" },
               opacity = "1 1",
             })
 
