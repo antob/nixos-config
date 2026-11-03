@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.desktob =
     {
@@ -13,8 +17,9 @@
       wgIp = "10.64.1.6";
     in
     {
-      imports = with inputs; [
-        nur.modules.nixos.default
+      imports = [
+        inputs.nur.modules.nixos.default
+        nixos.persistence
       ];
 
       antob = {
@@ -105,7 +110,6 @@
         };
 
         persistence = {
-          enable = true;
           home.directories = [
             ".config/vice"
             ".RetroDebugger"

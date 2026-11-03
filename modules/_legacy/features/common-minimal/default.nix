@@ -51,8 +51,6 @@ in
         console = enabled;
       };
 
-      persistence.enable = mkDefault false;
-
       home.extraOptions.programs = {
         zoxide = {
           enable = true;

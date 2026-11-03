@@ -3,7 +3,7 @@
     { lib, config, ... }:
     with lib;
     let
-      impermanence = config.antob.persistence.enable;
+      impermanence = config.preservation.enable;
       wipeScript = ''
         # Safety: never wipe the root subvolume when a hibernation image is
         # present on the swap area, resuming it requires the old root.

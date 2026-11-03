@@ -38,10 +38,9 @@ let
   rpiNixosSystem = inputs.nixos-raspberrypi.lib.nixosSystem;
   rpiNixosInstaller = inputs.nixos-raspberrypi.lib.nixosInstaller;
 
-  commonModules = with inputs; [
-    sops-nix.nixosModules.sops
-    disko.nixosModules.disko
-    config.flake.modules.nixos.overlays
+  commonModules = [
+    config.flake.modules.nixos.base
+    config.flake.modules.nixos.env
     ./_legacy
   ];
 
@@ -108,7 +107,7 @@ in
         };
         system = "aarch64-linux";
         modules = [
-          config.flake.modules.nixos.overlays
+          config.flake.modules.nixos.base
           ./_legacy/features/rpi
           config.flake.modules.nixos.pihole
         ];
@@ -121,7 +120,7 @@ in
         };
         system = "aarch64-linux";
         modules = [
-          config.flake.modules.nixos.overlays
+          config.flake.modules.nixos.base
           ./_legacy/features/rpi
           config.flake.modules.nixos.pikvm
         ];
@@ -134,7 +133,7 @@ in
         };
         system = "aarch64-linux";
         modules = [
-          config.flake.modules.nixos.overlays
+          config.flake.modules.nixos.base
           ./_legacy/features/rpi
           config.flake.modules.nixos.pidesk
         ];

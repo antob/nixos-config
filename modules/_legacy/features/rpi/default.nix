@@ -12,14 +12,6 @@ let
 in
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
-    inputs.disko.nixosModules.disko
-
-    ../../user
-    ../../home
-    ../../nix
-    ../../persistence
-    ../../color-scheme
 
     ../../tools/kitty
     ../../tools/git

@@ -3,7 +3,7 @@
     { lib, config, ... }:
     with lib;
     let
-      impermanence = config.antob.persistence.enable;
+      impermanence = config.preservation.enable;
       wipeScript = ''
         mkdir /tmp -p
         MNTPOINT=$(mktemp -d)

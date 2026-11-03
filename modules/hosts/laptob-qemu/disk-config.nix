@@ -2,7 +2,7 @@
   flake.modules.nixos.laptob-qemu =
     { lib, config, ... }:
     let
-      impermanence = config.antob.persistence.enable;
+      impermanence = config.preservation.enable;
     in
     {
       disko.devices = {
