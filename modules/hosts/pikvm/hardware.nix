@@ -1,11 +1,10 @@
+{ inputs, ... }:
+let
+  inherit (inputs) nixos-raspberrypi;
+in
 {
   flake.modules.nixos.pikvm =
-    {
-      lib,
-      inputs,
-      nixos-raspberrypi,
-      ...
-    }:
+    { lib, ... }:
 
     with lib;
     {

@@ -17,7 +17,6 @@ in
         mkEnableOption
         mkIf
         mkDefault
-        mkOpt
         ;
       inherit (lib.types) listOf str;
     in

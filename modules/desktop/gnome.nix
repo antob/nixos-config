@@ -167,8 +167,8 @@ in
           };
         })
         ({
-          # Default mime apps
-          xdg.mimeApps.defaultApplications = {
+          # Default mime apps; listed first so they win over other desktops' defaults
+          xdg.mimeApps.defaultApplications = lib.mapAttrs (_: lib.mkBefore) {
             "image/png" = [ "org.gnome.Loupe.desktop" ];
             "image/jpeg" = [ "org.gnome.Loupe.desktop" ];
             "application/pdf" = [ "org.gnome.Evince.desktop" ];

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -7,7 +7,6 @@ in
     {
       lib,
       config,
-      inputs,
       pkgs,
       ...
     }:
@@ -69,6 +68,7 @@ in
         nixos.systemd-networking
         nixos.hyprland
         nixos.keyring
+        nixos.base
       ];
 
       antob = {
@@ -145,4 +145,6 @@ in
 
       system.stateVersion = "22.11";
     };
+
+  flake.nixosConfigurations.laptob = inputs.nixpkgs.lib.nixosSystem { modules = [ nixos.laptob ]; };
 }

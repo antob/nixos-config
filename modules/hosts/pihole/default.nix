@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -42,6 +42,7 @@ in
         nixos.rpi
         nixos.wireguard
         nixos.systemd-networking
+        nixos.base
       ];
 
       #
@@ -207,4 +208,9 @@ in
 
       system.stateVersion = "21.11";
     };
+
+  flake.nixosConfigurations.pihole = inputs.nixos-raspberrypi.lib.nixosSystem {
+    system = "aarch64-linux";
+    modules = [ nixos.pihole ];
+  };
 }

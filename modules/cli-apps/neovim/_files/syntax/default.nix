@@ -1,4 +1,7 @@
-{ lib, ... }:
+{ ... }:
 {
-  imports = lib.scanPaths ./.;
+  imports = [
+    ./kickass.nix
+    ./m68k.nix
+  ];
 }

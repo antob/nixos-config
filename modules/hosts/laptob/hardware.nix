@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -8,7 +8,6 @@ in
       lib,
       pkgs,
       modulesPath,
-      inputs,
       ...
     }:
 

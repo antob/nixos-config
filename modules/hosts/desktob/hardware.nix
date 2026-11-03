@@ -1,10 +1,10 @@
+{ inputs, ... }:
 {
   flake.modules.nixos.desktob =
     {
       lib,
       pkgs,
       modulesPath,
-      inputs,
       ...
     }:
 

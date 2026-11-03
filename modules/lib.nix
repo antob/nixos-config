@@ -18,5 +18,8 @@
     disabled = {
       enable = false;
     };
+
+    # Base S3 repository for the hyllan offsite restic backups
+    hyllanBackupsBaseRepo = "s3:hel1.your-objectstorage.com/antob-hyllan-backups";
   };
 }

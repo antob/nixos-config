@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  inherit (config.aspects) nixos;
+  inherit (config.aspects) homeManager nixos;
 in
 {
   flake.modules.nixos.desktop =
@@ -29,41 +29,7 @@ in
       ];
 
       config = {
-        antob = {
-
-          home.extraOptions = {
-            # Default apps
-            xdg.mimeApps.defaultApplications = {
-              # Open all images with imv
-              "image/png" = [ "imv.desktop" ];
-              "image/jpeg" = [ "imv.desktop" ];
-              "image/gif" = [ "imv.desktop" ];
-              "image/webp" = [ "imv.desktop" ];
-              "image/bmp" = [ "imv.desktop" ];
-              "image/tiff" = [ "imv.desktop" ];
-
-              # Open PDFs with the Document Viewer
-              "application/pdf" = [ "org.gnome.Evince.desktop" ];
-
-              # Open video files with mpv
-              "video/mp4" = [ "mpv.desktop" ];
-              "video/x-msvideo" = [ "mpv.desktop" ];
-              "video/x-matroska" = [ "mpv.desktop" ];
-              "video/x-flv" = [ "mpv.desktop" ];
-              "video/x-ms-wmv" = [ "mpv.desktop" ];
-              "video/mpeg" = [ "mpv.desktop" ];
-              "video/ogg" = [ "mpv.desktop" ];
-              "video/webm" = [ "mpv.desktop" ];
-              "video/quicktime" = [ "mpv.desktop" ];
-              "video/3gpp" = [ "mpv.desktop" ];
-              "video/3gpp2" = [ "mpv.desktop" ];
-              "video/x-ms-asf" = [ "mpv.desktop" ];
-              "video/x-ogm+ogg" = [ "mpv.desktop" ];
-              "video/x-theora+ogg" = [ "mpv.desktop" ];
-              "application/ogg" = [ "mpv.desktop" ];
-            };
-          };
-        };
+        home-manager.sharedModules = [ homeManager.desktop ];
 
         services = {
           gvfs.enable = true;
@@ -158,4 +124,41 @@ in
         networking.useDHCP = lib.mkDefault true;
       };
     };
+
+  flake.modules.homeManager.desktop =
+    { lib, ... }:
+    with lib;
+    {
+      # Default apps
+      xdg.mimeApps.defaultApplications = {
+        # Open all images with imv
+        "image/png" = [ "imv.desktop" ];
+        "image/jpeg" = [ "imv.desktop" ];
+        "image/gif" = [ "imv.desktop" ];
+        "image/webp" = [ "imv.desktop" ];
+        "image/bmp" = [ "imv.desktop" ];
+        "image/tiff" = [ "imv.desktop" ];
+
+        # Open PDFs with the Document Viewer
+        "application/pdf" = [ "org.gnome.Evince.desktop" ];
+
+        # Open video files with mpv
+        "video/mp4" = [ "mpv.desktop" ];
+        "video/x-msvideo" = [ "mpv.desktop" ];
+        "video/x-matroska" = [ "mpv.desktop" ];
+        "video/x-flv" = [ "mpv.desktop" ];
+        "video/x-ms-wmv" = [ "mpv.desktop" ];
+        "video/mpeg" = [ "mpv.desktop" ];
+        "video/ogg" = [ "mpv.desktop" ];
+        "video/webm" = [ "mpv.desktop" ];
+        "video/quicktime" = [ "mpv.desktop" ];
+        "video/3gpp" = [ "mpv.desktop" ];
+        "video/3gpp2" = [ "mpv.desktop" ];
+        "video/x-ms-asf" = [ "mpv.desktop" ];
+        "video/x-ogm+ogg" = [ "mpv.desktop" ];
+        "video/x-theora+ogg" = [ "mpv.desktop" ];
+        "application/ogg" = [ "mpv.desktop" ];
+      };
+    };
+
 }

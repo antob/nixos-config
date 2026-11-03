@@ -1,10 +1,10 @@
+{ inputs, ... }:
+let
+  inherit (inputs) nixos-raspberrypi;
+in
 {
   flake.modules.nixos.pidesk =
-    {
-      lib,
-      nixos-raspberrypi,
-      ...
-    }:
+    { lib, ... }:
 
     with lib;
     {

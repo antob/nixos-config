@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -38,6 +38,7 @@ in
         nixos.rpi
         nixos.wireguard
         nixos.systemd-networking
+        nixos.base
       ];
 
       services.kvmd = {
@@ -63,4 +64,9 @@ in
 
       system.stateVersion = "21.11";
     };
+
+  flake.nixosConfigurations.pikvm = inputs.nixos-raspberrypi.lib.nixosSystem {
+    system = "aarch64-linux";
+    modules = [ nixos.pikvm ];
+  };
 }

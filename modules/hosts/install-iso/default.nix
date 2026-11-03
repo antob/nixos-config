@@ -1,19 +1,20 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
-  inherit (config.aspects) nixos;
+  inherit (config.aspects) homeManager nixos;
 in
 {
   flake.modules.nixos.install-iso =
     {
       pkgs,
       lib,
-      inputs,
       modulesPath,
       ...
     }:
 
     with lib;
     {
+      home-manager.sharedModules = [ homeManager.install-iso ];
+
       antob.openssh = {
         permitRootLogin = true;
       };
@@ -43,30 +44,13 @@ in
         nixos.networking
         nixos.gnome
         nixos.neovim
+        nixos.base
+        nixos.env
       ];
 
       # `install-iso` adds wireless support that
       # is incompatible with networkmanager.
       networking.wireless.enable = mkForce false;
-
-      antob = {
-
-        home.extraOptions.programs = {
-          bat = {
-            enable = true;
-            config.theme = "catppuccin";
-            themes = {
-              catppuccin = {
-                src = builtins.fetchurl {
-                  url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
-                  sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
-                  name = "catppuccin.tmTheme";
-                };
-              };
-            };
-          };
-        };
-      };
 
       services = {
         upower.enable = true;
@@ -114,4 +98,30 @@ in
 
       system.stateVersion = "22.11";
     };
+
+  flake.modules.homeManager.install-iso =
+    { lib, ... }:
+    with lib;
+    {
+      programs = {
+        bat = {
+          enable = true;
+          config.theme = "catppuccin";
+          themes = {
+            catppuccin = {
+              src = builtins.fetchurl {
+                url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
+                sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
+                name = "catppuccin.tmTheme";
+              };
+            };
+          };
+        };
+      };
+    };
+
+  flake.nixosConfigurations.install-iso = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = [ nixos.install-iso ];
+  };
 }

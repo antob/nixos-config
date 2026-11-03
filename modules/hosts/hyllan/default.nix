@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -8,7 +8,6 @@ in
       pkgs,
       lib,
       config,
-      inputs,
       ...
     }:
 
@@ -50,6 +49,7 @@ in
         nixos.atuin
         nixos.zfs
         nixos.systemd-networking
+        nixos.base
       ];
 
       antob = {
@@ -118,4 +118,6 @@ in
 
       system.stateVersion = "22.11";
     };
+
+  flake.nixosConfigurations.hyllan = inputs.nixpkgs.lib.nixosSystem { modules = [ nixos.hyllan ]; };
 }

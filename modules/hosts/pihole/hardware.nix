@@ -1,11 +1,10 @@
+{ inputs, ... }:
+let
+  inherit (inputs) nixos-raspberrypi;
+in
 {
   flake.modules.nixos.pihole =
-    {
-      lib,
-      config,
-      nixos-raspberrypi,
-      ...
-    }:
+    { lib, config, ... }:
 
     with lib;
     {

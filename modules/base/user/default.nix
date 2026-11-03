@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) mkOpt mkBoolOpt;
+  inherit (config.flake.lib) mkBoolOpt mkOpt;
 in
 {
   flake.modules.nixos.base =
@@ -62,11 +62,8 @@ in
       };
 
       config = {
+
         antob = {
-          home.file = {
-            ".face".source = cfg.icon;
-            "Pictures/${cfg.icon.fileName or (baseNameOf cfg.icon)}".source = cfg.icon;
-          };
 
           persistence = {
             home.directories = [
@@ -122,4 +119,18 @@ in
         };
       };
     };
+
+  flake.modules.homeManager.base =
+    { osConfig, lib, ... }:
+    with lib;
+    let
+      cfg = osConfig.antob.user;
+    in
+    {
+      home.file = {
+        ".face".source = cfg.icon;
+        "Pictures/${cfg.icon.fileName or (baseNameOf cfg.icon)}".source = cfg.icon;
+      };
+    };
+
 }

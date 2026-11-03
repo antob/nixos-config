@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) mkOpt;
+  inherit (config.aspects) homeManager;
 in
 {
   flake.modules.nixos.gaming =
@@ -42,6 +43,7 @@ in
       };
 
       config = {
+        home-manager.sharedModules = [ homeManager.gaming ];
 
         programs = {
           steam = {
@@ -129,41 +131,6 @@ in
         antob = {
           user.extraGroups = [ "gamemode" ];
 
-          home.extraOptions.xdg = {
-            configFile."MangoHud/MangoHud.conf".text = ''
-              horizontal
-            '';
-
-            desktopEntries = {
-              unrealGold = {
-                name = "Unreal Gold";
-                exec = "steam-run /mnt/data/Games/OldUnreal/UnrealGold/System64/unreal-bin-amd64";
-                icon = "/mnt/data/Games/OldUnreal/UnrealGold/System/ConfigLogo.bmp";
-                terminal = false;
-                type = "Application";
-                categories = [
-                  "Game"
-                ];
-              };
-              ut2004 =
-                let
-                  launch-ut2004 = pkgs.writeShellScriptBin "launch-ut2004" ''
-                    LD_LIBRARY_PATH=${pkgs.sdl3.lib}/lib steam-run /mnt/data/Games/OldUnreal/UT2004/System/UT2004
-                  '';
-                in
-                {
-                  name = "Unreal Tournament 2004";
-                  exec = "${launch-ut2004}/bin/launch-ut2004";
-                  icon = "/mnt/data/Games/OldUnreal/UT2004/Web/images/h_logo.jpg";
-                  terminal = false;
-                  type = "Application";
-                  categories = [
-                    "Game"
-                  ];
-                };
-            };
-          };
-
           persistence.home.directories = [
             # Steam
             ".steam"
@@ -179,4 +146,45 @@ in
         };
       };
     };
+
+  flake.modules.homeManager.gaming =
+    { lib, pkgs, ... }:
+    with lib;
+    {
+      xdg = {
+        configFile."MangoHud/MangoHud.conf".text = ''
+          horizontal
+        '';
+
+        desktopEntries = {
+          unrealGold = {
+            name = "Unreal Gold";
+            exec = "steam-run /mnt/data/Games/OldUnreal/UnrealGold/System64/unreal-bin-amd64";
+            icon = "/mnt/data/Games/OldUnreal/UnrealGold/System/ConfigLogo.bmp";
+            terminal = false;
+            type = "Application";
+            categories = [
+              "Game"
+            ];
+          };
+          ut2004 =
+            let
+              launch-ut2004 = pkgs.writeShellScriptBin "launch-ut2004" ''
+                LD_LIBRARY_PATH=${pkgs.sdl3.lib}/lib steam-run /mnt/data/Games/OldUnreal/UT2004/System/UT2004
+              '';
+            in
+            {
+              name = "Unreal Tournament 2004";
+              exec = "${launch-ut2004}/bin/launch-ut2004";
+              icon = "/mnt/data/Games/OldUnreal/UT2004/Web/images/h_logo.jpg";
+              terminal = false;
+              type = "Application";
+              categories = [
+                "Game"
+              ];
+            };
+        };
+      };
+    };
+
 }

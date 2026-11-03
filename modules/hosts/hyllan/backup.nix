@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.lib) hyllanBackupsBaseRepo;
+in
 {
   flake.modules.nixos.hyllan =
     {
@@ -10,7 +14,7 @@
     let
       secrets = config.sops.secrets;
       baseMountPoint = "/mnt/restic-snapshot";
-      baseRepo = lib.hyllanBackupsBaseRepo;
+      baseRepo = hyllanBackupsBaseRepo;
 
       mkResticBackups =
         backups:

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -29,6 +29,7 @@ in
         nixos.common-minimal
         nixos.openssh
         nixos.wireguard
+        nixos.base
       ];
 
       antob = {
@@ -100,4 +101,6 @@ in
 
       system.stateVersion = "22.11";
     };
+
+  flake.nixosConfigurations.wiggum = inputs.nixpkgs.lib.nixosSystem { modules = [ nixos.wiggum ]; };
 }

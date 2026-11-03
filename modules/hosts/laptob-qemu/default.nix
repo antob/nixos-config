@@ -1,15 +1,10 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.laptob-qemu =
-    {
-      pkgs,
-      lib,
-      inputs,
-      ...
-    }:
+    { pkgs, lib, ... }:
 
     with lib;
     {
@@ -20,6 +15,7 @@ in
         nixos.avahi
         nixos.networking
         nixos.gnome
+        nixos.base
       ];
 
       antob = {
@@ -36,4 +32,8 @@ in
 
       system.stateVersion = "22.11";
     };
+
+  flake.nixosConfigurations.laptob-qemu = inputs.nixpkgs.lib.nixosSystem {
+    modules = [ nixos.laptob-qemu ];
+  };
 }

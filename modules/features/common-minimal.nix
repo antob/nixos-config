@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  inherit (config.aspects) nixos;
+  inherit (config.aspects) homeManager nixos;
 in
 {
   flake.modules.nixos.common-minimal =
@@ -15,6 +15,7 @@ in
     with lib;
     {
       imports = [
+        nixos.env
         nixos.eza
         nixos.starship
         nixos.console
@@ -32,6 +33,8 @@ in
       ];
 
       config = {
+        home-manager.sharedModules = [ homeManager.common-minimal ];
+
         antob.neovim = {
           minimal = true;
         };
@@ -40,27 +43,6 @@ in
 
           # sqlit = enabled;
 
-          home.extraOptions.programs = {
-            zoxide = {
-              enable = true;
-              options = [ "--cmd cd" ];
-              enableZshIntegration = true;
-            };
-
-            bat = {
-              enable = true;
-              config.theme = "catppuccin";
-              themes = {
-                catppuccin = {
-                  src = builtins.fetchurl {
-                    url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
-                    sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
-                    name = "catppuccin.tmTheme";
-                  };
-                };
-              };
-            };
-          };
         };
 
         environment.variables = {
@@ -132,4 +114,32 @@ in
         };
       };
     };
+
+  flake.modules.homeManager.common-minimal =
+    { lib, ... }:
+    with lib;
+    {
+      programs = {
+        zoxide = {
+          enable = true;
+          options = [ "--cmd cd" ];
+          enableZshIntegration = true;
+        };
+
+        bat = {
+          enable = true;
+          config.theme = "catppuccin";
+          themes = {
+            catppuccin = {
+              src = builtins.fetchurl {
+                url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
+                sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
+                name = "catppuccin.tmTheme";
+              };
+            };
+          };
+        };
+      };
+    };
+
 }

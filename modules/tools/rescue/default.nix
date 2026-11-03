@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) mkOpt;
+  inherit (config.flake.lib) mkOpt hyllanBackupsBaseRepo;
 in
 {
   flake.modules.nixos.rescue =
@@ -32,7 +32,7 @@ in
         (mkIf (cfg.resticEnvFile != null) {
           environment.systemPackages = [
             (cp ./_files/restic-vaultwarden.nix {
-              inherit lib;
+              baseRepo = hyllanBackupsBaseRepo;
               envFile = cfg.resticEnvFile;
             })
           ];

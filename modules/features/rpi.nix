@@ -1,7 +1,7 @@
 { inputs, config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  inherit (config.aspects) nixos;
+  inherit (config.aspects) homeManager nixos;
 in
 {
   flake.modules.nixos.rpi =
@@ -15,7 +15,6 @@ in
     with lib;
     {
       imports = [
-
 
         # transitive deps
         nixos.eza
@@ -32,35 +31,10 @@ in
       ];
 
       config = {
+        home-manager.sharedModules = [ homeManager.rpi ];
+
         antob.neovim = {
           minimal = true;
-        };
-
-        antob = {
-
-          home.extraOptions.programs = {
-            zoxide = {
-              enable = true;
-              options = [ "--cmd cd" ];
-              enableZshIntegration = true;
-            };
-
-            bat = {
-              enable = true;
-              config.theme = "catppuccin";
-              themes = {
-                catppuccin = {
-                  src = builtins.fetchurl {
-                    url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
-                    sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
-                    name = "catppuccin.tmTheme";
-                  };
-                };
-              };
-            };
-          };
-
-          home.extraOptions.home.enableNixpkgsReleaseCheck = false;
         };
 
         environment = {
@@ -120,4 +94,37 @@ in
         };
       };
     };
+
+  flake.modules.homeManager.rpi =
+    { lib, ... }:
+    with lib;
+    {
+      config = lib.mkMerge [
+        ({
+          programs = {
+            zoxide = {
+              enable = true;
+              options = [ "--cmd cd" ];
+              enableZshIntegration = true;
+            };
+
+            bat = {
+              enable = true;
+              config.theme = "catppuccin";
+              themes = {
+                catppuccin = {
+                  src = builtins.fetchurl {
+                    url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
+                    sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
+                    name = "catppuccin.tmTheme";
+                  };
+                };
+              };
+            };
+          };
+        })
+        ({ home.enableNixpkgsReleaseCheck = false; })
+      ];
+    };
+
 }

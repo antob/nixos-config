@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) nixos;
 in
@@ -36,6 +36,8 @@ in
         nixos.tmux
         nixos.networking
         nixos.neovim
+        nixos.base
+        nixos.env
       ];
 
       # `install-iso` adds wireless support that
@@ -89,4 +91,9 @@ in
 
       system.stateVersion = "22.11";
     };
+
+  flake.nixosConfigurations.minimal-iso = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = [ nixos.minimal-iso ];
+  };
 }

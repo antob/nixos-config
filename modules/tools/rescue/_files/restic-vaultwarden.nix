@@ -3,7 +3,7 @@
 
 {
   pkgs,
-  lib,
+  baseRepo,
   envFile,
 }:
 pkgs.writeShellScriptBin "restic-vaultwarden" ''
@@ -62,7 +62,7 @@ pkgs.writeShellScriptBin "restic-vaultwarden" ''
       trap - EXIT
     fi
 
-    export RESTIC_REPOSITORY="${lib.hyllanBackupsBaseRepo}/tank"
+    export RESTIC_REPOSITORY="${baseRepo}/tank"
 
     case "$cmd" in
       snapshots)
