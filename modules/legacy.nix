@@ -108,7 +108,6 @@ in
         system = "aarch64-linux";
         modules = [
           config.flake.modules.nixos.base
-          ./_legacy/features/rpi
           config.flake.modules.nixos.pihole
         ];
       };
@@ -121,7 +120,6 @@ in
         system = "aarch64-linux";
         modules = [
           config.flake.modules.nixos.base
-          ./_legacy/features/rpi
           config.flake.modules.nixos.pikvm
         ];
       };
@@ -134,7 +132,6 @@ in
         system = "aarch64-linux";
         modules = [
           config.flake.modules.nixos.base
-          ./_legacy/features/rpi
           config.flake.modules.nixos.pidesk
         ];
       };

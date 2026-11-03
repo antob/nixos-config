@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.pikvm =
     {
@@ -11,9 +15,11 @@
       inherit (config.sops) secrets;
     in
     {
+      imports = [
+        nixos.rpi
+      ];
 
       antob = {
-        features.rpi = enabled;
         hardware.systemd-networking = {
           enable = true;
           hostName = "pikvm";

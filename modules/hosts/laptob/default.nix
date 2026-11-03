@@ -20,14 +20,11 @@ in
       imports = [
         inputs.nur.modules.nixos.default
         nixos.persistence
+        nixos.common
+        nixos.laptop
       ];
 
       antob = {
-        features = {
-          common = enabled;
-          laptop = enabled;
-        };
-
         desktop = {
           hyprland = enabled;
           addons.keyring = enabled;

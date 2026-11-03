@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.hyllan =
     {
@@ -17,13 +21,10 @@
     {
       imports = [
         inputs.copyparty.nixosModules.default
+        nixos.common
       ];
 
       antob = {
-        features = {
-          common = enabled;
-        };
-
         tools.atuin = {
           enable = true;
           autoSync = false;

@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.pihole =
     {
@@ -13,9 +17,11 @@
       piholeFtl = config.services.pihole-ftl;
     in
     {
+      imports = [
+        nixos.rpi
+      ];
 
       antob = {
-        features.rpi = enabled;
         hardware.systemd-networking = {
           enable = true;
           hostName = "pihole";

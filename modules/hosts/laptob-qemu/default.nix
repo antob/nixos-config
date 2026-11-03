@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.laptob-qemu =
     {
@@ -9,16 +13,13 @@
 
     with lib;
     {
-      imports = with inputs; [
-        nur.modules.nixos.default
+      imports = [
+        inputs.nur.modules.nixos.default
+        nixos.common
+        nixos.desktop
       ];
 
       antob = {
-        features = {
-          common = enabled;
-          desktop = enabled;
-        };
-
         desktop.gnome = enabled;
 
         # persistence = enabled;

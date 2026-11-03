@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.wiggum =
     {
@@ -11,12 +15,11 @@
       secrets = config.sops.secrets;
     in
     {
+      imports = [
+        nixos.common-minimal
+      ];
 
       antob = {
-        features = {
-          common-minimal = enabled;
-        };
-
         hardware.networking.enable = mkForce false;
 
         services = {

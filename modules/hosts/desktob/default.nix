@@ -20,20 +20,16 @@ in
       imports = [
         inputs.nur.modules.nixos.default
         nixos.persistence
+        nixos.common
+        nixos.desktop
+        nixos.gaming
       ];
 
       antob = {
-        features = {
-          common = enabled;
-          desktop = enabled;
-          gaming = {
-            enable = true;
-            display = {
-              width = 2560;
-              height = 1440;
-              refresh = 165;
-            };
-          };
+        gaming.display = {
+          width = 2560;
+          height = 1440;
+          refresh = 165;
         };
 
         desktop = {
