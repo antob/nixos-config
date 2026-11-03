@@ -47,10 +47,6 @@ in
             # sqlit = enabled;
           };
 
-          hardware = {
-            networking = enabled;
-          };
-
           home.extraOptions.programs = {
             zoxide = {
               enable = true;

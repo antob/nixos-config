@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -8,7 +9,7 @@
 with lib;
 let
   cfg = config.antob.desktop.addons.noctalia;
-  vpnCfg = config.antob.services.networkd-vpn;
+  vpnCfg = config.antob.networkd-vpn;
   inherit (config.antob.color-scheme) colors;
   theme = import ./themes/doomed-cyan.nix { inherit colors; };
 
@@ -67,7 +68,7 @@ in
       };
     }
 
-    (mkIf vpnCfg.enable {
+    (mkIf (options.antob ? networkd-vpn) {
       # Local plugins in the data dir take precedence over every plugin source.
       # Enable once with `noctalia msg plugins enable antob/vpn-status`.
       antob.home.extraOptions.xdg.dataFile = {

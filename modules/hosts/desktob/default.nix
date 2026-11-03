@@ -17,6 +17,13 @@ in
       wgIp = "10.64.1.6";
     in
     {
+      antob.systemd-networking = {
+        hostName = "desktob";
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "672fb36e";
+        enableWoL = true;
+      };
+
       antob.git.dirEmails = {
         "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
         "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
@@ -83,6 +90,9 @@ in
         nixos.wireguard
         nixos.rescue
         nixos.podman
+        nixos.llm-agents
+        nixos.networkd-vpn
+        nixos.systemd-networking
       ];
 
       antob = {
@@ -98,18 +108,7 @@ in
         };
 
         cli-apps = {
-          llm-agents = enabled;
           neovim.localConfig = true;
-        };
-
-        hardware = {
-          systemd-networking = {
-            enable = true;
-            hostName = "desktob";
-            # Derived from `head -c 8 /etc/machine-id`
-            hostId = "672fb36e";
-            enableWoL = true;
-          };
         };
 
         persistence = {

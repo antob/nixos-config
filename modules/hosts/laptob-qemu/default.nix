@@ -18,6 +18,7 @@ in
         nixos.common
         nixos.desktop
         nixos.avahi
+        nixos.networking
       ];
 
       antob = {

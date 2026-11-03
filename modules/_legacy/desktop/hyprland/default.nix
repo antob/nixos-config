@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -17,7 +18,7 @@ let
   dm-herdr-session = getExe (pkgs.callPackage ../scripts/dm-herdr-session.nix { inherit config; });
   dm-keybindings = getExe (pkgs.callPackage ./scripts/dm-keybindings.nix { });
   dm-vpn =
-    if config.antob.services.networkd-vpn.enable then
+    if options.antob ? networkd-vpn then
       getExe (pkgs.callPackage ../scripts/dm-networkd-vpn.nix { inherit config; })
     else
       getExe (pkgs.callPackage ../scripts/dm-nm-vpn.nix { });

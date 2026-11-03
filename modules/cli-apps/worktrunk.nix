@@ -1,24 +1,31 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-with lib;
+{ config, ... }:
 let
-  cfg = config.antob.cli-apps.worktrunk;
+  inherit (config.aspects) homeManager;
 in
 {
-  options.antob.cli-apps.worktrunk = {
-    enable = mkEnableOption "Whether or not to enable Worktrunk.";
-  };
+  flake.modules.nixos.worktrunk =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    with lib;
+    {
+      config = {
+        home-manager.sharedModules = [ homeManager.worktrunk ];
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      worktrunk
-    ];
+        environment.systemPackages = with pkgs; [
+          worktrunk
+        ];
 
-    antob.home.extraOptions = {
+      };
+    };
+
+  flake.modules.homeManager.worktrunk =
+    { lib, pkgs, ... }:
+    with lib;
+    {
       xdg.configFile."worktrunk/config.toml".text = /* toml */ ''
         worktree-path = "{{ repo_path }}/../{{ repo }}__worktrees/{{ branch | sanitize }}"
         skip-shell-integration-prompt = true
@@ -48,5 +55,5 @@ in
         eval "$(${lib.getExe pkgs.worktrunk} config shell init zsh)"
       '';
     };
-  };
+
 }

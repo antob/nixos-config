@@ -34,6 +34,7 @@ in
         nixos.gpg
         nixos.git
         nixos.tmux
+        nixos.networking
       ];
 
       # `install-iso` adds wireless support that
@@ -47,10 +48,6 @@ in
 
         cli-apps = {
           neovim = enabled;
-        };
-
-        hardware = {
-          networking = enabled;
         };
 
       };

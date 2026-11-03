@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   inputs,
@@ -21,7 +22,7 @@ let
   tuiTerminal = "${pkgs.alacritty}/bin/alacritty";
 
   dm-vpn =
-    if config.antob.services.networkd-vpn.enable then
+    if options.antob ? networkd-vpn then
       lib.getExe (pkgs.callPackage ../scripts/dm-networkd-vpn.nix { inherit config; })
     else
       lib.getExe (pkgs.callPackage ../scripts/dm-nm-vpn.nix { });

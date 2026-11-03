@@ -32,7 +32,6 @@ in
       ];
 
       antob = {
-        hardware.networking.enable = mkForce false;
 
       };
 

@@ -18,11 +18,7 @@ in
 
         ../_legacy/cli-apps/neovim
 
-        ../_legacy/hardware/systemd-networking
-
         # transitive deps
-        ../_legacy/hardware/networking
-        ../_legacy/services/networkd-vpn
         nixos.eza
         nixos.starship
         nixos.locale

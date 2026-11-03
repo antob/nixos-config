@@ -19,6 +19,21 @@ in
       emailTo = monCfg.emailTo;
     in
     {
+      antob.systemd-networking = {
+        enableWireless = false;
+        hostName = "hyllan";
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "236689a3";
+        staticIp = {
+          enable = true;
+          address = "192.168.1.2/24";
+          dns = [
+            "192.168.1.4"
+          ];
+          gateway = "192.168.1.1";
+        };
+      };
+
       antob.zfs = {
         pools = [ "zpool" ];
         auto-snapshot.enable = false;
@@ -34,26 +49,10 @@ in
         nixos.common
         nixos.atuin
         nixos.zfs
+        nixos.systemd-networking
       ];
 
       antob = {
-
-        hardware.systemd-networking = {
-          enable = true;
-          enableWireless = false;
-          enableVpn = false;
-          hostName = "hyllan";
-          # Derived from `head -c 8 /etc/machine-id`
-          hostId = "236689a3";
-          staticIp = {
-            enable = true;
-            address = "192.168.1.2/24";
-            dns = [
-              "192.168.1.4"
-            ];
-            gateway = "192.168.1.1";
-          };
-        };
 
         monitoring = {
           emailFrom = "home@antob.se";

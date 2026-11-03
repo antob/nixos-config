@@ -17,6 +17,22 @@ in
       piholeFtl = config.services.pihole-ftl;
     in
     {
+      antob.systemd-networking = {
+        hostName = "pihole";
+        enableWireless = false;
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "78b3aca6";
+        staticIp = {
+          enable = true;
+          address = "192.168.1.4/24";
+          dns = [
+            "1.1.1.1"
+            "1.0.0.1"
+          ];
+          gateway = "192.168.1.1";
+        };
+      };
+
       antob.wireguard = {
         address = "10.64.1.4/24";
         privateKeyFile = secrets.wg0_private_key.path;
@@ -25,27 +41,8 @@ in
       imports = [
         nixos.rpi
         nixos.wireguard
+        nixos.systemd-networking
       ];
-
-      antob = {
-        hardware.systemd-networking = {
-          enable = true;
-          hostName = "pihole";
-          enableWireless = false;
-          enableVpn = false;
-          # Derived from `head -c 8 /etc/machine-id`
-          hostId = "78b3aca6";
-          staticIp = {
-            enable = true;
-            address = "192.168.1.4/24";
-            dns = [
-              "1.1.1.1"
-              "1.0.0.1"
-            ];
-            gateway = "192.168.1.1";
-          };
-        };
-      };
 
       #
       # Services

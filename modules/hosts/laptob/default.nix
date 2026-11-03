@@ -17,6 +17,12 @@ in
       wgIp = "10.64.1.7";
     in
     {
+      antob.systemd-networking = {
+        hostName = "laptob";
+        # Derived from `head -c 8 /etc/machine-id`
+        hostId = "6278643e";
+      };
+
       antob.git.dirEmails = {
         "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
         "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
@@ -56,6 +62,9 @@ in
         nixos.restic-backup
         nixos.wireguard
         nixos.podman
+        nixos.llm-agents
+        nixos.networkd-vpn
+        nixos.systemd-networking
       ];
 
       antob = {
@@ -65,15 +74,7 @@ in
         };
 
         cli-apps = {
-          llm-agents = enabled;
           neovim.localConfig = true;
-        };
-
-        hardware.systemd-networking = {
-          enable = true;
-          hostName = "laptob";
-          # Derived from `head -c 8 /etc/machine-id`
-          hostId = "6278643e";
         };
 
         persistence = {

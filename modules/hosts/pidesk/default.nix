@@ -16,6 +16,11 @@ in
       secrets = config.sops.secrets;
     in
     {
+      antob.systemd-networking = {
+        hostName = "pidesk";
+        hostId = "b4a80555";
+      };
+
       antob.wireguard = {
         address = "10.64.1.9/24";
         privateKeyFile = secrets.wg0_private_key.path;
@@ -24,17 +29,8 @@ in
       imports = [
         nixos.rpi
         nixos.wireguard
+        nixos.systemd-networking
       ];
-
-      antob = {
-
-        hardware.systemd-networking = {
-          enable = true;
-          hostName = "pidesk";
-          enableVpn = false;
-          hostId = "b4a80555";
-        };
-      };
 
       environment.systemPackages = with pkgs; [
         etherwake

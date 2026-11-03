@@ -15,6 +15,20 @@ in
       inherit (config.sops) secrets;
     in
     {
+      antob.systemd-networking = {
+        hostName = "pikvm";
+        enableWireless = false;
+        hostId = "e3df0975";
+        staticIp = {
+          enable = true;
+          address = "192.168.1.3/24";
+          dns = [
+            "192.168.1.4"
+          ];
+          gateway = "192.168.1.1";
+        };
+      };
+
       antob.wireguard = {
         address = "10.64.1.3/24";
         privateKeyFile = secrets.wg0_private_key.path;
@@ -23,25 +37,8 @@ in
       imports = [
         nixos.rpi
         nixos.wireguard
+        nixos.systemd-networking
       ];
-
-      antob = {
-        hardware.systemd-networking = {
-          enable = true;
-          hostName = "pikvm";
-          enableWireless = false;
-          enableVpn = false;
-          hostId = "e3df0975";
-          staticIp = {
-            enable = true;
-            address = "192.168.1.3/24";
-            dns = [
-              "192.168.1.4"
-            ];
-            gateway = "192.168.1.1";
-          };
-        };
-      };
 
       services.kvmd = {
         enable = true;

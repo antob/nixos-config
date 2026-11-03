@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.aspects) homeManager;
+  inherit (config.aspects) nixos homeManager;
 in
 {
   flake.modules.nixos.checkpoint-vpn =
@@ -13,7 +13,17 @@ in
 
     with lib;
     {
+      imports = [ nixos.networkd-vpn ];
+
       config = {
+        # List the profiles in the dm-networkd-vpn menu. The attribute name must
+        # match `if-name` in the profile, it is used to detect an active tunnel.
+        antob.networkd-vpn.vpns.snx-puzzel = {
+          type = "snx";
+          snxProfile = "Puzzel";
+          label = "Puzzel VPN";
+        };
+
         home-manager.sharedModules = [ homeManager.checkpoint-vpn ];
 
         environment.systemPackages = with pkgs; [
@@ -34,15 +44,6 @@ in
 
         # update the firewall rule to allow keepalive traffic
         networking.firewall.checkReversePath = "loose";
-
-        # List the profiles in the dm-networkd-vpn menu. The attribute name must
-        # match `if-name` in the profile, it is used to detect an active tunnel.
-        antob.services.networkd-vpn.vpns.snx-puzzel = mkIf config.antob.services.networkd-vpn.enable {
-          type = "snx";
-          snxProfile = "Puzzel";
-          label = "Puzzel VPN";
-        };
-
       };
     };
 
