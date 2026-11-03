@@ -17,6 +17,8 @@ in
       wgIp = "10.64.1.7";
     in
     {
+      antob.neovim.localConfig = true;
+
       antob.systemd-networking = {
         hostName = "laptob";
         # Derived from `head -c 8 /etc/machine-id`
@@ -70,10 +72,6 @@ in
       ];
 
       antob = {
-
-        cli-apps = {
-          neovim.localConfig = true;
-        };
 
         persistence = {
           home.directories = [

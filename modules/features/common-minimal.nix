@@ -28,18 +28,17 @@ in
         nixos.gpg
         nixos.git
         nixos.tmux
+        nixos.neovim
       ];
 
       config = {
+        antob.neovim = {
+          minimal = true;
+        };
+
         antob = {
 
-          cli-apps = {
-            neovim = {
-              enable = true;
-              minimal = true;
-            };
-            # sqlit = enabled;
-          };
+          # sqlit = enabled;
 
           home.extraOptions.programs = {
             zoxide = {

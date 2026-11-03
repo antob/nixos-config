@@ -37,15 +37,13 @@ in
         nixos.git
         nixos.tmux
         nixos.nix-search-tv
+        nixos.neovim
       ];
 
       config = {
         antob = {
 
-          cli-apps = {
-            neovim = enabled;
-            # sqlit = enabled;
-          };
+          # sqlit = enabled;
 
           home.extraOptions.programs = {
             zoxide = {

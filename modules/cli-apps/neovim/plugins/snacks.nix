@@ -1,0 +1,77 @@
+{
+  flake.modules.homeManager.neovim =
+    {
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      config = lib.mkMerge [
+        (lib.mkIf (!osConfig.antob.neovim.localConfig) ({
+          programs.neovim = {
+            plugins = with pkgs.vimPlugins; [
+              snacks-nvim
+            ];
+
+            initLua = lib.mkOrder 208 /* lua */ ''
+              require("snacks").setup({
+                bigfile = { enabled = true },
+                dashboard = { enabled = false },
+                explorer = { enabled = false },
+                indent = { enabled = false },
+                input = { enabled = false },
+                scratch = { enabled = true },
+
+                picker = {
+                  enabled = true,
+                  ui_select = true,
+                  win = {
+                    -- input window
+                    input = {
+                      keys = {
+                        ["<Esc>"] = { "close", mode = { "n", "i" } },
+                      },
+                    },
+                  },
+                  sources = {
+                    explorer = {
+                      hidden = true,
+                    },
+                    files = {
+                      hidden = true,
+                    },
+                    grep = {
+                      hidden = true,
+                    },
+                  },
+                },
+
+                notifier = { enabled = true },
+                quickfile = { enabled = false },
+                scope = { enabled = false },
+                scroll = { enabled = false },
+                statuscolumn = { enabled = false },
+                words = { enabled = false },
+                styles = {
+                  lazygit = {
+                    wo = { winhighlight = "FloatBorder:PmenuBorder" },
+                    height = 0.99,
+                    width = 0.99,
+                  },
+                  zoom_indicator = {
+                    text = " 󰊓 ",
+                    row = 0,
+                  },
+                },
+              })
+
+              -- Make SnacksPickerBorder use the PmenuExtra highlight group
+              vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuExtra" })
+            '';
+          };
+        }))
+      ];
+    };
+
+}

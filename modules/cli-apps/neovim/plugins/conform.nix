@@ -1,19 +1,14 @@
 {
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-{
-  config =
-    lib.mkIf
-      (
-        config.antob.cli-apps.neovim.enable
-        && !config.antob.cli-apps.neovim.minimal
-        && !config.antob.cli-apps.neovim.localConfig
-      )
-      {
-        antob.home.extraOptions = {
+  flake.modules.homeManager.neovim =
+    {
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      config = lib.mkMerge [
+        (lib.mkIf (!osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) ({
           home.packages = with pkgs; [
             rumdl
           ];
@@ -25,7 +20,7 @@
           programs.neovim = {
             plugins = with pkgs.vimPlugins; [ conform-nvim ];
 
-            initLua = lib.mkOrder 200 /* lua */ ''
+            initLua = lib.mkOrder 203 /* lua */ ''
               require("conform").setup({
                 formatters_by_ft = {
                   bash = { "shfmt" },
@@ -166,6 +161,8 @@
               })
             '';
           };
-        };
-      };
+        }))
+      ];
+    };
+
 }

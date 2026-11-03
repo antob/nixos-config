@@ -17,6 +17,8 @@ in
       wgIp = "10.64.1.6";
     in
     {
+      antob.neovim.localConfig = true;
+
       antob.systemd-networking = {
         hostName = "desktob";
         # Derived from `head -c 8 /etc/machine-id`
@@ -102,10 +104,6 @@ in
           width = 2560;
           height = 1440;
           refresh = 165;
-        };
-
-        cli-apps = {
-          neovim.localConfig = true;
         };
 
         persistence = {

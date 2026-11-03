@@ -16,7 +16,6 @@ in
     {
       imports = [
 
-        ../_legacy/cli-apps/neovim
 
         # transitive deps
         nixos.eza
@@ -29,17 +28,15 @@ in
         nixos.kitty
         nixos.git
         nixos.tmux
+        nixos.neovim
       ];
 
       config = {
-        antob = {
+        antob.neovim = {
+          minimal = true;
+        };
 
-          cli-apps = {
-            neovim = {
-              enable = true;
-              minimal = true;
-            };
-          };
+        antob = {
 
           home.extraOptions.programs = {
             zoxide = {

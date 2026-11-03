@@ -35,6 +35,7 @@ in
         nixos.git
         nixos.tmux
         nixos.networking
+        nixos.neovim
       ];
 
       # `install-iso` adds wireless support that
@@ -43,14 +44,6 @@ in
 
       # Enable dconf to manage settings
       programs.dconf.enable = true;
-
-      antob = {
-
-        cli-apps = {
-          neovim = enabled;
-        };
-
-      };
 
       services = {
         upower.enable = true;

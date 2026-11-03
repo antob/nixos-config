@@ -42,6 +42,7 @@ in
         nixos.tmux
         nixos.networking
         nixos.gnome
+        nixos.neovim
       ];
 
       # `install-iso` adds wireless support that
@@ -49,10 +50,6 @@ in
       networking.wireless.enable = mkForce false;
 
       antob = {
-
-        cli-apps = {
-          neovim = enabled;
-        };
 
         home.extraOptions.programs = {
           bat = {
