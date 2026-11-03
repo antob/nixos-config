@@ -20,11 +20,16 @@ in
 
     antob.home.extraOptions = {
       xdg.configFile."worktrunk/config.toml".text = /* toml */ ''
-        worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+        worktree-path = "{{ repo_path }}/../{{ repo }}__worktrees/{{ branch | sanitize }}"
         skip-shell-integration-prompt = true
 
         [list]
         json-schema = 2
+
+        [pre-start]
+        js_deps = "[ -d {{ primary_worktree_path }}/node_modules ] && ln -sf {{ primary_worktree_path }}/node_modules ."
+        py_deps = "[ -d {{ primary_worktree_path }}/.venv ] && ln -sf {{ primary_worktree_path }}/.venv ."
+        devenv = "[ -d {{ primary_worktree_path }}/.devenv ] && cp {{ primary_worktree_path }}/.envrc . && cp {{ primary_worktree_path }}/.env . && ln -sf {{ primary_worktree_path }}/.devenv . && direnv allow && direnv exec . true"
 
         [aliases]
         ls = "wt list {{ args }}"
