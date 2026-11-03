@@ -3,7 +3,7 @@
     { config, ... }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       subdomain = "vault";
       port = 8222;
       dataDir = "/mnt/tank/services/vaultwarden";

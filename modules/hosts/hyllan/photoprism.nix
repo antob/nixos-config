@@ -3,7 +3,7 @@
     { config, lib, ... }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       subdomain = "photos";
       port = 2342;
       dataDir = "/mnt/tank/services/photoprism";

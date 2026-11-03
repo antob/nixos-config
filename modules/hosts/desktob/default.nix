@@ -12,7 +12,7 @@ in
     }:
     with lib;
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       wgIp = "10.64.1.6";
     in
     {

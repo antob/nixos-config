@@ -7,7 +7,7 @@
       ...
     }:
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       dataDir = "/mnt/tank/services/restic-server";
       pruneOpts = [
         "--keep-daily 7"

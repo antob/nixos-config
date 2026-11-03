@@ -12,7 +12,7 @@ in
     }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       baseMountPoint = "/mnt/restic-snapshot";
       baseRepo = hyllanBackupsBaseRepo;
 

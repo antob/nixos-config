@@ -7,7 +7,7 @@
     }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       subdomain = "lan-guard";
       port = 8680;
       dataDir = "/mnt/tank/services/lan-guard";

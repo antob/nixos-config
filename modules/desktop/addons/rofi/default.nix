@@ -38,7 +38,7 @@ in
     }:
     let
       cfg = osConfig.antob.rofi;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
       cmd-launch-webapp = lib.getExe (
         pkgs.callPackage ../../_scripts/cmd-launch-webapp.nix {
           inherit (cfg) launchPrefix;

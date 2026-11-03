@@ -47,7 +47,7 @@ in
       configFiles = mapAttrsToList (name: _: "${./_files/config}/${name}") (
         filterAttrs (_: kind: kind == "regular") (builtins.readDir ./_files/config)
       );
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
       alacritty = config.programs.alacritty.enable;
       kitty = config.programs.kitty.enable;
       plugins = with pkgs; [

@@ -30,7 +30,7 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.wezterm;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
     in
     {
       programs.wezterm = {

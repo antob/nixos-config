@@ -8,7 +8,7 @@
     }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       subdomain = "ha";
       port = 8123;
       zigbeePort = 8089; # Port for zigbee2mqtt frontend

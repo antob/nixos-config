@@ -15,7 +15,7 @@ in
     with lib;
     let
       # gpg = config.antob.gpg;
-      user = config.antob.user;
+      inherit (config.antob) user;
     in
     {
       options.antob.git = with types; {
@@ -63,7 +63,7 @@ in
     with lib;
     let
       cfg = osConfig.antob.git;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
     in
     {
       xdg.configFile."lazygit/config.yml".text = /* yaml */ ''

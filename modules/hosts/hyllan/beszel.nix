@@ -6,7 +6,7 @@
       subdomain = "monitor";
       port = 8090;
       dataDir = "/mnt/tank/services/beszel";
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
     in
     {
       services = {

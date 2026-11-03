@@ -3,7 +3,7 @@
     { config, pkgs, ... }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       monCfg = config.antob.monitoring;
       inherit (monCfg) emailFrom;
       inherit (monCfg) emailTo;

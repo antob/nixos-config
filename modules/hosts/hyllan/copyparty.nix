@@ -6,7 +6,7 @@
       subdomain = "cp";
       port = 3923;
       dataDir = "/mnt/tank/services/copyparty";
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
     in
     {
       services = {

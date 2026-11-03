@@ -3,7 +3,7 @@
     { config, pkgs, ... }:
 
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       iPhoneIp = "10.64.1.8";
     in
     {

@@ -162,7 +162,7 @@ in
         profiles = {
           ${osConfig.antob.user.name} = {
             id = 0;
-            name = osConfig.antob.user.name;
+            inherit (osConfig.antob.user) name;
             search = {
               default = "ddg";
               privateDefault = "ddg";

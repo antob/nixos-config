@@ -65,7 +65,7 @@
                   configureParent = true;
                 }
               ];
-              directories = cfg.safe.directories;
+              inherit (cfg.safe) directories;
               users."${userName}" = {
                 inherit (cfg.safe.home) files directories;
               };

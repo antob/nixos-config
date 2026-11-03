@@ -34,7 +34,7 @@ in
         pkgs.runCommand "propagated-icon"
           {
             passthru = {
-              fileName = cfg.icon.fileName;
+              inherit (cfg.icon) fileName;
             };
           }
           ''

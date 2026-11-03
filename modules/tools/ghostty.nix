@@ -21,7 +21,7 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.ghostty;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
     in
     {
       programs.ghostty = {

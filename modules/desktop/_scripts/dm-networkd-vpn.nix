@@ -6,7 +6,7 @@
 }:
 
 let
-  vpns = config.antob.networkd-vpn.vpns;
+  inherit (config.antob.networkd-vpn) vpns;
   snxctl = "${pkgs.snx-rs}/bin/snxctl";
   vpnCommand =
     action: vpn:

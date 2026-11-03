@@ -32,7 +32,7 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.kitty;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
     in
     {
       config = lib.mkMerge [

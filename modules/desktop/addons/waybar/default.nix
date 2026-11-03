@@ -42,10 +42,10 @@ in
     with lib;
     let
       cfg = osConfig.antob.waybar;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
       external-ip = lib.getExe (pkgs.callPackage ./_scripts/external-ip.nix { });
       mic-cam-usage = lib.getExe (pkgs.callPackage ./_scripts/mic-cam-usage.nix { });
-      vpns = osConfig.antob.networkd-vpn.vpns;
+      inherit (osConfig.antob.networkd-vpn) vpns;
       networkd-vpn-test = builtins.concatStringsSep " -o " (
         builtins.attrValues (builtins.mapAttrs (name: value: "-d /proc/sys/net/ipv4/conf/${name}") vpns)
       );

@@ -10,7 +10,7 @@
       siteDomain = "hs.antob.se";
       port = 9080;
       adminUser = "admin";
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
 
       aclConfig = {
         # Groups definition

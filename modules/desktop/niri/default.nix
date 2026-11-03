@@ -103,7 +103,7 @@ in
     with lib;
     let
       gtkCfg = osConfig.antob.gtk;
-      colors = osConfig.antob.color-scheme.colors;
+      inherit (osConfig.antob.color-scheme) colors;
       noctaliaEnabled = osConfig.antob ? noctalia;
       terminal = "${pkgs.kitty}/bin/kitty";
       tmuxTerminal = "${pkgs.kitty}/bin/kitty";

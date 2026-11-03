@@ -50,7 +50,7 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.clipperd;
-      secrets = osConfig.sops.secrets;
+      inherit (osConfig.sops) secrets;
     in
     {
       imports = [ inputs.clipperd.homeManagerModules.default ];

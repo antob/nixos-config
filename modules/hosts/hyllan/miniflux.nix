@@ -5,7 +5,7 @@
     let
       subdomain = "news";
       port = 8850;
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
     in
     {
       services = {

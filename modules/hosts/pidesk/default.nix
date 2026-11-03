@@ -13,7 +13,7 @@ in
 
     with lib;
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
     in
     {
       antob.systemd-networking = {

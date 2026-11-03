@@ -11,7 +11,7 @@
       ...
     }:
     let
-      secrets = config.sops.secrets;
+      inherit (config.sops) secrets;
       fqdn = "mail.antob.se";
       caddyCertDir = "/var/lib/caddy/.local/share/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${fqdn}";
       certDir = "/var/certs";
