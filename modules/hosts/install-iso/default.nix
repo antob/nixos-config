@@ -41,6 +41,7 @@ in
         nixos.git
         nixos.tmux
         nixos.networking
+        nixos.gnome
       ];
 
       # `install-iso` adds wireless support that
@@ -52,8 +53,6 @@ in
         cli-apps = {
           neovim = enabled;
         };
-
-        desktop.gnome = enabled;
 
         home.extraOptions.programs = {
           bat = {

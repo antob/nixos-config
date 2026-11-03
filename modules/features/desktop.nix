@@ -25,12 +25,11 @@ in
         nixos.virt-manager
         nixos.vscode
         nixos.firefox
+        nixos.udisks2
       ];
 
       config = {
         antob = {
-
-          desktop.addons.udisks2 = enabled;
 
           home.extraOptions = {
             # Default apps

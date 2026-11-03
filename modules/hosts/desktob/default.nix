@@ -93,6 +93,8 @@ in
         nixos.llm-agents
         nixos.networkd-vpn
         nixos.systemd-networking
+        nixos.hyprland
+        nixos.keyring
       ];
 
       antob = {
@@ -100,11 +102,6 @@ in
           width = 2560;
           height = 1440;
           refresh = 165;
-        };
-
-        desktop = {
-          hyprland = enabled;
-          addons.keyring = enabled;
         };
 
         cli-apps = {

@@ -42,9 +42,8 @@ in
     }:
     with lib;
     let
-      desktopCfg = osConfig.antob.desktop;
       pinentry =
-        if desktopCfg.gnome.enable then
+        if osConfig.services.desktopManager.gnome.enable then
           {
             path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
             name = "gnome3";

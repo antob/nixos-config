@@ -65,13 +65,11 @@ in
         nixos.llm-agents
         nixos.networkd-vpn
         nixos.systemd-networking
+        nixos.hyprland
+        nixos.keyring
       ];
 
       antob = {
-        desktop = {
-          hyprland = enabled;
-          addons.keyring = enabled;
-        };
 
         cli-apps = {
           neovim.localConfig = true;

@@ -19,10 +19,10 @@ in
         nixos.desktop
         nixos.avahi
         nixos.networking
+        nixos.gnome
       ];
 
       antob = {
-        desktop.gnome = enabled;
 
         # persistence = enabled;
 
