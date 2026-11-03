@@ -29,10 +29,6 @@ in
           };
         };
       };
-
-      xfconf.settings.xfce4-keyboard-shortcuts = mkIf config.antob.desktop.xfce-xmonad.enable {
-        "commands/custom/Print" = "${pkgs.flameshot}/bin/flameshot gui";
-      };
     };
   };
 }

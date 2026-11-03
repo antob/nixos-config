@@ -36,7 +36,7 @@ with lib;
       useUserPackages = true;
       useGlobalPkgs = true;
       backupFileExtension = "backup";
-      extraSpecialArgs = { inherit inputs outputs; };
+      extraSpecialArgs = { inherit inputs; };
 
       users.${config.antob.user.name} = mkAliasDefinitions options.antob.home.extraOptions;
     };

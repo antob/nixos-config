@@ -14,6 +14,15 @@
     # NixPkgs Unstable (kept one step behind)
     nixpkgs-prev.url = "github:nixos/nixpkgs/02c087f3fe673c9e317f206a627cb6b910336dbe";
 
+    # Flake Parts
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
+    # Import Tree - import every module in a directory
+    import-tree.url = "github:vic/import-tree";
+
     # Home Manager
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -117,158 +126,5 @@
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      ...
-    }@inputs:
-    let
-      inherit (self) outputs;
-      lib = import ./lib { inherit (nixpkgs) lib; };
-      rpiLib = import ./lib { inherit (inputs.nixos-raspberrypi.inputs.nixpkgs) lib; };
-      rpiNixosSystem = inputs.nixos-raspberrypi.lib.nixosSystem;
-      rpiNixosInstaller = inputs.nixos-raspberrypi.lib.nixosInstaller;
-
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-
-      forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
-      pkgsFor = lib.genAttrs systems (
-        system:
-        import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        }
-      );
-
-      commonModules = with inputs; [
-        sops-nix.nixosModules.sops
-        disko.nixosModules.disko
-        ./modules
-      ];
-
-      authorizedKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDIB2/+00zZtto7zwPegLiD9S+DivUiGSPL3BhoZI1pwqLhuKItvxbMnX+kUWfCyMcN20N7uYOZP4iCmyKIeUkQ1FgTqnRtDxignmni5xF31/h7gNf/POPWxagBFWzYYxxCknWzYFiupLN0VTobq4ZQ+1t2i/U2/j9nuElUV1/GjmlW/yjSBN647T8oB4mvVRJ2eIkd/pxL+dRCeX2N1UjZqoS7MZvgUNsS9/30gjau1+n8Fl4sERQr9tq8qz24HsWhdzmNCdQSnXbAe6hczQeOlwbCFLYcPW5ygtG+GYB7FWEbaeDOpfcXjcBdxhQXLL8QN5Nml1NzQj3OTYrihwTlHHeeGZXWFKa5OKfzX3zIXNkWfDlfThiMCGLt5S9A51C5m8SVRrQ9TC9ptwvNwOIqry4fyURtbSWUHV9r6SzYzifYwHn50OJ62Wr9ySWwRgh6xRD/8xtKI4y0hQGryoV9TxFtL1SvbbZybLgW0WSFPrCtk9dsAjCos1Wxpf3pqxJTH2HEYx3o03I7fYIxav6ZppNNLV6b5Hd6z2ExJoaax2A+YEds8pSJD+0L6ci9RU/AgaI1wlkLHOnkohTp7ZAK5KWEXJ6K4mXRH4sDvXNDDjYj1TvLZY8NlpHnwRzFkll2SzshegYkG3YoLeoAn4GW/0AkC0iX0ccirqRwN0i+UQ==";
-    in
-    {
-      overlays = import ./overlays { inherit inputs; };
-      packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
-      formatter = forEachSystem (pkgs: pkgs.nixfmt-tree);
-
-      nixosConfigurations = {
-        laptob = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          modules = commonModules ++ [
-            ./hosts/laptob
-          ];
-        };
-
-        desktob = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          modules = commonModules ++ [
-            ./hosts/desktob
-          ];
-        };
-
-        hyllan = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          modules = commonModules ++ [
-            ./hosts/hyllan
-          ];
-        };
-
-        wiggum = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          modules = commonModules ++ [
-            ./hosts/wiggum
-          ];
-        };
-
-        install-iso = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          system = "x86_64-linux";
-          modules = commonModules ++ [
-            ./hosts/install-iso
-          ];
-        };
-
-        minimal-iso = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          system = "x86_64-linux";
-          modules = commonModules ++ [
-            ./hosts/minimal-iso
-          ];
-        };
-
-        laptob-qemu = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs lib; };
-          modules = commonModules ++ [
-            ./hosts/laptob-qemu
-          ];
-        };
-
-        pihole = rpiNixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-            lib = rpiLib;
-          };
-          system = "aarch64-linux";
-          modules = [
-            ./modules/features/rpi
-            ./hosts/pihole
-          ];
-        };
-
-        pikvm = rpiNixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-            lib = rpiLib;
-          };
-          system = "aarch64-linux";
-          modules = [
-            ./modules/features/rpi
-            ./hosts/pikvm
-          ];
-        };
-
-        pidesk = rpiNixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-            lib = rpiLib;
-          };
-          system = "aarch64-linux";
-          modules = [
-            ./modules/features/rpi
-            ./hosts/pidesk
-          ];
-        };
-
-        rpi4-installer = rpiNixosInstaller {
-          system = "aarch64-linux";
-          specialArgs = {
-            inherit inputs outputs;
-            lib = rpiLib;
-          };
-          modules = [
-            {
-              imports = with inputs.nixos-raspberrypi.nixosModules; [
-                raspberry-pi-4.base
-              ];
-
-              sdImage.compressImage = false;
-              boot.zfs.forceImportRoot = false;
-              services.openssh = {
-                enable = true;
-                settings.PermitRootLogin = "yes";
-              };
-              users.users.root.openssh.authorizedKeys.keys = [
-                authorizedKey
-              ];
-            }
-          ];
-        };
-      };
-    };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }

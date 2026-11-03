@@ -458,7 +458,6 @@ in
     services.displayManager.gdm = {
       enable = true;
       autoSuspend = true;
-      wayland = true;
     };
 
     services.libinput = {
@@ -490,7 +489,6 @@ in
     };
 
     environment.gnome.excludePackages = with pkgs; [
-      gnome-photos
       gnome-tour
       gedit # text editor
       cheese # webcam tool

@@ -73,11 +73,11 @@ in
 
     sops.secrets = {
       clipperd_cert_key = {
-        sopsFile = ../../../hosts/common/secrets.yaml;
+        sopsFile = ../../../../hosts/common/secrets.yaml;
         owner = userName;
       };
       clipperd_api_token = {
-        sopsFile = ../../../hosts/common/secrets.yaml;
+        sopsFile = ../../../../hosts/common/secrets.yaml;
         owner = userName;
       };
     };
