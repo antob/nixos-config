@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
+  inherit (config.flake.modules) nixos;
 in
 {
   flake.modules.nixos.common =
@@ -13,6 +14,20 @@ in
 
     with lib;
     {
+      imports = [
+        nixos.eza
+        nixos.starship
+        nixos.direnv
+        nixos.devenv
+        nixos.rustup
+        nixos.fhs
+        nixos.console
+        nixos.fonts
+        nixos.locale
+        nixos.time
+        nixos.audio
+      ];
+
       config = {
         antob = {
           tools = {
@@ -20,14 +35,8 @@ in
             kitty = enabled;
             git = enabled;
             zsh = enabled;
-            starship = enabled;
-            eza = enabled;
-            direnv = enabled;
-            devenv = enabled;
-            rustup = enabled;
             fzf = enabled;
             scripts = enabled;
-            fhs = enabled;
           };
 
           cli-apps = {
@@ -42,7 +51,6 @@ in
 
           hardware = {
             networking = enabled;
-            audio = enabled;
           };
 
           services = {
@@ -50,13 +58,6 @@ in
           };
 
           security.gpg = enabled;
-
-          system = {
-            fonts = enabled;
-            locale = enabled;
-            time = enabled;
-            console = enabled;
-          };
 
           home.extraOptions.programs = {
             zoxide = {

@@ -28,7 +28,6 @@ in
     antob = {
       hardware.networking.enable = mkForce false;
       services = {
-        avahi.enable = mkForce false;
         networkd-vpn.enable = cfg.enableVpn;
       };
       persistence.safe.directories = mkIf cfg.enableWireless [ "/var/lib/iwd" ];

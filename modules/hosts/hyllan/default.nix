@@ -19,17 +19,18 @@ in
       emailTo = monCfg.emailTo;
     in
     {
+      antob.atuin = {
+        autoSync = false;
+        filterMode = "host";
+      };
+
       imports = [
         inputs.copyparty.nixosModules.default
         nixos.common
+        nixos.atuin
       ];
 
       antob = {
-        tools.atuin = {
-          enable = true;
-          autoSync = false;
-          filterMode = "host";
-        };
 
         system.zfs = {
           enable = true;

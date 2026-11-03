@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.minimal-iso =
     {
@@ -11,6 +15,14 @@
     {
       imports = [
         (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
+        nixos.eza
+        nixos.starship
+        nixos.console
+        nixos.fonts
+        nixos.locale
+        nixos.time
+        nixos.bluetooth
+        nixos.yubikey
       ];
 
       # `install-iso` adds wireless support that
@@ -25,8 +37,6 @@
           alacritty = enabled;
           git = enabled;
           zsh = enabled;
-          starship = enabled;
-          eza = enabled;
           fzf = enabled;
         };
 
@@ -36,8 +46,6 @@
         };
 
         hardware = {
-          bluetooth = enabled;
-          yubikey = enabled;
           networking = enabled;
         };
 
@@ -47,13 +55,6 @@
         };
 
         security.gpg = enabled;
-
-        system = {
-          fonts = enabled;
-          locale = enabled;
-          time = enabled;
-          console = enabled;
-        };
 
         virtualisation.docker.enable = false;
         virtualisation.podman.enable = false;

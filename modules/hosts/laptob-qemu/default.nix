@@ -17,6 +17,7 @@ in
         inputs.nur.modules.nixos.default
         nixos.common
         nixos.desktop
+        nixos.avahi
       ];
 
       antob = {

@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.flake.modules) nixos;
+in
 {
   flake.modules.nixos.laptob =
     {
@@ -12,6 +16,7 @@
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
         inputs.nixos-hardware.nixosModules.framework-intel-core-ultra-series3
+        nixos.ucsi-reset
       ];
 
       boot = {
@@ -53,7 +58,6 @@
       # UCSI driver on this Framework holds a phantom USB-C power source after
       # unplug, fooling systemd's AC detection. Reload the driver after each
       # resume so suspend-then-hibernate actually hibernates on schedule.
-      antob.hardware.ucsi-reset.enable = true;
 
       hardware.intelgpu = {
         vaapiDriver = "intel-media-driver";

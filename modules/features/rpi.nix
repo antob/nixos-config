@@ -1,6 +1,7 @@
 { inputs, config, ... }:
 let
   inherit (config.flake.lib) enabled;
+  inherit (config.flake.modules) nixos;
 in
 {
   flake.modules.nixos.rpi =
@@ -18,14 +19,10 @@ in
         ../_legacy/tools/kitty
         ../_legacy/tools/git
         ../_legacy/tools/zsh
-        ../_legacy/tools/starship
-        ../_legacy/tools/eza
         ../_legacy/tools/fzf
         ../_legacy/cli-apps/neovim
         ../_legacy/cli-apps/tmux
         ../_legacy/services/openssh
-        ../_legacy/system/locale
-        ../_legacy/system/time
 
         ../_legacy/hardware/systemd-networking
         ../_legacy/services/wireguard
@@ -33,8 +30,11 @@ in
         # transitive deps
         ../_legacy/security/gpg
         ../_legacy/hardware/networking
-        ../_legacy/services/avahi
         ../_legacy/services/networkd-vpn
+        nixos.eza
+        nixos.starship
+        nixos.locale
+        nixos.time
       ];
 
       config = {
@@ -43,8 +43,6 @@ in
             kitty = enabled;
             git = enabled;
             zsh = enabled;
-            starship = enabled;
-            eza = enabled;
             fzf = enabled;
           };
 
@@ -57,11 +55,6 @@ in
           };
 
           services.openssh = enabled;
-
-          system = {
-            locale = enabled;
-            time = enabled;
-          };
 
           home.extraOptions.programs = {
             zoxide = {

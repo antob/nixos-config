@@ -22,6 +22,9 @@ in
         nixos.persistence
         nixos.common
         nixos.laptop
+        nixos.atuin
+        nixos.checkpoint-vpn
+        nixos.tailscale
       ];
 
       antob = {
@@ -35,8 +38,6 @@ in
         security.secure-boot.enable = true;
 
         tools = {
-          atuin = enabled;
-          checkpoint-vpn = enabled;
           git.dirEmails = {
             "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
             "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
@@ -55,7 +56,6 @@ in
             address = "${wgIp}/24";
             privateKeyFile = secrets.wg0_private_key.path;
           };
-          tailscale.enable = true;
           restic-backup = {
             enable = true;
             paths = [

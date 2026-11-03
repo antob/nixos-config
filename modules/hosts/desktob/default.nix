@@ -17,12 +17,23 @@ in
       wgIp = "10.64.1.6";
     in
     {
+      antob.ollama = {
+        package = pkgs.ollama-vulkan;
+        host = "0.0.0.0";
+        openFirewallInterfaces = [ "wg0" ];
+      };
+
       imports = [
         inputs.nur.modules.nixos.default
         nixos.persistence
         nixos.common
         nixos.desktop
         nixos.gaming
+        nixos.atuin
+        nixos.checkpoint-vpn
+        nixos.ddcutil
+        nixos.ollama
+        nixos.tailscale
       ];
 
       antob = {
@@ -40,7 +51,6 @@ in
         virtualisation.podman.storageDriver = "btrfs";
 
         tools = {
-          atuin = enabled;
           alacritty.fontSize = 13;
           kitty.fontSize = 13;
           git.dirEmails = {
@@ -51,22 +61,14 @@ in
             enable = true;
             resticEnvFile = secrets.restic_env_file.path;
           };
-          checkpoint-vpn = enabled;
         };
 
         services = {
-          ollama = {
-            enable = true;
-            package = pkgs.ollama-vulkan;
-            host = "0.0.0.0";
-            openFirewallInterfaces = [ "wg0" ];
-          };
           wireguard = {
             enable = true;
             address = "${wgIp}/24";
             privateKeyFile = secrets.wg0_private_key.path;
           };
-          tailscale.enable = true;
           restic-backup = {
             enable = true;
             paths = [
@@ -102,7 +104,6 @@ in
             hostId = "672fb36e";
             enableWoL = true;
           };
-          ddcutil = enabled;
         };
 
         persistence = {

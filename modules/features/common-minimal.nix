@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
+  inherit (config.flake.modules) nixos;
 in
 {
   flake.modules.nixos.common-minimal =
@@ -13,14 +14,20 @@ in
 
     with lib;
     {
+      imports = [
+        nixos.eza
+        nixos.starship
+        nixos.console
+        nixos.locale
+        nixos.time
+      ];
+
       config = {
         antob = {
           tools = {
             kitty = enabled;
             git = enabled;
             zsh = enabled;
-            starship = enabled;
-            eza = enabled;
             fzf = enabled;
           };
 
@@ -43,12 +50,6 @@ in
           };
 
           security.gpg = enabled;
-
-          system = {
-            locale = enabled;
-            time = enabled;
-            console = enabled;
-          };
 
           home.extraOptions.programs = {
             zoxide = {

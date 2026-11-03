@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
+  inherit (config.flake.modules) nixos;
 in
 {
   flake.modules.nixos.desktop =
@@ -13,6 +14,17 @@ in
 
     with lib;
     {
+      imports = [
+        nixos.bluetooth
+        nixos.ledger
+        nixos.webcam
+        nixos.yubikey
+        nixos.zsa-voyager
+        nixos.printing
+        nixos.syncthing
+        nixos.virt-manager
+      ];
+
       config = {
         antob = {
           apps = {
@@ -20,23 +32,7 @@ in
             vscode = enabled;
           };
 
-          services = {
-            printing = enabled;
-            syncthing = enabled;
-            avahi = enabled;
-          };
-
           desktop.addons.udisks2 = enabled;
-
-          virtualisation.virt-manager = enabled;
-
-          hardware = {
-            bluetooth = enabled;
-            webcam = enabled;
-            zsa-voyager = enabled;
-            yubikey = enabled;
-            ledger = enabled;
-          };
 
           home.extraOptions = {
             # Default apps
