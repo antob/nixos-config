@@ -14,7 +14,6 @@ let
   userName = config.antob.user.name;
   userHome = "/home/${userName}";
 
-  dmsEnabled = config.antob.desktop.addons.dms-shell.enable;
   noctaliaEnabled = config.antob.desktop.addons.noctalia.enable;
 
   terminal = "${pkgs.kitty}/bin/kitty";
@@ -316,20 +315,6 @@ in
               Mod+Ctrl+E hotkey-overlay-title="Emoji selector" repeat=false { spawn-sh "rofimoji --prompt Emojis --action copy"; }
               Mod+D hotkey-overlay-title="App launcher" repeat=false { spawn-sh "rofi -show drun -show-icons"; }
           ''
-          (lib.optionalString dmsEnabled /* kdl */ ''
-            // DMS bindings
-            XF86AudioRaiseVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
-            XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
-            XF86AudioMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }
-            XF86MonBrightnessUp allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "increment" "5" ""; }
-            XF86MonBrightnessDown allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "decrement" "5" ""; }
-            XF86AudioMicMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "micmute"; }
-            Print { spawn "dms" "ipc" "call" "niri" "screenshot"; }
-            Mod+U hotkey-overlay-title="Toggle locking on idle" repeat=false { spawn "dms" "ipc" "call" "inhibit" "toggle"; }
-            Mod+X hotkey-overlay-title="System menu" repeat=false { spawn "dms" "ipc" "call" "widget" "toggle" "powerMenuButton"; }
-            Super+L hotkey-overlay-title="Lock screen" repeat=false { spawn "dms" "ipc" "call" "lock" "lock"; }
-            Super+Comma hotkey-overlay-title="Settings" repeat=false { spawn "dms" "ipc" "call" "settings" "focusOrToggle"; }
-          '')
           (lib.optionalString noctaliaEnabled /* kdl */ ''
             // Noctalia bindings
             XF86AudioRaiseVolume { spawn-sh "noctalia msg volume-up"; }
@@ -348,16 +333,6 @@ in
             Mod+Ctrl+P hotkey-overlay-title="Display Manager" repeat=false { spawn "monique"; }
           '')
           " }"
-          (lib.optionalString dmsEnabled /* kdl */ ''
-            // Set the overview wallpaper on the backdrop.
-            layer-rule {
-              match namespace="dms:blurwallpaper"
-              place-within-backdrop true
-            }
-
-            // Include DMS settings
-            include "dms/outputs.kdl"
-          '')
           (lib.optionalString noctaliaEnabled /* kdl */ ''
             // Blur everywhere without xray for a better look
             layer-rule {
@@ -387,7 +362,6 @@ in
               honor-xdg-activation-with-invalid-serial
             }
 
-            // Include DMS settings
             include "monitors.kdl"
 
             // Launch Noctalia at startup
@@ -409,15 +383,12 @@ in
 
     antob.persistence.home.directories = [
       ".config/niri"
-      ".config/niri/dms"
       ".config/monique"
     ];
 
     # Ensure included conf files are present
     systemd.tmpfiles.rules = [
       "f ${userHome}/.config/niri/monitors.kdl 0644 ${userName} users -"
-      "d ${userHome}/.config/niri/dms 0755 ${userName} users -"
-      "f ${userHome}/.config/niri/dms/outputs.kdl 0644 ${userName} users -"
     ];
 
     # Desktop portal
