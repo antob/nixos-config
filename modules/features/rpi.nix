@@ -16,17 +16,11 @@ in
     {
       imports = [
 
-        ../_legacy/tools/kitty
-        ../_legacy/tools/git
-        ../_legacy/tools/zsh
-        ../_legacy/tools/fzf
         ../_legacy/cli-apps/neovim
-        ../_legacy/cli-apps/tmux
 
         ../_legacy/hardware/systemd-networking
 
         # transitive deps
-        ../_legacy/security/gpg
         ../_legacy/hardware/networking
         ../_legacy/services/networkd-vpn
         nixos.eza
@@ -34,23 +28,21 @@ in
         nixos.locale
         nixos.time
         nixos.openssh
+        nixos.fzf
+        nixos.zsh
+        nixos.kitty
+        nixos.git
+        nixos.tmux
       ];
 
       config = {
         antob = {
-          tools = {
-            kitty = enabled;
-            git = enabled;
-            zsh = enabled;
-            fzf = enabled;
-          };
 
           cli-apps = {
             neovim = {
               enable = true;
               minimal = true;
             };
-            tmux = enabled;
           };
 
           home.extraOptions.programs = {

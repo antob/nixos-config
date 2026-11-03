@@ -1,22 +1,34 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-
-with lib;
+{ config, ... }:
 let
-  cfg = config.antob.tools.alacritty;
+  inherit (config.flake.lib) mkOpt;
+  inherit (config.aspects) homeManager;
 in
 {
-  options.antob.tools.alacritty = with types; {
-    enable = mkEnableOption "Enable alacritty";
-    fontSize = mkOpt int 12 "Font size.";
-  };
+  flake.modules.nixos.alacritty =
+    { lib, ... }:
 
-  config = mkIf cfg.enable {
-    antob.home.extraOptions = {
+    with lib;
+    {
+      config.home-manager.sharedModules = [ homeManager.alacritty ];
+
+      options.antob.alacritty = with types; {
+        fontSize = mkOpt int 12 "Font size.";
+      };
+
+    };
+
+  flake.modules.homeManager.alacritty =
+    {
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    with lib;
+    let
+      cfg = osConfig.antob.alacritty;
+    in
+    {
       programs.alacritty = {
         enable = true;
         package = pkgs.alacritty;
@@ -55,7 +67,7 @@ in
             save_to_clipboard = true;
           };
 
-          colors = import ./themes/tokyonight-night.nix;
+          colors = import ./_files/themes/tokyonight-night.nix;
 
           cursor = {
             style.shape = "Beam";
@@ -101,5 +113,5 @@ in
         '';
       };
     };
-  };
+
 }

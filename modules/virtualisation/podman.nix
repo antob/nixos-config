@@ -21,6 +21,8 @@ in
       };
 
       config = {
+        antob.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
+
         virtualisation.podman = {
           enable = true;
           autoPrune.enable = true;
@@ -73,7 +75,6 @@ in
           };
 
           user.extraGroups = [ "podman" ];
-          tools.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
         };
 
         environment = {

@@ -9,7 +9,7 @@ in
 
     with lib;
     {
-      home-manager.sharedModules = [ homeManager.ghostty ];
+      config.home-manager.sharedModules = [ homeManager.ghostty ];
 
       options.antob.ghostty = with types; {
         fontSize = mkOpt int 12 "Font size.";

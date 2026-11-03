@@ -1,4 +1,9 @@
-{ inputs, lib, config, ... }:
+{
+  inputs,
+  lib,
+  config,
+  ...
+}:
 {
   imports = [ inputs.flake-parts.flakeModules.modules ];
 
@@ -9,7 +14,8 @@
     readOnly = true;
     description = "flake.modules wrapped with a stable key so repeated imports are deduplicated.";
     default = lib.mapAttrs (
-      class: lib.mapAttrs (
+      class:
+      lib.mapAttrs (
         name: module: {
           key = "aspect/${class}/${name}";
           imports = [ module ];

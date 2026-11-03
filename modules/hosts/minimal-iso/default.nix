@@ -28,6 +28,12 @@ in
         nixos.bluetooth
         nixos.yubikey
         nixos.openssh
+        nixos.fzf
+        nixos.zsh
+        nixos.alacritty
+        nixos.gpg
+        nixos.git
+        nixos.tmux
       ];
 
       # `install-iso` adds wireless support that
@@ -38,23 +44,14 @@ in
       programs.dconf.enable = true;
 
       antob = {
-        tools = {
-          alacritty = enabled;
-          git = enabled;
-          zsh = enabled;
-          fzf = enabled;
-        };
 
         cli-apps = {
           neovim = enabled;
-          tmux = enabled;
         };
 
         hardware = {
           networking = enabled;
         };
-
-        security.gpg = enabled;
 
       };
 

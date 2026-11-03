@@ -1,44 +1,61 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-
-with lib;
+{ config, ... }:
 let
-  cfg = config.antob.security.gpg;
-  desktopCfg = config.antob.desktop;
-
-  pinentry =
-    if desktopCfg.gnome.enable then
-      {
-        path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
-        name = "gnome3";
-      }
-    else
-      {
-        path = "${pkgs.pinentry-rofi}/bin/pinentry-rofi";
-        name = null;
-      };
-
+  inherit (config.aspects) homeManager;
 in
 {
-  options.antob.security.gpg = with types; {
-    enable = mkEnableOption "Whether or not to enable GPG.";
-  };
+  flake.modules.nixos.gpg =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
 
-  config = mkIf cfg.enable {
+    with lib;
+    {
+      config = {
+        home-manager.sharedModules = [ homeManager.gpg ];
 
-    services.pcscd.enable = true;
+        services.pcscd.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      cryptsetup
-      paperkey
-      gnupg
-    ];
+        environment.systemPackages = with pkgs; [
+          cryptsetup
+          paperkey
+          gnupg
+        ];
 
-    antob.home.extraOptions = {
+        antob.persistence.safe.home.directories = [
+          {
+            directory = ".gnupg";
+            mode = "0700";
+          }
+        ];
+      };
+    };
+
+  flake.modules.homeManager.gpg =
+    {
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    with lib;
+    let
+      desktopCfg = osConfig.antob.desktop;
+      pinentry =
+        if desktopCfg.gnome.enable then
+          {
+            path = "${pkgs.pinentry-gnome3}/bin/pinentry-gnome3";
+            name = "gnome3";
+          }
+        else
+          {
+            path = "${pkgs.pinentry-rofi}/bin/pinentry-rofi";
+            name = null;
+          };
+    in
+    {
       services.gpg-agent = {
         enable = true;
         enableSshSupport = true;
@@ -118,11 +135,4 @@ in
         };
     };
 
-    antob.persistence.safe.home.directories = [
-      {
-        directory = ".gnupg";
-        mode = "0700";
-      }
-    ];
-  };
 }

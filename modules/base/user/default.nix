@@ -109,7 +109,7 @@ in
             home = "/home/${cfg.name}";
             group = cfg.group;
 
-            shell = mkIf config.antob.tools.zsh.enable pkgs.zsh;
+            shell = mkIf config.programs.zsh.enable pkgs.zsh;
 
             extraGroups = [
               "wheel"

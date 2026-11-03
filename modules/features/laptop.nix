@@ -14,12 +14,14 @@ in
 
     with lib;
     {
-      imports = [ nixos.desktop ];
+      imports = [
+        nixos.desktop
+        nixos.fingerprint
+      ];
 
       config = {
         antob = {
-          system.info.laptop = true;
-          hardware.fingerprint = enabled;
+          info.laptop = true;
         };
 
         environment.systemPackages = with pkgs; [

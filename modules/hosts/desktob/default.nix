@@ -17,6 +17,15 @@ in
       wgIp = "10.64.1.6";
     in
     {
+      antob.git.dirEmails = {
+        "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
+        "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
+      };
+
+      antob.alacritty.fontSize = 13;
+
+      antob.kitty.fontSize = 13;
+
       antob.podman = {
         storageDriver = "btrfs";
       };
@@ -86,15 +95,6 @@ in
         desktop = {
           hyprland = enabled;
           addons.keyring = enabled;
-        };
-
-        tools = {
-          alacritty.fontSize = 13;
-          kitty.fontSize = 13;
-          git.dirEmails = {
-            "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
-            "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
-          };
         };
 
         cli-apps = {

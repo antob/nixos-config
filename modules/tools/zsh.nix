@@ -1,30 +1,46 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-
-with lib;
+{ config, ... }:
 let
-  cfg = config.antob.tools.zsh;
+  inherit (config.flake.lib) mkOpt;
+  inherit (config.aspects) homeManager;
 in
 {
-  options.antob.tools.zsh = with types; {
-    enable = mkEnableOption "Whether or not to install and configure zsh.";
-    extraOhMyZshPlugins = mkOpt (listOf str) [ ] "Extra plugins for OhMyZsh.";
-  };
+  flake.modules.nixos.zsh =
+    { config, lib, ... }:
 
-  config = mkIf cfg.enable {
-    programs.zsh.enable = true;
-    antob.home.extraOptions = {
+    with lib;
+    {
+      options.antob.zsh = with types; {
+        extraOhMyZshPlugins = mkOpt (listOf str) [ ] "Extra plugins for OhMyZsh.";
+      };
+
+      config = {
+        home-manager.sharedModules = [ homeManager.zsh ];
+
+        programs.zsh.enable = true;
+
+        antob.persistence.safe.home.directories = [ ".local/share/zsh" ];
+      };
+    };
+
+  flake.modules.homeManager.zsh =
+    {
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    with lib;
+    let
+      cfg = osConfig.antob.zsh;
+    in
+    {
       programs.zsh = {
         enable = true;
         enableCompletion = true;
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
         defaultKeymap = "emacs";
-        dotDir = "/home/${config.antob.user.name}/.config/zsh";
+        dotDir = "/home/${osConfig.antob.user.name}/.config/zsh";
 
         historySubstringSearch = {
           enable = true;
@@ -118,6 +134,4 @@ in
       };
     };
 
-    antob.persistence.safe.home.directories = [ ".local/share/zsh" ];
-  };
 }

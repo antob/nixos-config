@@ -17,6 +17,11 @@ in
       wgIp = "10.64.1.7";
     in
     {
+      antob.git.dirEmails = {
+        "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
+        "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
+      };
+
       antob.podman = {
         storageDriver = "btrfs";
       };
@@ -59,13 +64,6 @@ in
           addons.keyring = enabled;
         };
 
-        tools = {
-          git.dirEmails = {
-            "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
-            "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
-          };
-        };
-
         cli-apps = {
           llm-agents = enabled;
           neovim.localConfig = true;
@@ -97,13 +95,13 @@ in
 
       # Framework-specific fix for the Goodix fingerprint reader which comes back
       # in a bad state after suspend/hibernate resume.
-      services.udev.extraRules = mkIf config.antob.hardware.fingerprint.enable ''
+      services.udev.extraRules = mkIf config.services.fprintd.enable ''
         ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="27c6", ATTR{idProduct}=="609c", ATTR{authorized}="0", ATTR{authorized}="1", RUN+="${pkgs.systemd}/bin/systemctl try-restart fprintd.service"
       '';
 
       # Make fprintd's own startup wait until the reader is actually enumerated before it opens
       systemd.services.fprintd.serviceConfig.ExecStartPre =
-        mkIf config.antob.hardware.fingerprint.enable "${pkgs.writeShellScript "wait-for-goodix-reader" ''
+        mkIf config.services.fprintd.enable "${pkgs.writeShellScript "wait-for-goodix-reader" ''
           for _ in $(seq 1 30); do
             for f in /sys/bus/usb/devices/*/idVendor; do
               dir=$(${pkgs.coreutils}/bin/dirname "$f")

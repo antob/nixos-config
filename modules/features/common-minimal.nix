@@ -22,31 +22,28 @@ in
         nixos.time
         nixos.yazi
         nixos.openssh
+        nixos.fzf
+        nixos.zsh
+        nixos.kitty
+        nixos.gpg
+        nixos.git
+        nixos.tmux
       ];
 
       config = {
         antob = {
-          tools = {
-            kitty = enabled;
-            git = enabled;
-            zsh = enabled;
-            fzf = enabled;
-          };
 
           cli-apps = {
             neovim = {
               enable = true;
               minimal = true;
             };
-            tmux = enabled;
             # sqlit = enabled;
           };
 
           hardware = {
             networking = enabled;
           };
-
-          security.gpg = enabled;
 
           home.extraOptions.programs = {
             zoxide = {

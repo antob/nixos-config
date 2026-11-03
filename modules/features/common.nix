@@ -29,30 +29,27 @@ in
         nixos.yazi
         nixos.openssh
         nixos.scripts
+        nixos.fzf
+        nixos.zsh
+        nixos.kitty
+        nixos.alacritty
+        nixos.gpg
+        nixos.git
+        nixos.tmux
+        nixos.nix-search-tv
       ];
 
       config = {
         antob = {
-          tools = {
-            alacritty = enabled;
-            kitty = enabled;
-            git = enabled;
-            zsh = enabled;
-            fzf = enabled;
-          };
 
           cli-apps = {
             neovim = enabled;
-            tmux = enabled;
-            nix-search-tv = enabled;
             # sqlit = enabled;
           };
 
           hardware = {
             networking = enabled;
           };
-
-          security.gpg = enabled;
 
           home.extraOptions.programs = {
             zoxide = {

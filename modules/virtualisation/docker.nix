@@ -21,12 +21,13 @@ in
       };
 
       config = {
+        antob.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
+
         virtualisation.docker.enable = true;
         virtualisation.docker.storageDriver = cfg.storageDriver;
 
         antob = {
           user.extraGroups = [ "docker" ];
-          tools.zsh.extraOhMyZshPlugins = [ "docker-compose" ];
           system.env.DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
 
           persistence = {

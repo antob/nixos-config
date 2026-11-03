@@ -1,35 +1,72 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-
-with lib;
+{ config, ... }:
 let
-  cfg = config.antob.tools.git;
-  # gpg = config.antob.security.gpg;
-  user = config.antob.user;
-  colors = config.antob.color-scheme.colors;
+  inherit (config.flake.lib) mkOpt enabled;
+  inherit (config.aspects) homeManager;
 in
 {
-  options.antob.tools.git = with types; {
-    enable = mkEnableOption "Whether or not to install and configure git.";
-    userName = mkOpt types.str user.fullName "The name to configure git with.";
-    userEmail = mkOpt types.str user.email "The email to configure git with.";
-    signingKey = mkOpt types.str "tobias.lindholm@antob.se" "The key ID to sign commits with.";
-    dirEmails = mkOpt (types.attrsOf types.str) { } "Git email per directory, keyed by gitdir prefix.";
-  };
+  flake.modules.nixos.git =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      git
-      gitui
-      lazygit
-      delta
-    ];
+    with lib;
+    let
+      # gpg = config.antob.gpg;
+      user = config.antob.user;
+    in
+    {
+      options.antob.git = with types; {
+        userName = mkOpt types.str user.fullName "The name to configure git with.";
+        userEmail = mkOpt types.str user.email "The email to configure git with.";
+        signingKey = mkOpt types.str "tobias.lindholm@antob.se" "The key ID to sign commits with.";
+        dirEmails = mkOpt (types.attrsOf types.str) { } "Git email per directory, keyed by gitdir prefix.";
+      };
 
-    antob.home.extraOptions = {
+      config = {
+        home-manager.sharedModules = [ homeManager.git ];
+
+        environment.systemPackages = with pkgs; [
+          git
+          gitui
+          lazygit
+          delta
+        ];
+
+        antob.persistence.home.directories = [ ".local/state/lazygit" ];
+
+        environment.shellAliases = {
+          gl = "git hist";
+          gb = "git branch";
+          gco = "git checkout";
+          gc = "git commit --verbose";
+          gca = "git commit --verbose --all";
+          gd = "git diff";
+          gp = "git push";
+          gst = "git status";
+          gw = "git worktree";
+          gg = "lazygit";
+        };
+      };
+    };
+
+  flake.modules.homeManager.git =
+    {
+      config,
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    with lib;
+    let
+      cfg = osConfig.antob.git;
+      user = osConfig.antob.user;
+      colors = osConfig.antob.color-scheme.colors;
+    in
+    {
       xdg.configFile."lazygit/config.yml".text = /* yaml */ ''
         gui:
           showFileTree: false
@@ -64,7 +101,7 @@ in
         signing = {
           key = cfg.signingKey;
           format = "openpgp";
-          signByDefault = mkIf config.antob.security.gpg.enable true;
+          signByDefault = mkIf config.services.gpg-agent.enable true;
         };
 
         settings = {
@@ -158,30 +195,15 @@ in
         ];
       };
 
-      programs.zsh.initContent = mkIf config.antob.tools.fzf.enable (
+      programs.zsh.initContent = mkIf config.programs.fzf.enable (
         mkOrder 200 ''
           source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
         ''
       );
 
       home.file = {
-        ".gitexcludes".source = ./.gitexcludes;
+        ".gitexcludes".source = ./_files/.gitexcludes;
       };
     };
 
-    antob.persistence.home.directories = [ ".local/state/lazygit" ];
-
-    environment.shellAliases = {
-      gl = "git hist";
-      gb = "git branch";
-      gco = "git checkout";
-      gc = "git commit --verbose";
-      gca = "git commit --verbose --all";
-      gd = "git diff";
-      gp = "git push";
-      gst = "git status";
-      gw = "git worktree";
-      gg = "lazygit";
-    };
-  };
 }

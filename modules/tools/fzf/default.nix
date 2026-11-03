@@ -1,27 +1,27 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-
-with lib;
+{ config, ... }:
 let
-  cfg = config.antob.tools.fzf;
+  inherit (config.aspects) homeManager;
 in
 {
-  options.antob.tools.fzf = with types; {
-    enable = mkEnableOption "Whether or not to install and configure fzf.";
-  };
+  flake.modules.nixos.fzf =
+    { lib, ... }:
 
-  config = mkIf cfg.enable {
-    antob.home.extraOptions = {
+    with lib;
+    {
+      home-manager.sharedModules = [ homeManager.fzf ];
+
+    };
+
+  flake.modules.homeManager.fzf =
+    { lib, pkgs, ... }:
+    with lib;
+    {
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
         enableNushellIntegration = false;
 
-        defaultOptions = import ./themes/tokyonight-night.nix ++ [
+        defaultOptions = import ./_files/themes/tokyonight-night.nix ++ [
           "--tmux 80%"
         ];
 
@@ -67,5 +67,5 @@ in
         }
       '';
     };
-  };
+
 }
