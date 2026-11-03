@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) nixos;
 in
 {

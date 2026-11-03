@@ -28,7 +28,7 @@ in
           enable = true;
           authKeyFile = mkIf (cfg.keyFile != null) cfg.keyFile;
           useRoutingFeatures = "client";
-          extraUpFlags = cfg.extraUpFlags;
+          inherit (cfg) extraUpFlags;
         };
 
         networking = {

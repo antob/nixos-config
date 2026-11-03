@@ -79,63 +79,65 @@
         };
       };
 
-      systemd.services = {
-        "podman-languard-backend" = {
-          serviceConfig = {
-            Restart = lib.mkOverride 90 "always";
+      systemd = {
+        services = {
+          "podman-languard-backend" = {
+            serviceConfig = {
+              Restart = lib.mkOverride 90 "always";
+            };
+            partOf = [
+              "podman-compose-languard.target"
+            ];
+            wantedBy = [
+              "podman-compose-languard.target"
+            ];
           };
-          partOf = [
-            "podman-compose-languard.target"
-          ];
-          wantedBy = [
-            "podman-compose-languard.target"
-          ];
+
+          "podman-languard-frontend" = {
+            serviceConfig = {
+              Restart = lib.mkOverride 90 "always";
+            };
+            partOf = [
+              "podman-compose-languard.target"
+            ];
+            wantedBy = [
+              "podman-compose-languard.target"
+            ];
+          };
+
+          "podman-languard-scanner" = {
+            serviceConfig = {
+              Restart = lib.mkOverride 90 "always";
+            };
+            partOf = [
+              "podman-compose-languard.target"
+            ];
+            wantedBy = [
+              "podman-compose-languard.target"
+            ];
+          };
         };
 
-        "podman-languard-frontend" = {
-          serviceConfig = {
-            Restart = lib.mkOverride 90 "always";
+        # Main service. When started, this will automatically create all resources
+        # and start the containers. When stopped, this will teardown all resources.
+        targets."podman-languard" = {
+          unitConfig = {
+            Description = "Lan Guard main target.";
           };
-          partOf = [
-            "podman-compose-languard.target"
-          ];
-          wantedBy = [
-            "podman-compose-languard.target"
-          ];
+          wantedBy = [ "multi-user.target" ];
         };
 
-        "podman-languard-scanner" = {
-          serviceConfig = {
-            Restart = lib.mkOverride 90 "always";
-          };
-          partOf = [
-            "podman-compose-languard.target"
-          ];
-          wantedBy = [
-            "podman-compose-languard.target"
-          ];
-        };
-      };
-
-      # Main service. When started, this will automatically create all resources
-      # and start the containers. When stopped, this will teardown all resources.
-      systemd.targets."podman-languard" = {
-        unitConfig = {
-          Description = "Lan Guard main target.";
-        };
-        wantedBy = [ "multi-user.target" ];
+        tmpfiles.rules = [
+          "d ${dataDir} 0750 root root -"
+          "d ${dataDir}/data 0750 root root -"
+          "d ${dataDir}/static 0750 root root -"
+        ];
       };
 
       services.caddy.antobProxies."${subdomain}" = {
         hostName = "127.0.0.1";
-        port = port;
+        inherit port;
       };
-
-      systemd.tmpfiles.rules = [
-        "d ${dataDir} 0750 root root -"
-        "d ${dataDir}/data 0750 root root -"
-        "d ${dataDir}/static 0750 root root -"
-      ];
 
       sops.secrets.lan_guard_environment = { };
     };

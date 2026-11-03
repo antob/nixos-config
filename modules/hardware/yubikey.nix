@@ -38,7 +38,6 @@ in
 
   flake.modules.homeManager.yubikey =
     { lib, pkgs, ... }:
-    with lib;
     {
       systemd.user.services.yubikey-touch-detector = {
         Unit = {

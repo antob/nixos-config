@@ -10,7 +10,6 @@ in
       ...
     }:
 
-    with lib;
     let
       inherit (config.sops) secrets;
     in

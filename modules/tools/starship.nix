@@ -6,7 +6,6 @@ in
   flake.modules.nixos.starship =
     { lib, ... }:
 
-    with lib;
     {
       home-manager.sharedModules = [ homeManager.starship ];
 
@@ -14,7 +13,6 @@ in
 
   flake.modules.homeManager.starship =
     { lib, ... }:
-    with lib;
     {
       programs.starship = {
         enable = true;

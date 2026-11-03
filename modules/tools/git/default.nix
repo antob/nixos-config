@@ -63,7 +63,6 @@ in
     with lib;
     let
       cfg = osConfig.antob.git;
-      user = osConfig.antob.user;
       colors = osConfig.antob.color-scheme.colors;
     in
     {

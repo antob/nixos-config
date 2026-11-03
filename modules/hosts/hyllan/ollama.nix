@@ -30,7 +30,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "http://127.0.0.1";
-          port = port;
+          inherit port;
           extraConfig = ''
             header_up Host 127.0.0.1
           '';

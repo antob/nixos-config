@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan-commafeed =
-    { ... }:
+    _:
 
     let
       subdomain = "news";
@@ -18,7 +18,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "127.0.0.1";
-          port = port;
+          inherit port;
         };
       };
 

@@ -40,7 +40,7 @@ in
           wg0 = {
             autostart = true;
             address = [ cfg.address ];
-            privateKeyFile = cfg.privateKeyFile;
+            inherit (cfg) privateKeyFile;
 
             # Scoped DNS: only cfg.domains route through the tunnel DNS. wg-quick's
             # `dns` option is intentionally NOT used here, because it installs a

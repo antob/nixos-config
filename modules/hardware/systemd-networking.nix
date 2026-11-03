@@ -45,8 +45,8 @@ in
           networkmanager.enable = false;
           useDHCP = false;
           usePredictableInterfaceNames = false;
-          hostName = cfg.hostName;
-          hostId = cfg.hostId;
+          inherit (cfg) hostName;
+          inherit (cfg) hostId;
 
           # Wake-on-LAN policy on the wired interface.
           interfaces.eth0.wakeOnLan = mkIf cfg.enableWoL {

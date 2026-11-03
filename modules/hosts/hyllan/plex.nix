@@ -13,7 +13,7 @@
           enable = true;
           openFirewall = true;
           group = "media";
-          dataDir = dataDir;
+          inherit dataDir;
           # Unstable plex cannot be built for now
           # (404 when fetching the code)
           package = pkgs.stable.plex;
@@ -21,7 +21,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "127.0.0.1";
-          port = port;
+          inherit port;
         };
       };
 

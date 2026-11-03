@@ -31,7 +31,6 @@ in
 
   flake.modules.homeManager.keyring =
     { lib, ... }:
-    with lib;
     {
       services.gnome-keyring = {
         enable = true;

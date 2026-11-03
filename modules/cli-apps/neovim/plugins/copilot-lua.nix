@@ -5,9 +5,8 @@ in
 {
   flake.modules.nixos.neovim =
     { lib, ... }:
-    with lib;
     {
-      options.antob.neovim.plugins.copilotLua = with types; {
+      options.antob.neovim.plugins.copilotLua = {
         enable = mkBoolOpt true "Whether or not to install and configure copilot-lua.";
         enableAtStartup = mkBoolOpt true "Whether to start with inline suggestions enabled (maps to suggestion.enabled).";
       };
@@ -27,7 +26,7 @@ in
     in
     {
       config = lib.mkMerge [
-        (lib.mkIf (cfg.enable && !osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) ({
+        (lib.mkIf (cfg.enable && !osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) {
           programs.neovim = {
             plugins = with pkgs.vimPlugins; [
               copilot-lua
@@ -80,7 +79,7 @@ in
               end, { noremap = true, silent = true, desc = "Dismiss Copilot suggestion and exit insert mode" })
             '';
           };
-        }))
+        })
       ];
     };
 

@@ -98,7 +98,6 @@ in
 
   flake.modules.homeManager.openssh =
     { osConfig, lib, ... }:
-    with lib;
     {
       programs.ssh = {
         enable = true;

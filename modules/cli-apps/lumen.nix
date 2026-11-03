@@ -28,7 +28,6 @@ in
 
   flake.modules.homeManager.lumen =
     { lib, ... }:
-    with lib;
     {
       xdg.configFile."lumen/lumen.config.json".text = /* json */ ''
         {

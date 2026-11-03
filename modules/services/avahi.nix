@@ -5,11 +5,6 @@
       config,
       ...
     }:
-
-    let
-
-      inherit (lib) mkEnableOption mkIf;
-    in
     {
       config = {
         services.avahi = {

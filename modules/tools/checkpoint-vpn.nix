@@ -49,7 +49,6 @@ in
 
   flake.modules.homeManager.checkpoint-vpn =
     { lib, ... }:
-    with lib;
     {
       xdg.configFile."snx-rs/puzzel.conf".text = /* bash */ ''
         profile-name=Puzzel

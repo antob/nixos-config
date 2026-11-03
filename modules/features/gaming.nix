@@ -149,7 +149,6 @@ in
 
   flake.modules.homeManager.gaming =
     { lib, pkgs, ... }:
-    with lib;
     {
       xdg = {
         configFile."MangoHud/MangoHud.conf".text = ''

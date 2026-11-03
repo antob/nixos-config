@@ -24,7 +24,6 @@ in
 
   flake.modules.homeManager.worktrunk =
     { lib, pkgs, ... }:
-    with lib;
     {
       xdg.configFile."worktrunk/config.toml".text = /* toml */ ''
         worktree-path = "{{ repo_path }}/../{{ repo }}__worktrees/{{ branch | sanitize }}"

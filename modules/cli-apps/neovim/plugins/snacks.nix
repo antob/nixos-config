@@ -8,7 +8,7 @@
     }:
     {
       config = lib.mkMerge [
-        (lib.mkIf (!osConfig.antob.neovim.localConfig) ({
+        (lib.mkIf (!osConfig.antob.neovim.localConfig) {
           programs.neovim = {
             plugins = with pkgs.vimPlugins; [
               snacks-nvim
@@ -70,7 +70,7 @@
               vim.api.nvim_set_hl(0, "SnacksPickerBorder", { link = "PmenuExtra" })
             '';
           };
-        }))
+        })
       ];
     };
 

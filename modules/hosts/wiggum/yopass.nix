@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.wiggum-yopass =
-    { ... }:
+    _:
 
     let
       siteDomain = "secrets.antob.se";

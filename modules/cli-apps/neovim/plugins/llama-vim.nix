@@ -28,7 +28,7 @@ in
     in
     {
       config = lib.mkMerge [
-        (lib.mkIf (cfg.enable && !osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) ({
+        (lib.mkIf (cfg.enable && !osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) {
           programs.neovim = {
             plugins = with pkgs.vimPlugins; [
               llama-vim
@@ -70,7 +70,7 @@ in
               })
             '';
           };
-        }))
+        })
       ];
     };
 

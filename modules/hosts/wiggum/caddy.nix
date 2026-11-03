@@ -7,7 +7,7 @@
     {
       services.caddy = {
         enable = true;
-        email = email;
+        inherit email;
         # acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
         extraConfig = ''
           (logging) {

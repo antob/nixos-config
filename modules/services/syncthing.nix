@@ -6,7 +6,6 @@ in
   flake.modules.nixos.syncthing =
     { config, lib, ... }:
 
-    with lib;
     {
       config = {
         home-manager.sharedModules = [ homeManager.syncthing ];
@@ -27,7 +26,6 @@ in
 
   flake.modules.homeManager.syncthing =
     { lib, pkgs, ... }:
-    with lib;
     {
       services.syncthing = {
         enable = true;

@@ -10,7 +10,6 @@ in
       ...
     }:
 
-    with lib;
     {
       imports = [ nixos.fzf ];
 
@@ -25,7 +24,6 @@ in
 
   flake.modules.homeManager.nix-search-tv =
     { lib, ... }:
-    with lib;
     {
       programs.nix-search-tv = {
         enable = true;

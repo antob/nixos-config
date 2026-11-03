@@ -24,11 +24,11 @@ in
       };
 
       config = mkMerge [
-        ({
+        {
           environment.systemPackages = [
             (cp ./_files/vaultwarden-local.nix { })
           ];
-        })
+        }
         (mkIf (cfg.resticEnvFile != null) {
           environment.systemPackages = [
             (cp ./_files/restic-vaultwarden.nix {

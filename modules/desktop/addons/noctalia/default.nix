@@ -12,54 +12,47 @@ in
     }:
 
     with lib;
-    let
-      inherit (config.antob.color-scheme) colors;
-
-      # Input for the vpn-status plugin: the VPNs to watch and the menu opened on click.
-    in
     {
       imports = [ nixos.swappy ];
 
-      config = (
-        mkMerge [
-          { home-manager.sharedModules = [ homeManager.noctalia ]; }
+      config = mkMerge [
+        { home-manager.sharedModules = [ homeManager.noctalia ]; }
 
-          {
-            programs.noctalia = {
-              enable = true;
-            };
+        {
+          programs.noctalia = {
+            enable = true;
+          };
 
-            environment.systemPackages = with pkgs; [
-              grim
-              slurp
-              # wf-recorder
-              wl-clipboard
-              hyprpicker
-              tesseract
-              imagemagick
-              zbar
-              curl
-              translate-shell
-              wl-screenrec
-              ffmpeg
-              # gifski
-              jq
+          environment.systemPackages = with pkgs; [
+            grim
+            slurp
+            # wf-recorder
+            wl-clipboard
+            hyprpicker
+            tesseract
+            imagemagick
+            zbar
+            curl
+            translate-shell
+            wl-screenrec
+            ffmpeg
+            # gifski
+            jq
+          ];
+          antob = {
+
+            persistence.home.directories = [
+              ".local/state/noctalia"
             ];
-            antob = {
 
-              persistence.home.directories = [
-                ".local/state/noctalia"
-              ];
+          };
+        }
 
-            };
-          }
-
-          (mkIf (config.antob ? networkd-vpn) {
-            # Local plugins in the data dir take precedence over every plugin source.
-            # Enable once with `noctalia msg plugins enable antob/vpn-status`.
-          })
-        ]
-      );
+        (mkIf (config.antob ? networkd-vpn) {
+          # Local plugins in the data dir take precedence over every plugin source.
+          # Enable once with `noctalia msg plugins enable antob/vpn-status`.
+        })
+      ];
     };
 
   flake.modules.homeManager.noctalia =
@@ -74,6 +67,7 @@ in
       vpnCfg = osConfig.antob.networkd-vpn;
       inherit (osConfig.antob.color-scheme) colors;
       theme = import ./_files/themes/doomed-cyan.nix { inherit colors; };
+      # Input for the vpn-status plugin: the VPNs to watch and the menu opened on click.
       vpnStatusConfig = builtins.toJSON {
         vpns = mapAttrsToList (name: vpn: {
           interface = name;
@@ -84,7 +78,7 @@ in
     in
     {
       config = lib.mkMerge [
-        ({
+        {
           xdg.configFile = {
             "noctalia/palettes/${theme.name}.json".text = builtins.toJSON theme.palette;
 
@@ -94,8 +88,8 @@ in
               custom_palette = "${theme.name}"
             '';
           };
-        })
-        (lib.mkIf (osConfig.antob ? networkd-vpn) ({
+        }
+        (lib.mkIf (osConfig.antob ? networkd-vpn) {
           xdg.dataFile = {
             "noctalia/plugins/vpn-status" = {
               source = ./_files/plugins/vpn-status;
@@ -103,7 +97,7 @@ in
             };
             "noctalia/plugins/vpn-status/vpns.json".text = vpnStatusConfig;
           };
-        }))
+        })
       ];
     };
 

@@ -20,7 +20,7 @@
       mailserver = {
         enable = true;
         stateVersion = 3;
-        fqdn = fqdn;
+        inherit fqdn;
         domains = [
           "antob.se"
           "antob.com"
@@ -74,26 +74,28 @@
         };
       };
 
-      # Forward catchall mail to plus alias
-      services.postfix.virtual = lib.mkOrder 200 ''
-        @antob.se tob+CatchAll@antob.se
-        @antob.com tob+CatchAll@antob.se
-      '';
+      services = {
+        # Forward catchall mail to plus alias
+        postfix.virtual = lib.mkOrder 200 ''
+          @antob.se tob+CatchAll@antob.se
+          @antob.com tob+CatchAll@antob.se
+        '';
 
-      # Mailserver has its DNS on port 53
-      services.dnsmasq.enable = lib.mkForce false;
+        # Mailserver has its DNS on port 53
+        dnsmasq.enable = lib.mkForce false;
 
-      # Setup SMTP-relay for Postfix
-      services.postfix = {
-        enable = true;
-        config = {
-          relayhost = [ "[mail.smtp2go.com]:587" ];
-          smtp_sasl_auth_enable = "yes";
-          smtp_sasl_password_maps = "texthash:${secrets.postfix_sasl_passwd.path}";
-          smtp_sasl_security_options = "noanonymous";
-          smtp_tls_security_level = lib.mkForce "may";
-          smtp_destination_concurrency_limit = "20";
-          header_size_limit = "4096000";
+        # Setup SMTP-relay for Postfix
+        postfix = {
+          enable = true;
+          config = {
+            relayhost = [ "[mail.smtp2go.com]:587" ];
+            smtp_sasl_auth_enable = "yes";
+            smtp_sasl_password_maps = "texthash:${secrets.postfix_sasl_passwd.path}";
+            smtp_sasl_security_options = "noanonymous";
+            smtp_tls_security_level = lib.mkForce "may";
+            smtp_destination_concurrency_limit = "20";
+            header_size_limit = "4096000";
+          };
         };
       };
 

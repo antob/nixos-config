@@ -6,7 +6,6 @@ in
   flake.modules.nixos.helix =
     { lib, ... }:
 
-    with lib;
     {
       home-manager.sharedModules = [ homeManager.helix ];
 
@@ -14,7 +13,6 @@ in
 
   flake.modules.homeManager.helix =
     { lib, ... }:
-    with lib;
     {
       programs.helix = {
         enable = true;

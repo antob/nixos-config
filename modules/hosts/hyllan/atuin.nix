@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { ... }:
+    _:
 
     let
       subdomain = "atuin";
@@ -10,7 +10,7 @@
       services = {
         atuin = {
           enable = true;
-          port = port;
+          inherit port;
           openRegistration = true;
           database = {
             createLocally = true;
@@ -20,7 +20,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "127.0.0.1";
-          port = port;
+          inherit port;
         };
       };
     };

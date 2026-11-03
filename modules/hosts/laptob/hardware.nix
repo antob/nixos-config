@@ -58,12 +58,16 @@ in
       # unplug, fooling systemd's AC detection. Reload the driver after each
       # resume so suspend-then-hibernate actually hibernates on schedule.
 
-      hardware.intelgpu = {
-        vaapiDriver = "intel-media-driver";
-        driver = "xe";
+      hardware = {
+        intelgpu = {
+          vaapiDriver = "intel-media-driver";
+          driver = "xe";
+        };
+
+        cpu.intel.npu.enable = true;
+
+        enableRedistributableFirmware = true;
       };
 
-      hardware.cpu.intel.npu.enable = true;
-      hardware.enableRedistributableFirmware = true;
     };
 }

@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan-open-webui =
-    { ... }:
+    _:
 
     let
       subdomain = "chat";
@@ -11,7 +11,7 @@
       services = {
         open-webui = {
           enable = true;
-          port = port;
+          inherit port;
           environment = {
             SCARF_NO_ANALYTICS = "True";
             DO_NOT_TRACK = "True";
@@ -25,7 +25,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "http://127.0.0.1";
-          port = port;
+          inherit port;
         };
       };
 

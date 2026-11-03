@@ -1,6 +1,5 @@
 { inputs, config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {

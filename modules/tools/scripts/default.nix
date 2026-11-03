@@ -7,7 +7,6 @@
       ...
     }:
 
-    with lib;
     let
       cp = pkgs.callPackage;
     in

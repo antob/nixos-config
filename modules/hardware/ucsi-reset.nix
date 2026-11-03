@@ -6,7 +6,6 @@
       pkgs,
       ...
     }:
-    with lib;
     {
       config = {
         # Workaround for a kernel bug where the UCSI controller stops honouring

@@ -10,7 +10,6 @@ in
       ...
     }:
 
-    with lib;
     {
       config = {
         home-manager.sharedModules = [ homeManager.bluetooth ];
@@ -38,7 +37,6 @@ in
 
   flake.modules.homeManager.bluetooth =
     { lib, ... }:
-    with lib;
     {
       dconf.settings = {
         "org/blueman/general" = {

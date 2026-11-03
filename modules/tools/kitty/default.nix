@@ -30,7 +30,6 @@ in
 
   flake.modules.homeManager.kitty =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.kitty;
       colors = osConfig.antob.color-scheme.colors;

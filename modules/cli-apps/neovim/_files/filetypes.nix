@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.neovim.initLua = /* lua */ ''
     -- Dotenv filetype
     vim.filetype.add({

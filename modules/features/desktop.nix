@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -127,7 +126,6 @@ in
 
   flake.modules.homeManager.desktop =
     { lib, ... }:
-    with lib;
     {
       # Default apps
       xdg.mimeApps.defaultApplications = {

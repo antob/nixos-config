@@ -8,7 +8,6 @@
       ...
     }:
 
-    with lib;
     {
       imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
 

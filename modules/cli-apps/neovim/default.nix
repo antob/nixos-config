@@ -20,50 +20,12 @@ in
       userHome = "/home/${user}";
 
       # Inspired from https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/nix-ld.nix
-      build-dependent-pkgs = with pkgs; [
-        acl
-        attr
-        bzip2
-        curl
-        libsodium
-        libssh
-        libxml2
-        openssl
-        stdenv.cc.cc
-        systemd
-        util-linux
-        xz
-        zlib
-        zstd
-        # Packages not included in `nix-ld`'s NixOSModule
-        glib
-        libcxx
-      ];
 
       # dlopen()/ffi.load() and `-lfoo` linking look libraries up by their
       # unversioned name (`libfoo.so`), but most nixpkgs packages only ship
       # versioned files (`libfoo.so.<n>`). Create the missing unversioned
       # symlinks so lookups succeed (e.g. notmuch.nvim doing
       # `ffi.load("notmuch")` -> `libnotmuch.so`).
-      addUnversionedSoSymlinks = ''
-        cd "$out/lib/nvim-depends/lib"
-        for libfile in *; do
-          case "$libfile" in
-            *.so | *.so.*) ;;
-            *) continue ;;
-          esac
-          case "$libfile" in
-            *.so) continue ;;
-          esac
-          # only numeric version suffixes (libfoo.so.1, libfoo.so.1.2.3)
-          version="''${libfile##*.so.}"
-          case "$version" in
-            *[!0-9.]* | "") continue ;;
-          esac
-          unversioned="''${libfile%%.so.*}.so"
-          [ -e "$unversioned" ] || ln -s "$libfile" "$unversioned"
-        done
-      '';
 
       # Runtime dlopen()/ffi.load() search path. Deliberately NOT the full
       # `build-dependent-pkgs` set: `LD_LIBRARY_PATH` is inherited by every
@@ -73,14 +35,6 @@ in
       # built against other nixpkgs generations (older direnv devshells, etc.).
       # Only packages explicitly listed in `extraDependentPackages` are exposed
       # at runtime; the rest stay in build-time-only variables below.
-      nvim-depends-runtime = pkgs.buildEnv {
-        name = "nvim-depends-runtime";
-        paths = map lib.getLib [ ]; # cfg.extraDependentPackages;
-        extraPrefix = "/lib/nvim-depends";
-        pathsToLink = [ "/lib" ];
-        ignoreCollisions = true;
-        postBuild = addUnversionedSoSymlinks;
-      };
 
       # Env vars are injected into the nvim *wrapper* (makeWrapper args) instead
       # of a shell alias: an alias only applies to `nvim` typed in an
@@ -96,80 +50,78 @@ in
       # restricted to `nvim-depends-runtime` (see above).
     in
     {
-      options.antob.neovim = with types; {
+      options.antob.neovim = {
         minimal = mkBoolOpt false "Whether or not to only do minimal install.";
         localConfig = mkBoolOpt false "Whether or not to use a local or generated config.";
       };
 
-      config = (
-        mkMerge [
-          { home-manager.sharedModules = [ homeManager.neovim ]; }
+      config = mkMerge [
+        { home-manager.sharedModules = [ homeManager.neovim ]; }
 
-          (mkIf (!cfg.localConfig) {
-          })
-          (mkIf cfg.localConfig {
-            environment.systemPackages = with pkgs; [
-              marksman # required by nvim-lspconfig
-              neovim-remote # required by lazygit
-              tree-sitter # required by nvim-treesitter
+        (mkIf (!cfg.localConfig) {
+        })
+        (mkIf cfg.localConfig {
+          environment.systemPackages = with pkgs; [
+            marksman # required by nvim-lspconfig
+            neovim-remote # required by lazygit
+            tree-sitter # required by nvim-treesitter
 
-              # required by nvim
-              fswatch
+            # required by nvim
+            fswatch
 
-              # required by telescope.nvim
-              fd
-              ripgrep
+            # required by telescope.nvim
+            fd
+            ripgrep
+          ];
+
+          # populates contents of /bin and /usr/bin/
+          services.envfs.enable = lib.mkDefault true;
+
+          # more info: https://github.com/mcdonc/.nixconfig/blob/master/videos/pydev/script.rst
+          # run unpatched dynamic binaries on NixOS
+          programs.nix-ld = {
+            enable = true;
+            libraries = with pkgs; [
+              # nix-ld adds the following libs by default
+              zlib
+              zstd
+              stdenv.cc.cc
+              curl
+              openssl
+              attr
+              libssh
+              bzip2
+              libxml2
+              acl
+              libsodium
+              util-linux
+              xz
+              systemd
+
+              # custom libs
+              stdenv.cc.cc.lib
+              fontconfig
+              freetype
+              icu
             ];
+          };
 
-            # populates contents of /bin and /usr/bin/
-            services.envfs.enable = lib.mkDefault true;
+          antob.persistence.home.directories = [
+            ".local/share/nvim"
+            ".local/state/nvim"
+          ];
 
-            # more info: https://github.com/mcdonc/.nixconfig/blob/master/videos/pydev/script.rst
-            # run unpatched dynamic binaries on NixOS
-            programs.nix-ld = {
-              enable = true;
-              libraries = with pkgs; [
-                # nix-ld adds the following libs by default
-                zlib
-                zstd
-                stdenv.cc.cc
-                curl
-                openssl
-                attr
-                libssh
-                bzip2
-                libxml2
-                acl
-                libsodium
-                util-linux
-                xz
-                systemd
+          fileSystems."${userHome}/.config/nvim" = {
+            device = "${userHome}/Projects/nvim-config";
+            options = [ "bind" ];
+            fsType = "none";
+          };
 
-                # custom libs
-                stdenv.cc.cc.lib
-                fontconfig
-                freetype
-                icu
-              ];
-            };
-
-            antob.persistence.home.directories = [
-              ".local/share/nvim"
-              ".local/state/nvim"
-            ];
-
-            fileSystems."${userHome}/.config/nvim" = {
-              device = "${userHome}/Projects/nvim-config";
-              options = [ "bind" ];
-              fsType = "none";
-            };
-
-            systemd.tmpfiles.rules = [
-              "d ${userHome}/.config/nvim 0755 ${user} ${group} -"
-            ];
-          })
-        ]
-      );
+          systemd.tmpfiles.rules = [
+            "d ${userHome}/.config/nvim 0755 ${user} ${group} -"
+          ];
+        })
+      ];
     };
 
   flake.modules.homeManager.neovim =
@@ -298,15 +250,15 @@ in
       );
 
       config = lib.mkMerge [
-        (lib.mkIf (!cfg.localConfig) ({
+        (lib.mkIf (!cfg.localConfig) {
           programs.neovim = {
             enable = true;
             vimAlias = true;
             withRuby = !cfg.minimal;
             withPython3 = !cfg.minimal;
           };
-        }))
-        (lib.mkIf cfg.localConfig ({
+        })
+        (lib.mkIf cfg.localConfig {
           home.packages = with pkgs; [
             ripgrep
             nvim-depends-include
@@ -363,7 +315,7 @@ in
                 magick
               ];
           };
-        }))
+        })
       ];
     };
 

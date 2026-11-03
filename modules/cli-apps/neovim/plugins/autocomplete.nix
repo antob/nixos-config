@@ -8,7 +8,7 @@
     }:
     {
       config = lib.mkMerge [
-        (lib.mkIf (!osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) ({
+        (lib.mkIf (!osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) {
           programs.neovim = {
             plugins = with pkgs.vimPlugins; [
               luasnip
@@ -83,7 +83,7 @@
               })
             '';
           };
-        }))
+        })
       ];
     };
 

@@ -33,7 +33,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "127.0.0.1";
-          port = port;
+          inherit port;
           extraHandleConfig = ''
             encode zstd gzip
           '';

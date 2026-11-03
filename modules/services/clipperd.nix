@@ -14,7 +14,6 @@ in
     with lib;
     let
       cfg = config.antob.clipperd;
-      secrets = config.sops.secrets;
       userName = config.antob.user.name;
     in
     {
@@ -49,7 +48,6 @@ in
 
   flake.modules.homeManager.clipperd =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.clipperd;
       secrets = osConfig.sops.secrets;

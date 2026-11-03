@@ -32,7 +32,7 @@ in
 
         networking = {
           hosts = {
-            "127.0.0.1" = (cfg.hosts."127.0.0.1" or [ ]);
+            "127.0.0.1" = cfg.hosts."127.0.0.1" or [ ];
           }
           // cfg.hosts;
 
@@ -49,38 +49,44 @@ in
           };
         };
 
-        services.strongswan = {
-          enable = true;
-          secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
+        services = {
+          strongswan = {
+            enable = true;
+            secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
+          };
+
+          dnsmasq = {
+            enable = true;
+            settings = {
+              address = "/.test/127.0.0.1";
+              listen-address = [
+                "::1"
+                "127.0.0.1"
+              ];
+              bind-interfaces = true;
+            };
+          };
+
+          resolved.enable = true;
         };
 
         # Workaround to fix l2tp. See https://github.com/NixOS/nixpkgs/issues/375352
         environment.etc."strongswan.conf".text = "";
 
-        systemd.tmpfiles.rules = [
-          "d /etc/ipsec.d 0700 root root -"
-        ];
+        systemd = {
+          tmpfiles.rules = [
+            "d /etc/ipsec.d 0700 root root -"
+          ];
 
-        services.dnsmasq = {
-          enable = true;
-          settings = {
-            address = "/.test/127.0.0.1";
-            listen-address = [
-              "::1"
-              "127.0.0.1"
-            ];
-            bind-interfaces = true;
-          };
+          # Fixes an issue that normally causes nixos-rebuild to fail.
+          # https://github.com/NixOS/nixpkgs/issues/180175
+          services.NetworkManager-wait-online.enable = false;
+
+          # Stop wpa_supplicant service spamming logs with "CTRL-EVENT-SIGNAL-CHANGE" messages.
+          services.wpa_supplicant.serviceConfig.LogLevelMax = "warning";
         };
 
-        services.resolved.enable = true;
-
-        # Fixes an issue that normally causes nixos-rebuild to fail.
-        # https://github.com/NixOS/nixpkgs/issues/180175
-        systemd.services.NetworkManager-wait-online.enable = false;
-
-        # Stop wpa_supplicant service spamming logs with "CTRL-EVENT-SIGNAL-CHANGE" messages.
-        systemd.services.wpa_supplicant.serviceConfig.LogLevelMax = "warning"; # 2;
+        # 2;
       };
     };
 

@@ -6,9 +6,8 @@
       ...
     }:
 
-    with lib;
     {
-      options.antob.debug.trackChanges = with types; {
+      options.antob.debug.trackChanges = {
       };
 
       config = {

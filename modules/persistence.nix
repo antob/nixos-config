@@ -6,7 +6,6 @@
       ...
     }:
 
-    with lib;
     let
       cfg = config.antob.persistence;
       userName = config.antob.user.name;
@@ -21,7 +20,7 @@
                 "x-gvfs-hide"
                 "x-gdu.hide"
               ];
-              files = cfg.files;
+              inherit (cfg) files;
               directories = cfg.directories ++ [
                 "/var/log"
                 "/var/cache"

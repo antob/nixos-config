@@ -57,37 +57,39 @@ in
         longitude = 11.8;
       };
 
-      environment.variables = {
-        EDITOR = "nvim";
-      };
+      environment = {
+        variables = {
+          EDITOR = "nvim";
+        };
 
-      environment.shellAliases = {
-        sudo = "sudo "; # Fixes missing alias doing `sudo`
-        cat = "bat -p";
-      };
+        shellAliases = {
+          sudo = "sudo "; # Fixes missing alias doing `sudo`
+          cat = "bat -p";
+        };
 
-      environment.systemPackages = with pkgs; [
-        htop
-        wget
-        bottom
-        ripgrep
-        fd
-        inetutils
-        procs
-        unzip
-        killall
-        doggo
-        dmidecode
-        usbutils
-        pciutils
-        gnumake
-        cifs-utils # Mount SMB shares
-        file
-        btrfs-progs
-        parted
-        nixos-anywhere
-        disko
-      ];
+        systemPackages = with pkgs; [
+          htop
+          wget
+          bottom
+          ripgrep
+          fd
+          inetutils
+          procs
+          unzip
+          killall
+          doggo
+          dmidecode
+          usbutils
+          pciutils
+          gnumake
+          cifs-utils # Mount SMB shares
+          file
+          btrfs-progs
+          parted
+          nixos-anywhere
+          disko
+        ];
+      };
 
       system.stateVersion = "22.11";
     };

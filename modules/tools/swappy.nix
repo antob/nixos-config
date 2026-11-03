@@ -6,7 +6,6 @@ in
   flake.modules.nixos.swappy =
     { lib, ... }:
 
-    with lib;
     {
       home-manager.sharedModules = [ homeManager.swappy ];
 
@@ -14,7 +13,6 @@ in
 
   flake.modules.homeManager.swappy =
     { lib, ... }:
-    with lib;
     {
       programs.swappy = {
         enable = true;

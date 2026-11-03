@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -13,10 +12,6 @@ in
     }:
 
     with lib;
-    let
-      inherit (config.antob.color-scheme) colors;
-
-    in
     {
       imports = [
         nixos.gtk
@@ -26,8 +21,23 @@ in
       ];
 
       config = {
-        antob.rofi = {
-          launchPrefix = "uwsm app -- ";
+        antob = {
+          rofi = {
+            launchPrefix = "uwsm app -- ";
+          };
+
+          system.env = {
+            # Hint electron apps to use wayland
+            NIXOS_OZONE_WL = "1";
+            QT_QPA_PLATFORMTHEME = "gtk3";
+          };
+
+          # nwg-displays config files
+          persistence.home.files = [
+            ".config/hypr/monitors.lua"
+            ".config/hypr/monitors.conf"
+            ".config/hypr/workspaces.conf"
+          ];
         };
 
         home-manager.sharedModules = [ homeManager.hyprland ];
@@ -43,15 +53,6 @@ in
 
         # xdg-desktop-portal-gnome FileChooser call depends on Nautilus
         services.dbus.packages = [ pkgs.nautilus ];
-
-        antob = {
-
-          system.env = {
-            # Hint electron apps to use wayland
-            NIXOS_OZONE_WL = "1";
-            QT_QPA_PLATFORMTHEME = "gtk3";
-          };
-        };
 
         # Desktop portal
         xdg.portal = {
@@ -86,13 +87,6 @@ in
         ];
         # Custom scripts
         # ++ (import ./scripts { inherit pkgs; });
-
-        # nwg-displays config files
-        antob.persistence.home.files = [
-          ".config/hypr/monitors.lua"
-          ".config/hypr/monitors.conf"
-          ".config/hypr/workspaces.conf"
-        ];
 
         systemd.services."getty@tty1" = mkIf config.antob.user.autoLogin {
           overrideStrategy = "asDropin";

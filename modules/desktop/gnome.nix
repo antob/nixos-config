@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -40,7 +39,55 @@ in
           gnome-shell-extension-expand-shutdown-menu
         ];
 
-        services.udev.packages = with pkgs; [ gnome-settings-daemon ];
+        services = {
+          udev.packages = with pkgs; [ gnome-settings-daemon ];
+
+          xserver = {
+            # Enable the X11 windowing system.
+            enable = true;
+
+            # Configure keymap in X11
+            xkb = {
+              layout = "se,se";
+              variant = "us,";
+              options = "caps:ctrl_modifier,grp:win_space_toggle";
+            };
+
+            # Configure Set console typematic delay and rate in X11
+            autoRepeatDelay = 200;
+            autoRepeatInterval = 40;
+          };
+
+          desktopManager.gnome.enable = true;
+
+          displayManager.gdm = {
+            enable = true;
+            autoSuspend = true;
+          };
+
+          libinput = {
+            enable = true;
+            touchpad = {
+              disableWhileTyping = true;
+              naturalScrolling = true;
+            };
+          };
+
+          displayManager.autoLogin = mkIf config.antob.user.autoLogin {
+            enable = true;
+            user = config.antob.user.name;
+          };
+
+          gnome = {
+            core-os-services.enable = true;
+            core-shell.enable = true;
+            core-apps.enable = true;
+            core-developer-tools.enable = true;
+            games.enable = false;
+            localsearch.enable = false;
+            tinysparql.enable = false;
+          };
+        };
 
         antob.system.env = {
           MOZ_ENABLE_WAYLAND = "1";
@@ -63,54 +110,9 @@ in
 
         # dconf and xfconf settings
 
-        services.xserver = {
-          # Enable the X11 windowing system.
-          enable = true;
-
-          # Configure keymap in X11
-          xkb = {
-            layout = "se,se";
-            variant = "us,";
-            options = "caps:ctrl_modifier,grp:win_space_toggle";
-          };
-
-          # Configure Set console typematic delay and rate in X11
-          autoRepeatDelay = 200;
-          autoRepeatInterval = 40;
-        };
-
-        services.desktopManager.gnome.enable = true;
-        services.displayManager.gdm = {
-          enable = true;
-          autoSuspend = true;
-        };
-
-        services.libinput = {
-          enable = true;
-          touchpad = {
-            disableWhileTyping = true;
-            naturalScrolling = true;
-          };
-        };
-
-        services.displayManager.autoLogin = mkIf config.antob.user.autoLogin {
-          enable = true;
-          user = config.antob.user.name;
-        };
-
         systemd.services = mkIf config.antob.user.autoLogin {
           "getty@tty1".enable = false;
           "autovt@tty1".enable = false;
-        };
-
-        services.gnome = {
-          core-os-services.enable = true;
-          core-shell.enable = true;
-          core-apps.enable = true;
-          core-developer-tools.enable = true;
-          games.enable = false;
-          localsearch.enable = false;
-          tinysparql.enable = false;
         };
 
         environment.gnome.excludePackages = with pkgs; [
@@ -137,7 +139,6 @@ in
       pkgs,
       ...
     }:
-    with lib;
     let
       colors = osConfig.antob.color-scheme.colors;
       cursorTheme = "Bibata-Modern-Ice";
@@ -148,7 +149,7 @@ in
     in
     {
       config = lib.mkMerge [
-        ({
+        {
           gtk = {
             enable = true;
             cursorTheme = {
@@ -165,8 +166,8 @@ in
               gtk-error-bell = false;
             };
           };
-        })
-        ({
+        }
+        {
           # Default mime apps; listed first so they win over other desktops' defaults
           xdg.mimeApps.defaultApplications = lib.mapAttrs (_: lib.mkBefore) {
             "image/png" = [ "org.gnome.Loupe.desktop" ];
@@ -525,7 +526,7 @@ in
               border: 3px solid #${colors.base0C};
             }
           '';
-        })
+        }
       ];
     };
 

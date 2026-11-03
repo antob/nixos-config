@@ -29,7 +29,6 @@ in
 
   flake.modules.homeManager.atuin =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.atuin;
     in

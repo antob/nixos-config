@@ -16,7 +16,7 @@ in
       cfg = config.antob.console;
     in
     {
-      options.antob.console = with types; {
+      options.antob.console = {
         setFont = mkBoolOpt false "Whether or not to set custom console font.";
       };
 

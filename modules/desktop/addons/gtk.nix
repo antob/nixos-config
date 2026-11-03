@@ -52,7 +52,6 @@ in
 
   flake.modules.homeManager.gtk =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.gtk;
     in

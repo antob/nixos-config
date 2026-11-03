@@ -104,7 +104,7 @@ in
             inherit (cfg) name hashedPassword;
 
             home = "/home/${cfg.name}";
-            group = cfg.group;
+            inherit (cfg) group;
 
             shell = mkIf config.programs.zsh.enable pkgs.zsh;
 
@@ -122,7 +122,6 @@ in
 
   flake.modules.homeManager.base =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.user;
     in

@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -50,72 +49,74 @@ in
 
         };
 
-        environment.variables = {
-          EDITOR = "nvim";
+        environment = {
+          variables = {
+            EDITOR = "nvim";
+          };
+
+          # Make hosts file writeable
+          etc.hosts.mode = "0644";
+
+          shellAliases = {
+            sudo = "sudo "; # Fixes missing alias doing `sudo`
+            cat = "bat -p";
+            http = "xh";
+            https = "xhs";
+            speedtest = "speedtest-rs";
+            j = "just";
+            open = "xdg-open";
+            hexyl = "hexyl --border none --color-scheme gradient";
+          };
+
+          systemPackages = with pkgs; [
+            htop
+            wget
+            bottom
+            ripgrep
+            fd
+            jq
+            inetutils
+            procs
+            unzip
+            dust
+            fwupd
+            killall
+            doggo
+            duf
+            jqp
+            xh
+            fastfetch
+            dmidecode
+            usbutils
+            pciutils
+            gnumake
+            e2fsprogs
+            cifs-utils # Mount SMB shares
+            speedtest-rs
+            file
+            nvd
+            hostctl
+            nix-search-tv
+            just
+            nixos-anywhere
+            sops
+            man-pages
+            man-pages-posix
+            witr
+            wl-color-picker
+            python3
+            bun
+            nmap
+            arp-scan
+            masscan
+            whatweb
+            difftastic
+            ffmpeg
+            imagemagick
+            hexyl
+            ssh-to-pgp
+          ];
         };
-
-        # Make hosts file writeable
-        environment.etc.hosts.mode = "0644";
-
-        environment.shellAliases = {
-          sudo = "sudo "; # Fixes missing alias doing `sudo`
-          cat = "bat -p";
-          http = "xh";
-          https = "xhs";
-          speedtest = "speedtest-rs";
-          j = "just";
-          open = "xdg-open";
-          hexyl = "hexyl --border none --color-scheme gradient";
-        };
-
-        environment.systemPackages = with pkgs; [
-          htop
-          wget
-          bottom
-          ripgrep
-          fd
-          jq
-          inetutils
-          procs
-          unzip
-          dust
-          fwupd
-          killall
-          doggo
-          duf
-          jqp
-          xh
-          fastfetch
-          dmidecode
-          usbutils
-          pciutils
-          gnumake
-          e2fsprogs
-          cifs-utils # Mount SMB shares
-          speedtest-rs
-          file
-          nvd
-          hostctl
-          nix-search-tv
-          just
-          nixos-anywhere
-          sops
-          man-pages
-          man-pages-posix
-          witr
-          wl-color-picker
-          python3
-          bun
-          nmap
-          arp-scan
-          masscan
-          whatweb
-          difftastic
-          ffmpeg
-          imagemagick
-          hexyl
-          ssh-to-pgp
-        ];
 
         services = {
           upower.enable = true;
@@ -159,7 +160,6 @@ in
 
   flake.modules.homeManager.common =
     { lib, ... }:
-    with lib;
     {
       programs = {
         zoxide = {

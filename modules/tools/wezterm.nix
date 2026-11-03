@@ -28,7 +28,6 @@ in
 
   flake.modules.homeManager.wezterm =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.wezterm;
       colors = osConfig.antob.color-scheme.colors;

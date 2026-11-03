@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   home.file.".config/nvim/ftdetect/kickass.vim".text = /* vim */ ''
     au BufRead,BufNewFile *.asm set filetype=kickass
     set commentstring=\/\/\ %s

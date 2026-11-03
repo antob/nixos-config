@@ -1,13 +1,11 @@
 { inputs, config, ... }:
 let
-  inherit (config.flake.lib) enabled disabled;
   inherit (config.aspects) homeManager;
 in
 {
   flake.modules.nixos.firefox =
     { config, lib, ... }:
 
-    with lib;
     {
       config = {
         home-manager.sharedModules = [ homeManager.firefox ];

@@ -30,9 +30,9 @@ in
 
         services.ollama = {
           enable = true;
-          package = cfg.package;
-          host = cfg.host;
-          port = cfg.port;
+          inherit (cfg) package;
+          inherit (cfg) host;
+          inherit (cfg) port;
           environmentVariables = {
             OLLAMA_ORIGINS = "*";
             OLLAMA_KEEP_ALIVE = "1h";
@@ -64,7 +64,6 @@ in
 
   flake.modules.homeManager.ollama =
     { lib, ... }:
-    with lib;
     {
       programs.zsh.initContent = ''
         # Function to fetch and return model names from 'ollama list'

@@ -66,7 +66,7 @@
       services = {
         headscale = {
           enable = true;
-          port = port;
+          inherit port;
           address = "127.0.0.1";
           settings = {
             server_url = "https://${siteDomain}:443";

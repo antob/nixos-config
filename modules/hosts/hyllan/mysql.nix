@@ -8,7 +8,7 @@
     {
       services.mysql = {
         enable = true;
-        dataDir = dataDir;
+        inherit dataDir;
         package = pkgs.mariadb;
       };
 

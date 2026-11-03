@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { ... }:
+    _:
 
     {
       services.samba = {

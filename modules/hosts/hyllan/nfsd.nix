@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { ... }:
+    _:
 
     # NFS exports are declared declaratively below and written to /etc/exports by
     # NixOS (services.nfs.server.exports). The ZFS `sharenfs` property is left

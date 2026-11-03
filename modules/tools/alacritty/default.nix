@@ -24,7 +24,6 @@ in
       pkgs,
       ...
     }:
-    with lib;
     let
       cfg = osConfig.antob.alacritty;
     in

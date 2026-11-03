@@ -19,7 +19,6 @@ in
 
   flake.modules.homeManager.ghostty =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.ghostty;
       colors = osConfig.antob.color-scheme.colors;

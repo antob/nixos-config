@@ -29,7 +29,6 @@ in
       pkgs,
       ...
     }:
-    with lib;
     let
       cfg = osConfig.antob.zsh;
     in
@@ -129,7 +128,7 @@ in
 
         oh-my-zsh = {
           enable = true;
-          plugins = [ ] ++ cfg.extraOhMyZshPlugins;
+          plugins = cfg.extraOhMyZshPlugins;
         };
       };
     };

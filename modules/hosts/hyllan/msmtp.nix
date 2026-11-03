@@ -5,8 +5,8 @@
     let
       secrets = config.sops.secrets;
       monCfg = config.antob.monitoring;
-      emailFrom = monCfg.emailFrom;
-      emailTo = monCfg.emailTo;
+      inherit (monCfg) emailFrom;
+      inherit (monCfg) emailTo;
     in
     {
       programs.msmtp = {

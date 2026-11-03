@@ -11,7 +11,6 @@ in
       ...
     }:
 
-    with lib;
     let
       flameshot-gui = pkgs.callPackage ./_files/flameshot-gui.nix { };
     in
@@ -26,7 +25,6 @@ in
 
   flake.modules.homeManager.flameshot =
     { osConfig, lib, ... }:
-    with lib;
     let
       colors = osConfig.antob.color-scheme.colors;
     in

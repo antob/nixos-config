@@ -8,7 +8,7 @@
     }:
     {
       config = lib.mkMerge [
-        (lib.mkIf (!osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) ({
+        (lib.mkIf (!osConfig.antob.neovim.minimal && !osConfig.antob.neovim.localConfig) {
           home.packages = with pkgs; [
             rumdl
           ];
@@ -161,7 +161,7 @@
               })
             '';
           };
-        }))
+        })
       ];
     };
 

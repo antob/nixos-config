@@ -14,33 +14,40 @@ in
     with lib;
     let
       monCfg = config.antob.monitoring;
-      emailFrom = monCfg.emailFrom;
-      emailTo = monCfg.emailTo;
+      inherit (monCfg) emailFrom;
+      inherit (monCfg) emailTo;
     in
     {
-      antob.systemd-networking = {
-        enableWireless = false;
-        hostName = "hyllan";
-        # Derived from `head -c 8 /etc/machine-id`
-        hostId = "236689a3";
-        staticIp = {
-          enable = true;
-          address = "192.168.1.2/24";
-          dns = [
-            "192.168.1.4"
-          ];
-          gateway = "192.168.1.1";
+      antob = {
+        systemd-networking = {
+          enableWireless = false;
+          hostName = "hyllan";
+          # Derived from `head -c 8 /etc/machine-id`
+          hostId = "236689a3";
+          staticIp = {
+            enable = true;
+            address = "192.168.1.2/24";
+            dns = [
+              "192.168.1.4"
+            ];
+            gateway = "192.168.1.1";
+          };
         };
-      };
 
-      antob.zfs = {
-        pools = [ "zpool" ];
-        auto-snapshot.enable = false;
-      };
+        zfs = {
+          pools = [ "zpool" ];
+          auto-snapshot.enable = false;
+        };
 
-      antob.atuin = {
-        autoSync = false;
-        filterMode = "host";
+        atuin = {
+          autoSync = false;
+          filterMode = "host";
+        };
+
+        monitoring = {
+          emailFrom = "home@antob.se";
+          emailTo = "tob@antob.se";
+        };
       };
 
       imports = [
@@ -51,14 +58,6 @@ in
         nixos.systemd-networking
         nixos.base
       ];
-
-      antob = {
-
-        monitoring = {
-          emailFrom = "home@antob.se";
-          emailTo = "tob@antob.se";
-        };
-      };
 
       nixpkgs.config = {
         allowUnfree = true;

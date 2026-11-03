@@ -20,7 +20,7 @@
       # tunnel only (port is opened on the wg0 interface alone).
       services.restic.server = {
         enable = true;
-        dataDir = dataDir;
+        inherit dataDir;
         listenAddress = "8000";
         extraFlags = [ "--no-auth" ];
       };
@@ -30,49 +30,55 @@
 
       networking.firewall.interfaces.wg0.allowedTCPPorts = [ 8000 ];
 
-      # Retention prune for all repos in the server dataDir. Runs as the restic
-      # user so files written by prune stay readable by the rest server.
-      systemd.services.restic-prune-all-client-backups = {
-        description = "Prune retention for all restic client backup repositories";
-        serviceConfig = {
-          Type = "oneshot";
-          User = "restic";
-          Group = "restic";
-          CacheDirectory = "restic-prune-all";
-          CacheDirectoryMode = "0700";
+      systemd = {
+        # Retention prune for all repos in the server dataDir. Runs as the restic
+        # user so files written by prune stay readable by the rest server.
+        services.restic-prune-all-client-backups = {
+          description = "Prune retention for all restic client backup repositories";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "restic";
+            Group = "restic";
+            CacheDirectory = "restic-prune-all";
+            CacheDirectoryMode = "0700";
+          };
+          unitConfig.RequiresMountsFor = [ dataDir ];
+          environment.RESTIC_CACHE_DIR = "/var/cache/restic-prune-all";
+          path = [
+            pkgs.restic
+            pkgs.coreutils
+          ];
+          script = ''
+            set -u
+            failed=0
+            for repo in ${dataDir}/*; do
+              [ -d "$repo" ] || continue
+              [ -f "$repo/config" ] || continue
+              name="$(basename "$repo")"
+              echo "=== Pruning $name"
+              if ! restic -r "$repo" --password-file ${secrets.restic_client_backup_password.path} \
+                  forget --prune ${lib.concatStringsSep " " pruneOpts}; then
+                echo "Pruning $name failed" >&2
+                failed=1
+              fi
+            done
+            exit "$failed"
+          '';
         };
-        unitConfig.RequiresMountsFor = [ dataDir ];
-        environment.RESTIC_CACHE_DIR = "/var/cache/restic-prune-all";
-        path = [
-          pkgs.restic
-          pkgs.coreutils
-        ];
-        script = ''
-          set -u
-          failed=0
-          for repo in ${dataDir}/*; do
-            [ -d "$repo" ] || continue
-            [ -f "$repo/config" ] || continue
-            name="$(basename "$repo")"
-            echo "=== Pruning $name"
-            if ! restic -r "$repo" --password-file ${secrets.restic_client_backup_password.path} \
-                forget --prune ${lib.concatStringsSep " " pruneOpts}; then
-              echo "Pruning $name failed" >&2
-              failed=1
-            fi
-          done
-          exit "$failed"
-        '';
-      };
 
-      systemd.timers.restic-prune-all-client-backups = {
-        description = "Daily restic client backups pruning";
-        timerConfig = {
-          OnCalendar = "02:30";
-          RandomizedDelaySec = "30m";
-          Persistent = true;
+        timers.restic-prune-all-client-backups = {
+          description = "Daily restic client backups pruning";
+          timerConfig = {
+            OnCalendar = "02:30";
+            RandomizedDelaySec = "30m";
+            Persistent = true;
+          };
+          wantedBy = [ "timers.target" ];
         };
-        wantedBy = [ "timers.target" ];
+
+        tmpfiles.rules = [
+          "d ${dataDir} 0700 restic restic -"
+        ];
       };
 
       sops.secrets.restic_client_backup_password = {
@@ -87,8 +93,5 @@
         };
       };
 
-      systemd.tmpfiles.rules = [
-        "d ${dataDir} 0700 restic restic -"
-      ];
     };
 }

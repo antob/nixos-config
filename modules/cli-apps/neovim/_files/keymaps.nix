@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.neovim.initLua = /* lua */ ''
     -- center buffer after ctrl u/d
     map("n", "<C-d>", "<C-d>zz")

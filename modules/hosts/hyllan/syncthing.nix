@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { ... }:
+    _:
 
     let
       subdomain = "syncthing";
@@ -11,7 +11,7 @@
       services = {
         syncthing = {
           enable = true;
-          dataDir = dataDir;
+          inherit dataDir;
           openDefaultPorts = true;
           overrideDevices = false;
           overrideFolders = false;
@@ -32,7 +32,7 @@
 
       services.caddy.antobProxies."${subdomain}" = {
         hostName = "127.0.0.1";
-        port = port;
+        inherit port;
       };
 
       # Syncthing ports: 8384 for remote access to GUI

@@ -10,7 +10,6 @@ in
       ...
     }:
 
-    with lib;
     {
       config = {
         home-manager.sharedModules = [ homeManager.virt-manager ];
@@ -23,7 +22,6 @@ in
 
   flake.modules.homeManager.virt-manager =
     { lib, ... }:
-    with lib;
     {
       dconf.settings = {
         "org/virt-manager/virt-manager/connections" = {

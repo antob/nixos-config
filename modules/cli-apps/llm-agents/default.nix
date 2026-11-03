@@ -1,6 +1,5 @@
 { inputs, config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -193,7 +192,6 @@ in
 
   flake.modules.homeManager.llm-agents =
     { lib, ... }:
-    with lib;
     {
       xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
         nerdfont: true

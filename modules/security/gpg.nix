@@ -40,7 +40,6 @@ in
       pkgs,
       ...
     }:
-    with lib;
     let
       pinentry =
         if osConfig.services.desktopManager.gnome.enable then

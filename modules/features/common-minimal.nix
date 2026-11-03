@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -45,48 +44,50 @@ in
 
         };
 
-        environment.variables = {
-          EDITOR = "nvim";
+        environment = {
+          variables = {
+            EDITOR = "nvim";
+          };
+
+          # Make hosts file writeable
+          etc.hosts.mode = "0644";
+
+          shellAliases = {
+            sudo = "sudo "; # Fixes missing alias doing `sudo`
+            cat = "bat -p";
+            speedtest = "speedtest-rs";
+          };
+
+          systemPackages = with pkgs; [
+            htop
+            wget
+            bottom
+            ripgrep
+            fd
+            jq
+            inetutils
+            procs
+            unzip
+            dust
+            killall
+            duf
+            dmidecode
+            usbutils
+            pciutils
+            gnumake
+            e2fsprogs
+            speedtest-rs
+            file
+            nvd
+            hostctl
+            sops
+            witr
+            python3
+            bun
+            nmap
+            arp-scan
+          ];
         };
-
-        # Make hosts file writeable
-        environment.etc.hosts.mode = "0644";
-
-        environment.shellAliases = {
-          sudo = "sudo "; # Fixes missing alias doing `sudo`
-          cat = "bat -p";
-          speedtest = "speedtest-rs";
-        };
-
-        environment.systemPackages = with pkgs; [
-          htop
-          wget
-          bottom
-          ripgrep
-          fd
-          jq
-          inetutils
-          procs
-          unzip
-          dust
-          killall
-          duf
-          dmidecode
-          usbutils
-          pciutils
-          gnumake
-          e2fsprogs
-          speedtest-rs
-          file
-          nvd
-          hostctl
-          sops
-          witr
-          python3
-          bun
-          nmap
-          arp-scan
-        ];
 
         services = {
           upower.enable = true;
@@ -117,7 +118,6 @@ in
 
   flake.modules.homeManager.common-minimal =
     { lib, ... }:
-    with lib;
     {
       programs = {
         zoxide = {

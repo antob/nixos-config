@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager;
 in
 {
@@ -71,7 +70,6 @@ in
 
   flake.modules.homeManager.herdr =
     { lib, pkgs, ... }:
-    with lib;
     {
       programs.zsh.initContent = ''
         eval "$(${lib.getExe pkgs.herdr} completion zsh)"

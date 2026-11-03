@@ -44,10 +44,10 @@ in
 
         services.restic.backups.${cfg.repoName} = {
           repository = "rest:http://${cfg.serverAddress}:${toString cfg.serverPort}/${cfg.repoName}";
-          passwordFile = cfg.passwordFile;
-          paths = cfg.paths;
-          exclude = cfg.exclude;
-          initialize = cfg.initialize;
+          inherit (cfg) passwordFile;
+          inherit (cfg) paths;
+          inherit (cfg) exclude;
+          inherit (cfg) initialize;
           # Re-arms relative to the last completed run so a roaming unit keeps
           # retrying rather than waiting for a fixed wall-clock deadline.
           timerConfig = {

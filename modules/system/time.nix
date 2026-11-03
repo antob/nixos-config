@@ -6,7 +6,6 @@
       ...
     }:
 
-    with lib;
     {
       config = {
         time.timeZone = "Europe/Stockholm";

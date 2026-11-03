@@ -9,9 +9,8 @@ in
       ...
     }:
 
-    with lib;
     {
-      options.antob.info = with types; {
+      options.antob.info = {
         laptop = mkBoolOpt false "The system is a laptop.";
       };
     };

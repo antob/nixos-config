@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) mkOpt enabled;
+  inherit (config.flake.lib) mkOpt;
   inherit (config.aspects) homeManager;
 in
 {
@@ -26,7 +26,7 @@ in
       config = {
         home-manager.sharedModules = [ homeManager.voxtype ];
 
-        environment.systemPackages = with pkgs; [
+        environment.systemPackages = [
           cfg.package
         ];
 
@@ -43,7 +43,6 @@ in
 
   flake.modules.homeManager.voxtype =
     { osConfig, lib, ... }:
-    with lib;
     let
       cfg = osConfig.antob.voxtype;
     in

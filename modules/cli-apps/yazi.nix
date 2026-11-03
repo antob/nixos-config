@@ -1,13 +1,11 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager;
 in
 {
   flake.modules.nixos.yazi =
     { lib, ... }:
 
-    with lib;
     {
       home-manager.sharedModules = [ homeManager.yazi ];
 
@@ -15,7 +13,6 @@ in
 
   flake.modules.homeManager.yazi =
     { lib, pkgs, ... }:
-    with lib;
     let
       yazi-flavors = pkgs.fetchFromGitHub {
         owner = "yazi-rs";

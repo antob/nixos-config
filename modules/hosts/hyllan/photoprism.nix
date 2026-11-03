@@ -12,7 +12,7 @@
       services = {
         photoprism = {
           enable = true;
-          port = port;
+          inherit port;
           passwordFile = secrets.photoprism_admin_password.path;
           originalsPath = "/var/lib/photoprism/originals";
           importPath = "/var/lib/photoprism/import";
@@ -44,7 +44,7 @@
 
         caddy.antobProxies."${subdomain}" = {
           hostName = "127.0.0.1";
-          port = port;
+          inherit port;
         };
       };
 

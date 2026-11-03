@@ -10,7 +10,6 @@ in
       ...
     }:
 
-    with lib;
     {
       config = {
         home-manager.sharedModules = [ homeManager.zellij ];

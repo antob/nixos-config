@@ -6,7 +6,6 @@
       ...
     }:
 
-    with lib;
     {
       config = {
         antob.persistence.safe.directories = [ "/var/lib/fprint" ];

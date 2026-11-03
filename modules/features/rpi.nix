@@ -1,6 +1,5 @@
-{ inputs, config, ... }:
+{ config, ... }:
 let
-  inherit (config.flake.lib) enabled;
   inherit (config.aspects) homeManager nixos;
 in
 {
@@ -97,10 +96,9 @@ in
 
   flake.modules.homeManager.rpi =
     { lib, ... }:
-    with lib;
     {
       config = lib.mkMerge [
-        ({
+        {
           programs = {
             zoxide = {
               enable = true;
@@ -122,8 +120,8 @@ in
               };
             };
           };
-        })
-        ({ home.enableNixpkgsReleaseCheck = false; })
+        }
+        { home.enableNixpkgsReleaseCheck = false; }
       ];
     };
 

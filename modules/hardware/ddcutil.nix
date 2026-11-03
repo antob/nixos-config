@@ -7,7 +7,6 @@
       ...
     }:
 
-    with lib;
     {
       config = {
         hardware.i2c.enable = true;

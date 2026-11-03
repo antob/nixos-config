@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { ... }:
+    _:
 
     let
       subdomain = "music";
@@ -32,7 +32,7 @@
 
       services.caddy.antobProxies."${subdomain}" = {
         hostName = "127.0.0.1";
-        port = port;
+        inherit port;
       };
 
       virtualisation.oci-containers.containers = {

@@ -39,7 +39,7 @@ in
         services.zfs = {
           autoScrub = {
             enable = true;
-            pools = cfg.pools;
+            inherit (cfg) pools;
           };
 
           trim.enable = true;

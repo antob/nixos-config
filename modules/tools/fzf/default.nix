@@ -6,7 +6,6 @@ in
   flake.modules.nixos.fzf =
     { lib, ... }:
 
-    with lib;
     {
       home-manager.sharedModules = [ homeManager.fzf ];
 
