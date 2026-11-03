@@ -131,7 +131,8 @@ in
       gnome-calculator
       evince
       # remmina # Remote Desktop Client
-      obsidian
+      # TODO: renderer crashes (webFrame defineProperty) on electron 43.8.3; revert once fixed
+      pkgs-prev.obsidian
       discord
       mqtt-explorer
       rustdesk-flutter
