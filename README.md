@@ -185,7 +185,7 @@ Clone your config flake and cd into the folder.
 Add `resume_offset` kernel parameter using value calculated in a previous step.
 
 ```text
-# In relevant host hardware file (e.g `hosts/laptob/hardware.nix`)
+# In relevant host hardware file (e.g `modules/hosts/laptob/hardware.nix`)
 boot.kernelParams = [ "resume_offset=140544" ]; # Example value
 ```
 

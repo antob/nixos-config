@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Pull the PiKVM-patched RPi kernel outputs from aostanin's cache for the given host.
 #
-# We deliberately don't add aostanin.cachix.org to modules/nix/default.nix's
+# We deliberately don't add aostanin.cachix.org to modules/base/nix.nix's
 # substituters: Nix trusts a substituter's key for *any* store path it's asked
 # about, not just the packages its maintainer intends to publish, so adding it
 # system-wide would let it substitute unrelated packages too. This fetches only

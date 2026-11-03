@@ -1,7 +1,9 @@
 # Agent Guidelines for nixos-config
 
-A multi-host, flake-based NixOS configuration with Home Manager integration.
-All custom options live under the `antob.*` namespace.
+A multi-host NixOS configuration in the dendritic pattern: every `.nix` file under
+`modules/` is a flake-parts module, loaded by import-tree. Features are *aspects*
+(`flake.modules.nixos.<name>` / `flake.modules.homeManager.<name>`) that hosts and
+presets import. Custom settings live under the `antob.*` namespace.
 
 ---
 
@@ -29,7 +31,7 @@ All custom options live under the `antob.*` namespace.
   ```
 
   `just bump-prev` re-pins `nixpkgs-prev` to the locked rev of the current system.
-- `modules/`, `hosts/`, `pkgs/`, `overlays/`, and `lib/` hold the actual config.
+- `modules/` (aspects, hosts, overlays, flake.lib) and `pkgs/` hold the actual config.
   Start there, never in the store. If you must touch `/nix/store`, start from the
   `result` symlink or a concretely named store path, never from the `/nix/store`
   root. The `store-*` steps are the only allowed store-adjacent lookups; the
@@ -47,8 +49,8 @@ All custom options live under the `antob.*` namespace.
   host needs `just build` / `just switch` and stop there. Verify with `nix eval`.
 - When the user pastes a build failure, find the failing derivation (the first
   `Cannot build` line; the rest are dependents). Usual fixes, in order of preference:
-  use `pkgs-prev.<pkg>` or `pkgs.stable.<pkg>`, or add a scoped override in the
-  `modifications` overlay (`overlays/default.nix`) such as `doCheck = false` or a
+  use `pkgs.prev.<pkg>` or `pkgs.stable.<pkg>`, or add a scoped override in the
+  `modifications` overlay (`modules/overlays.nix`) such as `doCheck = false` or a
   pinned `src`. Mark temporary workarounds with a `TODO:` and the upstream issue/PR.
 - "Investigate, do not fix" means read-only: no file edits, no service restarts,
   no deletions. Report findings and wait.
@@ -104,7 +106,7 @@ switched.
 
 There is **no test suite** and **no CI**. Correctness is validated by the user
 running `just build` / `just test`. The closest thing to CI is the nightly
-`nix-cache-build` job on hyllan (`hosts/hyllan/nix-cache.nix`, 03:00): it clones
+`nix-cache-build` job on hyllan (`modules/hosts/hyllan/nix-cache.nix`, 03:00): it clones
 `main` from the remote, builds the listed hosts into a separate store, serves them
 from `http://nix-cache.hyllan.lan` and publishes its `flake.lock`. Uncommitted or
 unpushed local changes are not in that build.
@@ -156,8 +158,8 @@ Y?".
 
 The alternate channels (`nixpkgs-stable`, `nixpkgs-next`, `nixpkgs-prev`) are
 separate flake inputs and have their own store paths. When a question targets
-those specifically, look in `overlays/default.nix` to see how they are wired
-to `pkgs.stable.*` / `pkgs.pkgs-next.*` / `pkgs.pkgs-prev.*`, then resolve the
+those specifically, look in `modules/overlays.nix` to see how they are wired
+to `pkgs.stable.*` / `pkgs.next.*` / `pkgs.prev.*`, then resolve the
 evaluated package set the same way (e.g. `nix eval --raw
 .#nixosConfigurations.desktob.pkgs.stable.path`).
 
@@ -173,68 +175,41 @@ nix eval --raw .#nixosConfigurations.desktob.config.boot.kernelPackages.kernel.d
 
 ## Raspberry Pi Hosts (pihole, pikvm, pidesk)
 
-These are built with `inputs.nixos-raspberrypi.lib.nixosSystem`, not
-`lib.nixosSystem`. They evaluate against nixos-raspberrypi's own (older, stable)
-nixpkgs and do **not** import the shared `commonModules` / full `./modules` tree.
-Their module list is only `./modules/features/rpi` plus the host directory.
+These are built with `inputs.nixos-raspberrypi.lib.nixosSystem` and evaluate
+against nixos-raspberrypi's own (older, stable) nixpkgs. They import `base` and
+the `rpi` preset (`modules/features/rpi.nix`), which imports exactly the aspects
+RPi hosts need.
 
-- `modules/features/rpi/default.nix` is self-sufficient: it imports exactly the
-  `antob.*` modules RPi hosts need, including transitive deps (e.g. `tools/git`
-  needs `security/gpg`). Add new RPi import wiring there, never in shared leaf
-  modules.
-- Options that only exist in newer nixpkgs (or in flake inputs not imported here)
-  break RPi evaluation, even when unused. Keep that in mind when editing modules
-  that `features/rpi` imports.
+- Options that only exist in newer nixpkgs (or in flake inputs these hosts do not
+  import) break RPi evaluation, even when unused. Keep that in mind when editing
+  aspects that `rpi` imports, directly or as a dependency.
 - Kernels come from `nixos-raspberrypi.cachix.org`. If a build starts compiling
   `linux-config-*` / the kernel, the derivation drifted from upstream's cached
   one; check `nixos-raspberrypi`'s transitive `nixpkgs` node in `flake.lock`.
 
 ---
 
-## Repository Structure
+## Repository Layout
+
+`flake.nix` only declares inputs; `outputs` is `mkFlake` over `import-tree ./modules`.
+Paths containing a `_`-prefixed segment are skipped by import-tree.
 
 ```text
-flake.nix       # Flake entry: all inputs and outputs
-flake.lock      # Pins every input to a locked revision
-justfile        # Task runner
-scripts/        # Standalone helper scripts used by just recipes
-result          # Ignored symlink to the most recent local build in /nix/store
-
-hosts/                     # Per-machine NixOS configs
-  common/                  # Shared secrets (sops-encrypted secrets.yaml)
-  <host>/                  # desktob (desktop), laptob (laptop), hyllan (home server,
-                           #   nix cache, restic server), wiggum, pihole, pikvm, pidesk
-                           #   (RPi), laptob-qemu, install-iso, minimal-iso
-    default.nix            # Host options entry point
-    hardware.nix           # Machine hardware config
-    disk-config.nix        # Partition layout (desktop/laptop family)
-    secrets.yaml           # Host sops secrets
-    public_key.asc         # SSH/age public key
-
-modules/                   # All custom NixOS/HM modules under antob.*
-  apps/                    # GUI applications (firefox, vscode, thunderbird, …)
-  cli-apps/                # CLI tools (neovim, helix, tmux, yazi, llm-agents, …)
-  color-scheme/            # Color schemes (catppuccin, gruvbox, tokyonight, …)
-  debug/                   # Debug helpers (track-changes)
-  desktop/                 # Window managers (hyprland, niri, cosmic, gnome, plasma, mango, …)
-    addons/                #   Shared WM addons (waybar, mako, rofi, gtk), keyring, …)
-    scripts/               #   Shared WM scripts
-  features/                # High-level presets (common, common-minimal, desktop, gaming, laptop, rpi)
-  hardware/                # audio, bluetooth, fingerprint, ledger, networking, ddcutil, yubikey, …
-  home/                    # Home Manager integration wrapper
-  monitoring/              # Monitoring email defaults
-  nix/                     # nixpkgs settings, overlay wiring, nix access tokens
-  persistence/             # Persistent storage (preservation module)
-  security/                # Hardening (gpg)
-  services/                # avahi, openssh, tailscale, ollama, syncthing, restic-backup, …
-  system/                  # console, env, fonts, info, locale, time, zfs
-  tools/                   # CLI/user tools (zsh, git, starship, alacritty, fzf, …)
-  user/                    # Default user account, default icon
-  virtualisation/          # docker, podman, virt-manager
-
-overlays/                  # nixpkgs overlays (stable, pkgs-next, pkgs-prev, additions, modifications, flake-inputs)
-pkgs/                      # Custom packages
-lib/                       # Custom library functions extending nixpkgs lib
+modules/
+  flake-parts.nix   # systems, flake.modules support, config.aspects (keyed aspects)
+  lib.nix           # flake.lib: mkOpt, mkBoolOpt, enabled, disabled, shared constants
+  overlays.nix      # flake.overlays + the `overlays` aspect
+  packages.nix      # perSystem packages (from pkgs/) and formatter
+  base/             # `base` aspect: every host imports it (sops, disko, preservation
+                    #   module, overlays, nix, Home Manager wiring, user, info, options)
+  persistence.nix   # `persistence` aspect: turns preservation on (desktob, laptob)
+  features/         # presets: common, common-minimal, desktop, gaming, laptop, rpi
+  hosts/<host>/     # one host: every file adds to flake.modules.nixos.<host>;
+                    #   default.nix also defines flake.nixosConfigurations.<host>
+  hosts/common/     # shared sops secrets
+  <category>/       # apps, cli-apps, desktop, hardware, security, services,
+                    #   system, tools, virtualisation, debug: one aspect per feature
+pkgs/               # custom packages, exposed via the `additions` overlay
 ```
 
 ---
@@ -249,145 +224,86 @@ lib/                       # Custom library functions extending nixpkgs lib
 - Variable names: `camelCase` for local bindings (`cfg`, `gtkCfg`, `emailFrom`).
 - NixOS option names: `camelCase` as per upstream convention.
 
-### Module Signature
+### Aspect Files
 
-Every module uses the standard NixOS module function signature with arguments on separate lines:
+One file (or one folder with `default.nix`) per feature, under its category folder.
+The aspect name is the feature name, flat and unique repo-wide (`git`, `hyprland`,
+`desktop`); the folder is only for organisation. A feature is turned on by
+**importing** its aspect, so there is no `enable` option:
 
 ```nix
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-with lib;
+{ inputs, config, ... }:          # flake-parts args: only what the file uses
 let
-  cfg = config.antob.<category>.<module>;
+  inherit (config.flake.lib) mkOpt;
+  inherit (config.aspects) nixos homeManager;
 in
 {
-  options.antob.<category>.<module> = { ... };
-  config = mkIf cfg.enable { ... };
+  flake.modules.nixos.git =
+    { config, lib, pkgs, ... }:   # ordinary NixOS module
+    with lib;
+    let
+      cfg = config.antob.git;
+    in
+    {
+      imports = [ nixos.gpg ];    # dependencies are imports too
+
+      options.antob.git = with types; {
+        userEmail = mkOpt str config.antob.user.email "The email to configure git with.";
+      };
+
+      config = {
+        home-manager.sharedModules = [ homeManager.git ];
+        environment.systemPackages = [ pkgs.git ];
+      };
+    };
+
+  flake.modules.homeManager.git =
+    { osConfig, ... }:            # ordinary Home Manager module
+    {
+      programs.git.settings.user.email = osConfig.antob.git.userEmail;
+    };
 }
 ```
 
-Only add `inputs` or `outputs` to the argument set when actually needed.
+- **Import aspects via `config.aspects.<class>.<name>`**, never `config.flake.modules`
+  directly: the wrapper gives each aspect a module key, so importing it from a preset,
+  a host and a dependency at once evaluates it once.
+- **`inputs`, `config.flake.lib` and `config.aspects` come from the outer
+  flake-parts closure.** Inner modules get no `specialArgs`; `lib` is stock nixpkgs
+  `lib`.
+- **Options are settings only** (`antob.<name>.<setting>`, flat, named after the
+  aspect). Set them where the aspect is imported.
+- **Home Manager halves** read NixOS settings through `osConfig` and are attached
+  with `home-manager.sharedModules`. HM is NixOS-integrated only.
+- **Multi-file features** (neovim plugins, hyprland) add to the same aspect name
+  from several files. Non-module helpers (scripts, data files, callPackage'd `.nix`)
+  live in `_files/` next to the aspect, keeping their basenames so store paths stay
+  stable.
+- **Checking another feature:** use the upstream option it sets
+  (`config.programs.zsh.enable`, `osConfig.services.desktopManager.gnome.enable`).
+  When there is none, check that its options exist (`config.antob ? networkd-vpn`),
+  or import it as a dependency.
+- **Ordering:** module order follows import-tree's file order, not intent. When the
+  order of merged list/string definitions matters (`initLua`, `initContent`, mime
+  defaults), state it with `mkOrder`/`mkBefore` (neovim plugins use `mkOrder 201`..`212`).
 
-### `with lib;`
+### Presets and Hosts
 
-Always open with `with lib;` at the top of any file using lib functions. This brings
-`mkIf`, `mkOption`, `mkEnableOption`, `mkMerge`, `types`, `enabled`, `disabled`, etc.
-into scope without qualification.
-
-### `let...in` Blocks
-
-Use a `let` block to bind `cfg = config.antob.<module>;` as the first line of every
-module. Derive other computed values there (e.g. package selections, path strings).
-
-### Options Definition
-
-```nix
-options.antob.tools.git = with types; {
-  enable    = mkEnableOption "Whether or not to install and configure git.";
-  userName  = mkOpt str user.fullName "The name to configure git with.";
-  userEmail = mkOpt str user.email   "The email to configure git with.";
-};
-```
-
-- Use `mkEnableOption` for boolean on/off flags.
-- Use the custom helpers from `lib/`: `mkOpt type default description`, `mkBoolOpt default description`, `mkOpt'`/`mkBoolOpt'` when a description is not needed.
-- Always supply a description string as the third argument to `mkOpt`.
-- Use `with types;` inside option blocks to avoid repeating `types.`.
-
-### Custom Lib Helpers
-
-Defined in `lib/default.nix` and available wherever `lib` is in scope:
-
-```nix
-lib.mkOpt        # mkOption shorthand: type → default → description → option
-lib.mkBoolOpt    # mkOpt types.bool shorthand
-lib.enabled      # { enable = true; }
-lib.disabled     # { enable = false; }
-lib.relativeToRoot  # lib.path.append from repo root
-lib.scanPaths    # auto-discover .nix files in a directory (exclude default.nix)
-lib.getFiles     # list plain files under a path
-lib.mkSslProxy   # Caddy vhost builder with Let's Encrypt DNS challenge
-lib.mkProxy      # Caddy vhost builder with internal TLS
-```
-
-### Config Guards
-
-Every module must guard its `config` block with `mkIf cfg.enable`:
-
-```nix
-config = mkIf cfg.enable {
-  # …
-};
-```
-
-For modules with multiple independent flags, use `mkMerge`:
-
-```nix
-config = mkMerge [
-  (mkIf cfg.enable       { … })
-  (mkIf cfg.enableCache  { nix.settings = { … }; })
-];
-```
-
-### `enabled` / `disabled` Shorthand
-
-Use the `enabled` / `disabled` helpers in host configs instead of `{ enable = true; }`:
-
-```nix
-antob = {
-  features.common     = enabled;
-  hardware.bluetooth  = enabled;
-  tools.git           = enabled;
-  services.openssh    = disabled;
-};
-```
-
-### Auto-Discovery (`scanPaths`)
-
-Every category directory (e.g. `modules/tools/default.nix`) should import child
-modules via `lib.scanPaths`:
-
-```nix
-{ lib, ... }: { imports = lib.scanPaths ./.; }
-```
-
-This auto-discovers all `.nix` files except `default.nix`. Adding a new module only
-requires placing a file in the correct directory, with no import list to update.
-
-### Home Manager Integration
-
-Home Manager runs as a NixOS module, not a standalone flake output. Modules add
-home-manager config through the unified `antob.home` API:
-
-```nix
-config = mkIf cfg.enable {
-  antob.home.extraOptions = {
-    programs.git.enable = true;
-  };
-  # or for file management:
-  antob.home.configFile."some/path".source = ./file;
-};
-```
-
-Never access `home-manager.users.<name>` directly from within a module; always go
-through `antob.home.*`.
+Presets (`modules/features/*.nix`) are aspects that import other aspects. Hosts
+import presets plus host-specific aspects; nothing opts out of a preset's import.
+When only some hosts want a feature, those hosts import it and the preset does not.
+Unused host-specific files are standalone aspects named `<host>-<file>`
+(`hyllan-plex`, `wiggum-headscale`): import one to enable it.
 
 ### Overlays and Multiple nixpkgs Channels
 
-Custom packages and patched packages live in `overlays/`. The overlays expose
-alternate channels as top-level attrs on `pkgs`:
+`modules/overlays.nix` exposes alternate channels as top-level attrs on `pkgs`:
 
 ```nix
-pkgs.stable.<pkg>        # from nixpkgs-stable
-pkgs.pkgs-next.<pkg>     # from nixpkgs-next (newer unstable)
-pkgs.pkgs-prev.<pkg>     # from nixpkgs-prev (pinned previous)
+pkgs.stable.<pkg>   # from nixpkgs-stable
+pkgs.next.<pkg>     # from nixpkgs-next (newer unstable)
+pkgs.prev.<pkg>     # from nixpkgs-prev (pinned previous)
 ```
-
-Use these when a specific package version is needed from a different channel.
 
 ### Custom Packages
 
@@ -396,14 +312,14 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 
 ### Secrets (SOPS)
 
-- Secrets are encrypted YAML files under `hosts/<name>/secrets.yaml` and `hosts/common/secrets.yaml`.
+- Secrets are encrypted YAML files under `modules/hosts/<name>/secrets.yaml` and
+  `modules/hosts/common/secrets.yaml`.
 - Each host declares `sops.defaultSopsFile` and individual `sops.secrets.<key>` options.
 - Access a secret at runtime with `config.sops.secrets.<key>.path`.
 - Never hardcode secrets or place plaintext credentials in `.nix` files.
 
 ### Error Handling
 
-- Use `lib.mkForce` at host level to override module defaults (e.g. `mkForce false`).
 - Use `lib.optionalString`, `lib.optional`, and `lib.optionals` for conditional lists/strings.
 - Use NixOS `assertions` for runtime validation where correctness cannot be enforced by types.
 - No explicit `throw` / `abort` unless truly unrecoverable.
@@ -412,13 +328,14 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 
 ## Naming Conventions Summary
 
-| Thing                   | Convention | Example                 |
-| ----------------------- | ---------- | ----------------------- |
-| File names              | `kebab-case` | `open-webui.nix`          |
-| Directory names         | `kebab-case` | `cli-apps/`               |
+| Thing                   | Convention   | Example                     |
+| ----------------------- | ------------ | --------------------------- |
+| File names              | `kebab-case` | `open-webui.nix`            |
+| Directory names         | `kebab-case` | `cli-apps/`                 |
+| Aspect names            | `kebab-case` | `nix-search-tv`, `hyprland` |
 | Local Nix bindings      | `camelCase`  | `cfg`, `gtkCfg`             |
 | NixOS options           | `camelCase`  | `hostName`, `storageDriver` |
-| Custom option namespace | `antob.*`    | `antob.tools.git.enable`  |
+| Custom option namespace | `antob.*`    | `antob.git.userEmail`       |
 | Host names              | `kebab-case` | `laptob`, `desktob`         |
 
 ---
@@ -426,7 +343,7 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 ## Key Architectural Decisions
 
 - **`antob.*` namespace** all custom options live under `antob`, to prevent conflicts with upstream NixOS options.
-- **Feature presets** the `antob.features.*` modules act as presets. `common`, `common-minimal`, `desktop`, `gaming`, `laptop`, and `rpi` enable many sub-modules at once. Hosts opt into presets instead of enabling every module individually.
+- **Dendritic aspects.** Every file is a flake-parts module; features are imported, not enabled. Presets (`common`, `common-minimal`, `desktop`, `gaming`, `laptop`, `rpi`) bundle aspects so hosts import a few presets instead of every feature.
 - **Impermanence.** Root filesystem is ephemeral. Persistent data lives at `antob.persistence.path` (default `/persist`), and the `.safe` subfolder is additionally backed up offsite. Some hosts override the path. System and user state is preserved via the `preservation` module, not written into the ephemeral root.
 - **No CI.** The user validates with `just build <host>` locally; hyllan's nightly cache build is the only automated build.
-- **Shell scripts as commands.** User-facing scripts live in `modules/tools/scripts/` as Nix-wrapped commands (one file or folder per command, e.g. `backup-status/`), not as loose files in `scripts/`.
+- **Shell scripts as commands.** User-facing scripts live in `modules/tools/scripts/_files/` as Nix-wrapped commands (one file or folder per command, e.g. `backup-status/`), not as loose files in `scripts/`.
