@@ -18,6 +18,7 @@ in
     userName = mkOpt types.str user.fullName "The name to configure git with.";
     userEmail = mkOpt types.str user.email "The email to configure git with.";
     signingKey = mkOpt types.str "tobias.lindholm@antob.se" "The key ID to sign commits with.";
+    dirEmails = mkOpt (types.attrsOf types.str) { } "Git email per directory, keyed by gitdir prefix.";
   };
 
   config = mkIf cfg.enable {
@@ -54,6 +55,11 @@ in
       programs.git = {
         enable = true;
         lfs = enabled;
+
+        includes = mapAttrsToList (dir: email: {
+          condition = "gitdir:${dir}";
+          contents.user.email = email;
+        }) cfg.dirEmails;
 
         signing = {
           key = cfg.signingKey;

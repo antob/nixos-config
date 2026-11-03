@@ -34,6 +34,10 @@ in
     tools = {
       atuin = enabled;
       checkpoint-vpn = enabled;
+      git.dirEmails = {
+        "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
+        "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
+      };
     };
 
     cli-apps = {

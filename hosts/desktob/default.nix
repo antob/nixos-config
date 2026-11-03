@@ -41,6 +41,10 @@ in
       atuin = enabled;
       alacritty.fontSize = 13;
       kitty.fontSize = 13;
+      git.dirEmails = {
+        "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
+        "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
+      };
       rescue = {
         enable = true;
         resticEnvFile = secrets.restic_env_file.path;
