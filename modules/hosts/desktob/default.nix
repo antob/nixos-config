@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.desktob =
@@ -17,6 +17,38 @@ in
       wgIp = "10.64.1.6";
     in
     {
+      antob.podman = {
+        storageDriver = "btrfs";
+      };
+
+      antob.rescue = {
+        resticEnvFile = secrets.restic_env_file.path;
+      };
+
+      antob.wireguard = {
+        address = "${wgIp}/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
+
+      antob.restic-backup = {
+        paths = [
+          "/persist/safe"
+        ];
+        passwordFile = secrets.restic_client_backup_password.path;
+      };
+
+      antob.clipperd = {
+        bindIp = wgIp;
+      };
+
+      antob.voxtype = {
+        package = pkgs.voxtype-vulkan;
+      };
+
+      antob.llama-cpp = {
+        package = pkgs.llama-cpp-vulkan;
+      };
+
       antob.ollama = {
         package = pkgs.ollama-vulkan;
         host = "0.0.0.0";
@@ -34,6 +66,14 @@ in
         nixos.ddcutil
         nixos.ollama
         nixos.tailscale
+        nixos.llama-cpp
+        nixos.lumen
+        nixos.voxtype
+        nixos.clipperd
+        nixos.restic-backup
+        nixos.wireguard
+        nixos.rescue
+        nixos.podman
       ];
 
       antob = {
@@ -48,8 +88,6 @@ in
           addons.keyring = enabled;
         };
 
-        virtualisation.podman.storageDriver = "btrfs";
-
         tools = {
           alacritty.fontSize = 13;
           kitty.fontSize = 13;
@@ -57,42 +95,10 @@ in
             "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
             "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
           };
-          rescue = {
-            enable = true;
-            resticEnvFile = secrets.restic_env_file.path;
-          };
-        };
-
-        services = {
-          wireguard = {
-            enable = true;
-            address = "${wgIp}/24";
-            privateKeyFile = secrets.wg0_private_key.path;
-          };
-          restic-backup = {
-            enable = true;
-            paths = [
-              "/persist/safe"
-            ];
-            passwordFile = secrets.restic_client_backup_password.path;
-          };
-          clipperd = {
-            enable = true;
-            bindIp = wgIp;
-          };
         };
 
         cli-apps = {
-          llama-cpp = {
-            enable = true;
-            package = pkgs.llama-cpp-vulkan;
-          };
           llm-agents = enabled;
-          voxtype = {
-            enable = true;
-            package = pkgs.voxtype-vulkan;
-          };
-          lumen = enabled;
           neovim.localConfig = true;
         };
 

@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) mkOpt mkBoolOpt;
-  inherit (config.flake.modules) homeManager;
+  inherit (config.aspects) homeManager;
 in
 {
   flake.modules.nixos.ollama =

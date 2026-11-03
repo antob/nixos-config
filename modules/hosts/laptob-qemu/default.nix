@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.laptob-qemu =
@@ -25,8 +25,6 @@ in
 
         # persistence = enabled;
 
-        virtualisation.docker.enable = false;
-        virtualisation.podman.enable = false;
       };
 
       environment.systemPackages = with pkgs; [

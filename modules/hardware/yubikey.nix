@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) homeManager;
+  inherit (config.aspects) homeManager;
 in
 {
   flake.modules.nixos.yubikey =

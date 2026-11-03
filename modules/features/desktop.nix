@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.desktop =
@@ -23,14 +23,12 @@ in
         nixos.printing
         nixos.syncthing
         nixos.virt-manager
+        nixos.vscode
+        nixos.firefox
       ];
 
       config = {
         antob = {
-          apps = {
-            firefox = enabled;
-            vscode = enabled;
-          };
 
           desktop.addons.udisks2 = enabled;
 

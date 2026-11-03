@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.laptob =
@@ -17,6 +17,26 @@ in
       wgIp = "10.64.1.7";
     in
     {
+      antob.podman = {
+        storageDriver = "btrfs";
+      };
+
+      antob.wireguard = {
+        address = "${wgIp}/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
+
+      antob.restic-backup = {
+        paths = [
+          "/persist/safe"
+        ];
+        passwordFile = secrets.restic_client_backup_password.path;
+      };
+
+      antob.clipperd = {
+        bindIp = wgIp;
+      };
+
       imports = [
         inputs.nur.modules.nixos.default
         nixos.persistence
@@ -25,6 +45,12 @@ in
         nixos.atuin
         nixos.checkpoint-vpn
         nixos.tailscale
+        nixos.lumen
+        nixos.secure-boot
+        nixos.clipperd
+        nixos.restic-backup
+        nixos.wireguard
+        nixos.podman
       ];
 
       antob = {
@@ -32,10 +58,6 @@ in
           hyprland = enabled;
           addons.keyring = enabled;
         };
-
-        virtualisation.podman.storageDriver = "btrfs";
-
-        security.secure-boot.enable = true;
 
         tools = {
           git.dirEmails = {
@@ -46,27 +68,7 @@ in
 
         cli-apps = {
           llm-agents = enabled;
-          lumen = enabled;
           neovim.localConfig = true;
-        };
-
-        services = {
-          wireguard = {
-            enable = true;
-            address = "${wgIp}/24";
-            privateKeyFile = secrets.wg0_private_key.path;
-          };
-          restic-backup = {
-            enable = true;
-            paths = [
-              "/persist/safe"
-            ];
-            passwordFile = secrets.restic_client_backup_password.path;
-          };
-          clipperd = {
-            enable = true;
-            bindIp = wgIp;
-          };
         };
 
         hardware.systemd-networking = {

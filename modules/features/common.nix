@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.common =
@@ -26,6 +26,9 @@ in
         nixos.locale
         nixos.time
         nixos.audio
+        nixos.yazi
+        nixos.openssh
+        nixos.scripts
       ];
 
       config = {
@@ -36,25 +39,17 @@ in
             git = enabled;
             zsh = enabled;
             fzf = enabled;
-            scripts = enabled;
           };
 
           cli-apps = {
             neovim = enabled;
             tmux = enabled;
-            yazi = enabled;
             nix-search-tv = enabled;
             # sqlit = enabled;
           };
 
-          virtualisation.podman.enable = mkDefault true;
-
           hardware = {
             networking = enabled;
-          };
-
-          services = {
-            openssh = enabled;
           };
 
           security.gpg = enabled;

@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.pikvm =
@@ -15,8 +15,14 @@ in
       inherit (config.sops) secrets;
     in
     {
+      antob.wireguard = {
+        address = "10.64.1.3/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
+
       imports = [
         nixos.rpi
+        nixos.wireguard
       ];
 
       antob = {
@@ -34,11 +40,6 @@ in
             ];
             gateway = "192.168.1.1";
           };
-        };
-        services.wireguard = {
-          enable = true;
-          address = "10.64.1.3/24";
-          privateKeyFile = secrets.wg0_private_key.path;
         };
       };
 

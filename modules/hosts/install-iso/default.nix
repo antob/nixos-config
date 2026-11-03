@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.install-iso =
@@ -14,6 +14,10 @@ in
 
     with lib;
     {
+      antob.openssh = {
+        permitRootLogin = true;
+      };
+
       imports = with inputs; [
         (modulesPath + "/installer/cd-dvd/installation-cd-graphical-base.nix")
         nur.modules.nixos.default
@@ -27,6 +31,9 @@ in
         nixos.bluetooth
         nixos.yubikey
         nixos.printing
+        nixos.vscode
+        nixos.firefox
+        nixos.openssh
       ];
 
       # `install-iso` adds wireless support that
@@ -34,10 +41,6 @@ in
       networking.wireless.enable = mkForce false;
 
       antob = {
-        apps = {
-          firefox = enabled;
-          vscode = enabled;
-        };
 
         tools = {
           alacritty = enabled;
@@ -57,17 +60,7 @@ in
 
         desktop.gnome = enabled;
 
-        services = {
-          openssh = {
-            enable = true;
-            permitRootLogin = true;
-          };
-        };
-
         security.gpg = enabled;
-
-        virtualisation.docker.enable = false;
-        virtualisation.podman.enable = false;
 
         home.extraOptions.programs = {
           bat = {

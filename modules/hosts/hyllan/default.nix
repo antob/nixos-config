@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.hyllan =
@@ -19,6 +19,11 @@ in
       emailTo = monCfg.emailTo;
     in
     {
+      antob.zfs = {
+        pools = [ "zpool" ];
+        auto-snapshot.enable = false;
+      };
+
       antob.atuin = {
         autoSync = false;
         filterMode = "host";
@@ -28,17 +33,10 @@ in
         inputs.copyparty.nixosModules.default
         nixos.common
         nixos.atuin
+        nixos.zfs
       ];
 
       antob = {
-
-        system.zfs = {
-          enable = true;
-          pools = [ "zpool" ];
-          auto-snapshot.enable = false;
-        };
-
-        virtualisation.podman.enable = true;
 
         hardware.systemd-networking = {
           enable = true;

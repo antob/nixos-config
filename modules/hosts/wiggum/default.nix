@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.wiggum =
@@ -15,25 +15,25 @@ in
       secrets = config.sops.secrets;
     in
     {
+      antob.wireguard = {
+        address = "10.64.1.5/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
+
+      antob.openssh = {
+        listenAddresses = [ "10.64.1.5" ]; # bind to the wg0 IP
+        interfaces = [ "wg0" ]; # open firewall only on wg0
+      };
+
       imports = [
         nixos.common-minimal
+        nixos.openssh
+        nixos.wireguard
       ];
 
       antob = {
         hardware.networking.enable = mkForce false;
 
-        services = {
-          openssh = {
-            enable = true;
-            listenAddresses = [ "10.64.1.5" ]; # bind to the wg0 IP
-            interfaces = [ "wg0" ]; # open firewall only on wg0
-          };
-          wireguard = {
-            enable = true;
-            address = "10.64.1.5/24";
-            privateKeyFile = secrets.wg0_private_key.path;
-          };
-        };
       };
 
       # Wait for the tunnel interfaces to be up before sshd binds

@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.pidesk =
@@ -16,8 +16,14 @@ in
       secrets = config.sops.secrets;
     in
     {
+      antob.wireguard = {
+        address = "10.64.1.9/24";
+        privateKeyFile = secrets.wg0_private_key.path;
+      };
+
       imports = [
         nixos.rpi
+        nixos.wireguard
       ];
 
       antob = {
@@ -28,16 +34,11 @@ in
           enableVpn = false;
           hostId = "b4a80555";
         };
-        services.wireguard = {
-          enable = true;
-          address = "10.64.1.9/24";
-          privateKeyFile = secrets.wg0_private_key.path;
-        };
       };
 
       environment.systemPackages = with pkgs; [
         etherwake
-        (pkgs.callPackage ../../_legacy/tools/scripts/wake-desktob.nix { })
+        (pkgs.callPackage ../../tools/scripts/_files/wake-desktob.nix { })
       ];
 
       # Sops secrets

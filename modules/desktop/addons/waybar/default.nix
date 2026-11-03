@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) mkOpt mkBoolOpt;
-  inherit (config.flake.modules) nixos homeManager;
+  inherit (config.aspects) nixos homeManager;
 in
 {
   flake.modules.nixos.waybar =

@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.aspects) nixos;
+in
 {
   flake.modules.nixos.hyllan =
     { lib, ... }:
@@ -7,10 +11,7 @@
       dataDir = "/mnt/tank/services/docker";
     in
     {
-      antob = {
-        virtualisation.podman.enable = true;
-        virtualisation.docker.enable = mkForce false;
-      };
+      imports = [ nixos.podman ];
 
       fileSystems = {
         "${dataDir}" = {

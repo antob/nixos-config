@@ -39,8 +39,8 @@ let
   rpiNixosInstaller = inputs.nixos-raspberrypi.lib.nixosInstaller;
 
   commonModules = [
-    config.flake.modules.nixos.base
-    config.flake.modules.nixos.env
+    config.aspects.nixos.base
+    config.aspects.nixos.env
     ./_legacy
   ];
 
@@ -52,28 +52,28 @@ in
       laptob = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          config.flake.modules.nixos.laptob
+          config.aspects.nixos.laptob
         ];
       };
 
       desktob = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          config.flake.modules.nixos.desktob
+          config.aspects.nixos.desktob
         ];
       };
 
       hyllan = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          config.flake.modules.nixos.hyllan
+          config.aspects.nixos.hyllan
         ];
       };
 
       wiggum = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          config.flake.modules.nixos.wiggum
+          config.aspects.nixos.wiggum
         ];
       };
 
@@ -81,7 +81,7 @@ in
         specialArgs = { inherit inputs lib; };
         system = "x86_64-linux";
         modules = commonModules ++ [
-          config.flake.modules.nixos.install-iso
+          config.aspects.nixos.install-iso
         ];
       };
 
@@ -89,14 +89,14 @@ in
         specialArgs = { inherit inputs lib; };
         system = "x86_64-linux";
         modules = commonModules ++ [
-          config.flake.modules.nixos.minimal-iso
+          config.aspects.nixos.minimal-iso
         ];
       };
 
       laptob-qemu = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          config.flake.modules.nixos.laptob-qemu
+          config.aspects.nixos.laptob-qemu
         ];
       };
 
@@ -107,8 +107,8 @@ in
         };
         system = "aarch64-linux";
         modules = [
-          config.flake.modules.nixos.base
-          config.flake.modules.nixos.pihole
+          config.aspects.nixos.base
+          config.aspects.nixos.pihole
         ];
       };
 
@@ -119,8 +119,8 @@ in
         };
         system = "aarch64-linux";
         modules = [
-          config.flake.modules.nixos.base
-          config.flake.modules.nixos.pikvm
+          config.aspects.nixos.base
+          config.aspects.nixos.pikvm
         ];
       };
 
@@ -131,8 +131,8 @@ in
         };
         system = "aarch64-linux";
         modules = [
-          config.flake.modules.nixos.base
-          config.flake.modules.nixos.pidesk
+          config.aspects.nixos.base
+          config.aspects.nixos.pidesk
         ];
       };
 

@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.minimal-iso =
@@ -13,6 +13,10 @@ in
 
     with lib;
     {
+      antob.openssh = {
+        permitRootLogin = true;
+      };
+
       imports = [
         (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
         nixos.eza
@@ -23,6 +27,7 @@ in
         nixos.time
         nixos.bluetooth
         nixos.yubikey
+        nixos.openssh
       ];
 
       # `install-iso` adds wireless support that
@@ -49,15 +54,8 @@ in
           networking = enabled;
         };
 
-        services.openssh = {
-          enable = true;
-          permitRootLogin = true;
-        };
-
         security.gpg = enabled;
 
-        virtualisation.docker.enable = false;
-        virtualisation.podman.enable = false;
       };
 
       services = {

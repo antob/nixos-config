@@ -5,7 +5,7 @@
       inputs.sops-nix.nixosModules.sops
       inputs.disko.nixosModules.disko
       inputs.preservation.nixosModules.preservation
-      config.flake.modules.nixos.overlays
+      config.aspects.nixos.overlays
     ];
   };
 }

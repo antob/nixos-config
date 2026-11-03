@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) mkOpt;
-  inherit (config.flake.modules) homeManager;
+  inherit (config.aspects) homeManager;
 in
 {
   flake.modules.nixos.wezterm =
@@ -178,7 +178,7 @@ in
             },
           }
 
-          return osConfig
+          return config
         '';
       };
     };

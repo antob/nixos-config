@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  inherit (config.flake.modules) nixos;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.common-minimal =
@@ -20,6 +20,8 @@ in
         nixos.console
         nixos.locale
         nixos.time
+        nixos.yazi
+        nixos.openssh
       ];
 
       config = {
@@ -37,16 +39,11 @@ in
               minimal = true;
             };
             tmux = enabled;
-            yazi = enabled;
             # sqlit = enabled;
           };
 
           hardware = {
             networking = enabled;
-          };
-
-          services = {
-            openssh = enabled;
           };
 
           security.gpg = enabled;

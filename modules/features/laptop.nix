@@ -1,7 +1,7 @@
 { config, ... }:
 let
   inherit (config.flake.lib) enabled;
-  aspects = config.flake.modules;
+  inherit (config.aspects) nixos;
 in
 {
   flake.modules.nixos.laptop =
@@ -14,7 +14,7 @@ in
 
     with lib;
     {
-      imports = [ aspects.nixos.desktop ];
+      imports = [ nixos.desktop ];
 
       config = {
         antob = {
