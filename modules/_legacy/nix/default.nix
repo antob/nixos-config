@@ -58,7 +58,7 @@ in
   };
 
   sops.secrets.nix_access_tokens = {
-    sopsFile = ../../../hosts/common/secrets.yaml;
+    sopsFile = ../../hosts/common/secrets.yaml;
     group = "nixbld";
     mode = "0440";
   };

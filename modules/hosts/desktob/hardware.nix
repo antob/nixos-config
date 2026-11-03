@@ -1,0 +1,65 @@
+{
+  flake.modules.nixos.desktob =
+    {
+      lib,
+      pkgs,
+      modulesPath,
+      inputs,
+      ...
+    }:
+
+    {
+      imports = [
+        (modulesPath + "/installer/scan/not-detected.nix")
+        inputs.nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series
+      ];
+
+      boot = {
+        kernelPackages = pkgs.linuxPackages_latest;
+
+        supportedFilesystems = [
+          "nfs"
+          "nfs4"
+        ];
+
+        initrd = {
+          availableKernelModules = [
+            "nvme"
+            "xhci_pci"
+            "thunderbolt"
+            "usbhid"
+            "usb_storage"
+            "sd_mod"
+          ];
+          kernelModules = [ ];
+        };
+
+        extraModulePackages = [ ];
+        kernelParams = [
+          "nohibernate"
+          # Increasing the VRAM allocation on AMD AI APUs
+          # Calculation: `([size in GB] * 1024 * 1024 * 1024) / 4.096`
+          "ttm.pages_limit=27648000" # 108 GB
+          "ttm.page_pool_size=27648000" # 108 GB
+          "btusb.enable_autosuspend=0" # Prevent BT mouse sleep
+        ];
+
+        # Enable emulated systems for cross-compilation
+        binfmt.emulatedSystems = [ "aarch64-linux" ];
+      };
+
+      # Mount data disk
+      fileSystems."/mnt/data" = {
+        device = "/dev/disk/by-label/data";
+        fsType = "ext4";
+        options = [
+          "noatime"
+          "nofail"
+          "x-gvfs-show"
+        ];
+      };
+
+      nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+      hardware.enableRedistributableFirmware = true;
+    };
+}

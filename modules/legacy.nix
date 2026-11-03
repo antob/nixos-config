@@ -53,28 +53,28 @@ in
       laptob = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          ../hosts/laptob
+          config.flake.modules.nixos.laptob
         ];
       };
 
       desktob = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          ../hosts/desktob
+          config.flake.modules.nixos.desktob
         ];
       };
 
       hyllan = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          ../hosts/hyllan
+          config.flake.modules.nixos.hyllan
         ];
       };
 
       wiggum = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          ../hosts/wiggum
+          config.flake.modules.nixos.wiggum
         ];
       };
 
@@ -82,7 +82,7 @@ in
         specialArgs = { inherit inputs lib; };
         system = "x86_64-linux";
         modules = commonModules ++ [
-          ../hosts/install-iso
+          config.flake.modules.nixos.install-iso
         ];
       };
 
@@ -90,14 +90,14 @@ in
         specialArgs = { inherit inputs lib; };
         system = "x86_64-linux";
         modules = commonModules ++ [
-          ../hosts/minimal-iso
+          config.flake.modules.nixos.minimal-iso
         ];
       };
 
       laptob-qemu = lib.nixosSystem {
         specialArgs = { inherit inputs lib; };
         modules = commonModules ++ [
-          ../hosts/laptob-qemu
+          config.flake.modules.nixos.laptob-qemu
         ];
       };
 
@@ -110,7 +110,7 @@ in
         modules = [
           config.flake.modules.nixos.overlays
           ./_legacy/features/rpi
-          ../hosts/pihole
+          config.flake.modules.nixos.pihole
         ];
       };
 
@@ -123,7 +123,7 @@ in
         modules = [
           config.flake.modules.nixos.overlays
           ./_legacy/features/rpi
-          ../hosts/pikvm
+          config.flake.modules.nixos.pikvm
         ];
       };
 
@@ -136,7 +136,7 @@ in
         modules = [
           config.flake.modules.nixos.overlays
           ./_legacy/features/rpi
-          ../hosts/pidesk
+          config.flake.modules.nixos.pidesk
         ];
       };
 

@@ -6,7 +6,7 @@ export LC_ALL=C
 HOST="hyllan.antob.net"
 HOST_NAME="hyllan"
 
-# Keep in sync with hosts/hyllan/restic-server.nix and backup.nix.
+# Keep in sync with modules/hosts/hyllan/restic-server.nix and backup.nix.
 DATA_DIR="/mnt/tank/services/restic-server"
 CLIENT_PW="/run/secrets/restic_client_backup_password"
 S3_ENV="/run/secrets/restic_env_file"

@@ -3,12 +3,12 @@
 # # User ssh-to-pgp
 # $ nix shell nixpkgs#ssh-to-pgp
 # # Get server public key and fingerprint. Add fingerprint to this file.
-# $ ssh hyllan.lan "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o hosts/hyllan/public_key.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
+# $ ssh hyllan.lan "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o modules/hosts/hyllan/public_key.asc -name hyllan -email tob@hyllan -comment "Host key for hyllan"
 # => 26ed358df14249befc3b72618ff9d36f72f3e498 # Add this to keys list below
 # # Import server public key
-# $ gpg --import hosts/hyllan/public_key.asc
+# $ gpg --import modules/hosts/hyllan/public_key.asc
 # # Re-encrypt common secrets to include new key
-# $ sops updatekeys hosts/common/secrets.yaml
+# $ sops updatekeys modules/hosts/common/secrets.yaml
 # ```
 keys:
   - &admin A5D2C0275BBB60F60770159EC457E72EEC222C29
@@ -22,7 +22,7 @@ keys:
   - &pidesk 9e59a392d5a9cabc9c439ff4752e284da71fc661
 
 creation_rules:
-  - path_regex: hosts/common/secrets.yaml$
+  - path_regex: modules/hosts/common/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
@@ -34,37 +34,37 @@ creation_rules:
           - *pikvm
           - *pihole
           - *pidesk
-  - path_regex: hosts/hyllan/secrets.yaml$
+  - path_regex: modules/hosts/hyllan/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
           - *hyllan
-  - path_regex: hosts/laptob/secrets.yaml$
+  - path_regex: modules/hosts/laptob/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
           - *laptob
-  - path_regex: hosts/desktob/secrets.yaml$
+  - path_regex: modules/hosts/desktob/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
           - *desktob
-  - path_regex: hosts/wiggum/secrets.yaml$
+  - path_regex: modules/hosts/wiggum/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
           - *wiggum
-  - path_regex: hosts/pikvm/secrets.yaml$
+  - path_regex: modules/hosts/pikvm/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
           - *pikvm
-  - path_regex: hosts/pihole/secrets.yaml$
+  - path_regex: modules/hosts/pihole/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
           - *pihole
-  - path_regex: hosts/pidesk/secrets.yaml$
+  - path_regex: modules/hosts/pidesk/secrets.yaml$
     key_groups:
       - pgp:
           - *admin
