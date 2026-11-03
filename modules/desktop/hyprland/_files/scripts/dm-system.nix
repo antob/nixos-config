@@ -1,12 +1,9 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }:
 let
-  # TODO: swayidle/hypridle were removed; drop the lock-screen branch below.
-  lockScreen = false;
   cmd-launch-blankscreen = lib.getExe (
     pkgs.callPackage ../../../_scripts/cmd-launch-blankscreen.nix { }
   );
@@ -34,7 +31,7 @@ pkgs.writeShellScriptBin "dm-system" ''
   }
 
   case $(menu "System" "  Lock\n󱄄  Screensaver\n󰤄  Suspend\n  Relaunch\n󰜉  Reboot\n󰍛  Reboot to FW\n󰐥  Shutdown") in
-    *Lock*) ${if lockScreen then "cmd-lock-screen" else "${cmd-launch-blankscreen}"} ;;
+    *Lock*) ${cmd-launch-blankscreen} ;;
     *Screensaver*) cmd-launch-screensaver ;;
     *Suspend) systemctl suspend ;;
     *Relaunch*) uwsm stop ;;

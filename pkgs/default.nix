@@ -12,9 +12,7 @@
   wlr-dpms = pkgs.callPackage ./wlr-dpms { };
   herb-tools = pkgs.callPackage ./herb-tools { };
   m68k-lsp-server = pkgs.callPackage ./m68k-lsp-server { };
-  rayfish = pkgs.callPackage ./rayfish { };
   iroh-lan = pkgs.callPackage ./iroh-lan { };
   etherwake = pkgs.callPackage ./etherwake { };
-  moshi-hook = pkgs.callPackage ./moshi-hook { };
   dmenu-antob = pkgs.callPackage ./dmenu-antob { };
 }

@@ -27,7 +27,6 @@ in
 
       imports = [
         nixos.common-minimal
-        nixos.openssh
         nixos.wireguard
         nixos.base
       ];
