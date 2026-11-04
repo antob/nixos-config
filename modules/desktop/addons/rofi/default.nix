@@ -239,7 +239,7 @@ in
                 text-color:                  inherit;
                 cursor:                      text;
                 // placeholder:                 "Type here...";
-                placeholder-color:           #585b70;
+                placeholder-color:           #${colors.base04};
             }
             case-indicator {
                 enabled:                     true;

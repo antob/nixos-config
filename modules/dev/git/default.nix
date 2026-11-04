@@ -64,6 +64,23 @@ in
     let
       cfg = osConfig.antob.git;
       inherit (osConfig.lib.stylix) colors;
+      # Blend `pct`% of colour b into colour a (diff line backgrounds).
+      mix =
+        a: b: pct:
+        concatMapStrings
+          (
+            ch:
+            let
+              x = toInt colors."${a}-rgb-${ch}";
+              y = toInt colors."${b}-rgb-${ch}";
+            in
+            fixedWidthString 2 "0" (toLower (toHexString ((x * (100 - pct) + y * pct) / 100)))
+          )
+          [
+            "r"
+            "g"
+            "b"
+          ];
     in
     {
       xdg.configFile."lazygit/config.yml".text = /* yaml */ ''
@@ -137,11 +154,11 @@ in
           };
           delta = {
             navigate = true; # use n and N to move between diff sections
-            syntax-theme = "OneHalfDark";
+            syntax-theme = "base16-stylix"; # bat theme from the Stylix bat target
 
             features = "side-by-side line-numbers decorations";
-            plus-style = "syntax '#003800'";
-            minus-style = "syntax '#3f0001'";
+            plus-style = "syntax '#${mix "base00" "base0B" 20}'";
+            minus-style = "syntax '#${mix "base00" "base08" 20}'";
 
             decorations = {
               commit-decoration-style = "yellow ul ol";
@@ -149,7 +166,7 @@ in
               file-decoration-style = "yellow ul";
               hunk-header-file-style = "yellow";
               hunk-header-line-number-style = "yellow";
-              hunk-header-decoration-style = "#444444 ul";
+              hunk-header-decoration-style = "#${colors.base03} ul";
               file-added-label = "added: ";
               file-copied-label = "copied: ";
               file-modified-label = "modified: ";
@@ -158,8 +175,8 @@ in
             };
 
             line-numbers = {
-              line-numbers-left-style = "#444444";
-              line-numbers-right-style = "#444444";
+              line-numbers-left-style = "#${colors.base03}";
+              line-numbers-right-style = "#${colors.base03}";
             };
           };
         };

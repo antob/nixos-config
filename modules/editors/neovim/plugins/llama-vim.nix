@@ -25,6 +25,7 @@ in
     with lib;
     let
       cfg = osConfig.antob.neovim.plugins.llamaVim;
+      inherit (osConfig.lib.stylix) colors;
     in
     {
       config = lib.mkMerge [
@@ -36,8 +37,8 @@ in
             ];
 
             initLua = lib.mkOrder 211 /* lua */ ''
-              vim.api.nvim_set_hl(0, "llama_hl_fim_hint", { fg = "#787c99", ctermfg = 209 })
-              vim.api.nvim_set_hl(0, "llama_hl_fim_info", { fg = "#444b6a", ctermfg = 119 })
+              vim.api.nvim_set_hl(0, "llama_hl_fim_hint", { fg = "#${colors.base04}", ctermfg = 209 })
+              vim.api.nvim_set_hl(0, "llama_hl_fim_info", { fg = "#${colors.base03}", ctermfg = 119 })
               vim.g.llama_config = {
                 show_info = false,
                 enable_at_startup = true,

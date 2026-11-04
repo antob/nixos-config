@@ -14,7 +14,7 @@
         polarity = "dark";
         base16Scheme = lib.recursiveUpdate (import ./_files/tokyo-night-terminal-dark.nix) {
           # Upstream reuses base04 here, which makes default text too dim.
-          palette.base05 = "#A9B1D6";
+          palette.base05 = "#C0CAF5";
         };
       };
     };
