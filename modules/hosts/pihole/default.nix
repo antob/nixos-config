@@ -42,7 +42,6 @@ in
         nixos.rpi
         nixos.wireguard
         nixos.systemd-networking
-        nixos.base
       ];
 
       #

@@ -15,7 +15,6 @@ in
         nixos.avahi
         nixos.networking
         nixos.gnome
-        nixos.base
       ];
 
       antob = {

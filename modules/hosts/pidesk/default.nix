@@ -30,7 +30,6 @@ in
         nixos.rpi
         nixos.wireguard
         nixos.systemd-networking
-        nixos.base
       ];
 
       environment.systemPackages = with pkgs; [

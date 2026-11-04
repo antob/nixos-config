@@ -37,7 +37,6 @@ in
         nixos.rpi
         nixos.wireguard
         nixos.systemd-networking
-        nixos.base
       ];
 
       services.kvmd = {

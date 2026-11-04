@@ -56,7 +56,6 @@ in
         nixos.atuin
         nixos.zfs
         nixos.systemd-networking
-        nixos.base
       ];
 
       nixpkgs.config = {
