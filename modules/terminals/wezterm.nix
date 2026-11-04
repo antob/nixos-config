@@ -30,10 +30,21 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.wezterm;
-      inherit (osConfig.lib.stylix) colors;
     in
     {
+      stylix.targets.wezterm = {
+        enable = true;
+        fonts.enable = false;
+        opacity.enable = false;
+      };
+
       programs.wezterm = {
+        # Translucent selection that keeps the text colour.
+        colorSchemes.stylix = {
+          selection_bg = lib.mkForce "rgba(90% 90% 90% 25%)";
+          selection_fg = lib.mkForce "none";
+        };
+
         enable = true;
         enableZshIntegration = true;
         extraConfig = /* lua */ ''
@@ -41,17 +52,7 @@ in
           local config = wezterm.config_builder()
           local act = wezterm.action
 
-          -- Customize the Tokyo Night theme
-          local custom_theme = wezterm.color.get_builtin_schemes()["Tokyo Night"]
-          -- custom_theme.selection_bg = "#${colors.base04}"
-          custom_theme.selection_fg = "none"
-          custom_theme.selection_bg = "rgba(90% 90% 90% 25%)"
-
           -- General settings
-          config.color_schemes = {
-            ["Custom Tokyo Night"] = custom_theme,
-          }
-          config.color_scheme = "Custom Tokyo Night"
           config.font = wezterm.font("Hack Nerd Font")
           config.font_size = tonumber("${toString cfg.fontSize}")
           config.window_decorations = "NONE"
@@ -66,8 +67,6 @@ in
           config.scrollback_lines = 10000
           config.default_cursor_style = "SteadyBar"
           config.cursor_blink_rate = 0
-          config.command_palette_bg_color = "#${colors.base00}"
-          config.command_palette_fg_color = "#${colors.base06}"
           config.window_close_confirmation = "NeverPrompt"
           config.enable_tab_bar = false
           config.enable_kitty_keyboard = true

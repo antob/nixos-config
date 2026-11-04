@@ -30,6 +30,8 @@ in
         ".config/zellij/config.kdl".source = ./_files/config.kdl;
       };
 
+      stylix.targets.zellij.enable = true;
+
       programs.zellij = {
         enable = true;
         # enableZshIntegration = true;

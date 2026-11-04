@@ -13,15 +13,9 @@ in
 
   flake.modules.homeManager.yazi =
     { lib, pkgs, ... }:
-    let
-      yazi-flavors = pkgs.fetchFromGitHub {
-        owner = "yazi-rs";
-        repo = "flavors";
-        rev = "9511cb0";
-        hash = "sha256-3RR8mi7CcVMDMitdTdaonFmfAIkeOzWK/CVKQmomIhE=";
-      };
-    in
     {
+      stylix.targets.yazi.enable = true;
+
       programs.yazi = {
         enable = true;
         enableZshIntegration = true;
@@ -36,20 +30,6 @@ in
             sort_dir_first = true;
             scrolloff = 3;
           };
-        };
-
-        theme = {
-          flavor = {
-            dark = "catppuccin-frappe";
-            light = "catppuccin-frappe";
-          };
-        };
-
-        flavors = {
-          "catppuccin-frappe" = "${yazi-flavors}/catppuccin-frappe.yazi";
-          "catppuccin-latte" = "${yazi-flavors}/catppuccin-latte.yazi";
-          "catppuccin-macchiato" = "${yazi-flavors}/catppuccin-macchiato.yazi";
-          "catppuccin-mocha" = "${yazi-flavors}/catppuccin-mocha.yazi";
         };
 
         plugins = {

@@ -47,7 +47,33 @@ in
       configFiles = mapAttrsToList (name: _: "${./_files/config}/${name}") (
         filterAttrs (_: kind: kind == "regular") (builtins.readDir ./_files/config)
       );
-      inherit (osConfig.lib.stylix) colors;
+      c = osConfig.lib.stylix.colors.withHashtag;
+      # No-break space: kitty widens nerd font icons into a following regular space
+      nbsp = builtins.fromJSON ''"\u00a0"'';
+      windowText = "#{?#{m:* pi *, #{P:#{@agent} }},#[fg=${c.base0D}]π ,}#{?#{m:* claude *, #{P:#{@agent} }},#[fg=${c.base09}]✻ ,}#[fg=${c.base05}]#W#{?@workmux_status, #{s/🤖/󰚩/:@workmux_status},}";
+      # Catppuccin's basic layout (number block + title block), coloured from Stylix.
+      theme = /* tmux */ ''
+        set -g status-style "bg=${c.base01},fg=${c.base05}"
+        set -g message-style "fg=${c.base0C},bg=${c.base03},align=centre"
+        set -g message-command-style "fg=${c.base0C},bg=${c.base03},align=centre"
+        set -g menu-selected-style "fg=${c.base05},bold,bg=${c.base03}"
+        set -g popup-style "bg=${c.base01},fg=${c.base05}"
+        set -g popup-border-style "fg=${c.base03}"
+        set -g pane-border-style "fg=${c.base03}"
+        set -g pane-active-border-style "fg=${c.base0C}"
+        set -g mode-style "bg=${c.base02},bold"
+        set -g clock-mode-colour "${c.base0D}"
+
+        set -g window-status-activity-style "bg=${c.base0D},fg=${c.base00}"
+        set -g window-status-bell-style "bg=${c.base0A},fg=${c.base00}"
+        set -g window-status-current-style default
+        set -g window-status-format "#[fg=${c.base00},bg=${c.base04}] #I #[fg=${c.base05},bg=${c.base02}] ${windowText}${nbsp}"
+        set -g window-status-current-format "#[fg=${c.base00},bg=${c.base0E}] #I #[fg=${c.base05},bg=${c.base03}] ${windowText}${nbsp}"
+      '';
+      # Session module: block turns red while the prefix is active.
+      sessionIcon = builtins.fromJSON ''"\ue795"'';
+      sessionColor = "#{?client_prefix,${c.base08},${c.base0B}}";
+      statusSession = "#[fg=${sessionColor}]█#[fg=${c.base00},bg=${sessionColor}]${sessionIcon} #[fg=${c.base05},bg=${c.base02}] #S#[fg=${c.base02}] ";
       alacritty = config.programs.alacritty.enable;
       kitty = config.programs.kitty.enable;
       plugins = with pkgs; [
@@ -62,24 +88,10 @@ in
           '';
         }
         {
-          plugin = tmuxPlugins.catppuccin;
-          extraConfig = /* tmux */ ''
-            set -g @catppuccin_flavor "frappe"
-            set -g @catppuccin_status_left_separator "█"
-            # No-break space: kitty widens nerd font icons into a following regular space
-            set -g @catppuccin_window_right_separator " "
-            set -g @catppuccin_pane_active_border_style "fg=#${colors.base0C}"
-            set -ogq @catppuccin_window_text " #{?#{m:* pi *, #{P:#{@agent} }},#[fg=#{@thm_blue}]π ,}#{?#{m:* claude *, #{P:#{@agent} }},#[fg=#{@thm_peach}]✻ ,}#[fg=#{@thm_fg}]#W#{?@workmux_status, #{s/🤖/󰚩/:@workmux_status},}"
-            set -ogq @catppuccin_window_current_text " #{?#{m:* pi *, #{P:#{@agent} }},#[fg=#{@thm_blue}]π ,}#{?#{m:* claude *, #{P:#{@agent} }},#[fg=#{@thm_peach}]✻ ,}#[fg=#{@thm_fg}]#W#{?@workmux_status, #{s/🤖/󰚩/:@workmux_status},}"
-            # tmux 3.8 defaults to underscore
-            set -g window-status-current-style default
-          '';
-        }
-        {
           plugin = tmuxPlugins.continuum;
           extraConfig = ''
             # Must be set before continuum loads: it appends its autosave hook to status-right
-            set -g status-right "#{E:@catppuccin_status_session}"
+            set -g status-right "${statusSession}"
             set -g @continuum-restore 'on'
             set -g @continuum-save-interval '5'
           '';
@@ -93,7 +105,9 @@ in
           clock24 = true;
           terminal = "tmux-256color";
           historyLimit = 100000;
-          extraConfig = builtins.concatStringsSep "\n" (map lib.strings.fileContents configFiles);
+          extraConfig = builtins.concatStringsSep "\n" (
+            map lib.strings.fileContents configFiles ++ [ theme ]
+          );
 
           inherit plugins;
         };

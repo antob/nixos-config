@@ -24,6 +24,12 @@ in
       inherit (osConfig.lib.stylix) colors;
     in
     {
+      stylix.targets.ghostty = {
+        enable = true;
+        fonts.enable = false;
+        opacity.enable = false;
+      };
+
       programs.ghostty = {
         enable = true;
         enableZshIntegration = true;
@@ -31,7 +37,6 @@ in
         clearDefaultKeybinds = true;
 
         settings = {
-          theme = "TokyoNight Night";
           font-family = "Hack Nerd Font";
           font-size = cfg.fontSize;
           cursor-style = "bar";
