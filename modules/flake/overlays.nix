@@ -29,7 +29,7 @@ in
     next = final: _: { next = importChannel inputs.nixpkgs-next final; };
     prev = final: _: { prev = importChannel inputs.nixpkgs-prev final; };
 
-    additions = final: _: import ../pkgs { pkgs = final; };
+    additions = final: _: import ../../pkgs { pkgs = final; };
 
     modifications = final: prev: {
       # TODO: Temporary workaround until nixpkgs signs these out-of-tree modules.

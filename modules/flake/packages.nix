@@ -8,7 +8,7 @@
         config.allowUnfree = true;
       };
 
-      packages = import ../pkgs { inherit pkgs; };
+      packages = import ../../pkgs { inherit pkgs; };
       formatter = pkgs.nixfmt-tree;
     };
 }
