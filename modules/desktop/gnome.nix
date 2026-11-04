@@ -140,7 +140,7 @@ in
       ...
     }:
     let
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
       cursorTheme = "Bibata-Modern-Ice";
       cursorSize = 16;
       terminal = "${pkgs.kitty}/bin/kitty";

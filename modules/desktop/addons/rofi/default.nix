@@ -38,7 +38,7 @@ in
     }:
     let
       cfg = osConfig.antob.rofi;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
       cmd-launch-webapp = lib.getExe (
         pkgs.callPackage ../../_scripts/cmd-launch-webapp.nix {
           inherit (cfg) launchPrefix;
@@ -140,7 +140,7 @@ in
             /*****----- Global Properties -----*****/
             * {
                 background:     #${colors.base01}FF;
-                background-alt: #${colors.base10}FF;
+                background-alt: #${colors.base02}FF;
                 foreground:     #${colors.base06}FF;
                 selected:       #${colors.base0C}FF;
                 active:         #${colors.base0B}FF;

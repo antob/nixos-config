@@ -28,6 +28,12 @@ in
       cfg = osConfig.antob.alacritty;
     in
     {
+      stylix.targets.alacritty = {
+        enable = true;
+        fonts.enable = false;
+        opacity.enable = false;
+      };
+
       programs.alacritty = {
         enable = true;
         package = pkgs.alacritty;
@@ -65,8 +71,6 @@ in
           selection = {
             save_to_clipboard = true;
           };
-
-          colors = import ./_files/themes/tokyonight-night.nix;
 
           cursor = {
             style.shape = "Beam";

@@ -63,7 +63,7 @@ in
     with lib;
     let
       cfg = osConfig.antob.git;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
     in
     {
       xdg.configFile."lazygit/config.yml".text = /* yaml */ ''
@@ -75,9 +75,9 @@ in
           border: single
           theme:
             selectedLineBgColor:
-              - "#${colors.base12}"
+              - "#${colors.base02}"
             inactiveBorderColor:
-              - "#${colors.base12}"
+              - "#${colors.base02}"
         git:
           autoFetch: false
           overrideGpg: true

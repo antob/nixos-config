@@ -26,7 +26,7 @@ in
   flake.modules.homeManager.flameshot =
     { osConfig, lib, ... }:
     let
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
     in
     {
       services.flameshot = {

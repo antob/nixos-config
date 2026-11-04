@@ -118,7 +118,7 @@ in
     with lib;
     let
       gtkCfg = osConfig.antob.gtk;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
       dm-firefox-profile = getExe (
         pkgs.callPackage ../_scripts/dm-firefox-profile.nix { config = osConfig; }
       );
@@ -145,11 +145,18 @@ in
 
       services.hyprpolkitagent.enable = true;
 
+      # Border colours come from Stylix; keep the cyan accent on the active border.
+      stylix.targets.hyprland = {
+        enable = true;
+        hyprpaper.enable = false;
+      };
+
       wayland.windowManager.hyprland = {
         enable = true;
         configType = "lua";
         systemd.enable = false; # Conflicts with UWSM
         xwayland.enable = true; # Default
+        settings.config.general."col.active_border" = mkForce "rgb(${colors.base0C})";
 
         extraConfig = /* lua */ ''
           ----------------------------------------------------------------------------
@@ -207,12 +214,6 @@ in
 
               border_size = 3,
 
-              -- https://wiki.hypr.land/Configuring/Basics/Variables/#variable-types for info about colors
-              col = {
-                active_border = "rgba(${colors.base0C}ff)",
-                inactive_border = "rgba(${colors.base12}aa)",
-              },
-
               -- Set to true enable resizing windows by clicking and dragging on borders and gaps
               resize_on_border = false,
 
@@ -230,7 +231,7 @@ in
                 enabled = true,
                 range = 4, -- was 2 in the old modular config
                 render_power = 3,
-                color = 0xee1a1a1a,
+                color = "rgba(${colors.base00}ee)",
               },
 
               blur = {
@@ -303,11 +304,6 @@ in
 
             group = {
               focus_removed_window = true,
-
-              col = {
-                border_active = "rgba(${colors.base0D}ff)",
-                border_inactive = "rgba(${colors.base12}aa)",
-              },
 
               groupbar = {
                 enabled = false,

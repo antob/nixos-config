@@ -30,7 +30,7 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.wezterm;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
     in
     {
       programs.wezterm = {
@@ -66,7 +66,7 @@ in
           config.scrollback_lines = 10000
           config.default_cursor_style = "SteadyBar"
           config.cursor_blink_rate = 0
-          config.command_palette_bg_color = "#${colors.base13}"
+          config.command_palette_bg_color = "#${colors.base00}"
           config.command_palette_fg_color = "#${colors.base06}"
           config.window_close_confirmation = "NeverPrompt"
           config.enable_tab_bar = false

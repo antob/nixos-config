@@ -214,7 +214,7 @@ modules/
   hardware/     audio, bluetooth, fingerprint, ledger, webcam, yubikey, …
   services/     syncthing, printing, clipperd, restic-backup, rescue
   system/       console, env, fonts, locale, time, zfs, persistence, gpg,
-                secure-boot, track-changes
+                secure-boot, track-changes, stylix (colour scheme, imported by base)
 pkgs/           custom packages, exposed via the `additions` overlay
 ```
 
@@ -229,7 +229,7 @@ changes nothing.
 
 - **2 spaces** for indentation throughout, no tabs.
 - Formatter: `nixfmt-tree` (wrapper around `nixfmt`). Run `just fmt` before committing.
-- File names: `kebab-case` (e.g. `open-webui.nix`, `color-scheme/`).
+- File names: `kebab-case` (e.g. `open-webui.nix`, `backup-status/`).
 - Variable names: `camelCase` for local bindings (`cfg`, `gtkCfg`, `emailFrom`).
 - NixOS option names: `camelCase` as per upstream convention.
 
@@ -292,6 +292,11 @@ in
   (`config.programs.zsh.enable`, `osConfig.services.desktopManager.gnome.enable`).
   When there is none, check that its options exist (`config.antob ? networkd-vpn`),
   or import it as a dependency.
+- **Colours** come from Stylix (`modules/system/stylix/`, `autoEnable = false`). Read
+  them with `osConfig.lib.stylix.colors.base0D` (bare hex) or `.withHashtag`, and opt an
+  app into its Stylix target in that app's aspect (`stylix.targets.<app>.enable = true`).
+  Older nixpkgs on the RPi hosts may need Stylix modules added to `disabledModules` in
+  the `rpi` profile.
 - **Ordering:** module order follows import-tree's file order, not intent. When the
   order of merged list/string definitions matters (`initLua`, `initContent`, mime
   defaults), state it with `mkOrder`/`mkBefore` (neovim plugins use `mkOrder 201`..`212`).

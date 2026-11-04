@@ -65,7 +65,7 @@ in
     with lib;
     let
       vpnCfg = osConfig.antob.networkd-vpn;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
       theme = import ./_files/themes/doomed-cyan.nix { inherit colors; };
       # Input for the vpn-status plugin: the VPNs to watch and the menu opened on click.
       vpnStatusConfig = builtins.toJSON {

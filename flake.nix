@@ -35,6 +35,14 @@
     # Preservation
     preservation.url = "github:nix-community/preservation";
 
+    # Stylix - System-wide colour and font theming
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nur.follows = "nur";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+
     # Nix User Repository (NUR)
     nur = {
       url = "github:nix-community/NUR";

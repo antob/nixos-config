@@ -12,17 +12,37 @@ in
     };
 
   flake.modules.homeManager.fzf =
-    { lib, pkgs, ... }:
-    with lib;
     {
+      osConfig,
+      lib,
+      pkgs,
+      ...
+    }:
+    with lib;
+    let
+      colors = osConfig.lib.stylix.colors.withHashtag;
+    in
+    {
+      stylix.targets.fzf.enable = true;
+
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
         enableNushellIntegration = false;
 
-        defaultOptions = import ./_files/themes/tokyonight-night.nix ++ [
+        defaultOptions = [
+          "--highlight-line"
+          "--info=inline-right"
+          "--ansi"
+          "--layout=reverse"
           "--tmux 80%"
         ];
+
+        # Not set by the Stylix target.
+        colors = {
+          border = colors.base03;
+          gutter = colors.base00;
+        };
 
         defaultCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
 

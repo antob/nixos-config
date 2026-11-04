@@ -28,19 +28,8 @@ in
       };
 
     homeManager.install-iso = {
-      programs.bat = {
-        enable = true;
-        config.theme = "catppuccin";
-        themes = {
-          catppuccin = {
-            src = builtins.fetchurl {
-              url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme";
-              sha256 = "sha256:0xxashmrrj81y99ia4hvcpmplkzr1rlpgh4idf9inc7bikq6cm9r";
-              name = "catppuccin.tmTheme";
-            };
-          };
-        };
-      };
+      programs.bat.enable = true;
+      stylix.targets.bat.enable = true;
     };
   };
 

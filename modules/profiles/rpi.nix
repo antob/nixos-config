@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.aspects) homeManager nixos;
 in
@@ -7,6 +7,12 @@ in
     { lib, pkgs, ... }:
     {
       imports = [ nixos.shell ];
+
+      # Stylix master targets newer nixpkgs than nixos-raspberrypi's.
+      disabledModules = map (m: "${inputs.stylix}/modules/${m}/nixos.nix") [
+        "kmscon"
+        "regreet"
+      ];
 
       config = {
         home-manager.sharedModules = [ homeManager.rpi ];
@@ -17,6 +23,7 @@ in
           raspberrypi-eeprom
         ];
 
+        stylix.enableReleaseChecks = false;
         nix.settings.filter-syscalls = false;
         documentation.enable = lib.mkDefault false;
 

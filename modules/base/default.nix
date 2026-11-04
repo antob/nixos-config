@@ -6,6 +6,7 @@
       inputs.disko.nixosModules.disko
       inputs.preservation.nixosModules.preservation
       config.aspects.nixos.overlays
+      config.aspects.nixos.stylix
     ];
   };
 }

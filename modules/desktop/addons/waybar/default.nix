@@ -42,7 +42,7 @@ in
     with lib;
     let
       cfg = osConfig.antob.waybar;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
       external-ip = lib.getExe (pkgs.callPackage ./_scripts/external-ip.nix { });
       mic-cam-usage = lib.getExe (pkgs.callPackage ./_scripts/mic-cam-usage.nix { });
       inherit (osConfig.antob.networkd-vpn) vpns;
@@ -315,7 +315,7 @@ in
 
         style = ''
           * {
-            background-color: #${colors.base10};
+            background-color: #${colors.base02};
             color: #${colors.base07};
 
             border: none;

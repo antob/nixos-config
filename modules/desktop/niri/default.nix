@@ -103,7 +103,7 @@ in
     with lib;
     let
       gtkCfg = osConfig.antob.gtk;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
       noctaliaEnabled = osConfig.antob ? noctalia;
       terminal = "${pkgs.kitty}/bin/kitty";
       tmuxTerminal = "${pkgs.kitty}/bin/kitty";
@@ -160,7 +160,7 @@ in
               width 2
               urgent-color "#${colors.base0F}ff"
               active-color "#${colors.base0C}ff"
-              inactive-color "#${colors.base12}aa"
+              inactive-color "#${colors.base02}aa"
             }
             shadow {
               on
@@ -179,7 +179,7 @@ in
               corner-radius 2
             }
             insert-hint {
-              color "#${colors.base12}88"
+              color "#${colors.base02}88"
             }
             default-column-width {
               proportion 1.0

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
   inherit (config.flake.lib) mkOpt;
   inherit (config.aspects) homeManager;
@@ -32,7 +32,12 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.kitty;
-      inherit (osConfig.antob.color-scheme) colors;
+      inherit (osConfig.lib.stylix) colors;
+      # Same template as Stylix's kitty target, which needs programs.kitty.
+      theme = colors {
+        templateRepo = inputs.stylix.inputs.tinted-kitty;
+        target = "base16";
+      };
     in
     {
       config = lib.mkMerge [
@@ -78,9 +83,9 @@ in
               map ctrl+shift+x scroll_to_prompt 1
               map ctrl+shift+z scroll_to_prompt -1
 
-              include ${./_files/themes/tokyonight-night.conf}
+              include ${theme}
               active_border_color #${colors.base0C}
-              inactive_border_color #${colors.base12}
+              inactive_border_color #${colors.base02}
             '';
           in
           {
