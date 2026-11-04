@@ -12,81 +12,30 @@ in
     }:
     with lib;
     let
-      inherit (config.sops) secrets;
       wgIp = "10.64.1.7";
     in
     {
       antob = {
-        neovim.localConfig = true;
-
         systemd-networking = {
           hostName = "laptob";
           # Derived from `head -c 8 /etc/machine-id`
           hostId = "6278643e";
         };
 
-        git.dirEmails = {
-          "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
-          "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
-        };
-
-        podman = {
-          storageDriver = "btrfs";
-        };
-
         wireguard = {
           address = "${wgIp}/24";
-          privateKeyFile = secrets.wg0_private_key.path;
-        };
-
-        restic-backup = {
-          paths = [
-            "/persist/safe"
-          ];
-          passwordFile = secrets.restic_client_backup_password.path;
         };
 
         clipperd = {
           bindIp = wgIp;
         };
 
-        persistence = {
-          home.directories = [
-            ".config/vice"
-            ".RetroDebugger"
-            ".C64Debugger"
-          ];
-          safe.home.directories = [
-            ".aws"
-          ];
-        };
-
-        system.env = {
-          GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
-          OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
-        };
       };
 
       imports = [
-        inputs.nur.modules.nixos.default
-        nixos.persistence
-        nixos.common
+        nixos.workstation
         nixos.laptop
-        nixos.atuin
-        nixos.checkpoint-vpn
-        nixos.tailscale
-        nixos.lumen
         nixos.secure-boot
-        nixos.clipperd
-        nixos.restic-backup
-        nixos.wireguard
-        nixos.podman
-        nixos.llm-agents
-        nixos.networkd-vpn
-        nixos.systemd-networking
-        nixos.hyprland
-        nixos.keyring
-        nixos.base
       ];
 
       # Framework-specific fix for the Goodix fingerprint reader which comes back
@@ -125,22 +74,7 @@ in
       };
 
       # Sops secrets
-      sops = {
-        defaultSopsFile = ../common/secrets.yaml;
-        secrets = {
-          wg0_private_key = {
-            sopsFile = ./secrets.yaml;
-            owner = "systemd-network";
-          };
-          restic_client_backup_password = { };
-          github_copilot_token = {
-            owner = "tob";
-          };
-          openrouter_api_key = {
-            owner = "tob";
-          };
-        };
-      };
+      sops.secrets.wg0_private_key.sopsFile = ./secrets.yaml;
 
       system.stateVersion = "22.11";
     };

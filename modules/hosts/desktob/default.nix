@@ -17,8 +17,6 @@ in
     in
     {
       antob = {
-        neovim.localConfig = true;
-
         systemd-networking = {
           hostName = "desktob";
           # Derived from `head -c 8 /etc/machine-id`
@@ -26,18 +24,9 @@ in
           enableWoL = true;
         };
 
-        git.dirEmails = {
-          "~/Projects/obit/" = "tobias.lindholm@oborgen.se";
-          "~/Projects/puzzel/" = "tobias.lindholm@puzzel.com";
-        };
-
         alacritty.fontSize = 13;
 
         kitty.fontSize = 13;
-
-        podman = {
-          storageDriver = "btrfs";
-        };
 
         rescue = {
           resticEnvFile = secrets.restic_env_file.path;
@@ -45,14 +34,6 @@ in
 
         wireguard = {
           address = "${wgIp}/24";
-          privateKeyFile = secrets.wg0_private_key.path;
-        };
-
-        restic-backup = {
-          paths = [
-            "/persist/safe"
-          ];
-          passwordFile = secrets.restic_client_backup_password.path;
         };
 
         clipperd = {
@@ -79,53 +60,20 @@ in
           refresh = 165;
         };
 
-        persistence = {
-          home.directories = [
-            ".config/vice"
-            ".RetroDebugger"
-            ".C64Debugger"
-            # ".nuget"
-            # ".microsoft"
-            # ".dotnet"
-          ];
-          safe.home.directories = [
-            ".aws"
-          ];
-        };
-
         system.env = {
-          GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
-          OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
           OPENCODE_API_KEY = "$(cat ${secrets.opencode_api_key.path})";
           OPENAI_API_KEY = "$(cat ${secrets.openai_api_key.path})";
         };
       };
 
       imports = [
-        inputs.nur.modules.nixos.default
-        nixos.persistence
-        nixos.common
-        nixos.desktop
+        nixos.workstation
         nixos.gaming
-        nixos.atuin
-        nixos.checkpoint-vpn
         nixos.ddcutil
         nixos.ollama
-        nixos.tailscale
         nixos.llama-cpp
-        nixos.lumen
         nixos.voxtype
-        nixos.clipperd
-        nixos.restic-backup
-        nixos.wireguard
         nixos.rescue
-        nixos.podman
-        nixos.llm-agents
-        nixos.networkd-vpn
-        nixos.systemd-networking
-        nixos.hyprland
-        nixos.keyring
-        nixos.base
       ];
 
       environment.systemPackages = with pkgs; [
@@ -146,29 +94,16 @@ in
       nixpkgs.config.rocmSupport = true;
 
       # Sops secrets
-      sops = {
-        defaultSopsFile = ../common/secrets.yaml;
-        secrets = {
-          wg0_private_key = {
-            sopsFile = ./secrets.yaml;
-            owner = "systemd-network";
-          };
-          restic_client_backup_password = { };
-          restic_env_file = {
-            sopsFile = ../common/secrets.yaml;
-          };
-          github_copilot_token = {
-            owner = "tob";
-          };
-          openrouter_api_key = {
-            owner = "tob";
-          };
-          opencode_api_key = {
-            owner = "tob";
-          };
-          openai_api_key = {
-            owner = "tob";
-          };
+      sops.secrets = {
+        wg0_private_key.sopsFile = ./secrets.yaml;
+        restic_env_file = {
+          sopsFile = ../common/secrets.yaml;
+        };
+        opencode_api_key = {
+          owner = "tob";
+        };
+        openai_api_key = {
+          owner = "tob";
         };
       };
 
