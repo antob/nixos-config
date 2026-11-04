@@ -110,6 +110,7 @@ in
 
   flake.modules.homeManager.hyprland =
     {
+      config,
       osConfig,
       lib,
       pkgs,
@@ -117,7 +118,7 @@ in
     }:
     with lib;
     let
-      gtkCfg = osConfig.antob.gtk;
+      inherit (osConfig.stylix) cursor;
       inherit (osConfig.lib.stylix) colors;
       dm-firefox-profile = getExe (
         pkgs.callPackage ../_scripts/dm-firefox-profile.nix { config = osConfig; }
@@ -137,9 +138,9 @@ in
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           accent-color = "teal";
-          gtk-theme = gtkCfg.theme.name;
-          cursor-theme = gtkCfg.cursor.name;
-          cursor-size = gtkCfg.cursor.size;
+          gtk-theme = config.gtk.theme.name;
+          cursor-theme = cursor.name;
+          cursor-size = cursor.size;
         };
       };
 

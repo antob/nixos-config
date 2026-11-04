@@ -21,6 +21,8 @@ in
       };
 
       config = {
+        stylix.targets.console.enable = true;
+
         console = mkIf cfg.setFont {
           earlySetup = true;
           font = "ter-124b";

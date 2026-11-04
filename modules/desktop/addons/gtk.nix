@@ -18,15 +18,6 @@ in
     in
     {
       options.antob.gtk = with types; {
-        theme = {
-          name = mkOpt str "Adwaita:dark" "The name of the GTK theme to apply.";
-          pkg = mkOpt (nullOr package) null "The package to use for the theme.";
-        };
-        cursor = {
-          name = mkOpt str "Bibata-Modern-Ice" "The name of the cursor theme to apply.";
-          size = mkOpt int 16 "Cursor size to apply.";
-          pkg = mkOpt (nullOr package) pkgs.bibata-cursors "The package to use for the cursor theme.";
-        };
         icon = {
           name = mkOpt str "Adwaita" "The name of the icon theme to apply.";
           pkg = mkOpt package pkgs.adwaita-icon-theme "The package to use for the icon theme.";
@@ -41,10 +32,15 @@ in
           pkgs.adwaita-icon-theme-legacy
         ];
 
+        stylix.cursor = {
+          name = "Bibata-Modern-Ice";
+          package = pkgs.bibata-cursors;
+          size = 16;
+        };
+
         environment.sessionVariables = {
-          GTK_THEME = cfg.theme.name;
-          XCURSOR_THEME = cfg.cursor.name;
-          XCURSOR_SIZE = toString cfg.cursor.size;
+          XCURSOR_THEME = config.stylix.cursor.name;
+          XCURSOR_SIZE = toString config.stylix.cursor.size;
         };
 
       };
@@ -56,19 +52,15 @@ in
       cfg = osConfig.antob.gtk;
     in
     {
+      # Theme (adw-gtk3 + generated gtk.css) and cursor come from Stylix.
+      stylix.targets.gtk = {
+        enable = true;
+        fonts.enable = false;
+        flatpakSupport.enable = false;
+      };
+
       gtk = {
         enable = true;
-
-        theme = {
-          inherit (cfg.theme) name;
-          package = cfg.theme.pkg;
-        };
-
-        cursorTheme = {
-          inherit (cfg.cursor) name;
-          inherit (cfg.cursor) size;
-          package = cfg.cursor.pkg;
-        };
 
         iconTheme = {
           inherit (cfg.icon) name;
@@ -78,12 +70,9 @@ in
         gtk3.extraConfig = {
           gtk-error-bell = false;
         };
-        gtk4 = {
-          theme = null; # See https://stopthemingmy.app
-          extraConfig = {
-            gtk-interface-color-scheme = "dark";
-            gtk-error-bell = false;
-          };
+        gtk4.extraConfig = {
+          gtk-interface-color-scheme = "dark";
+          gtk-error-bell = false;
         };
       };
     };

@@ -95,6 +95,7 @@ in
 
   flake.modules.homeManager.niri =
     {
+      config,
       osConfig,
       lib,
       pkgs,
@@ -102,7 +103,7 @@ in
     }:
     with lib;
     let
-      gtkCfg = osConfig.antob.gtk;
+      inherit (osConfig.stylix) cursor;
       inherit (osConfig.lib.stylix) colors;
       noctaliaEnabled = osConfig.antob ? noctalia;
       terminal = "${pkgs.kitty}/bin/kitty";
@@ -194,8 +195,8 @@ in
             always-center-single-column
           }
           cursor {
-            xcursor-theme "${gtkCfg.cursor.name}"
-            xcursor-size ${toString gtkCfg.cursor.size}
+            xcursor-theme "${cursor.name}"
+            xcursor-size ${toString cursor.size}
             hide-when-typing
             hide-after-inactive-ms 5000
           }
@@ -436,9 +437,9 @@ in
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           accent-color = "teal";
-          gtk-theme = gtkCfg.theme.name;
-          cursor-theme = gtkCfg.cursor.name;
-          cursor-size = gtkCfg.cursor.size;
+          gtk-theme = config.gtk.theme.name;
+          cursor-theme = cursor.name;
+          cursor-size = cursor.size;
         };
       };
     };
