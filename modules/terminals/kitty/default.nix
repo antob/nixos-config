@@ -54,6 +54,9 @@ in
               clear_all_shortcuts yes
               confirm_os_window_close 0
               cursor_shape beam
+              cursor_trail 3
+              cursor_trail_decay 0.03 0.1
+              cursor_trail_start_threshold 10
               disable_ligatures always
               enable_audio_bell no
               enabled_layouts tall,vertical,horizontal,grid,stack
