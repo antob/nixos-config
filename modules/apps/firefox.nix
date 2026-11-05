@@ -142,6 +142,9 @@ in
         "media.ffmpeg.vaapi.enabled" = true;
         "media.navigator.enabled" = false;
         "layout.spellcheckDefault" = 0;
+
+        ## FIREFOX GNOME THEME
+        "gnomeTheme.allTabsButtonOnOverflow" = true; # show "List All Tabs" button on tab overflow
       };
       commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
         ublock-origin
