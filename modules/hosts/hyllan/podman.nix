@@ -1,22 +1,6 @@
 { config, ... }:
-let
-  inherit (config.aspects) nixos;
-in
 {
-  flake.modules.nixos.hyllan =
-    { lib, ... }:
-
-    let
-      dataDir = "/mnt/tank/services/docker";
-    in
-    {
-      imports = [ nixos.podman ];
-
-      fileSystems = {
-        "${dataDir}" = {
-          device = "zpool/docker";
-          fsType = "zfs";
-        };
-      };
-    };
+  flake.modules.nixos.hyllan = {
+    imports = [ config.aspects.nixos.podman ];
+  };
 }

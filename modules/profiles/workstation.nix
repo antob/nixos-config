@@ -17,7 +17,6 @@ in
         nixos.persistence
         nixos.atuin
         nixos.checkpoint-vpn
-        nixos.tailscale
         nixos.lumen
         nixos.clipperd
         nixos.restic-backup
