@@ -28,6 +28,22 @@
         };
       };
 
+      # Mails the unit status. Use with `onFailure = [ "notify-failure@%n.service" ];`
+      systemd.services."notify-failure@" = {
+        description = "Mail failure notice for %i";
+        serviceConfig.Type = "oneshot";
+        scriptArgs = "%i";
+        script = ''
+          ${pkgs.msmtp}/bin/sendmail -t <<EOF
+          To: ${emailTo}
+          From: ${emailFrom}
+          Subject: [${config.networking.hostName}] $1 failed
+
+          $(${pkgs.systemd}/bin/systemctl status --full --lines=50 "$1")
+          EOF
+        '';
+      };
+
       sops.secrets.proton_smtp_token = { };
     };
 }

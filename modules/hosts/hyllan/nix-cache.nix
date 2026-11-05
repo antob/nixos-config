@@ -90,6 +90,7 @@
           cd "$work" || exit 1
         else
           echo "Failed to copy to file binary cache"
+          failed=1
         fi
 
         # Publish the lock this run built from, so clients can pin to it for full cache hits
@@ -101,10 +102,10 @@
           echo "=== Running garbage collection"
           nix --store "$store" store gc || echo "Garbage collection failed"
         else
-          echo "=== Skipping garbage collection: at least one host failed to build"
+          echo "=== Skipping garbage collection: at least one step failed"
         fi
 
-        exit 0
+        exit "$failed"
       '';
 
       # Serve narinfos and compressed NARs from the file cache when present, else fall
@@ -188,6 +189,7 @@
         };
 
         services.nix-cache-build = {
+          onFailure = [ "notify-failure@%n.service" ];
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
           path = with pkgs; [
