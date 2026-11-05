@@ -944,6 +944,17 @@ in
         export HYPRCURSOR_SIZE=16
       '';
 
+      # Theme for hyprtoolkit apps, e.g. the xdph share picker.
+      home.file.".config/hypr/hyprtoolkit.conf".text = ''
+        background = rgba(${colors.base00}ff)
+        base = rgba(${colors.base01}ff)
+        alternate_base = rgba(${colors.base02}ff)
+        text = rgba(${colors.base05}ff)
+        bright_text = rgba(${colors.base00}ff)
+        accent = rgba(${colors.base0D}ff)
+        accent_secondary = rgba(${colors.base0C}ff)
+      '';
+
       # xdg.portal = {
       #   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       # };
