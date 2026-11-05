@@ -24,6 +24,7 @@ in
         nixos.virt-manager
         nixos.vscode
         nixos.firefox
+        nixos.chromium
         nixos.udisks2
       ];
 
@@ -79,7 +80,6 @@ in
 
         environment.systemPackages = with pkgs; [
           arandr
-          ungoogled-chromium
           libreoffice-stable
           gimp
           mpv
