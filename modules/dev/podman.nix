@@ -64,10 +64,7 @@ in
 
         antob = {
           persistence = {
-            directories = [
-              "/var/lib/containers"
-              "/run/containers"
-            ];
+            directories = [ "/var/lib/containers" ];
             home.directories = [
               ".local/share/containers"
               ".config/containers"

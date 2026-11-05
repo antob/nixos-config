@@ -22,6 +22,8 @@
         enable = true;
         inherit dataDir;
         listenAddress = "8000";
+        # Clients can add snapshots but not delete them; pruning runs locally below.
+        appendOnly = true;
         extraFlags = [ "--no-auth" ];
       };
 

@@ -31,7 +31,7 @@ in
           }
         ];
 
-        networking.firewall.allowedTCPPorts = [ 7171 ];
+        networking.firewall.interfaces.wg0.allowedTCPPorts = [ 7171 ];
 
         sops.secrets = {
           clipperd_cert_key = {

@@ -36,7 +36,6 @@
       networking.firewall.allowedTCPPorts = [
         port # Hass GUI port
         1400 # Sonos
-        zigbeePort # Zigbee2MQTT frontend
       ];
 
       systemd.tmpfiles.rules = [
@@ -58,7 +57,12 @@
       systemd.services.bluetooth-power-on = {
         description = "Power on Bluetooth adapter before Home Assistant starts";
         before = [ "podman-hass.service" ];
-        serviceConfig.ExecStart = "${pkgs.bluez}/bin/hciconfig hci0 up";
+        wantedBy = [ "podman-hass.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${pkgs.bluez}/bin/hciconfig hci0 up";
+        };
       };
 
       services = {

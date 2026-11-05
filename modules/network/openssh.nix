@@ -106,13 +106,11 @@ in
           Ciphers = "aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr";
         };
         extraConfig = ''
-          HostKeyAlgorithms +ssh-rsa
-          PubkeyAcceptedKeyTypes +ssh-rsa
           User ${osConfig.antob.user.name}
         '';
         settings = {
           "*" = {
-            forwardAgent = true;
+            forwardAgent = false;
             addKeysToAgent = "no";
             compression = false;
             serverAliveInterval = 5;
@@ -127,6 +125,12 @@ in
             UserKnownHostsFile = "/dev/null";
             StrictHostKeyChecking = "no";
             LogLevel = "ERROR";
+          };
+          # Own hosts: LAN and the WireGuard network
+          "192.168.* *.lan *.antob.net" = {
+            ForwardAgent = true;
+            HostKeyAlgorithms = "+ssh-rsa";
+            PubkeyAcceptedKeyTypes = "+ssh-rsa";
           };
         };
         includes = [ "hosts" ];

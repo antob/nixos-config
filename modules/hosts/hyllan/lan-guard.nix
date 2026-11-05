@@ -86,10 +86,10 @@
               Restart = lib.mkOverride 90 "always";
             };
             partOf = [
-              "podman-compose-languard.target"
+              "podman-languard.target"
             ];
             wantedBy = [
-              "podman-compose-languard.target"
+              "podman-languard.target"
             ];
           };
 
@@ -98,10 +98,10 @@
               Restart = lib.mkOverride 90 "always";
             };
             partOf = [
-              "podman-compose-languard.target"
+              "podman-languard.target"
             ];
             wantedBy = [
-              "podman-compose-languard.target"
+              "podman-languard.target"
             ];
           };
 
@@ -110,10 +110,10 @@
               Restart = lib.mkOverride 90 "always";
             };
             partOf = [
-              "podman-compose-languard.target"
+              "podman-languard.target"
             ];
             wantedBy = [
-              "podman-compose-languard.target"
+              "podman-languard.target"
             ];
           };
         };

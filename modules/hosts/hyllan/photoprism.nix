@@ -48,8 +48,6 @@
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ port ];
-
       sops.secrets.photoprism_admin_password = { };
 
       fileSystems = {

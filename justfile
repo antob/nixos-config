@@ -103,8 +103,6 @@ repl:
 clean:
     # Wipe out NixOS's history
     sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
-    # Wipe out home-manager's history
-    nix profile wipe-history --profile $"($env.XDG_STATE_HOME)/nix/profiles/home-manager" --older-than 7d
 
 # Garbage collect all unused nix store entries
 gc:

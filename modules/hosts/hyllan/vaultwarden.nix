@@ -43,8 +43,6 @@
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ port ];
-
       sops.secrets.vaultwarden_env_variables = { };
     };
 }

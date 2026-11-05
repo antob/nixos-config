@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { config, pkgs, ... }:
+    { config, ... }:
 
     let
       dataDir = "/mnt/tank/services/postgresql";
@@ -24,10 +24,6 @@
       services.postgresql = {
         enable = true;
         inherit dataDir;
-        authentication = pkgs.lib.mkOverride 10 ''
-          #type database  DBuser  auth-method
-          local all       all     trust
-        '';
       };
 
       fileSystems = {

@@ -31,10 +31,7 @@ in
           system.env.DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
 
           persistence = {
-            directories = [
-              "/var/lib/docker"
-              "/run/docker"
-            ];
+            directories = [ "/var/lib/docker" ];
             home.directories = [
               ".config/docker"
             ];

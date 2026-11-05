@@ -34,7 +34,6 @@ in
           inherit (cfg) host;
           inherit (cfg) port;
           environmentVariables = {
-            OLLAMA_ORIGINS = "*";
             OLLAMA_KEEP_ALIVE = "1h";
             OLLAMA_IGPU_ENABLE = "1"; # For Vulkan backend, enable iGPU support.
             OLLAMA_NUM_PARALLEL = "2";

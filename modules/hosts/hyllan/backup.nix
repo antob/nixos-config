@@ -37,6 +37,10 @@ in
                 exclude = map (exclude: "${baseMountPoint}/${dataset}${exclude}") excludes;
 
                 backupPrepareCommand = ''
+                  # Clear leftovers from an interrupted run
+                  ${pkgs.util-linux}/bin/umount ${baseMountPoint}/${dataset} 2>/dev/null || true
+                  ${pkgs.zfs}/bin/zfs destroy zpool/${dataset}@restic-backup 2>/dev/null || true
+
                   ${pkgs.zfs}/bin/zfs snapshot zpool/${dataset}@restic-backup
                   mkdir -p ${baseMountPoint}/${dataset}
                   ${pkgs.util-linux}/bin/mount -t zfs zpool/${dataset}@restic-backup ${baseMountPoint}/${dataset}

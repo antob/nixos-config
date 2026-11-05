@@ -15,7 +15,7 @@
           openDefaultPorts = true;
           overrideDevices = false;
           overrideFolders = false;
-          guiAddress = "0.0.0.0:${toString port}";
+          guiAddress = "127.0.0.1:${toString port}";
         };
       };
 
@@ -33,9 +33,10 @@
       services.caddy.antobProxies."${subdomain}" = {
         hostName = "127.0.0.1";
         inherit port;
+        # Syncthing rejects non-localhost Host headers when the GUI listens on localhost
+        extraConfig = ''
+          header_up Host {upstream_hostport}
+        '';
       };
-
-      # Syncthing ports: 8384 for remote access to GUI
-      networking.firewall.allowedTCPPorts = [ port ];
     };
 }
