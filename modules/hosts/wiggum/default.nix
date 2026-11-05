@@ -27,9 +27,9 @@ in
 
       };
 
-      imports = [
-        nixos.server
-        nixos.wireguard
+      imports = with nixos; [
+        server
+        wireguard
       ];
 
       # Wait for the tunnel interfaces to be up before sshd binds

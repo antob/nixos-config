@@ -66,14 +66,14 @@ in
         };
       };
 
-      imports = [
-        nixos.workstation
-        nixos.gaming
-        nixos.ddcutil
-        nixos.ollama
-        nixos.llama-cpp
-        nixos.voxtype
-        nixos.rescue
+      imports = with nixos; [
+        workstation
+        gaming
+        ddcutil
+        ollama
+        llama-cpp
+        voxtype
+        rescue
       ];
 
       environment.systemPackages = with pkgs; [

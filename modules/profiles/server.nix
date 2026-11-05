@@ -6,12 +6,12 @@ in
   flake.modules.nixos.server =
     { lib, pkgs, ... }:
     {
-      imports = [
-        nixos.shell
-        nixos.env
-        nixos.console
-        nixos.yazi
-        nixos.gpg
+      imports = with nixos; [
+        shell
+        env
+        console
+        yazi
+        gpg
       ];
 
       environment.systemPackages = with pkgs; [

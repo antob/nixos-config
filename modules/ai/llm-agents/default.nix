@@ -137,9 +137,9 @@ in
         );
     in
     {
-      imports = [
-        nixos.herdr
-        nixos.worktrunk
+      imports = with nixos; [
+        herdr
+        worktrunk
       ];
 
       config = {

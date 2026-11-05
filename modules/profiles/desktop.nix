@@ -13,19 +13,19 @@ in
 
     with lib;
     {
-      imports = [
-        nixos.bluetooth
-        nixos.ledger
-        nixos.webcam
-        nixos.yubikey
-        nixos.zsa-voyager
-        nixos.printing
-        nixos.syncthing
-        nixos.virt-manager
-        nixos.vscode
-        nixos.firefox
-        nixos.chromium
-        nixos.udisks2
+      imports = with nixos; [
+        bluetooth
+        ledger
+        webcam
+        yubikey
+        zsa-voyager
+        printing
+        syncthing
+        virt-manager
+        vscode
+        firefox
+        chromium
+        udisks2
       ];
 
       config = {

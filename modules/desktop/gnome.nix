@@ -18,9 +18,9 @@ in
 
     in
     {
-      imports = [
-        nixos.keyring
-        nixos.flameshot
+      imports = with nixos; [
+        keyring
+        flameshot
       ];
 
       config = {

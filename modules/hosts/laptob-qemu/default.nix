@@ -8,13 +8,13 @@ in
 
     with lib;
     {
-      imports = [
+      imports = with nixos; [
         inputs.nur.modules.nixos.default
-        nixos.common
-        nixos.desktop
-        nixos.avahi
-        nixos.networking
-        nixos.gnome
+        common
+        desktop
+        avahi
+        networking
+        gnome
       ];
 
       antob = {

@@ -18,12 +18,12 @@ in
 
     in
     {
-      imports = [
+      imports = with nixos; [
         inputs.monique.nixosModules.default
-        nixos.gtk
-        nixos.nautilus
-        nixos.noctalia
-        nixos.rofi
+        gtk
+        nautilus
+        noctalia
+        rofi
       ];
 
       config = {

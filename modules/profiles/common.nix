@@ -6,17 +6,17 @@ in
   flake.modules.nixos.common =
     { pkgs, ... }:
     {
-      imports = [
-        nixos.server
-        nixos.direnv
-        nixos.devenv
-        nixos.rustup
-        nixos.fhs
-        nixos.fonts
-        nixos.audio
-        nixos.scripts
-        nixos.alacritty
-        nixos.nix-search-tv
+      imports = with nixos; [
+        server
+        direnv
+        devenv
+        rustup
+        fhs
+        fonts
+        audio
+        scripts
+        alacritty
+        nix-search-tv
       ];
 
       config = {

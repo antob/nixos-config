@@ -10,23 +10,23 @@ in
       inherit (config.sops) secrets;
     in
     {
-      imports = [
+      imports = with nixos; [
         inputs.nur.modules.nixos.default
-        nixos.common
-        nixos.desktop
-        nixos.persistence
-        nixos.atuin
-        nixos.checkpoint-vpn
-        nixos.lumen
-        nixos.clipperd
-        nixos.restic-backup
-        nixos.wireguard
-        nixos.podman
-        nixos.llm-agents
-        nixos.networkd-vpn
-        nixos.systemd-networking
-        nixos.hyprland
-        nixos.keyring
+        common
+        desktop
+        persistence
+        atuin
+        checkpoint-vpn
+        lumen
+        clipperd
+        restic-backup
+        wireguard
+        podman
+        llm-agents
+        networkd-vpn
+        systemd-networking
+        hyprland
+        keyring
       ];
 
       antob = {

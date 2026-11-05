@@ -13,9 +13,9 @@ in
 
     with lib;
     {
-      imports = [
-        nixos.desktop
-        nixos.fingerprint
+      imports = with nixos; [
+        desktop
+        fingerprint
       ];
 
       config = {

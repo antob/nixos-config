@@ -45,12 +45,12 @@ in
         };
       };
 
-      imports = [
+      imports = with nixos; [
         inputs.copyparty.nixosModules.default
-        nixos.common
-        nixos.atuin
-        nixos.zfs
-        nixos.systemd-networking
+        common
+        atuin
+        zfs
+        systemd-networking
       ];
 
       services = {

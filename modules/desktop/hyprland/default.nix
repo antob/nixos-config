@@ -13,11 +13,11 @@ in
 
     with lib;
     {
-      imports = [
-        nixos.gtk
-        nixos.nautilus
-        nixos.noctalia
-        nixos.rofi
+      imports = with nixos; [
+        gtk
+        nautilus
+        noctalia
+        rofi
       ];
 
       config = {

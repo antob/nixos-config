@@ -32,10 +32,10 @@ in
 
       };
 
-      imports = [
-        nixos.workstation
-        nixos.laptop
-        nixos.secure-boot
+      imports = with nixos; [
+        workstation
+        laptop
+        secure-boot
       ];
 
       # Framework-specific fix for the Goodix fingerprint reader which comes back

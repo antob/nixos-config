@@ -6,19 +6,19 @@ in
   flake.modules.nixos.shell =
     { lib, pkgs, ... }:
     {
-      imports = [
-        nixos.base
-        nixos.eza
-        nixos.starship
-        nixos.locale
-        nixos.time
-        nixos.openssh
-        nixos.fzf
-        nixos.zsh
-        nixos.kitty
-        nixos.git
-        nixos.tmux
-        nixos.neovim
+      imports = with nixos; [
+        base
+        eza
+        starship
+        locale
+        time
+        openssh
+        fzf
+        zsh
+        kitty
+        git
+        tmux
+        neovim
       ];
 
       config = {

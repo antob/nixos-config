@@ -7,15 +7,15 @@ in
     nixos.install-iso =
       { pkgs, modulesPath, ... }:
       {
-        imports = [
+        imports = with nixos; [
           (modulesPath + "/installer/cd-dvd/installation-cd-graphical-base.nix")
           inputs.nur.modules.nixos.default
-          nixos.iso
-          nixos.audio
-          nixos.printing
-          nixos.vscode
-          nixos.firefox
-          nixos.gnome
+          iso
+          audio
+          printing
+          vscode
+          firefox
+          gnome
         ];
 
         home-manager.sharedModules = [ homeManager.install-iso ];

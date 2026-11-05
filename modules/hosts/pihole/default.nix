@@ -38,10 +38,10 @@ in
         privateKeyFile = secrets.wg0_private_key.path;
       };
 
-      imports = [
-        nixos.rpi
-        nixos.wireguard
-        nixos.systemd-networking
+      imports = with nixos; [
+        rpi
+        wireguard
+        systemd-networking
       ];
 
       #

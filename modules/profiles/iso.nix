@@ -6,26 +6,26 @@ in
   flake.modules.nixos.iso =
     { lib, pkgs, ... }:
     {
-      imports = [
-        nixos.base
-        nixos.env
-        nixos.eza
-        nixos.starship
-        nixos.console
-        nixos.fonts
-        nixos.locale
-        nixos.time
-        nixos.bluetooth
-        nixos.yubikey
-        nixos.openssh
-        nixos.fzf
-        nixos.zsh
-        nixos.alacritty
-        nixos.gpg
-        nixos.git
-        nixos.tmux
-        nixos.networking
-        nixos.neovim
+      imports = with nixos; [
+        base
+        env
+        eza
+        starship
+        console
+        fonts
+        locale
+        time
+        bluetooth
+        yubikey
+        openssh
+        fzf
+        zsh
+        alacritty
+        gpg
+        git
+        tmux
+        networking
+        neovim
       ];
 
       antob.openssh = {
