@@ -215,8 +215,10 @@ in
 
               border_size = 3,
 
-              -- Set to true enable resizing windows by clicking and dragging on borders and gaps
-              resize_on_border = false,
+              -- Resize floating windows by dragging their borders
+              resize_on_border = true,
+              extend_border_grab_area = 8,
+              hover_icon_on_border = true,
 
               -- Async page flips fail on amdgpu here ("failed to commit: Invalid argument") and freeze the game.
               allow_tearing = false,
@@ -331,10 +333,13 @@ in
               follow_mouse = 1,
               sensitivity = 0,
               focus_on_close = 2,
+              numlock_by_default = true,
 
               touchpad = {
                 natural_scroll = true,
                 scroll_factor = 0.4,
+                -- Two-finger click is right-click
+                clickfinger_behavior = true,
               },
             },
 
@@ -361,6 +366,12 @@ in
               disable_splash_rendering = true,
               focus_on_activate = true,
               vrr = 2, -- fullscreen only
+              -- Let a restarted Noctalia take the lock back if it crashed while locked
+              allow_session_lock_restore = true,
+              -- Fewer false "app not responding" dialogs
+              anr_missed_pings = 3,
+              key_press_enables_dpms = true,
+              mouse_move_enables_dpms = true,
             },
 
             xwayland = {
@@ -490,6 +501,38 @@ in
             opacity = "1 1",
           })
 
+          -- Picture-in-picture: float, pin and keep in the top-right corner
+          hl.window_rule({
+            name = "pip",
+            match = { title = "^(Picture.?in.?[Pp]icture)$" },
+            float = true,
+            pin = true,
+            size = { 600, 338 },
+            keep_aspect_ratio = true,
+            border_size = 0,
+            opacity = "1 1",
+            move = { "(monitor_w-window_w-40)", "(monitor_h*0.04)" },
+          })
+
+          -- Keep password managers out of screen shares
+          hl.window_rule({ name = "no-share-bitwarden", match = { class = "^([bB]itwarden)$" }, no_screen_share = true })
+
+          -- Hide the browsers' "sharing your screen" indicator windows
+          hl.window_rule({ name = "hide-share-indicator", match = { title = "(.*is sharing.*|.*Sharing Indicator)" }, workspace = "special silent" })
+
+          -- Don't let Telegram steal focus on new messages
+          hl.window_rule({ name = "telegram-no-focus-steal", match = { class = "org.telegram.desktop" }, focus_on_activate = false })
+
+          -- No idle lock while games are fullscreen
+          hl.window_rule({ name = "games-idle-inhibit", match = { class = "^(steam|steam_app_.*|gamescope)$" }, idle_inhibit = "fullscreen" })
+
+          -- Stop XWayland drag-and-drop ghost windows from taking focus
+          hl.window_rule({
+            name = "xwayland-drag-fix",
+            match = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
+            no_focus = true,
+          })
+
           -- Fullscreen screensaver
           hl.window_rule({ name = "fullscreen-screensaver", match = { class = "Screensaver" }, fullscreen = true })
 
@@ -501,6 +544,7 @@ in
           hl.on("window.title", function(w)
             if w.title and w.title:find("(Bitwarden Password Manager) - Bitwarden", 1, true) then
               hl.dispatch(hl.dsp.window.set_prop({ prop = "no_anim", value = "on", window = w }))
+              hl.dispatch(hl.dsp.window.set_prop({ prop = "no_screen_share", value = "on", window = w }))
               hl.dispatch(hl.dsp.window.float({ action = "enable", window = w }))
               hl.dispatch(hl.dsp.window.resize({ x = 500, y = 800, window = w }))
             end
@@ -633,6 +677,7 @@ in
 
           -- Screenshots
           hl.bind("Print", hl.dsp.exec_cmd(ipc .. "screenshot-region"), { description = "Screenshot of region" })
+          hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("pkill hyprpicker || ${getExe pkgs.hyprpicker} -a"), { description = "Color picker" })
 
           -- Layouts ---------------------------------------------------------------------
 
@@ -670,6 +715,24 @@ in
             end,
             default = hl.dsp.window.fullscreen({ mode = "maximized" }),
           }), { description = "Toggle full-width column / maximize window" })
+
+          -- Pop the window out (float, pin, center) or put it back
+          hl.bind(mainMod .. " + O", function()
+            local w = hl.get_active_window()
+            if not w then
+              return
+            end
+            if w.pinned then
+              hl.dispatch(hl.dsp.window.pin({ window = w }))
+              hl.dispatch(hl.dsp.window.float({ action = "disable", window = w }))
+            else
+              hl.dispatch(hl.dsp.window.float({ action = "enable", window = w }))
+              hl.dispatch(hl.dsp.window.resize({ x = 1300, y = 900, window = w }))
+              hl.dispatch(hl.dsp.window.center({ window = w }))
+              hl.dispatch(hl.dsp.window.pin({ window = w }))
+              hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = w }))
+            end
+          end, { description = "Pop window out / back in" })
 
           -- Switch focus between floating and tiled windows
           hl.bind(mainMod .. " + SHIFT + V", function()
@@ -840,6 +903,13 @@ in
             hl.bind("ALT + " .. i, hl.dsp.focus({ monitor = i - 1 }), { description = "Focus monitor " .. i })
             hl.bind("ALT + SHIFT + " .. i, hl.dsp.workspace.move({ monitor = i - 1 }), { description = "Move workspace to monitor " .. i })
           end
+
+          -- Touchpad gestures ----------------------------------------------------------
+          -- Like Niri: 3 fingers vertical switches workspace, horizontal moves between columns.
+
+          hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })
+          hl.gesture({ fingers = 3, direction = "left", action = function() hl.dispatch(hl.dsp.layout("focus r")) end })
+          hl.gesture({ fingers = 3, direction = "right", action = function() hl.dispatch(hl.dsp.layout("focus l")) end })
 
           -- Groups ----------------------------------------------------------------------
 
