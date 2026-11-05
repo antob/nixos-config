@@ -47,7 +47,7 @@ in
 
         restic-backup = {
           paths = [
-            "/persist/safe"
+            "${config.antob.persistence.path}/safe"
           ];
           passwordFile = secrets.restic_client_backup_password.path;
         };
@@ -81,10 +81,10 @@ in
           };
           restic_client_backup_password = { };
           github_copilot_token = {
-            owner = "tob";
+            owner = config.antob.user.name;
           };
           openrouter_api_key = {
-            owner = "tob";
+            owner = config.antob.user.name;
           };
         };
       };

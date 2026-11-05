@@ -100,10 +100,10 @@ in
           sopsFile = ../common/secrets.yaml;
         };
         opencode_api_key = {
-          owner = "tob";
+          owner = config.antob.user.name;
         };
         openai_api_key = {
-          owner = "tob";
+          owner = config.antob.user.name;
         };
       };
 

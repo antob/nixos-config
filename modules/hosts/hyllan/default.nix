@@ -43,11 +43,6 @@ in
           autoSync = false;
           filterMode = "host";
         };
-
-        monitoring = {
-          emailFrom = "home@antob.se";
-          emailTo = "tob@antob.se";
-        };
       };
 
       imports = [
@@ -57,10 +52,6 @@ in
         nixos.zfs
         nixos.systemd-networking
       ];
-
-      nixpkgs.config = {
-        allowUnfree = true;
-      };
 
       services = {
         fstrim.enable = mkDefault true;

@@ -38,10 +38,6 @@ in
         wants = [ "wg-quick-wg0.service" ];
       };
 
-      nixpkgs.config = {
-        allowUnfree = true;
-      };
-
       # Enable IP forwarding
       boot.kernel.sysctl = {
         "net.ipv4.ip_forward" = 1;
