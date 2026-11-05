@@ -139,7 +139,7 @@ in
           "rofi/themes/default.rasi".text = /* rasi */ ''
             /*****----- Global Properties -----*****/
             * {
-                background:     #${colors.base01}FF;
+                background:     #${colors.base00}FF;
                 background-alt: #${colors.base02}FF;
                 foreground:     #${colors.base06}FF;
                 selected:       #${colors.base0C}FF;
