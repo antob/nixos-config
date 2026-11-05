@@ -252,11 +252,11 @@
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
-        "lastModified": 1783570805,
-        "narHash": "sha256-ptl5aRlCv9/uRSv2u8Hq8UFVFeZ6Q/bT049bpqNgc3w=",
+        "lastModified": 1792416163,
+        "narHash": "sha256-0M5/QfbfHwI7gP+q6IGdidxl5caGXMaEalNj2E2Rxyg=",
         "owner": "rafaelmardojai",
         "repo": "firefox-gnome-theme",
-        "rev": "5602ed62d638142c1ab31dccd01dfbfb28841225",
+        "rev": "fdc1af075073f93dc63e43b28a499b2251bcfcc2",
         "type": "github"
       },
       "original": {
@@ -1168,6 +1168,7 @@
         "clipperd": "clipperd",
         "copyparty": "copyparty",
         "disko": "disko",
+        "firefox-gnome-theme": "firefox-gnome-theme",
         "flake-parts": "flake-parts_2",
         "home-manager": "home-manager",
         "import-tree": "import-tree_2",
@@ -1263,7 +1264,9 @@
         "base16-fish": "base16-fish",
         "base16-helix": "base16-helix",
         "base16-vim": "base16-vim",
-        "firefox-gnome-theme": "firefox-gnome-theme",
+        "firefox-gnome-theme": [
+          "firefox-gnome-theme"
+        ],
         "flake-parts": [
           "flake-parts"
         ],

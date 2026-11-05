@@ -156,6 +156,19 @@ in
         inputs.betterfox.homeModules.betterfox
       ];
 
+      # firefox-gnome-theme (userChrome/userContent) coloured from Stylix.
+      stylix.targets.firefox = {
+        enable = true;
+        fonts.enable = false;
+        firefoxGnomeTheme.enable = true;
+        profileNames = [
+          osConfig.antob.user.name
+          "HL"
+          "OBIT"
+          "Puzzel"
+        ];
+      };
+
       programs.firefox = {
         enable = true;
         configPath = "${userHome}/.config/mozilla/firefox";

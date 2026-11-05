@@ -41,6 +41,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nur.follows = "nur";
       inputs.flake-parts.follows = "flake-parts";
+      inputs.firefox-gnome-theme.follows = "firefox-gnome-theme";
+    };
+
+    # Firefox GNOME theme - tracks upstream so it keeps up with Firefox releases
+    firefox-gnome-theme = {
+      url = "github:rafaelmardojai/firefox-gnome-theme";
+      flake = false;
     };
 
     # Nix User Repository (NUR)
