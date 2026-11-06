@@ -190,7 +190,7 @@ in
                 enabled:                     true;
                 margin:                      0px;
                 padding:                     10px;
-                border:                      2px solid;
+                border:                      3px solid;
                 border-radius:               6px;
                 border-color:                @border-colour;
                 cursor:                      "default";
@@ -278,7 +278,7 @@ in
                 margin:                      0px;
                 padding:                     12px 12px;
                 border:                      0px solid;
-                border-radius:               0px;
+                border-radius:               4px;
                 border-color:                @border-colour;
                 background-color:            transparent;
                 text-color:                  @foreground-colour;
@@ -362,7 +362,7 @@ in
             }
             error-message {
                 padding:                     10px;
-                border:                      2px solid;
+                border:                      0px solid;
                 border-radius:               4px;
                 border-color:                @border-colour;
                 background-color:            @background-colour;
