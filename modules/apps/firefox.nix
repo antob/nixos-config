@@ -27,6 +27,7 @@ in
     with lib;
     let
       userHome = "/home/${osConfig.antob.user.name}";
+      colors = osConfig.lib.stylix.colors.withHashtag;
       betterfoxSettings = {
         securefox = {
           enable = true;
@@ -146,6 +147,25 @@ in
         ## FIREFOX GNOME THEME
         "gnomeTheme.allTabsButtonOnOverflow" = true; # show "List All Tabs" button on tab overflow
       };
+      # Match the focus ring to Hyprland's active border, terminal-like text, undimmed placeholders.
+      userChrome = mkAfter ''
+        :root {
+          --gnome-entry-focused-border-color: ${colors.base0C} !important;
+          --gnome-window-color: ${colors.base06} !important;
+          --gnome-view-color: ${colors.base06} !important;
+          --gnome-menu-color: ${colors.base06} !important;
+          --toolbox-textcolor: ${colors.base06} !important;
+          --toolbox-textcolor-inactive: ${colors.base06} !important;
+          --toolbar-color: ${colors.base06} !important;
+          --gnome-toolbar-icon-fill: ${colors.base06} !important;
+        }
+        input::placeholder,
+        .urlbar-input::placeholder,
+        .searchbar-textbox::placeholder {
+          color: var(--gnome-window-color) !important;
+          opacity: 1 !important;
+        }
+      '';
       commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
         ublock-origin
         duckduckgo-privacy-essentials
@@ -186,6 +206,7 @@ in
             };
             settings = commonSettings;
             extensions.packages = commonExtensions;
+            inherit userChrome;
           };
 
           "HL" = {
@@ -198,6 +219,7 @@ in
             };
             settings = commonSettings;
             extensions.packages = commonExtensions;
+            inherit userChrome;
           };
 
           "OBIT" = {
@@ -210,6 +232,7 @@ in
             };
             settings = commonSettings;
             extensions.packages = commonExtensions;
+            inherit userChrome;
           };
 
           "Puzzel" = {
@@ -222,6 +245,7 @@ in
             };
             settings = commonSettings;
             extensions.packages = commonExtensions;
+            inherit userChrome;
           };
         };
 
