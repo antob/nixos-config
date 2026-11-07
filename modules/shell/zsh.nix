@@ -31,12 +31,16 @@ in
     }:
     let
       cfg = osConfig.antob.zsh;
+      inherit (osConfig.lib.stylix) colors;
     in
     {
       programs.zsh = {
         enable = true;
         enableCompletion = true;
-        autosuggestion.enable = true;
+        autosuggestion = {
+          enable = true;
+          highlight = "fg=#${colors.base04}";
+        };
         syntaxHighlighting.enable = true;
         defaultKeymap = "emacs";
         dotDir = "/home/${osConfig.antob.user.name}/.config/zsh";
