@@ -147,7 +147,6 @@ in
         ## FIREFOX GNOME THEME
         "gnomeTheme.allTabsButtonOnOverflow" = true; # show "List All Tabs" button on tab overflow
       };
-      # Match the focus ring to Hyprland's active border, terminal-like text, undimmed placeholders.
       userChrome = mkAfter ''
         :root {
           --gnome-entry-focused-border-color: ${colors.base0C} !important;
@@ -158,6 +157,8 @@ in
           --toolbox-textcolor-inactive: ${colors.base06} !important;
           --toolbar-color: ${colors.base06} !important;
           --gnome-toolbar-icon-fill: ${colors.base06} !important;
+          --gnome-tabbar-tab-active-background: ${colors.base03} !important;
+          --gnome-tabbar-tab-active-hover-background: color-mix(in srgb, ${colors.base03} 80%, ${colors.base04}) !important;
         }
         input::placeholder,
         .urlbar-input::placeholder,
