@@ -78,6 +78,7 @@ in
               map ctrl+shift+c copy_to_clipboard
               map ctrl+shift+equal change_font_size all +1.0
               map ctrl+shift+f search_scrollback
+              map ctrl+shift+f5 load_config_file
               map ctrl+shift+minus change_font_size all -1.0
               map ctrl+shift+p command_palette
               map ctrl+shift+page_down scroll_page_down
