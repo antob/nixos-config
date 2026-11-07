@@ -175,19 +175,28 @@ in
             ".local/share/rtk"
             ".local/state/workmux"
             ".cache/workmux"
-            ".config/claude"
             ".config/Claude"
           ];
         };
 
-        fileSystems."${userHome}/.pi/agent" = {
-          device = "${userHome}/Projects/pi-agent-config";
-          options = [ "bind" ];
-          fsType = "none";
+        fileSystems = {
+          "${userHome}/.pi/agent" = {
+            device = "${userHome}/Projects/pi-agent-config";
+            options = [ "bind" ];
+            fsType = "none";
+          };
+
+          # Synced between workstations via Syncthing (~/Projects)
+          "${userHome}/.config/claude" = {
+            device = "${userHome}/Projects/claude-config";
+            options = [ "bind" ];
+            fsType = "none";
+          };
         };
 
         systemd.tmpfiles.rules = [
           "d ${userHome}/.pi 0755 ${user} ${group} -"
+          "d ${userHome}/.config/claude 0755 ${user} ${group} -"
         ];
       };
     };
