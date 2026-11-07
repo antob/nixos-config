@@ -166,6 +166,14 @@ in
           color: var(--gnome-window-color) !important;
           opacity: 1 !important;
         }
+        /* GNOME theme's 6px panel padding clips the Ctrl+Tab focus ring, which sits 10px above each preview. */
+        #ctrlTab-panel {
+          --panel-padding: 20px 10px 10px !important;
+        }
+        .ctrlTab-preview:focus > .ctrlTab-preview-inner,
+        #ctrlTab-showAll:focus {
+          border-color: ${colors.base0C} !important;
+        }
       '';
       commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
         ublock-origin
