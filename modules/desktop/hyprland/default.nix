@@ -127,6 +127,9 @@ in
         pkgs.callPackage ../_scripts/dm-herdr-session.nix { config = osConfig; }
       );
       dm-keybindings = getExe (pkgs.callPackage ./_files/scripts/dm-keybindings.nix { });
+      cmd-launch-webapp = getExe (
+        pkgs.callPackage ../_scripts/cmd-launch-webapp.nix { inherit (osConfig.antob.rofi) launchPrefix; }
+      );
       dm-vpn =
         if osConfig.antob ? networkd-vpn then
           getExe (pkgs.callPackage ../_scripts/dm-networkd-vpn.nix { config = osConfig; })
@@ -263,7 +266,10 @@ in
 
           hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
           hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
-          hl.animation({ leaf = "windows", enabled = true, speed = 4.79, bezier = "easeOutQuint" })
+          local slideSpeed = 4.79 -- deciseconds; shared by window moves and workspace slides
+          hl.animation({ leaf = "windows", enabled = true, speed = slideSpeed, bezier = "easeOutQuint" })
+          local windowsMoveAnim = { leaf = "windowsMove", enabled = true, speed = slideSpeed, bezier = "easeOutQuint" }
+          hl.animation(windowsMoveAnim)
           hl.animation({ leaf = "windowsIn", enabled = true, speed = 4.1, bezier = "easeOutQuint", style = "popin 87%" })
           hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
           hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
@@ -280,9 +286,11 @@ in
           hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
           hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
           -- Slide workspaces vertically, with the same speed and curve as moving between
-          -- columns in the scrolling layout (windowsMove, inherited from windows).
+          -- columns in the scrolling layout (windowsMove).
           -- Higher workspace numbers slide in from below.
-          hl.animation({ leaf = "workspaces", enabled = true, speed = 4.79, bezier = "easeOutQuint", style = "slidevert" })
+          hl.animation({ leaf = "workspaces", enabled = true, speed = slideSpeed, bezier = "easeOutQuint", style = "slidevert" })
+          local specialWorkspaceAnim = { leaf = "specialWorkspace", enabled = true, speed = slideSpeed, bezier = "easeOutQuint", style = "slidevert" }
+          hl.animation(specialWorkspaceAnim)
 
           ----------------------------------------------------------------------------
           -- Layouts and groups
@@ -590,10 +598,11 @@ in
           -- local chromium = "uwsm app -- chromium --app="
 
           -- Pick the dispatcher for the active workspace's tiled layout (scrolling,
-          -- master, monocle, dwindle), falling back to `default`.
+          -- master, monocle, dwindle), falling back to `default`. An open special
+          -- workspace takes precedence, as layout messages go to it.
           local function perLayout(dispatchers)
             return function()
-              local ws = hl.get_active_workspace()
+              local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
               local d = dispatchers[ws and ws.tiled_layout] or dispatchers.default
               if d then
                 hl.dispatch(d)
@@ -659,6 +668,190 @@ in
           hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(tmuxTerminal), { description = "Terminal (tmux)" })
           hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(terminal), { description = "Terminal" })
           hl.bind(mainMod .. " + ALT + Return", hl.dsp.exec_cmd("${dm-herdr-session}"), { description = "Herdr" })
+          -- Scratchpads: centred floating apps, each on its own special workspace.
+          -- Mod + grave toggles the last used one; Mod + Left/Right step between them while open.
+          local scratchpads = {
+            { name = "music", class = "chrome-music.antob.net__-Default", cmd = "${cmd-launch-webapp} https://music.antob.net", size = 0.7 },
+            { name = "obsidian", class = "md.obsidian.Obsidian", cmd = "uwsm app -- obsidian", size = 0.7 },
+            { name = "term", class = "scratchpad", cmd = terminal .. " --class scratchpad", size = 0.6 },
+          }
+          local lastScratchpad = 1
+
+          -- Enabled only while a scratchpad launches its app, so launcher starts open normally
+          for _, s in ipairs(scratchpads) do
+            s.ws = "special:" .. s.name
+            s.rule = hl.window_rule({
+              name = "scratchpad-" .. s.name,
+              enabled = false,
+              match = { class = "^" .. (s.class:gsub("%.", "\\.")) .. "$" },
+              float = true,
+              center = true,
+              size = { "monitor_w*" .. s.size, "monitor_h*" .. s.size },
+              workspace = s.ws .. " silent",
+            })
+          end
+
+          -- set_enabled re-applies every rule to every window, so skip it when already off
+          local function disableRule(s)
+            if s.rule:is_enabled() then s.rule:set_enabled(false) end
+          end
+
+          hl.on("window.open", function(win)
+            for _, s in ipairs(scratchpads) do
+              if win.class == s.class then disableRule(s) end
+            end
+          end)
+
+          -- Overview: every running scratchpad app tiled together on one special workspace.
+          hl.layout.register("grid", {
+            recalculate = function(ctx)
+              local n = #ctx.targets
+              local cols = math.ceil(math.sqrt(n))
+              for i, target in ipairs(ctx.targets) do
+                target:place(n <= 3 and ctx:column(i, n) or ctx:grid_cell(i, cols))
+              end
+            end,
+          })
+
+          local overview = "scratchpads"
+          local overviewWs = "special:" .. overview
+          hl.workspace_rule({ workspace = overviewWs, layout = "grid" })
+
+          local function activeSpecial()
+            local special = hl.get_active_special_workspace()
+            return special and special.name
+          end
+
+          local function overviewOpen()
+            return activeSpecial() == overviewWs
+          end
+
+          local function visibleScratchpad()
+            local name = activeSpecial()
+            for i, s in ipairs(scratchpads) do
+              if name == s.ws then return i end
+            end
+          end
+
+          local function scratchpadIndex(class)
+            for i, s in ipairs(scratchpads) do
+              if s.class == class then return i end
+            end
+          end
+
+          local function onWorkspace(win, ws)
+            return win.workspace and win.workspace.name == ws
+          end
+
+          local function eachScratchpadWindow(fn)
+            for _, s in ipairs(scratchpads) do
+              for _, win in ipairs(hl.get_windows({ class = s.class })) do fn(win, s) end
+            end
+          end
+
+          local function withoutAnim(anim, fn)
+            hl.animation({ leaf = anim.leaf, enabled = false })
+            fn()
+            hl.timer(function() hl.animation(anim) end, { timeout = 50, type = "oneshot" })
+          end
+
+          local function placeScratchpad(win, s)
+            hl.dispatch(hl.dsp.window.move({ workspace = s.ws, follow = false, window = win }))
+            hl.dispatch(hl.dsp.window.float({ action = "enable", window = win }))
+            local mon = win.monitor
+            if mon then
+              hl.dispatch(hl.dsp.window.resize({ x = mon.width / mon.scale * s.size, y = mon.height / mon.scale * s.size, window = win }))
+            end
+            hl.dispatch(hl.dsp.window.center({ window = win }))
+          end
+
+          local function scratchpadWindow(s)
+            local wins = hl.get_windows({ class = s.class })
+            for _, win in ipairs(wins) do
+              if onWorkspace(win, s.ws) then return win end
+            end
+            return wins[1]
+          end
+
+          -- Launch the app, or pull it in if it was opened elsewhere or tiled, then show it.
+          local function showScratchpad(i)
+            local s = scratchpads[i]
+            local win = scratchpadWindow(s)
+            if not win then
+              s.rule:set_enabled(true)
+              hl.exec_cmd(s.cmd)
+              -- In case the app never opens a window
+              hl.timer(function() disableRule(s) end, { timeout = 15000, type = "oneshot" })
+            elseif not (win.floating and onWorkspace(win, s.ws)) then
+              placeScratchpad(win, s)
+            end
+            hl.dispatch(hl.dsp.workspace.toggle_special(s.name))
+            lastScratchpad = i
+          end
+
+          local function hideScratchpad()
+            local i = visibleScratchpad()
+            if i then hl.dispatch(hl.dsp.workspace.toggle_special(scratchpads[i].name)) end
+            return i
+          end
+
+          -- windowsMove is off so the windows are already tiled as the overview slides in
+          local function openOverview()
+            withoutAnim(windowsMoveAnim, function()
+              local found = false
+              eachScratchpadWindow(function(win, s)
+                if onWorkspace(win, s.ws) or onWorkspace(win, overviewWs) then
+                  hl.dispatch(hl.dsp.window.move({ workspace = overviewWs, follow = false, window = win }))
+                  hl.dispatch(hl.dsp.window.float({ action = "disable", window = win }))
+                  found = true
+                end
+              end)
+              if found then hl.dispatch(hl.dsp.workspace.toggle_special(overview)) end
+            end)
+          end
+
+          -- Wait for the overview to slide out; moving windows earlier cuts the animation short
+          local function restoreOverviewLater()
+            hl.timer(function()
+              if overviewOpen() then return end
+              eachScratchpadWindow(function(win, s)
+                if onWorkspace(win, overviewWs) then placeScratchpad(win, s) end
+              end)
+            end, { timeout = math.ceil(slideSpeed * 100) + 50, type = "oneshot" })
+          end
+
+          local function closeOverview()
+            hl.dispatch(hl.dsp.workspace.toggle_special(overview))
+            restoreOverviewLater()
+          end
+
+          hl.bind(mainMod .. " + grave", function()
+            if overviewOpen() then
+              local active = hl.get_active_window()
+              lastScratchpad = (active and scratchpadIndex(active.class)) or lastScratchpad
+              showScratchpad(lastScratchpad)
+              restoreOverviewLater()
+            elseif not hideScratchpad() then
+              showScratchpad(lastScratchpad)
+            end
+          end, { description = "Toggle scratchpad" })
+
+          -- While a scratchpad is open, step to the previous/next app without the slide animation
+          local function scratchpadOr(step, fallback)
+            return function()
+              local i = visibleScratchpad()
+              if not i then return fallback() end
+              withoutAnim(specialWorkspaceAnim, function()
+                showScratchpad((i - 1 + step) % #scratchpads + 1)
+              end)
+            end
+          end
+          hl.bind("CTRL + grave", function()
+            if overviewOpen() then closeOverview() else openOverview() end
+          end, { description = "Scratchpad overview" })
+          hl.bind(mainMod .. " + Escape", function()
+            if overviewOpen() then closeOverview() else hideScratchpad() end
+          end, { description = "Hide scratchpad" })
           hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("uwsm app -- nautilus --new-window"), { description = "File manager" })
           hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(browser), { description = "Web browser" })
           hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("${dm-firefox-profile}"), { description = "Select Firefox profile" })
@@ -772,16 +965,16 @@ in
             default = hl.dsp.focus({ direction = "down" }),
           }), { description = "Focus window or workspace down" })
 
-          hl.bind(mainMod .. " + left", perLayout({
+          hl.bind(mainMod .. " + left", scratchpadOr(-1, perLayout({
             scrolling = hl.dsp.layout("focus l"),
             monocle = hl.dsp.layout("cycleprev"),
             default = hl.dsp.focus({ direction = "left" }),
-          }), { description = "Move focus left" })
-          hl.bind(mainMod .. " + right", perLayout({
+          })), { description = "Move focus left or previous scratchpad" })
+          hl.bind(mainMod .. " + right", scratchpadOr(1, perLayout({
             scrolling = hl.dsp.layout("focus r"),
             monocle = hl.dsp.layout("cyclenext"),
             default = hl.dsp.focus({ direction = "right" }),
-          }), { description = "Move focus right" })
+          })), { description = "Move focus right or next scratchpad" })
 
           -- Focus next/previous column, wrapping around like Niri's
           -- focus-column-right-or-first. scrolling:wrap_focus is off (so Mod + Left/Right
