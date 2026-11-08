@@ -90,6 +90,9 @@ in
       # Keeping off 2.4GHz also leaves that band to the Bolt/Bluetooth mouse.
       networking.wireless.iwd.settings.Rank.BandModifier2_4GHz = "0.0";
 
+      # eth0 is only a Wake-on-LAN cable to pidesk and never gets a lease.
+      systemd.network.networks."10-lan".linkConfig.RequiredForOnline = mkForce "no";
+
       # Enable ROCm support in nixpkgs
       nixpkgs.config.rocmSupport = true;
 
