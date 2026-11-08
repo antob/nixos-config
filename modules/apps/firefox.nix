@@ -27,7 +27,63 @@ in
     with lib;
     let
       userHome = "/home/${osConfig.antob.user.name}";
-      colors = osConfig.lib.stylix.colors.withHashtag;
+      # Firefox Color theme from the Stylix scheme.
+      stylixTheme =
+        let
+          inherit (osConfig.lib.stylix) colors;
+          mkColor = base: {
+            r = toInt colors."${base}-rgb-r";
+            g = toInt colors."${base}-rgb-g";
+            b = toInt colors."${base}-rgb-b";
+          };
+          frame = mkColor "base00";
+          panel = mkColor "base01";
+          toolbar = mkColor "base02";
+          highlight = mkColor "base02";
+          text = mkColor "base05";
+          accent = mkColor "base0C";
+        in
+        {
+          title = "Stylix";
+          images.additional_backgrounds = [ ];
+          colors = {
+            inherit frame toolbar;
+            frame_inactive = frame;
+            tab_background_text = text;
+            tab_text = text;
+            tab_selected = toolbar;
+            tab_line = toolbar; # hides the selected-tab outline
+            tab_loading = accent;
+            tab_background_separator = toolbar;
+            toolbar_text = text;
+            icons = accent;
+            icons_attention = accent;
+            bookmark_text = text;
+            button_background_active = frame;
+            toolbar_bottom_separator = frame;
+            toolbar_vertical_separator = frame;
+            toolbar_field = frame;
+            toolbar_field_text = text;
+            toolbar_field_focus = frame;
+            toolbar_field_border = frame;
+            toolbar_field_border_focus = accent;
+            toolbar_field_separator = toolbar;
+            toolbar_field_highlight = highlight;
+            toolbar_field_highlight_text = text;
+            popup = panel;
+            popup_text = text;
+            popup_border = frame;
+            popup_highlight = highlight;
+            popup_highlight_text = text;
+            sidebar = frame;
+            sidebar_text = text;
+            sidebar_border = toolbar;
+            sidebar_highlight = highlight;
+            sidebar_highlight_text = text;
+            ntp_background = frame;
+            ntp_text = text;
+          };
+        };
       betterfoxSettings = {
         securefox = {
           enable = true;
@@ -61,6 +117,8 @@ in
         "accessibility.force_disabled" = 1; # disable Accessibility features
         "security.cert_pinning.enforcement_level" = 2; # strict public key pinning
         "privacy.userContext.enabled" = true; # enable container tabs
+        "extensions.autoDisableScopes" = 0; # don't auto-disable add-ons installed by Home Manager
+        "browser.uidensity" = 2; # touch density: taller tabs and toolbar
         "browser.formfill.enable" = lib.mkForce true; # remember form field entries
 
         # make Strict ETP less aggressive
@@ -143,56 +201,34 @@ in
         "media.ffmpeg.vaapi.enabled" = true;
         "media.navigator.enabled" = false;
         "layout.spellcheckDefault" = 0;
-
-        ## FIREFOX GNOME THEME
-        "gnomeTheme.allTabsButtonOnOverflow" = true; # show "List All Tabs" button on tab overflow
       };
-      userChrome = mkAfter ''
-        :root {
-          --gnome-entry-focused-border-color: ${colors.base0C} !important;
-          --gnome-window-color: ${colors.base06} !important;
-          --gnome-view-color: ${colors.base06} !important;
-          --gnome-menu-color: ${colors.base06} !important;
-          --toolbox-textcolor: ${colors.base06} !important;
-          --toolbox-textcolor-inactive: ${colors.base06} !important;
-          --toolbar-color: ${colors.base06} !important;
-          --gnome-toolbar-icon-fill: ${colors.base06} !important;
-          --gnome-tabbar-tab-active-background: ${colors.base03} !important;
-          --gnome-tabbar-tab-active-hover-background: color-mix(in srgb, ${colors.base03} 80%, ${colors.base04}) !important;
-        }
-        input::placeholder,
-        .urlbar-input::placeholder,
-        .searchbar-textbox::placeholder {
-          color: var(--gnome-window-color) !important;
-          opacity: 1 !important;
-        }
-        /* GNOME theme's 6px panel padding clips the Ctrl+Tab focus ring, which sits 10px above each preview. */
-        #ctrlTab-panel {
-          --panel-padding: 20px 10px 10px !important;
-        }
-        .ctrlTab-preview:focus > .ctrlTab-preview-inner,
-        #ctrlTab-showAll:focus {
-          border-color: ${colors.base0C} !important;
-        }
-      '';
-      commonExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        ublock-origin
-        duckduckgo-privacy-essentials
-        multi-account-containers
-        linkhints
-        bitwarden
-      ];
+      commonExtensions = {
+        packages = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          duckduckgo-privacy-essentials
+          multi-account-containers
+          linkhints
+          bitwarden
+          firefox-color
+        ];
+        settings."FirefoxColor@mozilla.com" = {
+          force = true;
+          settings = {
+            firstRunDone = true;
+            theme = stylixTheme;
+          };
+        };
+      };
     in
     {
       imports = [
         inputs.betterfox.homeModules.betterfox
       ];
 
-      # firefox-gnome-theme (userChrome/userContent) coloured from Stylix.
+      # Only Stylix's reader-mode colours; the browser chrome uses stylixTheme.
       stylix.targets.firefox = {
         enable = true;
         fonts.enable = false;
-        firefoxGnomeTheme.enable = true;
         profileNames = [
           osConfig.antob.user.name
           "HL"
@@ -214,8 +250,7 @@ in
               force = true;
             };
             settings = commonSettings;
-            extensions.packages = commonExtensions;
-            inherit userChrome;
+            extensions = commonExtensions;
           };
 
           "HL" = {
@@ -227,8 +262,7 @@ in
               force = true;
             };
             settings = commonSettings;
-            extensions.packages = commonExtensions;
-            inherit userChrome;
+            extensions = commonExtensions;
           };
 
           "OBIT" = {
@@ -240,8 +274,7 @@ in
               force = true;
             };
             settings = commonSettings;
-            extensions.packages = commonExtensions;
-            inherit userChrome;
+            extensions = commonExtensions;
           };
 
           "Puzzel" = {
@@ -253,8 +286,7 @@ in
               force = true;
             };
             settings = commonSettings;
-            extensions.packages = commonExtensions;
-            inherit userChrome;
+            extensions = commonExtensions;
           };
         };
 

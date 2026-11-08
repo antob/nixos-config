@@ -38,10 +38,12 @@
     # Stylix - System-wide colour and font theming
     stylix = {
       url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nur.follows = "nur";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.firefox-gnome-theme.follows = "firefox-gnome-theme";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nur.follows = "nur";
+        flake-parts.follows = "flake-parts";
+        firefox-gnome-theme.follows = "firefox-gnome-theme";
+      };
     };
 
     # Firefox GNOME theme - tracks upstream so it keeps up with Firefox releases
