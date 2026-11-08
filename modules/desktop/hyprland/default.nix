@@ -435,7 +435,7 @@ in
           })
           hl.window_rule({
             name = "opaque-apps",
-            match = { class = "^(firefox|Alacritty)$" },
+            match = { class = "^(firefox|Alacritty|org.gnome.Nautilus)$" },
             opacity = "1 1",
           })
 
