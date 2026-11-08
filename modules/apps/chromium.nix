@@ -15,8 +15,10 @@
           "g"
           "b"
         ];
+      # Halfway between two base16 slots, like flake.lib.mixColors.
+      mix = a: b: lib.zipListsWith (x: y: (x + y) / 2) (rgb a) (rgb b);
 
-      # Unpacked theme extension, coloured like the Firefox Stylix target.
+      # Unpacked theme extension, coloured like the Firefox theme (modules/apps/firefox.nix).
       theme = pkgs.writeTextDir "manifest.json" (
         builtins.toJSON {
           manifest_version = 3;
@@ -29,8 +31,8 @@
             frame_incognito_inactive = rgb "base00";
             background_tab = rgb "base00";
             background_tab_inactive = rgb "base00";
-            background_tab_text = rgb "base04";
-            toolbar = rgb "base01";
+            background_tab_text = rgb "base05";
+            toolbar = mix "base01" "base02";
             tab_text = rgb "base05";
             toolbar_text = rgb "base05";
             toolbar_button_icon = rgb "base05";
