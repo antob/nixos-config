@@ -497,7 +497,7 @@ in
             name = "noctalia-settings",
             match = { class = "dev.noctalia.Noctalia" },
             float = true,
-            size = { 1080, 920 },
+            size = { "1080", "monitor_h*0.75" },
           })
 
           -- fs-uae
