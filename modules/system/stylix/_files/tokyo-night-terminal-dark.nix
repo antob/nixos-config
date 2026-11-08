@@ -1,4 +1,4 @@
-# tinted-theming/schemes base16/tokyo-night-terminal-dark.yaml
+# tinted-theming/schemes base16/tokyo-night-terminal-dark.yaml, with a neutral base03
 {
   system = "base16";
   name = "Tokyo Night Terminal Dark";
@@ -8,7 +8,7 @@
     base00 = "#16161E";
     base01 = "#1A1B26";
     base02 = "#2F3549";
-    base03 = "#444B6A";
+    base03 = "#4C4C4C"; # upstream #444B6A, desaturated to a neutral grey of the same brightness
     base04 = "#787C99";
     base05 = "#CBCCD1";
     base06 = "#CBCCD1";
