@@ -547,10 +547,32 @@ in
           -- Do not animate fullscreen windows
           hl.window_rule({ name = "no-anim-fullscreen", match = { fullscreen = true }, no_anim = true })
 
-          -- Float and resize the Bitwarden browser extension popup. Its title is only
-          -- set after the window opens, so a static window rule can't match it.
+          -- Float and resize the Bitwarden browser extension popup. Firefox maps every new
+          -- window as "Mozilla Firefox" and sets the real title ~50ms later, so float them all
+          -- at open (keeping the scrolling layout still) and tile the ones that aren't Bitwarden.
+          hl.window_rule({
+            name = "firefox-untitled",
+            match = { class = "^firefox$", initial_title = "^Mozilla Firefox$" },
+            float = true,
+          })
+          local firefoxUntitled = {}
+          hl.on("window.open", function(w)
+            if w.class == "firefox" and w.initial_title == "Mozilla Firefox" then
+              firefoxUntitled[w.stable_id] = true
+            end
+          end)
           hl.on("window.title", function(w)
-            if w.title and w.title:find("(Bitwarden Password Manager) - Bitwarden", 1, true) then
+            if not w.title then
+              return
+            end
+            local isBitwarden = w.title:find("Extension: (Bitwarden Password Manager)", 1, true)
+            if firefoxUntitled[w.stable_id] then
+              firefoxUntitled[w.stable_id] = nil
+              if not isBitwarden then
+                hl.dispatch(hl.dsp.window.float({ action = "disable", window = w }))
+              end
+            end
+            if w.title:find("(Bitwarden Password Manager) - Bitwarden", 1, true) then
               hl.dispatch(hl.dsp.window.set_prop({ prop = "no_anim", value = "on", window = w }))
               hl.dispatch(hl.dsp.window.set_prop({ prop = "no_screen_share", value = "on", window = w }))
               hl.dispatch(hl.dsp.window.float({ action = "enable", window = w }))
