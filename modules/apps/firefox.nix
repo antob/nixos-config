@@ -224,6 +224,16 @@ in
           outline-offset: -1px !important;
         }
       '';
+      # Bitwarden's popup starts on its light theme and adds theme_dark/theme_light once loaded.
+      userContent = ''
+        @-moz-document regexp("moz-extension://[^/]+/popup/index\\.html.*") {
+          html.browser_firefox:not(.theme_dark, .theme_light),
+          html.browser_firefox:not(.theme_dark, .theme_light) body {
+            background-color: ${hexColors.base00} !important;
+            color: ${hexColors.base05} !important;
+          }
+        }
+      '';
       commonExtensions = {
         packages = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
@@ -301,7 +311,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
-            inherit userChrome;
+            inherit userChrome userContent;
           };
 
           "HL" = {
@@ -314,7 +324,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
-            inherit userChrome;
+            inherit userChrome userContent;
           };
 
           "OBIT" = {
@@ -327,7 +337,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
-            inherit userChrome;
+            inherit userChrome userContent;
           };
 
           "Puzzel" = {
@@ -340,7 +350,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
-            inherit userChrome;
+            inherit userChrome userContent;
           };
         };
 
