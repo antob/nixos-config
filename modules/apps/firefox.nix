@@ -35,13 +35,16 @@ in
         g = channel base "g";
         b = channel base "b";
       };
-      selection = mkColor "base03";
+      # Halfway between two base16 slots, like flake.lib.mixColors.
+      mkMix = a: b: mapAttrs (ch: v: (v + (mkColor b).${ch}) / 2) (mkColor a);
+      selection = mkColor "base0C";
+      selectionText = mkColor "base00";
       # Firefox Color theme from the Stylix scheme.
       stylixTheme =
         let
           frame = mkColor "base00";
           panel = mkColor "base01";
-          toolbar = mkColor "base02";
+          toolbar = mkMix "base01" "base02";
           highlight = mkColor "base02";
           text = mkColor "base05";
           accent = mkColor "base0C";
@@ -55,7 +58,7 @@ in
             tab_background_text = text;
             tab_text = text;
             tab_selected = toolbar;
-            tab_line = toolbar; # hides the selected-tab outline
+            tab_line = accent; # selected-tab ring, widened in userChrome
             tab_loading = text;
             tab_background_separator = toolbar;
             toolbar_text = text;
@@ -72,7 +75,7 @@ in
             toolbar_field_border_focus = accent;
             toolbar_field_separator = toolbar;
             toolbar_field_highlight = selection;
-            toolbar_field_highlight_text = text;
+            toolbar_field_highlight_text = selectionText;
             popup = panel;
             popup_text = text;
             popup_border = frame;
@@ -82,7 +85,7 @@ in
             sidebar_text = text;
             sidebar_border = toolbar;
             sidebar_highlight = selection;
-            sidebar_highlight_text = text;
+            sidebar_highlight_text = selectionText;
             ntp_background = frame;
             ntp_text = text;
           };
@@ -131,8 +134,8 @@ in
         # System colours used where the Firefox Color theme doesn't reach (sidebar, dialogs, pages).
         "ui.accentcolor" = hexColors.base0C;
         "ui.accentcolortext" = hexColors.base00;
-        "ui.highlight" = hexColors.base03;
-        "ui.highlighttext" = hexColors.base05;
+        "ui.highlight" = hexColors.base0C;
+        "ui.highlighttext" = hexColors.base00;
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # load userChrome.css
         "browser.formfill.enable" = lib.mkForce true; # remember form field entries
 
@@ -219,6 +222,10 @@ in
       };
       # Firefox hard-codes a yellow dotted outline on the focused row of tree lists (sidebar, Library).
       userChrome = ''
+        .tab-background:is([selected], [multiselected]) {
+          outline-width: 2px !important;
+          outline-offset: -2px !important;
+        }
         treechildren::-moz-tree-row(current, focus) {
           outline: 1px solid ${hexColors.base0C} !important;
           outline-offset: -1px !important;
@@ -257,33 +264,36 @@ in
         inputs.betterfox.homeModules.betterfox
       ];
 
-      # Firefox Color imports storage.js only into an empty database, so clear it when the theme
-      # changes. Skips profiles in use; they are retried on the next activation (switch or boot).
-      home.activation.resetFirefoxColor = hm.dag.entryAfter [ "linkGeneration" ] ''
-        themeHash=${builtins.hashString "sha256" (builtins.toJSON stylixTheme)}
-        for profile in ${
-          concatMapStringsSep " " (p: escapeShellArg p.path) (attrValues config.programs.firefox.profiles)
-        }; do
-          dir=${escapeShellArg config.programs.firefox.configPath}/$profile
-          stamp=$dir/.firefox-color-theme
-          [[ -f $dir/prefs.js ]] || continue
-          [[ -f $stamp && $(<"$stamp") == "$themeHash" ]] && continue
+      # Firefox Color imports storage.js only into an empty database, so a `firefox` launcher
+      # clears it before start-up when the theme has changed. Profiles in use are skipped.
+      home.packages = [
+        (hiPrio (
+          pkgs.writeShellScriptBin "firefox" ''
+            themeHash=${builtins.hashString "sha256" (builtins.toJSON stylixTheme)}
+            for profile in ${
+              concatMapStringsSep " " (p: escapeShellArg p.path) (attrValues config.programs.firefox.profiles)
+            }; do
+              dir=${escapeShellArg config.programs.firefox.configPath}/$profile
+              stamp=$dir/.firefox-color-theme
+              [[ -f $dir/prefs.js ]] || continue
+              [[ -f $stamp && $(<"$stamp") == "$themeHash" ]] && continue
 
-          if [[ -L $dir/lock ]]; then
-            pid=$(readlink "$dir/lock"); pid=''${pid##*+}
-            if [[ $(cat /proc/"$pid"/comm 2>/dev/null) == *firefox* ]]; then
-              warnEcho "Firefox is running with profile $profile; Firefox Color theme not reset."
-              continue
-            fi
-          fi
+              if [[ -L $dir/lock ]]; then
+                pid=$(readlink "$dir/lock")
+                [[ $(cat /proc/"''${pid##*+}"/comm 2>/dev/null) == *firefox* ]] && continue
+              fi
 
-          uuid=$(grep -oP 'FirefoxColor@mozilla\.com\\":\\"\K[0-9a-f-]+' "$dir/prefs.js" || true)
-          if [[ -n $uuid ]]; then
-            run rm -rf -- "$dir/storage/default/moz-extension+++$uuid^userContextId=4294967295"
-          fi
-          run tee "$stamp" <<<"$themeHash" >/dev/null
-        done
-      '';
+              uuid=$(grep -oP 'FirefoxColor@mozilla\.com\\":\\"\K[0-9a-f-]+' "$dir/prefs.js" || true)
+              if [[ -n $uuid ]]; then
+                rm -rf -- "$dir/storage/default/moz-extension+++$uuid^userContextId=4294967295"
+              fi
+              echo "$themeHash" >"$stamp"
+            done
+
+            exec ${getExe config.programs.firefox.finalPackage} "$@"
+          ''
+        ))
+      ];
 
       # Only Stylix's reader-mode colours; the browser chrome uses stylixTheme.
       stylix.targets.firefox = {
