@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.flake.lib) mkBoolOpt;
+  inherit (config.flake.lib) mkBoolOpt mixColors;
   inherit (config.aspects) homeManager;
 in
 {
@@ -53,7 +53,7 @@ in
       windowText = "#{?#{m:* pi *, #{P:#{@agent} }},#[fg=${c.base0D}]π ,}#{?#{m:* claude *, #{P:#{@agent} }},#[fg=${c.base09}]✻ ,}#[fg=${c.base05}]#W#{?@workmux_status, #{s/🤖/󰚩/:@workmux_status},}";
       # Catppuccin's basic layout (number block + title block), coloured from Stylix.
       theme = /* tmux */ ''
-        set -g status-style "bg=${c.base01},fg=${c.base05}"
+        set -g status-style "bg=${mixColors osConfig.lib.stylix.colors "base01" "base02"},fg=${c.base05}"
         set -g message-style "fg=${c.base0C},bg=${c.base03},align=centre"
         set -g message-command-style "fg=${c.base0C},bg=${c.base03},align=centre"
         set -g menu-selected-style "fg=${c.base05},bold,bg=${c.base03}"
