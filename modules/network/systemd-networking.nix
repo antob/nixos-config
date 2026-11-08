@@ -87,7 +87,6 @@ in
               matchConfig.Name = "wlan0";
               networkConfig = {
                 DHCP = "yes";
-                IgnoreCarrierLoss = "3s";
                 MulticastDNS = true;
               };
             };
