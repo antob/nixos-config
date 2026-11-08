@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.aspects) homeManager nixos;
+  inherit (config.flake.lib) mixColors;
 in
 {
   flake.modules.nixos.noctalia =
@@ -67,7 +68,7 @@ in
       vpnCfg = osConfig.antob.networkd-vpn;
       theme = import ./_files/stylix-palette.nix {
         inherit (osConfig.lib.stylix) colors;
-        inherit lib;
+        inherit mixColors;
       };
       # Input for the vpn-status plugin: the VPNs to watch and the menu opened on click.
       vpnStatusConfig = builtins.toJSON {

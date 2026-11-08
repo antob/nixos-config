@@ -1,23 +1,8 @@
 # Noctalia palette from the Stylix colours (roles as in the old Doomed-Cyan theme).
-{ colors, lib }:
+{ colors, mixColors }:
 let
   c = colors.withHashtag;
-  mix =
-    a: b:
-    let
-      channel =
-        ch:
-        let
-          avg = (lib.toInt colors."${a}-rgb-${ch}" + lib.toInt colors."${b}-rgb-${ch}") / 2;
-        in
-        lib.fixedWidthString 2 "0" (lib.toHexString avg);
-    in
-    "#"
-    + lib.concatMapStrings channel [
-      "r"
-      "g"
-      "b"
-    ];
+  mix = mixColors colors;
 in
 {
   name = "Stylix";
