@@ -53,11 +53,11 @@ in
             tab_text = text;
             tab_selected = toolbar;
             tab_line = toolbar; # hides the selected-tab outline
-            tab_loading = accent;
+            tab_loading = text;
             tab_background_separator = toolbar;
             toolbar_text = text;
-            icons = accent;
-            icons_attention = accent;
+            icons = text;
+            icons_attention = text;
             bookmark_text = text;
             button_background_active = frame;
             toolbar_bottom_separator = frame;
