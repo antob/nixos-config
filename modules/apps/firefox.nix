@@ -19,6 +19,7 @@ in
 
   flake.modules.homeManager.firefox =
     {
+      config,
       osConfig,
       lib,
       pkgs,
@@ -120,6 +121,11 @@ in
         "security.cert_pinning.enforcement_level" = 2; # strict public key pinning
         "privacy.userContext.enabled" = true; # enable container tabs
         "extensions.autoDisableScopes" = 0; # don't auto-disable add-ons installed by Home Manager
+        # HM disables this when extensions.settings is used, which hides every add-on's saved data.
+        # Firefox Color still imports its storage.js once, into its empty database.
+        "extensions.webextensions.ExtensionStorageIDB.enabled" = true;
+        # Lets Firefox Color re-import storage.js after resetFirefoxColor empties its database.
+        "extensions.webextensions.ExtensionStorageIDB.migrated.FirefoxColor@mozilla.com" = false;
         "browser.uidensity" = 2; # touch density: taller tabs and toolbar
 
         # System colours used where the Firefox Color theme doesn't reach (sidebar, dialogs, pages).
@@ -240,6 +246,34 @@ in
       imports = [
         inputs.betterfox.homeModules.betterfox
       ];
+
+      # Firefox Color imports storage.js only into an empty database, so clear it when the theme
+      # changes. Skips profiles in use; they are retried on the next activation (switch or boot).
+      home.activation.resetFirefoxColor = hm.dag.entryAfter [ "linkGeneration" ] ''
+        themeHash=${builtins.hashString "sha256" (builtins.toJSON stylixTheme)}
+        for profile in ${
+          concatMapStringsSep " " (p: escapeShellArg p.path) (attrValues config.programs.firefox.profiles)
+        }; do
+          dir=${escapeShellArg config.programs.firefox.configPath}/$profile
+          stamp=$dir/.firefox-color-theme
+          [[ -f $dir/prefs.js ]] || continue
+          [[ -f $stamp && $(<"$stamp") == "$themeHash" ]] && continue
+
+          if [[ -L $dir/lock ]]; then
+            pid=$(readlink "$dir/lock"); pid=''${pid##*+}
+            if [[ $(cat /proc/"$pid"/comm 2>/dev/null) == *firefox* ]]; then
+              warnEcho "Firefox is running with profile $profile; Firefox Color theme not reset."
+              continue
+            fi
+          fi
+
+          uuid=$(grep -oP 'FirefoxColor@mozilla\.com\\":\\"\K[0-9a-f-]+' "$dir/prefs.js" || true)
+          if [[ -n $uuid ]]; then
+            run rm -rf -- "$dir/storage/default/moz-extension+++$uuid^userContextId=4294967295"
+          fi
+          run tee "$stamp" <<<"$themeHash" >/dev/null
+        done
+      '';
 
       # Only Stylix's reader-mode colours; the browser chrome uses stylixTheme.
       stylix.targets.firefox = {
