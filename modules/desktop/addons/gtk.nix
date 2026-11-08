@@ -50,6 +50,7 @@ in
     { osConfig, lib, ... }:
     let
       cfg = osConfig.antob.gtk;
+      inherit (osConfig.lib.stylix.colors) withHashtag;
     in
     {
       # Theme (adw-gtk3 + generated gtk.css) and cursor come from Stylix.
@@ -57,6 +58,11 @@ in
         enable = true;
         fonts.enable = false;
         flatpakSupport.enable = false;
+        # Stylix uses base0D; match the cyan accent used elsewhere.
+        extraCss = ''
+          @define-color accent_color ${withHashtag.base0C};
+          @define-color accent_bg_color ${withHashtag.base0C};
+        '';
       };
 
       gtk = {
