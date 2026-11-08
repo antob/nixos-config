@@ -58,10 +58,12 @@ in
         enable = true;
         fonts.enable = false;
         flatpakSupport.enable = false;
-        # Stylix uses base0D; match the cyan accent used elsewhere.
+        # Stylix uses base0D; match the cyan accent used elsewhere. The sidebar keeps the
+        # flat look of unfocused windows by blending into the window background.
         extraCss = ''
           @define-color accent_color ${withHashtag.base0C};
           @define-color accent_bg_color ${withHashtag.base0C};
+          @define-color sidebar_bg_color @window_bg_color;
         '';
       };
 
