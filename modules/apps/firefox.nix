@@ -27,15 +27,17 @@ in
     with lib;
     let
       userHome = "/home/${osConfig.antob.user.name}";
+      hexColors = osConfig.lib.stylix.colors.withHashtag;
+      channel = base: ch: toInt osConfig.lib.stylix.colors."${base}-rgb-${ch}";
+      mkColor = base: {
+        r = channel base "r";
+        g = channel base "g";
+        b = channel base "b";
+      };
+      selection = mkColor "base03";
       # Firefox Color theme from the Stylix scheme.
       stylixTheme =
         let
-          inherit (osConfig.lib.stylix) colors;
-          mkColor = base: {
-            r = toInt colors."${base}-rgb-r";
-            g = toInt colors."${base}-rgb-g";
-            b = toInt colors."${base}-rgb-b";
-          };
           frame = mkColor "base00";
           panel = mkColor "base01";
           toolbar = mkColor "base02";
@@ -68,7 +70,7 @@ in
             toolbar_field_border = frame;
             toolbar_field_border_focus = accent;
             toolbar_field_separator = toolbar;
-            toolbar_field_highlight = highlight;
+            toolbar_field_highlight = selection;
             toolbar_field_highlight_text = text;
             popup = panel;
             popup_text = text;
@@ -78,7 +80,7 @@ in
             sidebar = frame;
             sidebar_text = text;
             sidebar_border = toolbar;
-            sidebar_highlight = highlight;
+            sidebar_highlight = selection;
             sidebar_highlight_text = text;
             ntp_background = frame;
             ntp_text = text;
@@ -119,6 +121,13 @@ in
         "privacy.userContext.enabled" = true; # enable container tabs
         "extensions.autoDisableScopes" = 0; # don't auto-disable add-ons installed by Home Manager
         "browser.uidensity" = 2; # touch density: taller tabs and toolbar
+
+        # System colours used where the Firefox Color theme doesn't reach (sidebar, dialogs, pages).
+        "ui.accentcolor" = hexColors.base0C;
+        "ui.accentcolortext" = hexColors.base00;
+        "ui.highlight" = hexColors.base03;
+        "ui.highlighttext" = hexColors.base05;
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # load userChrome.css
         "browser.formfill.enable" = lib.mkForce true; # remember form field entries
 
         # make Strict ETP less aggressive
@@ -202,6 +211,13 @@ in
         "media.navigator.enabled" = false;
         "layout.spellcheckDefault" = 0;
       };
+      # Firefox hard-codes a yellow dotted outline on the focused row of tree lists (sidebar, Library).
+      userChrome = ''
+        treechildren::-moz-tree-row(current, focus) {
+          outline: 1px solid ${hexColors.base0C} !important;
+          outline-offset: -1px !important;
+        }
+      '';
       commonExtensions = {
         packages = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
@@ -251,6 +267,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
+            inherit userChrome;
           };
 
           "HL" = {
@@ -263,6 +280,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
+            inherit userChrome;
           };
 
           "OBIT" = {
@@ -275,6 +293,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
+            inherit userChrome;
           };
 
           "Puzzel" = {
@@ -287,6 +306,7 @@ in
             };
             settings = commonSettings;
             extensions = commonExtensions;
+            inherit userChrome;
           };
         };
 
