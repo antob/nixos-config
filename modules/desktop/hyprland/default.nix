@@ -547,36 +547,56 @@ in
           -- Do not animate fullscreen windows
           hl.window_rule({ name = "no-anim-fullscreen", match = { fullscreen = true }, no_anim = true })
 
-          -- Float and resize the Bitwarden browser extension popup. Firefox maps every new
-          -- window as "Mozilla Firefox" and sets the real title ~50ms later, so float them all
-          -- at open (keeping the scrolling layout still) and tile the ones that aren't Bitwarden.
+          -- Float and center the Bitwarden browser extension popup. Firefox maps every new
+          -- window as "Mozilla Firefox" and sets the real title ~50ms later, so park them on a
+          -- hidden workspace until then and bring them back tiled, or floating if Bitwarden.
+          local firefoxPendingWs = "special:firefox-pending"
           hl.window_rule({
             name = "firefox-untitled",
             match = { class = "^firefox$", initial_title = "^Mozilla Firefox$" },
-            float = true,
+            workspace = firefoxPendingWs .. " silent",
           })
-          local firefoxUntitled = {}
+
+          local function floatBitwarden(w)
+            hl.dispatch(hl.dsp.window.set_prop({ prop = "no_anim", value = "on", window = w }))
+            hl.dispatch(hl.dsp.window.set_prop({ prop = "no_screen_share", value = "on", window = w }))
+            hl.dispatch(hl.dsp.window.float({ action = "enable", window = w }))
+            hl.dispatch(hl.dsp.window.resize({ x = 500, y = 800, window = w }))
+          end
+
+          -- stable_id -> workspace the window was opened from
+          local firefoxPending = {}
+          local function unpark(w, isBitwarden)
+            local target = firefoxPending[w.stable_id]
+            firefoxPending[w.stable_id] = nil
+            if isBitwarden then floatBitwarden(w) end
+            hl.dispatch(hl.dsp.window.move({ workspace = target, follow = false, window = w }))
+            if isBitwarden then hl.dispatch(hl.dsp.window.center({ window = w })) end
+            hl.dispatch(hl.dsp.focus({ window = w }))
+          end
+
           hl.on("window.open", function(w)
-            if w.class == "firefox" and w.initial_title == "Mozilla Firefox" then
-              firefoxUntitled[w.stable_id] = true
-            end
-          end)
-          hl.on("window.title", function(w)
-            if not w.title then
-              return
-            end
-            local isBitwarden = w.title:find("Extension: (Bitwarden Password Manager)", 1, true)
-            if firefoxUntitled[w.stable_id] then
-              firefoxUntitled[w.stable_id] = nil
-              if not isBitwarden then
-                hl.dispatch(hl.dsp.window.float({ action = "disable", window = w }))
+            if not (w.class == "firefox" and w.initial_title == "Mozilla Firefox") then return end
+            local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
+            local id = w.stable_id
+            firefoxPending[id] = ws and (ws.special and ws.name or ws.id) or "e+0"
+            -- Pages without a title (e.g. an HTTP auth prompt) never send a title change
+            hl.timer(function()
+              if not firefoxPending[id] then return end
+              for _, win in ipairs(hl.get_windows({ class = "firefox" })) do
+                if win.stable_id == id then unpark(win, false) end
               end
-            end
-            if w.title:find("(Bitwarden Password Manager) - Bitwarden", 1, true) then
-              hl.dispatch(hl.dsp.window.set_prop({ prop = "no_anim", value = "on", window = w }))
-              hl.dispatch(hl.dsp.window.set_prop({ prop = "no_screen_share", value = "on", window = w }))
-              hl.dispatch(hl.dsp.window.float({ action = "enable", window = w }))
-              hl.dispatch(hl.dsp.window.resize({ x = 500, y = 800, window = w }))
+              firefoxPending[id] = nil
+            end, { timeout = 1000, type = "oneshot" })
+          end)
+
+          hl.on("window.title", function(w)
+            if not w.title then return end
+            if firefoxPending[w.stable_id] then
+              unpark(w, w.title:find("Extension: (Bitwarden Password Manager)", 1, true) ~= nil)
+            elseif w.title:find("(Bitwarden Password Manager) - Bitwarden", 1, true) then
+              floatBitwarden(w)
+              hl.dispatch(hl.dsp.window.center({ window = w }))
             end
           end)
 
