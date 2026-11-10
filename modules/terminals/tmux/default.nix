@@ -74,6 +74,32 @@ in
       sessionIcon = builtins.fromJSON ''"\ue795"'';
       sessionColor = "#{?client_prefix,${c.base08},${c.base0B}}";
       statusSession = "#[fg=${sessionColor}]█#[fg=${c.base00},bg=${sessionColor}]${sessionIcon} #[fg=${c.base05},bg=${c.base02}] #S#[fg=${c.base02}] ";
+      tmuxColumns = pkgs.writeShellApplication {
+        name = "tmux-columns";
+        runtimeInputs = [
+          config.programs.tmux.package
+          pkgs.jq
+        ];
+        # jq programs use $vars inside single quotes
+        excludeShellChecks = [ "SC2016" ];
+        text = builtins.readFile ./_files/tmux-columns.sh;
+      };
+      # Ctrl+Shift+Enter: new column right of this one; prefix Down/Right: split within the column;
+      # prefix Shift+Left/Right: swap the column with its neighbour.
+      columns = /* tmux */ ''
+        bind -n \uE010 run-shell "${getExe tmuxColumns} new '#{pane_id}'"
+        bind Down run-shell "${getExe tmuxColumns} down '#{pane_id}'"
+        bind Right run-shell "${getExe tmuxColumns} right '#{pane_id}'"
+        # Repeatable: keep tapping Shift+Left/Right within repeat-time to keep moving the column
+        bind -r S-Left run-shell "${getExe tmuxColumns} swap '#{pane_id}' left"
+        bind -r S-Right run-shell "${getExe tmuxColumns} swap '#{pane_id}' right"
+        # Snapshot layouts on split and focus change, so closing a pane evens out its container
+        # and moves focus within its column
+        set-hook -g after-split-window "run-shell '${getExe tmuxColumns} snapshot'"
+        set-hook -g after-select-pane "run-shell -b '${getExe tmuxColumns} snapshot #{window_id}'"
+        set-hook -g after-kill-pane "run-shell '${getExe tmuxColumns} closed'"
+        set-hook -g pane-exited "run-shell '${getExe tmuxColumns} closed'"
+      '';
       alacritty = config.programs.alacritty.enable;
       kitty = config.programs.kitty.enable;
       plugins = with pkgs; [
@@ -106,7 +132,11 @@ in
           terminal = "tmux-256color";
           historyLimit = 100000;
           extraConfig = builtins.concatStringsSep "\n" (
-            map lib.strings.fileContents configFiles ++ [ theme ]
+            map lib.strings.fileContents configFiles
+            ++ [
+              theme
+              columns
+            ]
           );
 
           inherit plugins;
