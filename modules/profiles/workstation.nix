@@ -27,6 +27,7 @@ in
         systemd-networking
         hyprland
         keyring
+        tailscale
       ];
 
       antob = {
