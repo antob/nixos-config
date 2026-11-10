@@ -55,9 +55,9 @@ in
         };
 
         gaming.display = {
-          width = 2560;
+          width = 3440;
           height = 1440;
-          refresh = 165;
+          refresh = 144;
         };
 
         system.env = {
