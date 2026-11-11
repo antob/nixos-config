@@ -70,6 +70,7 @@ in
         workstation
         gaming
         ddcutil
+        solaar
         ollama
         llama-cpp
         voxtype
