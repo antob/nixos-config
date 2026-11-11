@@ -126,6 +126,7 @@ in
             commonJailOptions
             ++ [
               (readwrite (noescape "~/.config/claude"))
+              (readonly config.sops.secrets.claude_signing_key.path)
               (try-fwd-env "CLAUDE_CONFIG_DIR")
               (try-fwd-env "CLAUDE_CODE_TMUX_TRUECOLOR")
               (try-fwd-env "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY")
@@ -194,6 +195,13 @@ in
           };
         };
 
+        # Lets Claude sign commits without a YubiKey touch; used via GIT_CONFIG_* in Claude's settings.json
+        sops.secrets.claude_signing_key = {
+          sopsFile = ../../hosts/common/secrets.yaml;
+          owner = user;
+          mode = "0400";
+        };
+
         systemd.tmpfiles.rules = [
           "d ${userHome}/.pi 0755 ${user} ${group} -"
           "d ${userHome}/.config/claude 0755 ${user} ${group} -"
@@ -202,8 +210,13 @@ in
     };
 
   flake.modules.homeManager.llm-agents =
-    { lib, ... }:
+    { config, lib, ... }:
     {
+      programs.git.settings.gpg.ssh.allowedSignersFile = "${config.xdg.configHome}/git/allowed_signers";
+      xdg.configFile."git/allowed_signers".text = ''
+        tobias.lindholm@antob.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILw/NZaQAbkoZM/bHDzb3PHJmFYuDU2SkN8XkRvr/I+Y claude
+      '';
+
       xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
         nerdfont: true
         status_icons:
