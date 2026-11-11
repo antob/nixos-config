@@ -58,8 +58,9 @@ in
         enable = true;
         enableSshSupport = true;
         enableScDaemon = true;
-        defaultCacheTtl = 60;
-        maxCacheTtl = 120;
+        # scdaemon re-unlocks the card from this cache after a reset; per-use touch still applies
+        defaultCacheTtl = 28800;
+        maxCacheTtl = 86400;
         # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
         enableExtraSocket = true;
         extraConfig = ''
@@ -105,6 +106,8 @@ in
             enable = true;
             scdaemonSettings = {
               disable-ccid = true;
+              # Avoid OpenPGP<->PIV app switches that reset the card's PIN state
+              disable-application = "piv";
             };
             settings = {
               trust-model = "tofu+pgp";
