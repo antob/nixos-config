@@ -100,13 +100,30 @@ in
         set-hook -g after-kill-pane "run-shell '${getExe tmuxColumns} closed'"
         set-hook -g pane-exited "run-shell '${getExe tmuxColumns} closed'"
       '';
+      # Plain capture-pane hides OSC 8 link targets behind their names; append them via -H (tmux 3.8+)
+      extrakto = pkgs.tmuxPlugins.extrakto.overrideAttrs {
+        postPatch = ''
+          substituteInPlace extrakto_plugin.py --replace-fail "        return captured" '
+                  panes = [self.trigger_pane]
+                  if self.grab_area.startswith("window"):
+                      panes = subprocess.check_output(
+                          ["tmux", "list-panes", "-F", "#{pane_id}"], universal_newlines=True
+                      ).split()
+                  for pane in panes:
+                      captured += "\n" + subprocess.check_output(
+                          ["tmux", "capture-pane", "-pHS", capture_pane_start, "-t", pane],
+                          universal_newlines=True,
+                      )
+                  return captured'
+        '';
+      };
       alacritty = config.programs.alacritty.enable;
       kitty = config.programs.kitty.enable;
       plugins = with pkgs; [
         tmuxPlugins.sensible
         tmuxPlugins.tmux-fzf
         {
-          plugin = tmuxPlugins.extrakto;
+          plugin = extrakto;
           extraConfig = ''
             # "auto" picks xclip when XWayland sets $DISPLAY
             set -g @extrakto_clip_tool 'wl-copy'
@@ -114,7 +131,7 @@ in
             # popup -w/-h take no formats and error when larger than the client, so cap at 120x40 per open
             set -g @extrakto_key 'none'
             bind Tab set -gF @extrakto_popup_size '#{?#{e|>:#{client_width},133},120,90%},#{?#{e|>:#{client_height},44},40,90%}' \; \
-              run-shell "${tmuxPlugins.extrakto}/share/tmux-plugins/extrakto/scripts/open.sh '#{pane_id}'"
+              run-shell "${extrakto}/share/tmux-plugins/extrakto/scripts/open.sh '#{pane_id}'"
           '';
         }
         {
