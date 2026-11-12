@@ -26,6 +26,7 @@ in
         firefox
         chromium
         udisks2
+        xdg-open-browser
       ];
 
       config = {
