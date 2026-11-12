@@ -61,12 +61,15 @@ in
               enable_audio_bell no
               enabled_layouts tall,vertical,horizontal,grid,stack
               hide_window_decorations yes
+              hyperlink_target_position tooltip
               listen_on unix:/tmp/kitty.sock
               scrollback_lines 10000
+              show_hyperlink_targets yes
               tab_bar_style separator
               tab_separator  | 
               term xterm-256color
               undercurl_style thick-sparse
+              underline_hyperlinks always
               url_color #${colors.base06}
               url_style straight
               window_border_width 1pt
