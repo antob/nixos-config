@@ -87,9 +87,9 @@ in
       # Ctrl+Shift+Enter: new column right of this one; prefix Down/Right: split within the column;
       # prefix Shift+Left/Right: swap the column with its neighbour.
       columns = /* tmux */ ''
-        bind -n \uE010 run-shell "${getExe tmuxColumns} new '#{pane_id}'"
-        bind Down run-shell "${getExe tmuxColumns} down '#{pane_id}'"
-        bind Right run-shell "${getExe tmuxColumns} right '#{pane_id}'"
+        bind -n \uE010 run-shell "${getExe tmuxColumns} new '#{pane_id}' >/dev/null"
+        bind Down run-shell "${getExe tmuxColumns} down '#{pane_id}' >/dev/null"
+        bind Right run-shell "${getExe tmuxColumns} right '#{pane_id}' >/dev/null"
         # Repeatable: keep tapping Shift+Left/Right within repeat-time to keep moving the column
         bind -r S-Left run-shell "${getExe tmuxColumns} swap '#{pane_id}' left"
         bind -r S-Right run-shell "${getExe tmuxColumns} swap '#{pane_id}' right"
@@ -154,6 +154,8 @@ in
       ];
     in
     {
+      home.packages = [ tmuxColumns ];
+
       programs = {
         tmux = {
           enable = true;

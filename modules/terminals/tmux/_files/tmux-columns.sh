@@ -1,10 +1,34 @@
-# Column-aware splits. A column is one top-level child of the window layout.
-# Usage: tmux-columns new|down|right <pane-id>
-#        tmux-columns swap <pane-id> left|right
-#        tmux-columns snapshot [window-id] | closed
 # Sizes are computed here because select-layout -E (tmux 3.8) leaves nested panes unresized.
 
-cmd=$1
+usage() {
+  cat <<'EOF'
+Usage: tmux-columns <command> [args]
+
+Column-aware tmux splits. A column is one top-level, side-by-side slot of the
+window layout; it can hold several panes stacked or split within it. New panes
+get the default shell in the source pane's working directory, become the active
+pane, and the affected column or container is resized evenly. new, down and
+right print the new pane's id, e.g. for tmux send-keys -t <id>.
+
+<pane> is any tmux pane target, e.g. "$TMUX_PANE" for the calling pane.
+
+Commands:
+  new <pane>               Add a new full-height column right of <pane>'s column
+  down <pane>              Split <pane> vertically, within its column
+  right <pane>             Split <pane> horizontally, within its column
+  swap <pane> left|right   Swap <pane>'s column with its neighbour; no-op at the
+                           edge or while zoomed
+  snapshot [window]        Record window layouts (all windows if omitted)
+  closed                   Even out containers that lost a pane since the last
+                           snapshot (run by tmux hooks)
+  -h, --help, help         Show this help
+
+Example: run a command in a new pane below the calling one
+  id=$(tmux-columns down "$TMUX_PANE") && tmux send-keys -t "$id" 'htop' Enter
+EOF
+}
+
+cmd=${1:-}
 pane=${2:-}
 flag=@columns_single
 snap=@columns_layout
@@ -102,6 +126,10 @@ snapshot_all() {
 }
 
 case $cmd in
+-h | --help | help)
+  usage
+  exit
+  ;;
 snapshot)
   snapshot_all "$pane"
   exit
@@ -174,10 +202,11 @@ right)
   fi
   ;;
 *)
-  echo "usage: tmux-columns new|down|right <pane-id> | swap <pane-id> left|right | snapshot | closed" >&2
+  usage >&2
   exit 1
   ;;
 esac
 
 start_shell "$new"
 snapshot_all
+echo "$new"
