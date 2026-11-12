@@ -106,6 +106,18 @@ in
         tmuxPlugins.sensible
         tmuxPlugins.tmux-fzf
         {
+          plugin = tmuxPlugins.extrakto;
+          extraConfig = ''
+            # "auto" picks xclip when XWayland sets $DISPLAY
+            set -g @extrakto_clip_tool 'wl-copy'
+            set -g @extrakto_filter_order 'url word path all line'
+            # popup -w/-h take no formats and error when larger than the client, so cap at 120x40 per open
+            set -g @extrakto_key 'none'
+            bind Tab set -gF @extrakto_popup_size '#{?#{e|>:#{client_width},133},120,90%},#{?#{e|>:#{client_height},44},40,90%}' \; \
+              run-shell "${tmuxPlugins.extrakto}/share/tmux-plugins/extrakto/scripts/open.sh '#{pane_id}'"
+          '';
+        }
+        {
           plugin = tmuxPlugins.resurrect;
           extraConfig = ''
             set -g @resurrect-dir '~/.local/share/tmux/resurrect'
