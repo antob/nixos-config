@@ -17,7 +17,20 @@ in
       inherit (config.antob.user) group;
       user = config.antob.user.name;
       userHome = "/home/${user}";
-      piPackage = inputs.pi-coding-agent.packages.${system}.pi;
+      piPackage = pkgs.symlinkJoin {
+        name = "pi";
+        paths = [ inputs.pi-coding-agent.packages.${system}.pi ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/pi \
+            --set PI_SKIP_VERSION_CHECK 1 \
+            --set GIT_CONFIG_COUNT 2 \
+            --set GIT_CONFIG_KEY_0 gpg.format \
+            --set GIT_CONFIG_VALUE_0 ssh \
+            --set GIT_CONFIG_KEY_1 user.signingkey \
+            --set GIT_CONFIG_VALUE_1 ${config.sops.secrets.agent_signing_key.path}
+        '';
+      };
       llm-pkgs = inputs.llm-agents.packages.${system};
       jail = inputs.jail-nix.lib.extend {
         inherit pkgs;
@@ -101,6 +114,7 @@ in
             commonJailOptions
             ++ [
               (readwrite (noescape "~/.pi"))
+              (readonly config.sops.secrets.agent_signing_key.path)
 
               (add-pkg-deps commonPkgs)
               (add-pkg-deps extraPkgs)
@@ -126,7 +140,7 @@ in
             commonJailOptions
             ++ [
               (readwrite (noescape "~/.config/claude"))
-              (readonly config.sops.secrets.claude_signing_key.path)
+              (readonly config.sops.secrets.agent_signing_key.path)
               (try-fwd-env "CLAUDE_CONFIG_DIR")
               (try-fwd-env "CLAUDE_CODE_TMUX_TRUECOLOR")
               (try-fwd-env "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY")
@@ -195,8 +209,8 @@ in
           };
         };
 
-        # Lets Claude sign commits without a YubiKey touch; used via GIT_CONFIG_* in Claude's settings.json
-        sops.secrets.claude_signing_key = {
+        # Lets agents sign commits without a YubiKey touch; Claude reads it via GIT_CONFIG_* in its settings.json, Pi via its wrapper
+        sops.secrets.agent_signing_key = {
           sopsFile = ../../hosts/common/secrets.yaml;
           owner = user;
           mode = "0400";
@@ -214,7 +228,7 @@ in
     {
       programs.git.settings.gpg.ssh.allowedSignersFile = "${config.xdg.configHome}/git/allowed_signers";
       xdg.configFile."git/allowed_signers".text = ''
-        tobias.lindholm@antob.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILw/NZaQAbkoZM/bHDzb3PHJmFYuDU2SkN8XkRvr/I+Y claude
+        tobias.lindholm@antob.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILw/NZaQAbkoZM/bHDzb3PHJmFYuDU2SkN8XkRvr/I+Y agent
       '';
 
       xdg.configFile."workmux/config.yaml".text = /* yaml */ ''
