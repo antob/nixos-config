@@ -104,6 +104,7 @@ in
             "/services/mass"
             "/services/caddy"
             "/services/esphome"
+            "/services/freshrss"
           ];
         }
       ];
