@@ -55,17 +55,32 @@
         fi
 
         failed=0
+        summary="$work/failure-summary"
+        : > "$summary"
+
+        # First error block of a build log is the root cause; later ones are dependents.
+        root_cause() {
+          awk -v store="$store" '
+            /^error:/ { if (seen++) exit; print; next }
+            seen && /^ +(Reason|specified|got):/ { print }
+            seen && /^ +> .*(error|panicked)/ { print }
+            seen && /^ +nix log / { sub(/nix log/, "nix --store " store " log"); print }
+          ' "$1"
+        }
+
         for host in ${lib.concatStringsSep " " buildHosts}; do
           echo "=== Starting build for host $host"
           if [ "$host" = "pikvm" ]; then
             echo "--- Pre-fetching PiKVM kernel from aostanin.cachix.org"
             ./scripts/fetch-pikvm-kernel.sh --store "$store" pikvm || echo "--- Pre-fetch failed, will build kernel from source if needed"
           fi
-          if nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --out-link "${rootsDir}/$host"; then
+          log="$work/build-$host.log"
+          if (set -o pipefail; nix --store "$store" build ".#nixosConfigurations.$host.config.system.build.toplevel" --out-link "${rootsDir}/$host" 2>&1 | tee "$log"); then
             echo "=== Build succeeded for host $host"
           else
             echo "=== Build failed for host $host, keeping its previous root"
             failed=1
+            { echo "* $host"; root_cause "$log"; } >> "$summary"
           fi
         done
 
@@ -91,6 +106,7 @@
         else
           echo "Failed to copy to file binary cache"
           failed=1
+          echo "* Copy to file binary cache failed" >> "$summary"
         fi
 
         # Publish the lock this run built from, so clients can pin to it for full cache hits
@@ -103,6 +119,12 @@
           nix --store "$store" store gc || echo "Garbage collection failed"
         else
           echo "=== Skipping garbage collection: at least one step failed"
+        fi
+
+        # Printed last so it lands in the failure mail's `systemctl status` excerpt.
+        if [ -s "$summary" ]; then
+          echo "=== Failure summary"
+          cat "$summary"
         fi
 
         exit "$failed"
