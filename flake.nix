@@ -12,7 +12,7 @@
     nixpkgs-next.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # NixPkgs Unstable (kept one step behind)
-    nixpkgs-prev.url = "github:nixos/nixpkgs/02c087f3fe673c9e317f206a627cb6b910336dbe";
+    nixpkgs-prev.url = "github:nixos/nixpkgs/f9a75f41be3a74eab55d3a7679d34ad6cc0da977";
 
     # Flake Parts
     flake-parts = {

@@ -90,7 +90,7 @@ in
           evince
           # remmina # Remote Desktop Client
           # TODO: renderer crashes (webFrame defineProperty) on electron 43.8.3; revert once fixed
-          prev.obsidian
+          obsidian
           discord
           mqtt-explorer
           rustdesk-flutter
