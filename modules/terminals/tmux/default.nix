@@ -103,7 +103,24 @@ in
           done
         '';
       };
+      # tmux defaults minus XDG_SESSION_TYPE/XDG_SESSION_DESKTOP: a tty client would set
+      # XDG_SESSION_TYPE=tty and make pinentry-rofi fall back to pinentry-tty
+      updateEnvironment = [
+        "DISPLAY"
+        "KRB5CCNAME"
+        "MSYSTEM"
+        "SSH_ASKPASS"
+        "SSH_AUTH_SOCK"
+        "SSH_AGENT_PID"
+        "SSH_CONNECTION"
+        "WAYLAND_DISPLAY"
+        "WINDOWID"
+        "XAUTHORITY"
+        "XDG_CURRENT_DESKTOP"
+      ];
       clientEnv = /* tmux */ ''
+        set -g update-environment "${head updateEnvironment}"
+        ${concatMapStringsSep "\n        " (v: ''set -ag update-environment "${v}"'') (tail updateEnvironment)}
         set-hook -g client-attached "run-shell -b '${getExe syncClientEnv}'"
         set-hook -g client-detached "run-shell -b '${getExe syncClientEnv}'"
         set-hook -g client-active "run-shell -b '${getExe syncClientEnv}'"
