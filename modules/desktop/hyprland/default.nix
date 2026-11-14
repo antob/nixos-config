@@ -33,11 +33,16 @@ in
           };
 
           # nwg-displays config files
-          persistence.home.files = [
-            ".config/hypr/monitors.lua"
-            ".config/hypr/monitors.conf"
-            ".config/hypr/workspaces.conf"
-          ];
+          persistence.home = {
+            files = [
+              ".config/hypr/monitors.lua"
+              ".config/hypr/monitors.conf"
+              ".config/hypr/workspaces.conf"
+            ];
+            directories = [
+              ".config/nwg-displays"
+            ];
+          };
         };
 
         home-manager.sharedModules = [ homeManager.hyprland ];
