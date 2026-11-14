@@ -116,7 +116,8 @@ in
 
             programs.zsh.initContent = /* bash */ ''
               if test -n "$KITTY_INSTALLATION_DIR"; then
-                export KITTY_SHELL_INTEGRATION="no-rc"
+                # In tmux, zsh.nix sets pane titles; keep kitty from overriding them.
+                export KITTY_SHELL_INTEGRATION="no-rc''${TMUX:+ no-title}"
                 autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
                 kitty-integration
                 unfunction kitty-integration

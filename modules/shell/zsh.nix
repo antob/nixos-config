@@ -91,10 +91,23 @@ in
             # Improved vim bindings.
             #source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
-            # zsh-window-title plugin.
             export DISABLE_AUTO_TITLE="true" # Disable oh-my-zsh auto title
-            export ZSH_WINDOW_TITLE_DIRECTORY_DEPTH=1
-            source ${pkgs.zsh-window-title}/share/zsh-window-title/zsh-window-title.plugin.zsh
+            if [[ -n $TMUX ]]; then
+              # Pane title: the running command, nothing at the prompt (it shows the directory).
+              autoload -Uz add-zsh-hook
+              function _pane_title_precmd() { print -n $'\e]2;\a' }
+              function _pane_title_preexec() {
+                local cmd=''${1//[[:cntrl:]]/ }
+                (( ''${#cmd} > 60 )) && cmd="''${cmd[1,59]}…"
+                print -rn -- $'\e]2;'"$cmd"$'\a'
+              }
+              add-zsh-hook precmd _pane_title_precmd
+              add-zsh-hook preexec _pane_title_preexec
+            else
+              # zsh-window-title plugin.
+              export ZSH_WINDOW_TITLE_DIRECTORY_DEPTH=1
+              source ${pkgs.zsh-window-title}/share/zsh-window-title/zsh-window-title.plugin.zsh
+            fi
 
             # ZSH Widget bindings
             bindkey "^b" backward-word

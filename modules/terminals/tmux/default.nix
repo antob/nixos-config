@@ -120,7 +120,9 @@ in
       ];
       clientEnv = /* tmux */ ''
         set -g update-environment "${head updateEnvironment}"
-        ${concatMapStringsSep "\n        " (v: ''set -ag update-environment "${v}"'') (tail updateEnvironment)}
+        ${concatMapStringsSep "\n        " (v: ''set -ag update-environment "${v}"'') (
+          tail updateEnvironment
+        )}
         set-hook -g client-attached "run-shell -b '${getExe syncClientEnv}'"
         set-hook -g client-detached "run-shell -b '${getExe syncClientEnv}'"
         set-hook -g client-active "run-shell -b '${getExe syncClientEnv}'"
