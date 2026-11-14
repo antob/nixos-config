@@ -55,11 +55,14 @@ in
         };
 
         gaming.display = {
-          width = 3440;
-          height = 1440;
+          # Steam launch options: `gamemoderun gamescope --mangoapp -- %command%`
+          # Light games add `-w 3440 -h 1440 -F linear`
+          width = 2560;
+          height = 1080;
           outputWidth = 5120;
           outputHeight = 2160;
           refresh = 165;
+          filter = "fsr";
         };
 
         system.env = {
