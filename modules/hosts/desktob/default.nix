@@ -57,7 +57,7 @@ in
         gaming.display = {
           width = 3440;
           height = 1440;
-          refresh = 144;
+          refresh = 165;
         };
 
         system.env = {
