@@ -34,7 +34,9 @@ in
 
       environment.systemPackages = with pkgs; [
         etherwake
-        (pkgs.callPackage ../../shell/scripts/_files/wake-desktob.nix { })
+        (pkgs.callPackage ../../shell/scripts/_files/wake-desktob.nix {
+          keyFile = secrets.desktob_wake_key.path;
+        })
       ];
 
       # Sops secrets
@@ -43,6 +45,11 @@ in
         secrets = {
           wg0_private_key = {
             owner = "systemd-network";
+          };
+          # Login key for desktob, authorised there only for wake-desktob-guard
+          desktob_wake_key = {
+            owner = config.antob.user.name;
+            mode = "0400";
           };
         };
       };
