@@ -24,9 +24,9 @@ in
           enableWoL = true;
         };
 
-        alacritty.fontSize = 13;
+        alacritty.fontSize = 14;
 
-        kitty.fontSize = 13;
+        kitty.fontSize = 14;
 
         rescue = {
           resticEnvFile = secrets.restic_env_file.path;
