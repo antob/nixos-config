@@ -57,6 +57,8 @@ in
         gaming.display = {
           width = 3440;
           height = 1440;
+          outputWidth = 5120;
+          outputHeight = 2160;
           refresh = 165;
         };
 

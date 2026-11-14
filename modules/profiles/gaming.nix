@@ -36,9 +36,25 @@ in
     {
       options.antob.gaming = with types; {
         display = {
-          width = mkOpt (nullOr int) null "Default gamescope game and output width.";
-          height = mkOpt (nullOr int) null "Default gamescope game and output height.";
+          width = mkOpt (nullOr int) null "Default gamescope game width.";
+          height = mkOpt (nullOr int) null "Default gamescope game height.";
           refresh = mkOpt (nullOr int) null "Default gamescope game refresh rate.";
+          outputWidth = mkOpt (nullOr int) cfg.display.width "Default gamescope output width.";
+          outputHeight = mkOpt (nullOr int) cfg.display.height "Default gamescope output height.";
+          scaler = mkOpt (nullOr (enum [
+            "auto"
+            "integer"
+            "fit"
+            "fill"
+            "stretch"
+          ])) null "Default gamescope upscaler.";
+          filter = mkOpt (nullOr (enum [
+            "linear"
+            "nearest"
+            "fsr"
+            "nis"
+            "pixel"
+          ])) null "Default gamescope upscale filter.";
         };
       };
 
@@ -70,15 +86,15 @@ in
               "--adaptive-sync"
               "--nested-unfocused-refresh 30"
             ]
-            ++ optionals (cfg.display.width != null) [
-              "--nested-width ${toString cfg.display.width}"
-              "--output-width ${toString cfg.display.width}"
-            ]
-            ++ optionals (cfg.display.height != null) [
-              "--nested-height ${toString cfg.display.height}"
-              "--output-height ${toString cfg.display.height}"
-            ]
-            ++ optional (cfg.display.refresh != null) "--nested-refresh ${toString cfg.display.refresh}";
+            ++ optional (cfg.display.width != null) "--nested-width ${toString cfg.display.width}"
+            ++ optional (cfg.display.height != null) "--nested-height ${toString cfg.display.height}"
+            ++ optional (cfg.display.outputWidth != null) "--output-width ${toString cfg.display.outputWidth}"
+            ++ optional (
+              cfg.display.outputHeight != null
+            ) "--output-height ${toString cfg.display.outputHeight}"
+            ++ optional (cfg.display.refresh != null) "--nested-refresh ${toString cfg.display.refresh}"
+            ++ optional (cfg.display.scaler != null) "--scaler ${cfg.display.scaler}"
+            ++ optional (cfg.display.filter != null) "--filter ${cfg.display.filter}";
           };
         };
 
