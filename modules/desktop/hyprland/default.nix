@@ -498,6 +498,12 @@ in
             },
             tag = "+floating-window",
           })
+          -- Steam's main window is titled "Steam"; Properties, Friends, Settings etc. are not
+          hl.window_rule({
+            name = "tag-floating-steam-dialogs",
+            match = { class = "^steam$", title = "negative:^(Steam)?$" },
+            tag = "+floating-window-lg",
+          })
           hl.window_rule({
             name = "tag-floating-window-lg",
             match = { class = "(TUI.float.lg|nwg-displays|X64)" },
