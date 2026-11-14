@@ -316,7 +316,7 @@ in
               follow_focus = true,
               focus_fit_method = 0, -- 0 = center, 1 = fit
               wrap_focus = false,
-              column_width = 1.0,
+              column_width = 0.667,
             },
 
             master = {
