@@ -1151,12 +1151,6 @@ in
             hl.bind(mainMod .. " + ALT + SHIFT + " .. key, hl.dsp.window.move({ monitor = dir }), { description = "Move window to monitor " .. key:lower() })
           end
 
-          -- Focus monitor / move active workspace to monitor with ALT (+ SHIFT) + [1-3]
-          for i = 1, 3 do
-            hl.bind("ALT + " .. i, hl.dsp.focus({ monitor = i - 1 }), { description = "Focus monitor " .. i })
-            hl.bind("ALT + SHIFT + " .. i, hl.dsp.workspace.move({ monitor = i - 1 }), { description = "Move workspace to monitor " .. i })
-          end
-
           -- Touchpad gestures ----------------------------------------------------------
           -- Like Niri: 3 fingers vertical switches workspace, horizontal moves between columns.
 
