@@ -92,7 +92,7 @@ in
           for session in $(tmux list-sessions -F '#{session_id}'); do
             pid=$(tmux list-clients -t "$session" -F '#{client_activity} #{client_pid}' | sort -rn | head -1 | cut -d' ' -f2)
             [[ -n $pid && -r /proc/$pid/environ ]] || continue
-            for var in SSH_CONNECTION SSH_AUTH_SOCK; do
+            for var in SSH_CONNECTION SSH_AUTH_SOCK WAYLAND_DISPLAY DISPLAY; do
               value=$(tr '\0' '\n' < "/proc/$pid/environ" | sed -n "s/^$var=//p" | head -1)
               if [[ -n $value ]]; then
                 tmux set-environment -t "$session" "$var" "$value"

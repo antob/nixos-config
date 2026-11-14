@@ -106,22 +106,24 @@ in
             }
             precmd_functions+=(restore_cursor)
 
-            # Sync SSH vars from the tmux session (kept current by tmux-sync-client-env hooks)
-            function sync_tmux_ssh_env() {
+            # Sync client vars from the tmux session (kept current by tmux-sync-client-env hooks)
+            function sync_tmux_client_env() {
               [[ -n $TMUX ]] || return
               local -A env
-              local line
+              local line var
               for line in ''${(f)"$(tmux show-environment 2>/dev/null)"}; do
                 [[ $line == *=* ]] && env[''${line%%=*}]=''${line#*=}
               done
-              if [[ -n ''${env[SSH_CONNECTION]} ]]; then
-                export SSH_CONNECTION=''${env[SSH_CONNECTION]}
-              else
-                unset SSH_CONNECTION
-              fi
+              for var in SSH_CONNECTION WAYLAND_DISPLAY DISPLAY; do
+                if [[ -n ''${env[$var]} ]]; then
+                  export $var=''${env[$var]}
+                else
+                  unset $var
+                fi
+              done
               [[ -n ''${env[SSH_AUTH_SOCK]} ]] && export SSH_AUTH_SOCK=''${env[SSH_AUTH_SOCK]}
             }
-            precmd_functions=(sync_tmux_ssh_env $precmd_functions)
+            precmd_functions=(sync_tmux_client_env $precmd_functions)
 
             # Customize ZSH highligh colors
             typeset -A ZSH_HIGHLIGHT_STYLES
