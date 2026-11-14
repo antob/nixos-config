@@ -180,7 +180,14 @@ in
           -- hyprlang file from Lua; nwg-displays (>= 0.4.4) also writes a Lua version
           -- next to it (monitors.lua). The config dir is on package.path, and pcall
           -- keeps a missing file from being an error.
+          -- nwg-displays always writes a per-monitor vrr (0 unless toggled there); drop it so misc.vrr applies.
+          local monitor = hl.monitor
+          hl.monitor = function(rule)
+            rule.vrr = nil
+            return monitor(rule)
+          end
           pcall(require, "monitors")
+          hl.monitor = monitor
 
           ----------------------------------------------------------------------------
           -- Environment variables
