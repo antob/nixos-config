@@ -28,11 +28,10 @@ in
           pkgs.yubikey-manager
         ];
 
+        # ccid's 92_pcscd_ccid.rules enables autosuspend on CCID devices, which resets the card
         services.udev.extraRules = ''
-          # Autosuspend Yubikey
-          ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{idVendor}=="1050", ATTR{idProduct}=="0406", ATTR{power/control}="auto"
+          ACTION!="remove", SUBSYSTEM=="usb", ATTR{idVendor}=="1050", TEST=="power/control", ATTR{power/control}="on"
         '';
-
       };
     };
 
@@ -45,7 +44,7 @@ in
         };
 
         Service = {
-          ExecStart = "${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify";
+          ExecStart = "${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --notify";
           EnvironmentFile = "-%E/yubikey-touch-detector/service.conf";
         };
 

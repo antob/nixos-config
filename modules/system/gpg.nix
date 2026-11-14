@@ -17,6 +17,13 @@ in
         home-manager.sharedModules = [ homeManager.gpg ];
 
         services.pcscd.enable = true;
+        # Upstream passes -x (auto-exit), which resets the card under a live scdaemon
+        systemd.services.pcscd.serviceConfig.ExecStart = mkForce [
+          ""
+          "${getExe config.services.pcscd.package} -f -c ${
+            config.environment.etc."reader.conf".source
+          } ${escapeShellArgs config.services.pcscd.extraArgs}"
+        ];
 
         environment.systemPackages = with pkgs; [
           cryptsetup
