@@ -84,6 +84,31 @@ in
         excludeShellChecks = [ "SC2016" ];
         text = builtins.readFile ./_files/tmux-columns.sh;
       };
+      # update-environment only runs on attach, so a detached SSH client leaves its vars behind
+      syncClientEnv = pkgs.writeShellApplication {
+        name = "tmux-sync-client-env";
+        runtimeInputs = [ config.programs.tmux.package ];
+        text = ''
+          for session in $(tmux list-sessions -F '#{session_id}'); do
+            pid=$(tmux list-clients -t "$session" -F '#{client_activity} #{client_pid}' | sort -rn | head -1 | cut -d' ' -f2)
+            [[ -n $pid && -r /proc/$pid/environ ]] || continue
+            for var in SSH_CONNECTION SSH_AUTH_SOCK; do
+              value=$(tr '\0' '\n' < "/proc/$pid/environ" | sed -n "s/^$var=//p" | head -1)
+              if [[ -n $value ]]; then
+                tmux set-environment -t "$session" "$var" "$value"
+              else
+                tmux set-environment -t "$session" -u "$var"
+              fi
+            done
+          done
+        '';
+      };
+      clientEnv = /* tmux */ ''
+        set-hook -g client-attached "run-shell -b '${getExe syncClientEnv}'"
+        set-hook -g client-detached "run-shell -b '${getExe syncClientEnv}'"
+        set-hook -g client-active "run-shell -b '${getExe syncClientEnv}'"
+        set-hook -g client-session-changed "run-shell -b '${getExe syncClientEnv}'"
+      '';
       # Ctrl+Shift+Enter: new column right of this one; prefix Down/Right: split within the column;
       # prefix Shift+Left/Right: swap the column with its neighbour.
       columns = /* tmux */ ''
@@ -154,7 +179,10 @@ in
       ];
     in
     {
-      home.packages = [ tmuxColumns ];
+      home.packages = [
+        tmuxColumns
+        syncClientEnv
+      ];
 
       programs = {
         tmux = {
@@ -167,6 +195,7 @@ in
             ++ [
               theme
               columns
+              clientEnv
             ]
           );
 

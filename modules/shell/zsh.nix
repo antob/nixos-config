@@ -106,16 +106,20 @@ in
             }
             precmd_functions+=(restore_cursor)
 
-            # Sync SSH_CONNECTION from tmux so starship shows the hostname only over SSH
+            # Sync SSH vars from the tmux session (kept current by tmux-sync-client-env hooks)
             function sync_tmux_ssh_env() {
               [[ -n $TMUX ]] || return
+              local -A env
               local line
-              line=$(tmux show-environment SSH_CONNECTION 2>/dev/null)
-              if [[ $line == SSH_CONNECTION=* ]]; then
-                export SSH_CONNECTION=''${line#SSH_CONNECTION=}
+              for line in ''${(f)"$(tmux show-environment 2>/dev/null)"}; do
+                [[ $line == *=* ]] && env[''${line%%=*}]=''${line#*=}
+              done
+              if [[ -n ''${env[SSH_CONNECTION]} ]]; then
+                export SSH_CONNECTION=''${env[SSH_CONNECTION]}
               else
                 unset SSH_CONNECTION
               fi
+              [[ -n ''${env[SSH_AUTH_SOCK]} ]] && export SSH_AUTH_SOCK=''${env[SSH_AUTH_SOCK]}
             }
             precmd_functions=(sync_tmux_ssh_env $precmd_functions)
 
