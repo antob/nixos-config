@@ -184,6 +184,7 @@ in
             set -g @resurrect-dir '~/.local/share/tmux/resurrect'
             set -g @resurrect-save 'S'
             set -g @resurrect-restore 'R'
+            set -g @resurrect-delete-backup-after '7'
           '';
         }
         {
