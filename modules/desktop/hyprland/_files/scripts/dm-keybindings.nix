@@ -89,5 +89,5 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
     parse_bindings | \
     sort -f -t $'\t' -k1,1 | \
     cut -f2- | \
-    ${pkgs.rofi}/bin/rofi -dmenu -theme xl -p 'Keybindings'
+    ${pkgs.rofi}/bin/rofi -dmenu -theme xl -theme-str 'listview { lines: 16; }' -p 'Keybindings'
 ''
