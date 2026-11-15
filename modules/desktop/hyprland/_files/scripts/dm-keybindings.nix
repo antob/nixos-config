@@ -9,7 +9,6 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
   # Fetch dynamic keybindings from Hyprland
   #
   # Also do some pre-processing:
-  # - Remove standard Omarchy bin path prefix
   # - Remove uwsm prefix
   # - Map numeric modifier key mask to a textual rendition
   # - Output comma-separated values that the parser can understand
@@ -18,7 +17,6 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
       jq -r '.[] | {modmask, key, keycode, description, dispatcher, arg} | "\(.modmask),\(.key)@\(.keycode),\(.description),\(.dispatcher),\(.arg)"' | \
       sed -r \
           -e 's/null//' \
-          -e 's,~/.local/share/omarchy/bin/,,' \
           -e 's,uwsm app -- ,,' \
           -e 's/@0//' \
           -e 's/,@/,code:/' \
@@ -46,7 +44,7 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
   # - Set the field separator to a comma ','.
   # - Joins the key combination (e.g., "SUPER + Q").
   # - Joins the command that the key executes.
-  # - Prints everything in a nicely aligned format.
+  # - Prints the action as a tab-separated sort key, then the aligned line.
   parse_bindings() {
     awk -F, '
   {
@@ -81,7 +79,7 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
       }
 
       if (action != "") {
-          printf "%-35s → %s\n", key_combo, action;
+          printf "%s\t%-35s → %s\n", action, key_combo, action;
       }
   }'
   }
@@ -89,5 +87,7 @@ pkgs.writeShellScriptBin "dm-keybindings" ''
   dynamic_bindings | \
     sort -u | \
     parse_bindings | \
+    sort -f -t $'\t' -k1,1 | \
+    cut -f2- | \
     ${pkgs.rofi}/bin/rofi -dmenu -theme xl -p 'Keybindings'
 ''

@@ -643,8 +643,6 @@ in
           ----------------------------------------------------------------------------
           -- Keybindings
           -- https://wiki.hypr.land/Configuring/Basics/Binds/
-          -- Kept in line with the Niri bindings (modules/desktop/niri/default.nix).
-          -- Niri's columns map to the scrolling layout (`hl.dsp.layout(...)`).
           ----------------------------------------------------------------------------
 
           local mainMod = "SUPER"
@@ -708,7 +706,6 @@ in
           hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"), { description = "Launcher" })
           hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"), { description = "Control center" })
           hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd(ipc .. "settings-toggle"), { description = "Settings" })
-          hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(ipc .. "panel-open control-center bluetooth"), { description = "Bluetooth" })
           hl.bind(mainMod .. " + X", hl.dsp.exec_cmd(ipc .. "panel-open session"), { description = "System menu" })
           hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(ipc .. "session lock"), { description = "Lock screen" })
           hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(ipc .. "caffeine-toggle"), { description = "Toggle locking on idle" })
@@ -916,6 +913,7 @@ in
           hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(browser), { description = "Web browser" })
           hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("${dm-firefox-profile}"), { description = "Select Firefox profile" })
           hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(tuiTerminal .. " --class=TUI.float.lg -e ${pkgs.impala}/bin/impala"), { description = "WIFI" })
+          hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(tuiTerminal .. " --class=TUI.float.lg -e ${getExe pkgs.bluetui}"), { description = "Bluetooth" })
           hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(tuiTerminal .. " --class=TUI.float.lg -e ${getExe pkgs.bottom}"), { description = "Activity" })
           hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("uwsm app -- ${getExe pkgs.nwg-displays}"), { description = "Displays" })
 
@@ -999,8 +997,8 @@ in
 
           -- Focus -----------------------------------------------------------------------
 
-          -- Like Niri's focus-window-or-workspace-up/down: move within the column and
-          -- go to the previous/next workspace at the top/bottom. general:no_focus_fallback
+          -- Move focus within the column and go to the previous/next workspace at the
+          -- top/bottom. general:no_focus_fallback
           -- is enabled for the move so the layout doesn't wrap within the column;
           local function focusWindowOrWorkspace(dir, fallback)
             return function()
@@ -1036,8 +1034,8 @@ in
             default = hl.dsp.focus({ direction = "right" }),
           })), { description = "Move focus right or next scratchpad" })
 
-          -- Focus next/previous column, wrapping around like Niri's
-          -- focus-column-right-or-first. scrolling:wrap_focus is off (so Mod + Left/Right
+          -- Focus next/previous column, wrapping around at the ends.
+          -- scrolling:wrap_focus is off (so Mod + Left/Right
           -- stop at the edges); enable it just for this focus move.
           local function focusColumnWrapping(dir)
             return function()
@@ -1070,8 +1068,8 @@ in
           }), { description = "Move column right" })
 
           -- Move the window up/down within the column
-          -- Like Niri's move-window-up/down-or-to-workspace-up/down: swap with the window
-          -- above/below and move the window to the previous/next workspace when there is none
+          -- Swap with the window above/below and move the window to the previous/next
+          -- workspace when there is none
           local function moveWindowOrToWorkspace(dir, fallback)
             return function()
               local result = hl.dispatch(hl.dsp.window.swap({ direction = dir }))
@@ -1125,7 +1123,6 @@ in
           for i = 1, maxWorkspace do
             hl.bind(mainMod .. " + " .. i, hl.dsp.focus({ workspace = i }), { description = "Switch to workspace " .. i })
             hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }), { description = "Move window to workspace " .. i })
-            hl.bind(mainMod .. " + CTRL + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }), { description = "Move window to workspace " .. i })
           end
 
           -- Previous/next workspace on the monitor, within 1 to maxWorkspace
@@ -1143,28 +1140,37 @@ in
 
           -- Monitors --------------------------------------------------------------------
 
-          local monitorDirs = { Left = "l", Right = "r", Up = "u", Down = "d" }
+          -- Same pattern as windows: plain focuses, SHIFT moves the window
+          local monitorDirs = { left = "l", right = "r", up = "u", down = "d" }
           for key, dir in pairs(monitorDirs) do
-            hl.bind("ALT + " .. key, hl.dsp.focus({ monitor = dir }), { description = "Focus monitor " .. key:lower() })
-            hl.bind(mainMod .. " + ALT + " .. key, hl.dsp.workspace.move({ monitor = dir }), { description = "Move workspace to monitor " .. key:lower() })
-            hl.bind(mainMod .. " + ALT + CTRL + " .. key, hl.dsp.window.move({ monitor = dir }), { description = "Move window to monitor " .. key:lower() })
-            hl.bind(mainMod .. " + ALT + SHIFT + " .. key, hl.dsp.window.move({ monitor = dir }), { description = "Move window to monitor " .. key:lower() })
+            hl.bind(mainMod .. " + ALT + " .. key, hl.dsp.focus({ monitor = dir }), { description = "Focus monitor " .. key })
+            hl.bind(mainMod .. " + ALT + SHIFT + " .. key, hl.dsp.window.move({ monitor = dir }), { description = "Move window to monitor " .. key })
+            hl.bind(mainMod .. " + ALT + CTRL + " .. key, hl.dsp.workspace.move({ monitor = dir }), { description = "Move workspace to monitor " .. key })
           end
+          hl.bind(mainMod .. " + backslash", hl.dsp.focus({ monitor = "+1" }), { description = "Focus next monitor" })
 
           -- Touchpad gestures ----------------------------------------------------------
-          -- Like Niri: 3 fingers vertical switches workspace, horizontal moves between columns.
+          -- 3 fingers vertical switches workspace, horizontal moves between columns.
 
           hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })
-          hl.gesture({ fingers = 3, direction = "left", action = function() hl.dispatch(hl.dsp.layout("focus r")) end })
-          hl.gesture({ fingers = 3, direction = "right", action = function() hl.dispatch(hl.dsp.layout("focus l")) end })
+          hl.gesture({ fingers = 3, direction = "left", action = perLayout({
+            scrolling = hl.dsp.layout("focus r"),
+            monocle = hl.dsp.layout("cyclenext"),
+            default = hl.dsp.focus({ direction = "right" }),
+          }) })
+          hl.gesture({ fingers = 3, direction = "right", action = perLayout({
+            scrolling = hl.dsp.layout("focus l"),
+            monocle = hl.dsp.layout("cycleprev"),
+            default = hl.dsp.focus({ direction = "left" }),
+          }) })
 
           -- Groups ----------------------------------------------------------------------
 
           hl.bind(mainMod .. " + G", hl.dsp.group.toggle(), { description = "Toggle the current active window into a group" })
-          hl.bind(mainMod .. " + CTRL + Right", hl.dsp.group.next(), { description = "Switch to the next window in a group" })
-          hl.bind(mainMod .. " + CTRL + Left", hl.dsp.group.prev(), { description = "Switch to the previous window in a group" })
-          hl.bind(mainMod .. " + CTRL + SHIFT + Right", hl.dsp.window.move({ direction = "right", group_aware = true }), { description = "Move the active window into right group" })
-          hl.bind(mainMod .. " + CTRL + SHIFT + Left", hl.dsp.window.move({ direction = "left", group_aware = true }), { description = "Move the active window into left group" })
+          hl.bind(mainMod .. " + CTRL + right", hl.dsp.group.next(), { description = "Switch to the next window in a group" })
+          hl.bind(mainMod .. " + CTRL + left", hl.dsp.group.prev(), { description = "Switch to the previous window in a group" })
+          hl.bind(mainMod .. " + CTRL + SHIFT + right", hl.dsp.window.move({ direction = "right", group_aware = true }), { description = "Move the active window into right group" })
+          hl.bind(mainMod .. " + CTRL + SHIFT + left", hl.dsp.window.move({ direction = "left", group_aware = true }), { description = "Move the active window into left group" })
         '';
       };
 
