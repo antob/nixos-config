@@ -161,6 +161,14 @@ in
                   return captured'
         '';
       };
+      # Empty pane titles collapse tab-separated fields and lose the saved cwd.
+      # TODO: drop when https://github.com/tmux-plugins/tmux-resurrect/pull/583 lands
+      resurrect = pkgs.tmuxPlugins.resurrect.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace scripts/save.sh --replace-fail 'format+="#{pane_title}"' 'format+=":#{pane_title}"'
+          substituteInPlace scripts/restore.sh --replace-fail '-T "$pane_title"' '-T "''${pane_title#:}"'
+        '';
+      });
       alacritty = config.programs.alacritty.enable;
       kitty = config.programs.kitty.enable;
       plugins = with pkgs; [
@@ -179,7 +187,7 @@ in
           '';
         }
         {
-          plugin = tmuxPlugins.resurrect;
+          plugin = resurrect;
           extraConfig = ''
             set -g @resurrect-dir '~/.local/share/tmux/resurrect'
             set -g @resurrect-save 'S'
