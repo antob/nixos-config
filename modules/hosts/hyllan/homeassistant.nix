@@ -120,14 +120,14 @@
               pan_id = 52088;
               network_key = "!${secrets."zigbee2mqtt.yaml".path} network_key";
             };
-            # Friendly names become Home Assistant device names and entity ids.
+            # Must be unique here (they are MQTT topics); Home Assistant shows shorter device names.
             devices = {
-              "0x00158d00089368f8".friendly_name = "Klimatsensor Utomhus";
-              "0x00158d0008937376".friendly_name = "Klimatsensor Nedervåning";
-              "0x00158d000893696b".friendly_name = "Klimatsensor Ovanvåning";
-              "0x00158d008b7d3df0".friendly_name = "Dörrsensor Ytterdörr";
-              "0xe0798dfffee094a1".friendly_name = "Zigbee-repeater Förråd";
-              "0xe0798dfffee7e241".friendly_name = "Zigbee-repeater Elskåp";
+              "0x00158d00089368f8".friendly_name = "Garden climate sensor";
+              "0x00158d0008937376".friendly_name = "Living room climate sensor";
+              "0x00158d000893696b".friendly_name = "Upstairs hall climate sensor";
+              "0x00158d008b7d3df0".friendly_name = "Front door sensor";
+              "0xe0798dfffee094a1".friendly_name = "Shed zigbee repeater";
+              "0xe0798dfffee7e241".friendly_name = "Living room zigbee repeater";
             };
             frontend = {
               port = zigbeePort;
