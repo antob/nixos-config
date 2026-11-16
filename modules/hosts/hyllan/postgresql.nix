@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.hyllan =
-    { config, ... }:
+    { config, pkgs, ... }:
 
     let
       dataDir = "/mnt/tank/services/postgresql";
@@ -23,6 +23,8 @@
 
       services.postgresql = {
         enable = true;
+        # TODO: postgresql_14 is EOL and removed from unstable; pg_upgrade to a newer major.
+        package = pkgs.stable.postgresql_14;
         inherit dataDir;
       };
 
