@@ -18,6 +18,9 @@
       };
       users.groups.esphome = { };
 
+      # ESPHome downloads prebuilt toolchains (e.g. xtensa gcc) that need an FHS loader.
+      programs.nix-ld.enable = true;
+
       systemd.services.esphome = {
         description = "ESPHome Device Builder dashboard";
         after = [ "network.target" ];

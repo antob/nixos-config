@@ -13,21 +13,53 @@
       port = 8123;
       zigbeePort = 8089; # Port for zigbee2mqtt frontend
       dataDir = "/mnt/tank/services/hass";
+      configDir = "${dataDir}/home-assistant";
+      rfxtrxDevice = "/dev/serial/by-id/usb-RFXCOM_RFXtrx433_A120LOLF-if00-port0";
+
+      # Integrations, areas, dashboards and automations are managed in the UI (.storage).
+      # http settings are UI-only since 2026.8, so there is no http: block here.
+      configuration = pkgs.writeText "configuration.yaml" ''
+        default_config:
+
+        homeassistant:
+          packages: !include_dir_named packages
+
+        automation: !include automations.yaml
+        script: !include scripts.yaml
+        scene: !include scenes.yaml
+
+        recorder:
+          purge_keep_days: 14
+          exclude:
+            entity_globs:
+              - sensor.*_voltage
+              - sensor.*_current
+              - sensor.*_uptime
+              - sensor.*_wifi_signal
+      '';
     in
     {
       virtualisation.oci-containers.containers = {
         hass = {
-          image = "ghcr.io/home-assistant/home-assistant:stable";
+          image = "ghcr.io/home-assistant/home-assistant:2026.11.1";
           autoStart = true;
           extraOptions = [
             "--network=host"
-            "--privileged=true"
+            "--device=${rfxtrxDevice}:/dev/ttyRFXtrx"
+            # podman stop defaults to 10s, too short for the recorder to close the database.
+            "--stop-timeout=90"
           ];
+          # DHCP discovery and Bluetooth adapter management need raw sockets.
+          capabilities = {
+            NET_ADMIN = true;
+            NET_RAW = true;
+          };
           environment = {
             TZ = "Europe/Stockholm";
           };
           volumes = [
-            "${dataDir}/config:/config"
+            "${configDir}:/config"
+            "${configuration}:/config/configuration.yaml:ro"
           ];
         };
       };
@@ -39,7 +71,11 @@
       ];
 
       systemd.tmpfiles.rules = [
-        "d ${dataDir}/config 0755 root root -"
+        "d ${configDir} 0755 root root -"
+        "d ${configDir}/packages 0755 root root -"
+        "f ${configDir}/automations.yaml 0644 root root - []"
+        "f ${configDir}/scripts.yaml 0644 root root - {}"
+        "f ${configDir}/scenes.yaml 0644 root root - []"
         "d ${dataDir}/zigbee2mqtt 0755 zigbee2mqtt zigbee2mqtt -"
       ];
 
@@ -50,27 +86,13 @@
         };
       };
 
-      # hyllan has no bluez daemon, so nothing powers the Bluetooth adapter on at
-      # boot. Bring hci0 up explicitly before the hass container starts.
-      # One-shot only: do not enable services.bluetooth here,
-      # the daemon would hold the management channel and break raw-socket access.
-      systemd.services.bluetooth-power-on = {
-        description = "Power on Bluetooth adapter before Home Assistant starts";
-        before = [ "podman-hass.service" ];
-        wantedBy = [ "podman-hass.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${pkgs.bluez}/bin/hciconfig hci0 up";
-        };
-      };
-
       services = {
-        # Mosquitto, MQTT broker
+        # Mosquitto, MQTT broker. Only Home Assistant and zigbee2mqtt on this host use it.
         mosquitto = {
           enable = true;
           listeners = [
             {
+              address = "127.0.0.1";
               acl = [ "pattern readwrite #" ];
               omitPasswordAuth = true;
               settings.allow_anonymous = true;
@@ -85,9 +107,10 @@
           settings = {
             homeassistant = lib.mkForce true;
             permit_join = false;
+            availability.enabled = true;
             mqtt = {
               base_topic = "zigbee2mqtt";
-              server = "mqtt://localhost:1883";
+              server = "mqtt://127.0.0.1:1883";
             };
             serial = {
               port = "/dev/serial/by-id/usb-Silicon_Labs_Sonoff_Zigbee_3.0_USB_Dongle_Plus_0001-if00-port0";
@@ -96,6 +119,15 @@
             advanced = {
               pan_id = 52088;
               network_key = "!${secrets."zigbee2mqtt.yaml".path} network_key";
+            };
+            # Friendly names become Home Assistant device names and entity ids.
+            devices = {
+              "0x00158d00089368f8".friendly_name = "Klimatsensor Utomhus";
+              "0x00158d0008937376".friendly_name = "Klimatsensor Nedervåning";
+              "0x00158d000893696b".friendly_name = "Klimatsensor Ovanvåning";
+              "0x00158d008b7d3df0".friendly_name = "Dörrsensor Ytterdörr";
+              "0xe0798dfffee094a1".friendly_name = "Zigbee-repeater Förråd";
+              "0xe0798dfffee7e241".friendly_name = "Zigbee-repeater Elskåp";
             };
             frontend = {
               port = zigbeePort;
