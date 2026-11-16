@@ -316,7 +316,8 @@ in
               follow_focus = true,
               focus_fit_method = 0, -- 0 = center, 1 = fit
               wrap_focus = false,
-              column_width = 0.667,
+              column_width = 1.0,
+              fullscreen_on_one_column = false,
             },
 
             master = {
@@ -654,6 +655,28 @@ in
           local browser = "uwsm app -- firefox"
           -- Unused
           -- local chromium = "uwsm app -- chromium --app="
+
+          -- New scrolling columns open full width. On ultrawide monitors (aspect ratio
+          -- of at least 2) a column that starts alone is shrunk to 2/3 of the width.
+          local ultrawideRatio = 2
+          local ultrawideColumnWidth = 0.667
+          hl.on("window.open", function(w)
+            if w.floating then return end
+            local id = w.stable_id
+            hl.timer(function()
+              local active = hl.get_active_window()
+              if not (active and active.stable_id == id) or active.floating then return end
+              local ws = active.workspace
+              local mon = active.monitor
+              local col = active.layout and active.layout.column
+              if not (ws and not ws.special and ws.tiled_layout == "scrolling" and mon and col) then return end
+              if mon.width / mon.height < ultrawideRatio then return end
+              -- Skip a window that joined an existing column or was already resized
+              if col.windows and #col.windows > 1 then return end
+              if col.width < 0.999 then return end
+              hl.dispatch(hl.dsp.layout("colresize " .. ultrawideColumnWidth))
+            end, { timeout = 1, type = "oneshot" })
+          end)
 
           -- Pick the dispatcher for the active workspace's tiled layout (scrolling,
           -- master, monocle, dwindle), falling back to `default`. An open special
@@ -1113,7 +1136,7 @@ in
           hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.window.resize({ x = 0, y = -100, relative = true }), { description = "Decrease window height" })
           hl.bind(mainMod .. " + SHIFT + equal", hl.dsp.window.resize({ x = 0, y = 100, relative = true }), { description = "Increase window height" })
 
-          -- Cycle through scrolling:explicit_column_widths (default 0.333, 0.5, 0.667, 1,0
+          -- Cycle through scrolling:explicit_column_widths (default 0.333, 0.5, 0.667, 1.0)
           hl.bind(mainMod .. " + R", perLayout({ scrolling = hl.dsp.layout("colresize +conf") }), { description = "Switch preset column width" })
 
           -- Workspaces ------------------------------------------------------------------
