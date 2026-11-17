@@ -48,6 +48,12 @@
         binfmt.emulatedSystems = [ "aarch64-linux" ];
       };
 
+      # Wake from suspend by the Bluetooth keyboard only, not the mouse on the Logitech Bolt receiver.
+      services.udev.extraRules = ''
+        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0e8d", ATTR{idProduct}=="0717", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="046d", ATTR{idProduct}=="c548", ATTR{power/wakeup}="disabled"
+      '';
+
       # Mount data disk
       fileSystems."/mnt/data" = {
         device = "/dev/disk/by-label/data";
