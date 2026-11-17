@@ -123,7 +123,7 @@
             # Must be unique here (they are MQTT topics); Home Assistant shows shorter device names.
             devices = {
               "0x00158d00089368f8".friendly_name = "Garden climate sensor";
-              "0x00158d0008937376".friendly_name = "Living room climate sensor";
+              "0x00158d0008937376".friendly_name = "Hallway climate sensor";
               "0x00158d000893696b".friendly_name = "Upstairs hall climate sensor";
               "0x00158d008b7d3df0".friendly_name = "Front door sensor";
               "0xe0798dfffee094a1".friendly_name = "Shed zigbee repeater";
