@@ -951,6 +951,8 @@ in
 
           -- Screenshots
           hl.bind("Print", hl.dsp.exec_cmd(ipc .. "screenshot-region"), { description = "Screenshot of region" })
+          -- The MX Mechanical Mini screenshot key sends Super+Shift+S in Windows mode.
+          hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. "screenshot-region"), { description = "Screenshot of region" })
           hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("pkill hyprpicker || ${getExe pkgs.hyprpicker} -a"), { description = "Color picker" })
 
           -- Layouts ---------------------------------------------------------------------
