@@ -22,6 +22,7 @@ in
         dns = mkOpt str "10.64.1.4" "DNS server used to resolve tunnel-scoped domains via wg0.";
         domains = mkOpt (listOf str) [
           "~antob.net"
+          "~lan"
         ] "Route-only routing domains resolved through the tunnel.";
       };
 
