@@ -1,3 +1,9 @@
 result
 .worktrees
 *.sync-conflict-*
+
+# Agent skills hold house-specific details and stay out of this public repo
+.agents/
+.claude/skills
+
+.direnv/

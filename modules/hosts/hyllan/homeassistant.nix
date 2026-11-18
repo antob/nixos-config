@@ -16,27 +16,25 @@
       configDir = "${dataDir}/home-assistant";
       rfxtrxDevice = "/dev/serial/by-id/usb-RFXCOM_RFXtrx433_A120LOLF-if00-port0";
 
-      # Integrations, areas, dashboards and automations are managed in the UI (.storage).
-      # http settings are UI-only since 2026.8, so there is no http: block here.
-      configuration = pkgs.writeText "configuration.yaml" ''
-        default_config:
-
-        homeassistant:
-          packages: !include_dir_named packages
-
-        automation: !include automations.yaml
-        script: !include scripts.yaml
-        scene: !include scenes.yaml
-
-        recorder:
-          purge_keep_days: 14
-          exclude:
-            entity_globs:
-              - sensor.*_voltage
-              - sensor.*_current
-              - sensor.*_uptime
-              - sensor.*_wifi_signal
-      '';
+      # Root-only container queries for the agent; no arguments are passed on to podman.
+      hassCtl = pkgs.writeShellApplication {
+        name = "hass-ctl";
+        runtimeInputs = [ config.virtualisation.podman.package ];
+        text = ''
+          case "''${1:-}" in
+            ps) exec podman ps --all --filter name=^hass$ ;;
+            inspect) exec podman inspect hass ;;
+            stats) exec podman stats --no-stream hass ;;
+            top) exec podman top hass ;;
+            images) exec podman images ghcr.io/home-assistant/home-assistant ;;
+            check-config) exec podman exec hass python3 -m homeassistant --script check_config --config /config ;;
+            *)
+              echo "usage: sudo hass-ctl ps|inspect|stats|top|images|check-config" >&2
+              exit 2
+              ;;
+          esac
+        '';
+      };
     in
     {
       virtualisation.oci-containers.containers = {
@@ -57,11 +55,25 @@
           environment = {
             TZ = "Europe/Stockholm";
           };
-          volumes = [
-            "${configDir}:/config"
-            "${configuration}:/config/configuration.yaml:ro"
-          ];
+          # configuration.yaml is a plain file in the config dir, so YAML changes reload without a switch.
+          volumes = [ "${configDir}:/config" ];
         };
+      };
+
+      antob.agent-access = {
+        units = [
+          "podman-hass"
+          "zigbee2mqtt"
+        ];
+        logUnits = [
+          "podman-hass"
+          "zigbee2mqtt"
+          "mosquitto"
+          "caddy"
+        ];
+        sudoPackages = [ hassCtl ];
+        gitSafeDirectories = [ configDir ];
+        packages = [ pkgs.dnsutils ];
       };
 
       # Open ports
@@ -72,11 +84,14 @@
 
       systemd.tmpfiles.rules = [
         "d ${configDir} 0755 root root -"
-        "d ${configDir}/packages 0755 root root -"
+        "z ${configDir}/configuration.yaml 0644 agent agent -"
+        "d ${configDir}/packages 0755 agent agent -"
+        "Z ${configDir}/packages - agent agent -"
+        "d ${configDir}/.git 0755 agent agent -"
         "f ${configDir}/automations.yaml 0644 root root - []"
         "f ${configDir}/scripts.yaml 0644 root root - {}"
         "f ${configDir}/scenes.yaml 0644 root root - []"
-        "d ${dataDir}/zigbee2mqtt 0755 zigbee2mqtt zigbee2mqtt -"
+        "d ${dataDir}/zigbee2mqtt 0700 zigbee2mqtt zigbee2mqtt -"
       ];
 
       fileSystems = {

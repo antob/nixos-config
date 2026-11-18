@@ -48,6 +48,7 @@ in
       imports = with nixos; [
         inputs.copyparty.nixosModules.default
         common
+        agent-access
         atuin
         zfs
         systemd-networking

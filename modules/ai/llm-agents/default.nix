@@ -209,11 +209,39 @@ in
           };
         };
 
-        # Lets agents sign commits without a YubiKey touch; Claude reads it via GIT_CONFIG_* in its settings.json, Pi via its wrapper
-        sops.secrets.agent_signing_key = {
-          sopsFile = ../../hosts/common/workstation-secrets.yaml;
-          owner = user;
-          mode = "0400";
+        sops.secrets = {
+          # Lets agents sign commits without a YubiKey touch; Claude reads it via GIT_CONFIG_* in its settings.json, Pi via its wrapper
+          agent_signing_key = {
+            sopsFile = ../../hosts/common/workstation-secrets.yaml;
+            owner = user;
+            mode = "0400";
+          };
+          # Logs in as the restricted `agent` user (agent-access aspect) on other hosts
+          agent_ssh_key = {
+            sopsFile = ../../hosts/common/workstation-secrets.yaml;
+            owner = user;
+            mode = "0400";
+          };
+          # Home Assistant token of the Agent user; nixos-config's .envrc exports it as HA_AGENT_TOKEN
+          ha_agent_token = {
+            sopsFile = ../../hosts/common/workstation-secrets.yaml;
+            owner = user;
+            mode = "0400";
+          };
+        };
+
+        programs.ssh = {
+          extraConfig = ''
+            Match user agent
+              IdentityFile ${config.sops.secrets.agent_ssh_key.path}
+              IdentitiesOnly yes
+            # Ends the Match block, or options other modules append would only apply to the agent user
+            Match all
+          '';
+          knownHosts.hyllan = {
+            hostNames = [ "hyllan.antob.net" ];
+            publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDn6Z353msYJVcE1N00ieFhm3fd+eCrOP1cwwXKCcNsS";
+          };
         };
 
         systemd.tmpfiles.rules = [

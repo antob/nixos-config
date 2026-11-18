@@ -9,6 +9,22 @@
       subdomain = "esphome";
       port = 6052;
       dataDir = "/mnt/tank/services/esphome";
+
+      # The esphome CLI as the esphome user with the dashboard's environment; `--usb` adds the dialout group.
+      esphomeCli = pkgs.writeShellApplication {
+        name = "esphome-cli";
+        text = ''
+          group=()
+          if [ "''${1:-}" = --usb ]; then
+            group=(-g dialout)
+            shift
+          fi
+          exec sudo -u esphome "''${group[@]}" env --chdir=${dataDir} HOME=${dataDir} \
+            PLATFORMIO_CORE_DIR=${dataDir}/.platformio \
+            PATH=${pkgs.esphome}/bin:${pkgs.esphome-device-builder}/bin:/run/current-system/sw/bin \
+            esphome "$@"
+        '';
+      };
     in
     {
       users.users.esphome = {
@@ -97,6 +113,14 @@
       systemd.tmpfiles.rules = [
         "d ${dataDir} 0750 esphome esphome -"
       ];
+
+      # Compiling firmware already runs arbitrary code as esphome, so the agent may run anything as that user.
+      antob.agent-access = {
+        units = [ "esphome" ];
+        logUnits = [ "esphome" ];
+        runAs = [ "esphome : dialout" ];
+        packages = [ esphomeCli ];
+      };
 
       # mDNS so the dashboard can discover devices by name on the LAN.
       networking.firewall.allowedUDPPorts = [ 5353 ];

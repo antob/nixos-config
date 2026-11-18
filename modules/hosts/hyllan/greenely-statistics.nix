@@ -34,6 +34,11 @@
         };
       };
 
+      antob.agent-access = {
+        units = [ "greenely-statistics" ];
+        logUnits = [ "greenely-statistics" ];
+      };
+
       sops.secrets.greenely_statistics_token = { };
     };
 }
