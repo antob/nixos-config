@@ -211,7 +211,7 @@ in
 
         # Lets agents sign commits without a YubiKey touch; Claude reads it via GIT_CONFIG_* in its settings.json, Pi via its wrapper
         sops.secrets.agent_signing_key = {
-          sopsFile = ../../hosts/common/secrets.yaml;
+          sopsFile = ../../hosts/common/workstation-secrets.yaml;
           owner = user;
           mode = "0400";
         };

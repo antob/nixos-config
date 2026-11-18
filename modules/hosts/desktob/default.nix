@@ -65,10 +65,6 @@ in
           filter = "fsr";
         };
 
-        system.env = {
-          OPENCODE_API_KEY = "$(cat ${secrets.opencode_api_key.path})";
-          OPENAI_API_KEY = "$(cat ${secrets.openai_api_key.path})";
-        };
       };
 
       imports = with nixos; [
@@ -109,12 +105,6 @@ in
         wg0_private_key.sopsFile = ./secrets.yaml;
         restic_env_file = {
           sopsFile = ../common/secrets.yaml;
-        };
-        opencode_api_key = {
-          owner = config.antob.user.name;
-        };
-        openai_api_key = {
-          owner = config.antob.user.name;
         };
       };
 

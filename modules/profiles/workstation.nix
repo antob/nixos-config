@@ -75,12 +75,12 @@ in
 
       # Sops secrets; each host adds its own wg0_private_key sopsFile
       sops = {
-        defaultSopsFile = ../hosts/common/secrets.yaml;
+        defaultSopsFile = ../hosts/common/workstation-secrets.yaml;
         secrets = {
           wg0_private_key = {
             owner = "systemd-network";
           };
-          restic_client_backup_password = { };
+          restic_client_backup_password.sopsFile = ../hosts/common/secrets.yaml;
           github_copilot_token = {
             owner = config.antob.user.name;
           };
