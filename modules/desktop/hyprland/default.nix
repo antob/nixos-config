@@ -752,10 +752,12 @@ in
           -- Mod + grave toggles the last used one; Mod + Left/Right step between them while open.
           local scratchpads = {
             { name = "music", class = "chrome-music.antob.net__-Default", cmd = "${cmd-launch-webapp} https://music.antob.net", size = 0.7 },
-            { name = "obsidian", class = "md.obsidian.Obsidian", cmd = "uwsm app -- obsidian", size = 0.7 },
-            { name = "term", class = "scratchpad", cmd = terminal .. " --class scratchpad", size = 0.6 },
+            { name = "term", class = "scratchpad", cmd = terminal .. " --class scratchpad", size = 0.7 },
           }
           local lastScratchpad = 1
+          -- All scratchpads share one width fraction, capped in logical px for ultrawide monitors
+          local scratchpadWidth = 0.7
+          local scratchpadMaxWidth = 1800
 
           -- Enabled only while a scratchpad launches its app, so launcher starts open normally
           for _, s in ipairs(scratchpads) do
@@ -766,7 +768,8 @@ in
               match = { class = "^" .. (s.class:gsub("%.", "\\.")) .. "$" },
               float = true,
               center = true,
-              size = { "monitor_w*" .. s.size, "monitor_h*" .. s.size },
+              size = { "monitor_w*" .. scratchpadWidth, "monitor_h*" .. s.size },
+              max_size = { scratchpadMaxWidth, 100000 },
               workspace = s.ws .. " silent",
             })
           end
@@ -840,7 +843,8 @@ in
             hl.dispatch(hl.dsp.window.float({ action = "enable", window = win }))
             local mon = win.monitor
             if mon then
-              hl.dispatch(hl.dsp.window.resize({ x = mon.width / mon.scale * s.size, y = mon.height / mon.scale * s.size, window = win }))
+              local w = math.min(mon.width / mon.scale * scratchpadWidth, scratchpadMaxWidth)
+              hl.dispatch(hl.dsp.window.resize({ x = w, y = mon.height / mon.scale * s.size, window = win }))
             end
             hl.dispatch(hl.dsp.window.center({ window = win }))
           end
