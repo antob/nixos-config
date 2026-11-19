@@ -19,6 +19,11 @@ store-rev input:
 nixpkgs-src input="nixpkgs":
     nix eval --raw --impure --expr '(builtins.getFlake (toString ./.)).inputs.{{ input }}.outPath'
 
+# Print the store path of a package's source as a host sees it (overlays and pins applied)
+# Fetches the source into the store if missing, builds nothing. Usage: `just pkg-src hyprland [host]`
+pkg-src attr host=`hostname`:
+    nix build --no-link --print-out-paths {{ if default_subst == "" { "" } else { "--option substituters https://cache.nixos.org" } }} '.#nixosConfigurations.{{ host }}.pkgs.{{ attr }}.src'
+
 ###################################
 # Various `nixos-rebuild` commands
 ###################################
