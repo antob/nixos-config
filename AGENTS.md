@@ -57,10 +57,12 @@ profiles import. Custom settings live under the `antob.*` namespace.
   `systemctl status`, `ip`, `iwctl`, `resolvectl`) and ask before changing state.
 - Other hosts are reachable as `ssh <host>.lan` (e.g. `hyllan.lan`, `laptob.lan`,
   `pihole.lan`). Only SSH in when the task concerns that host.
-- Host-management skills (e.g. `home-assistant`) live in `.agents/skills/`
-  (gitignored, `.claude/skills` links to it). They log in as the restricted `agent`
-  user (`ssh agent@<host>.antob.net`), whose rights each host grants through the
-  `agent-access` aspect (`modules/services/agent-access.nix`).
+- Host-management skills (e.g. `home-assistant`, `hyllan`) live in `.agents/skills/`
+  (gitignored, `.claude/skills` links to it). For read-only checks on a host with
+  `agent-access`, use `ssh agent@<host>.antob.net` (no YubiKey touch; rights are
+  listed in the host's skill). Ask before `ssh <host>.lan` when the agent user lacks
+  a right. Grants come from the `agent-access` aspect
+  (`modules/services/agent-access.nix`).
 - After the user switches, confirm the change actually landed before
   re-debugging: Home Manager files under `~/.config` are symlinks into the store,
   so `readlink -f` shows the deployed version. Many apps (tmux, workmux, waybar,
