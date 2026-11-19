@@ -3,48 +3,45 @@
 A multi-host NixOS configuration in the dendritic pattern: every `.nix` file under
 `modules/` is a flake-parts module, loaded by import-tree. Features are *aspects*
 (`flake.modules.nixos.<name>` / `flake.modules.homeManager.<name>`) that hosts and
-presets import. Custom settings live under the `antob.*` namespace.
+profiles import. Custom settings live under the `antob.*` namespace.
 
 ---
 
 ## Where to Look (read this before scanning)
 
+- The working directory is the repo root. Do not `cd` into it before commands.
 - This repo is the source of truth for all config. Never run `find`, `ls -R`, or
   `grep -r` across `/nix/store`, `/`, or the whole filesystem. Those trees are huge
   and slow.
-- Do not build to resolve questions. `just build / switch / test / boot / deploy`
-  and `nixos-rebuild ...` write to the store and change running system state. Only
-  run them when the user explicitly asks you to. Never run them to inspect current
-  configuration.
-- `result` is an ignored symlink at the repo root pointing to the most recent local
-  build. The path encodes the host: `/nix/store/<hash>-nixos-system-<host>-...`.
-  Resolve it with `realpath result` or `just store-result`, and trust it only if it
-  names the host you are working on (it may point to another host built previously).
-  If it is missing or names a different host, do not rebuild. Ask the user to build
-  the host you need.
-- `flake.nix` declares the inputs/channels and which host subsystems they use.
-- `flake.lock` pins every input to a committed revision. For a one-off lookup use
-  `just store-rev <input>` (e.g. `nixpkgs`, `nixpkgs-stable`), or read it directly:
-
-  ```bash
-  jq -r '.nodes.<name>.locked.rev' flake.lock
-  ```
-
-  `just bump-prev` re-pins `nixpkgs-prev` to the locked rev of the current system.
-- `modules/` (aspects, hosts, overlays, flake.lib) and `pkgs/` hold the actual config.
-  Start there, never in the store. If you must touch `/nix/store`, start from the
-  `result` symlink or a concretely named store path, never from the `/nix/store`
-  root. The `store-*` steps are the only allowed store-adjacent lookups; the
-  `build/switch/test/boot/deploy` steps are state-changing and off-limits for
-  info-gathering.
-- Flakes only see files tracked by git. A new file you create is invisible to
-  `nix eval` / builds until it is added. Run `git add -N <file>` (intent-to-add,
-  stages no content) or tell the user it must be added before they rebuild.
+- For upstream source, resolve a concrete path first and search only inside it:
+  `just pkg-src <attr> [host]` (a package's source as that host sees it),
+  `just nixpkgs-src [input]` (the pinned nixpkgs or another input). Both are
+  read-only and allowed. Details and option lookups: `docs/agent-reference.md`.
+- Do not build to resolve questions. Use `nix eval` instead (e.g.
+  `nix eval --json .#nixosConfigurations.<host>.config.<option>`). `just build /
+  switch / test / boot / deploy` and `nixos-rebuild ...` write to the store and
+  change running system state. Run `just build` only when explicitly asked, and
+  never run `just switch / test / boot / deploy`: the user applies changes
+  themselves, even when they ask for a change to be made.
+- `result` is an ignored symlink at the repo root to the most recent local build.
+  The path encodes the host (`/nix/store/<hash>-nixos-system-<host>-...`). Resolve
+  it with `just store-result` and trust it only if it names the host you are working
+  on. If it is missing or names another host, ask the user to build.
+- `flake.nix` declares inputs and channels. `flake.lock` pins every input: use
+  `just store-rev <input>` for a revision. `just bump-prev` re-pins `nixpkgs-prev`
+  to the locked rev of the current system.
+- `modules/` (aspects, hosts, overlays, flake.lib) and `pkgs/` hold the actual
+  config. Start there. If you must touch `/nix/store`, start from `result` or a
+  concretely named store path, never from the `/nix/store` root.
+- Flakes only see files tracked by git. A new file is invisible to `nix eval` and
+  builds until added. Run `git add -N <file>` (intent-to-add, stages no content) or
+  tell the user it must be added before they rebuild.
 
 ---
 
 ## Working With the User
 
+- Commit only when asked. Commits go on `main`, no branches unless asked.
 - The user builds and switches hosts themselves. When a change is ready, say which
   host needs `just build` / `just switch` and stop there. Verify with `nix eval`.
 - When the user pastes a build failure, find the failing derivation (the first
@@ -55,8 +52,8 @@ presets import. Custom settings live under the `antob.*` namespace.
 - "Investigate, do not fix" means read-only: no file edits, no service restarts,
   no deletions. Report findings and wait.
 - Much of the work is live debugging of the running machine (network, input
-  devices, printers, services), not just config edits. Usually the local host is
-  `desktob`; check with `hostname`. Prefer read-only diagnostics (`journalctl`,
+  devices, printers, services), not just config edits. The local host varies
+  (`desktob`, `laptob`); check with `hostname`. Prefer read-only diagnostics (`journalctl`,
   `systemctl status`, `ip`, `iwctl`, `resolvectl`) and ask before changing state.
 - Other hosts are reachable as `ssh <host>.lan` (e.g. `hyllan.lan`, `laptob.lan`,
   `pihole.lan`). Only SSH in when the task concerns that host.
@@ -68,9 +65,9 @@ presets import. Custom settings live under the `antob.*` namespace.
   re-debugging: Home Manager files under `~/.config` are symlinks into the store,
   so `readlink -f` shows the deployed version. Many apps (tmux, workmux, waybar,
   compositors) also need a reload or restart to pick up new config.
-- Remember impermanence: new state an app writes (config dirs, caches, databases)
-  is lost on reboot unless persisted via the `preservation` module. Check this
-  whenever adding an app or debugging "settings don't survive a reboot".
+- Remember impermanence (see "Other Conventions"): new state an app writes (config
+  dirs, caches, databases) is lost on reboot unless persisted. Check this whenever
+  adding an app or debugging "settings don't survive a reboot".
 
 ---
 
@@ -97,16 +94,21 @@ and commit `flake.nix` + `flake.lock` together.
 
 Read-only store lookups (safe to run):
 
-| Command                | Description                                                |
-| ---------------------- | ---------------------------------------------------------- |
-| `just store-result`    | Resolve `result` symlink to the most recent local build      |
-| `just store-rev <input>` | Print the pinned revision of a flake input from `flake.lock` |
-| `just nixpkgs-src [input]` | Print the store path of the pinned nixpkgs (or another input) source from `flake.lock` |
+| Command                      | Description                                                                         |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
+| `just store-result`          | Resolve the `result` symlink to the most recent local build                         |
+| `just store-rev <input>`     | Print the pinned revision of a flake input from `flake.lock`                        |
+| `just nixpkgs-src [input]`   | Print the store path of the pinned nixpkgs (or another input) source                |
+| `just pkg-src <attr> [host]` | Print the store path of a package's source as a host sees it (fetches, builds nothing) |
 
-These `store-*` / `nixpkgs-src` commands only read state and change nothing. The `build / switch /
-test / boot / deploy / iso` commands write to the store and change system state; do
-not run them to gather information. Ask the user when you need a host built or
-switched.
+These only read state. The `build / switch / test / boot / deploy / iso` commands
+write to the store and change system state; do not run them to gather information.
+Ask the user when you need a host built or switched.
+
+Away from the home LAN the `nix-cache.hyllan.lan` substituter is unreachable and
+commands stall on repeated 15 s timeouts (`unable to download ...narinfo`). If you
+see that, stop and rerun with `DEFAULT_SUBST=true just <recipe>`. Only
+`_nixos-rebuild` (build, switch, ...) and `pkg-src` honour it.
 
 There is **no test suite** and **no CI**. Correctness is validated by the user
 running `just build` / `just test`. The closest thing to CI is the nightly
@@ -117,78 +119,14 @@ unpushed local changes are not in that build.
 
 ---
 
-## Reading nixpkgs source & option definitions (fast)
+## Reference
 
-To understand what an upstream option does or where a package is defined, do NOT
-grep/find across `/nix/store` or the whole filesystem. Those trees are huge and
-slow. The pinned nixpkgs source already exists in the store; resolve it to a
-concrete path first, then search only inside that path.
-
-```bash
-NIXPKGS=$(just nixpkgs-src)   # e.g. /nix/store/<hash>-source (eval only, no build)
-```
-
-Then grep/read against `$NIXPKGS` directly, never against `/nix/store` itself:
-
-```bash
-rg -l "options\\.programs\\.vscode" "$NIXPKGS/nixos/modules/programs"
-less "$NIXPKGS/nixos/modules/programs/vscode.nix"
-```
-
-Useful directories inside the source:
-
-| Path                              | Contents                                         |
-| --------------------------------- | ------------------------------------------------ |
-| `nixos/modules/`                  | NixOS module/option definitions                  |
-| `nixos/modules/services/`         | Service options (`systemd`, `web`, …)             |
-| `nixos/modules/programs/`         | Program options (`vscode.nix`, `firefox.nix`, …) |
-| `pkgs/top-level/all-packages.nix` | Central package attribute map                    |
-| `pkgs/by-name/`                   | Package definitions keyed by name                |
-| `lib/`                            | nixpkgs `lib` helpers (`mkOption`, `mkIf`, …)    |
-| `nixos/modules/misc/`             | Core system options (`system.nixos`, …)          |
-
-To inspect what an option resolves to (not just its default), evaluate the
-configuration read-only instead of building:
-
-```bash
-nix eval --json .#nixosConfigurations.desktob.config.services.openssh.enable
-```
-
-Prints `true`/`false` (use `--json` for non-string option values; `--raw` only
-prints strings). This runs a full evaluation (~10s the first time, cached
-afterwards) but writes nothing to the store. Prefer `nix eval` over
-`nixos-rebuild build` when answering "what value does option X have on host
-Y?".
-
-The alternate channels (`nixpkgs-stable`, `nixpkgs-next`, `nixpkgs-prev`) are
-separate flake inputs and have their own store paths. When a question targets
-those specifically, look in `modules/flake/overlays.nix` to see how they are wired
-to `pkgs.stable.*` / `pkgs.next.*` / `pkgs.prev.*`, then resolve the
-evaluated package set the same way (e.g. `nix eval --raw
-.#nixosConfigurations.desktob.pkgs.stable.path`).
-
-To check which version of a package a host actually gets (e.g. after the user
-updated inputs), evaluate it instead of guessing from the lock:
-
-```bash
-nix eval --raw .#nixosConfigurations.desktob.pkgs.hyprland.version
-nix eval --raw .#nixosConfigurations.desktob.config.boot.kernelPackages.kernel.drvPath
-```
-
----
-
-## Raspberry Pi Hosts (pihole, pikvm, pidesk)
-
-These are built with `inputs.nixos-raspberrypi.lib.nixosSystem` and evaluate
-against nixos-raspberrypi's own (older, stable) nixpkgs. They import the `rpi`
-profile (`modules/profiles/rpi.nix`), which is `shell` plus the RPi bits.
-
-- Options that only exist in newer nixpkgs (or in flake inputs these hosts do not
-  import) break RPi evaluation, even when unused. Keep that in mind when editing
-  aspects that `rpi` imports, directly or as a dependency.
-- Kernels come from `nixos-raspberrypi.cachix.org`. If a build starts compiling
-  `linux-config-*` / the kernel, the derivation drifted from upstream's cached
-  one; check `nixos-raspberrypi`'s transitive `nixpkgs` node in `flake.lock`.
+- Reading nixpkgs source, `nix eval` recipes for options and versions, alternate
+  channels: `docs/agent-reference.md`.
+- Raspberry Pi hosts (pihole, pikvm, pidesk): they evaluate on nixos-raspberrypi's
+  older nixpkgs, so options that only exist in newer nixpkgs break them even when
+  unused. Keep RPi-only wiring in `modules/profiles/rpi.nix`. Kernel cache and
+  other details: `docs/agent-reference.md`.
 
 ---
 
@@ -233,9 +171,6 @@ changes nothing.
 
 - **2 spaces** for indentation throughout, no tabs.
 - Formatter: `nixfmt-tree` (wrapper around `nixfmt`). Run `just fmt` before committing.
-- File names: `kebab-case` (e.g. `open-webui.nix`, `backup-status/`).
-- Variable names: `camelCase` for local bindings (`cfg`, `gtkCfg`, `emailFrom`).
-- NixOS option names: `camelCase` as per upstream convention.
 
 ### Aspect Files
 
@@ -359,24 +294,14 @@ exposed via the `additions` overlay. Use `pkgs.<name>` to reference them from mo
 
 ---
 
-## Naming Conventions Summary
+## Other Conventions
 
-| Thing                   | Convention   | Example                     |
-| ----------------------- | ------------ | --------------------------- |
-| File names              | `kebab-case` | `open-webui.nix`            |
-| Directory names         | `kebab-case` | `cli-apps/`                 |
-| Aspect names            | `kebab-case` | `nix-search-tv`, `hyprland` |
-| Local Nix bindings      | `camelCase`  | `cfg`, `gtkCfg`             |
-| NixOS options           | `camelCase`  | `hostName`, `storageDriver` |
-| Custom option namespace | `antob.*`    | `antob.git.userEmail`       |
-| Host names              | `kebab-case` | `laptob`, `desktob`         |
-
----
-
-## Key Architectural Decisions
-
-- **`antob.*` namespace** all custom options live under `antob`, to prevent conflicts with upstream NixOS options.
-- **Dendritic aspects.** Every file is a flake-parts module; features are imported, not enabled. Layered profiles bundle aspects so hosts import one profile instead of every feature.
-- **Impermanence.** Root filesystem is ephemeral. Persistent data lives at `antob.persistence.path` (default `/persist`), and the `.safe` subfolder is additionally backed up offsite. Some hosts override the path. System and user state is preserved via the `preservation` module, not written into the ephemeral root.
-- **No CI.** The user validates with `just build <host>` locally; hyllan's nightly cache build is the only automated build.
-- **Shell scripts as commands.** User-facing scripts live in `modules/shell/scripts/_files/` as Nix-wrapped commands (one file or folder per command, e.g. `backup-status/`), not as loose files in `scripts/`.
+- Directory, file, aspect and host names are `kebab-case`; local bindings and
+  NixOS options are `camelCase`; custom options live under `antob.*`.
+- **Impermanence.** The root filesystem is ephemeral. Persistent data lives at
+  `antob.persistence.path` (default `/persist`, overridden on some hosts); its
+  `.safe` subfolder is also backed up offsite. State is preserved via the
+  `preservation` module.
+- **Shell scripts as commands.** User-facing scripts live in
+  `modules/shell/scripts/_files/` as Nix-wrapped commands (one file or folder per
+  command, e.g. `backup-status/`), not as loose files in `scripts/`.
