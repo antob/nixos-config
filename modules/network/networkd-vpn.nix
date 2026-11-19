@@ -88,6 +88,7 @@
         networking.wg-quick.interfaces = {
           protonvpn0 = {
             autostart = false;
+            mtu = 1380;
             address = [ "10.2.0.2/32" ];
             dns = [ "10.2.0.1" ];
             privateKeyFile = secrets.protonvpn0_private_key.path;
@@ -106,6 +107,7 @@
           };
           protonvpn1 = {
             autostart = false;
+            mtu = 1380;
             address = [ "10.2.0.2/32" ];
             dns = [ "10.2.0.1" ];
             privateKeyFile = secrets.protonvpn1_private_key.path;
