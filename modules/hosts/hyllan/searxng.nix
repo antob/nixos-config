@@ -8,6 +8,10 @@
       inherit (config.sops) secrets;
     in
     {
+      antob.agent-access.logUnits = [
+        "searx"
+      ];
+
       services = {
         searx = {
           enable = true;

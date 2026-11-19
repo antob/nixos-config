@@ -9,6 +9,11 @@
       localMusicDir = "/mnt/tank/share/public/Music";
     in
     {
+      antob.agent-access.logUnits = [
+        "podman-mass"
+        "podman-ytdlp-pot-provider"
+      ];
+
       virtualisation.oci-containers.containers = {
         mass = {
           image = "ghcr.io/music-assistant/server:beta";

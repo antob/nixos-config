@@ -9,6 +9,10 @@
       inherit (config.sops) secrets;
     in
     {
+      antob.agent-access.logUnits = [
+        "copyparty"
+      ];
+
       services = {
 
         copyparty = {

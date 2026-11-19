@@ -146,6 +146,11 @@
       '';
     in
     {
+      antob.agent-access.logUnits = [
+        "harmonia"
+        "nix-cache-build"
+      ];
+
       services = {
         harmonia.cache = {
           enable = true;

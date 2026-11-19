@@ -69,6 +69,10 @@ in
         );
     in
     {
+      antob.agent-access.logUnits = map (name: "restic-backups-${name}") (
+        lib.attrNames config.services.restic.backups
+      );
+
       services.restic.backups = mkResticBackups [
         {
           name = "hass";

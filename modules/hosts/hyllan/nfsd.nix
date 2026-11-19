@@ -28,6 +28,10 @@
     #        $ ls /mnt/tank/share/<name>
 
     {
+      antob.agent-access.logUnits = [
+        "nfs-server"
+      ];
+
       fileSystems = {
         "/mnt/tank/share/public" = {
           device = "zpool/public_share";

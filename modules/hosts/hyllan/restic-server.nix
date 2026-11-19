@@ -16,6 +16,11 @@
       ];
     in
     {
+      antob.agent-access.logUnits = [
+        "restic-rest-server"
+        "restic-prune-all-client-backups"
+      ];
+
       # Restic REST server for laptop backups, reachable over the WireGuard
       # tunnel only (port is opened on the wg0 interface alone).
       services.restic.server = {

@@ -13,6 +13,12 @@
       dataDir = "/mnt/tank/services/lan-guard";
     in
     {
+      antob.agent-access.logUnits = [
+        "podman-languard-backend"
+        "podman-languard-frontend"
+        "podman-languard-scanner"
+      ];
+
       virtualisation.oci-containers.containers = {
         "languard-backend" = {
           image = "ghcr.io/hillaliy/languard-backend:latest";

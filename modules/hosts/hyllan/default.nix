@@ -18,6 +18,15 @@ in
       inherit (monCfg) emailTo;
     in
     {
+      # Journals the agent user may read (see the agent-access aspect).
+      antob.agent-access.logUnits = [
+        "systemd-networkd"
+        "zfs-import-zpool"
+        "zfs-mount"
+        "zfs-zed"
+        "smartd"
+      ];
+
       antob = {
         systemd-networking = {
           enableWireless = false;

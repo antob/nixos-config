@@ -3,6 +3,10 @@
     _:
 
     {
+      antob.agent-access.logUnits = [
+        "samba-smbd"
+      ];
+
       services.samba = {
         enable = true;
         openFirewall = true;
