@@ -19,11 +19,15 @@
       # Root-only container queries for the agent; no arguments are passed on to podman.
       hassCtl = pkgs.writeShellApplication {
         name = "hass-ctl";
-        runtimeInputs = [ config.virtualisation.podman.package ];
+        runtimeInputs = [
+          config.virtualisation.podman.package
+          pkgs.jq
+        ];
         text = ''
           case "''${1:-}" in
             ps) exec podman ps --all --filter name=^hass$ ;;
-            inspect) exec podman inspect hass ;;
+            # Env and CreateCommand carry the container's environment values, so drop them.
+            inspect) podman inspect hass | jq 'map(del(.Config.Env, .Config.CreateCommand))' ;;
             stats) exec podman stats --no-stream hass ;;
             top) exec podman top hass ;;
             images) exec podman images ghcr.io/home-assistant/home-assistant ;;
