@@ -52,6 +52,8 @@
           hl.timer(function()
             local active = hl.get_active_window()
             if not (active and active.stable_id == id) or active.floating then return end
+            -- Fullscreen keeps the column width, so games would not fill the monitor
+            if (active.fullscreen or 0) ~= 0 or active.class:match("^gamescope$") or active.class:match("^steam_app_") then return end
             local ws = active.workspace
             local mon = active.monitor
             local col = active.layout and active.layout.column
