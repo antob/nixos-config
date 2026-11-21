@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.aspects) nixos;
+in
 {
   flake.modules.nixos.wiggum-headscale =
     {
@@ -63,6 +67,8 @@
       aclFile = pkgs.writeText "acl-policy.json" aclJson;
     in
     {
+      imports = [ nixos.wiggum-caddy ];
+
       services = {
         headscale = {
           enable = true;

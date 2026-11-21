@@ -38,11 +38,15 @@ in
         wants = [ "wg-quick-wg0.service" ];
       };
 
-      # Enable IP forwarding
       boot.kernel.sysctl = {
-        "net.ipv4.ip_forward" = 1;
-        "net.ipv4.conf.all.forwarding" = true;
-        "net.ipv6.conf.all.forwarding" = true;
+        "net.ipv6.conf.all.accept_redirects" = 0;
+        "net.ipv6.conf.default.accept_redirects" = 0;
+      };
+
+      # No LLMNR or mDNS on a public host
+      services.resolved.settings.Resolve = {
+        LLMNR = false;
+        MulticastDNS = false;
       };
 
       # Networking and firewall

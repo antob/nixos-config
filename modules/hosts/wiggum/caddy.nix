@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.wiggum =
+  flake.modules.nixos.wiggum-caddy =
     { pkgs, ... }:
     let
       email = "tob@antob.se";

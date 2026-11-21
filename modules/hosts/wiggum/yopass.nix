@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.aspects) nixos;
+in
 {
   flake.modules.nixos.wiggum-yopass =
     _:
@@ -7,6 +11,8 @@
       port = 8090;
     in
     {
+      imports = [ nixos.wiggum-caddy ];
+
       virtualisation.oci-containers.containers = {
         yopass = {
           image = "jhaals/yopass";

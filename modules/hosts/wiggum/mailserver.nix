@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  inherit (config.aspects) nixos;
+in
 {
   flake.modules.nixos.wiggum-mailserver =
     # Analyze postfix logs:
@@ -17,6 +21,11 @@
       certDir = "/var/certs";
     in
     {
+      imports = [
+        nixos.wiggum-caddy
+        nixos.wiggum-fail2ban
+      ];
+
       mailserver = {
         enable = true;
         stateVersion = 3;

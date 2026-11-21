@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.wiggum =
+  flake.modules.nixos.wiggum-fail2ban =
     { pkgs, ... }:
 
     {
