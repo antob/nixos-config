@@ -1,5 +1,7 @@
 # WireGuard hub migration: hyllan to wiggum
 
+**Status: abandoned (2026-11-21), hyllan stays the hub.** A wiggum hub decrypts all spoke to spoke traffic (NFS, restic over HTTP, DNS) on an internet-facing VPS and becomes a router into the home network, while nearly everything used lives at home. The home IP and port forward have not been a real problem. Kept from the work: wiggum key rotation, the node table, `restartUnits` and the dormant hub mode in `modules/network/wireguard.nix`. See "Rollback" at the end.
+
 Goal: wiggum (public VPS) becomes the wg0 hub so the network no longer depends on the home IP and router port forward. Subnet and addresses stay the same (`10.64.1.0/24`).
 
 ## Current state
@@ -75,4 +77,17 @@ Status: option B chosen (2026-11-21) and folded into phases 2 to 4.
 - Phase 2.2 and 2.3 code done (2026-11-21, uncommitted): wiggum sets `antob.wireguard.hub = true` (also `send_redirects = 0`, since spokes only reach each other through the hub); hyllan's wiggum peer is `10.64.1.0/24`. Verified with `nix eval`: wiggum has `listenPort 51820`, UDP 51820 open, forward filter on, one peer hyllan `/24` via `wg.antob.se`; hyllan peers unchanged apart from wiggum `/24`.
 - Known wart until phase 4: packets to unassigned wg0 addresses loop between hyllan and wiggum until TTL expires (each holds `/24` towards the other).
 - Phase 2 deployed and verified (2026-11-21): wiggum listens on 51820, handshake with hyllan, wiggum pings .2 .3 .4 .6 .7 .9, hyllan's wiggum peer shows `10.64.1.0/24`. Other hosts get the 2.1 change (`restartUnits` only) on their next deploy.
-- Next: phase 3, laptob first.
+- Phase 2 committed as 76f097c.
+- Phase 3 laptob code done (2026-11-21, uncommitted): `wiggumSpokes = [ "laptob" ]`, laptob peer removed on hyllan. Verified with `nix eval`: wiggum has hyllan `/24` plus laptob `/32`; laptob has a single peer wiggum `/24` via `hs.antob.se`. Deployed and verified (2026-11-21): handshake on wiggum, laptob reaches hyllan, desktob and DNS, hyllan reaches laptob.
+- Open point for home spokes: option B only links them directly to hyllan, so wg0 DNS to pihole (`10.64.1.4`) from desktob and pidesk will go via wiggum. Consider `antob.wireguard.dns = "192.168.1.4"` on home hosts.
+- Next: phase 3 desktob (home spoke).
+
+## Rollback (2026-11-21)
+
+Code (uncommitted): `wiggumSpokes = [ ]`, hyllan's wireguard config back to its phase 1 state (laptob `/32` peer restored, wiggum peer `10.64.1.5/32`), `antob.wireguard.hub` removed from wiggum. `nix eval` of wg0 on wiggum and laptob matches the pre-migration baseline; hyllan's file is identical to commit 9745756.
+
+Deployed and verified (2026-11-21): hyllan shows handshakes for wiggum, laptob and the other spokes; wiggum and laptob checks pass.
+
+Deploy order used: hyllan, then laptob right after (laptob is cut off from hyllan and the other spokes in between), then wiggum over `46.62.214.26` (its wg0 restarts). Verify: handshakes for laptob and wiggum on hyllan, wiggum pings every node, laptob pings hyllan and desktob.
+
+After that: remove the temporary public SSH on wiggum (restore `listenAddresses = [ "10.64.1.5" ]`, drop `extraInputRules`), deployed over wg0. Optionally drop the unused migration scaffolding (`wiggumSpokes`, `hubEndpoint`, `hyllanLanEndpoint`, `home` flags).

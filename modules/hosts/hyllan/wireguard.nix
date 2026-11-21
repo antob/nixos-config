@@ -77,10 +77,10 @@
                 PublicKey = "70PciNESmE7cvtPuIORr/2paDCoTgokWoZbvblHyZGI=";
                 AllowedIPs = [ "10.64.1.4" ];
               }
-              # Wiggum, the new hub. Direct /32 spoke peers still win.
+              # Wiggum
               {
                 PublicKey = "kXis0LY2yJ9xmauVtbd0XvGGOFpgUU0etPHB//1JCQ0=";
-                AllowedIPs = [ "10.64.1.0/24" ];
+                AllowedIPs = [ "10.64.1.5" ];
               }
               # Desktob
               {

@@ -12,8 +12,6 @@ in
 
     {
       antob = {
-        wireguard.hub = true;
-
         openssh = {
           # TODO: restore listenAddresses = [ "10.64.1.5" ] in phase 4 (docs/wireguard-hub-migration.md)
           interfaces = [ "wg0" ]; # open firewall only on wg0
