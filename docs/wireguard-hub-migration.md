@@ -90,4 +90,6 @@ Deployed and verified (2026-11-21): hyllan shows handshakes for wiggum, laptob a
 
 Deploy order used: hyllan, then laptob right after (laptob is cut off from hyllan and the other spokes in between), then wiggum over `46.62.214.26` (its wg0 restarts). Verify: handshakes for laptob and wiggum on hyllan, wiggum pings every node, laptob pings hyllan and desktob.
 
-After that: remove the temporary public SSH on wiggum (restore `listenAddresses = [ "10.64.1.5" ]`, drop `extraInputRules`), deployed over wg0. Optionally drop the unused migration scaffolding (`wiggumSpokes`, `hubEndpoint`, `hyllanLanEndpoint`, `home` flags).
+Committed as 0fb47a7.
+
+Follow-ups (2026-11-21, uncommitted): wiggum's temporary public SSH removed (`listenAddresses = [ "10.64.1.5" ]` restored, `extraInputRules` dropped); migration scaffolding removed from the aspect (`wiggumSpokes`, `hs.antob.se`, LAN endpoint, `home` flags). Hub mode is now generic: a `/32` peer for every other node. `nix eval` of wg0 on all six aspect hosts is identical to the pre-migration baseline. Pending: deploy wiggum over wg0.

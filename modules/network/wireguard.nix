@@ -2,7 +2,6 @@
 let
   inherit (config.flake.lib) mkOpt mkBoolOpt;
 
-  # The wg0 mesh. `home` nodes are stationary at home and keep a direct link to hyllan.
   nodes = {
     hyllan = {
       ip = "10.64.1.2";
@@ -11,12 +10,10 @@ let
     pikvm = {
       ip = "10.64.1.3";
       publicKey = "w4KKlllk8xpQXoijHViqdefKw9Ilwcl9LJt7emP6GHg=";
-      home = true;
     };
     pihole = {
       ip = "10.64.1.4";
       publicKey = "70PciNESmE7cvtPuIORr/2paDCoTgokWoZbvblHyZGI=";
-      home = true;
     };
     wiggum = {
       ip = "10.64.1.5";
@@ -25,7 +22,6 @@ let
     desktob = {
       ip = "10.64.1.6";
       publicKey = "bnsImaGQClT8/kL/4BoyOcpmtlXi6deeyZeOJxiGljE=";
-      home = true;
     };
     laptob = {
       ip = "10.64.1.7";
@@ -38,18 +34,13 @@ let
     pidesk = {
       ip = "10.64.1.9";
       publicKey = "ygE5P5AyxzGPZh5ljlaJ51pnBFOA2xyXRcfkqe92dBI=";
-      home = true;
     };
   };
 
-  # TODO: hub migration (docs/wireguard-hub-migration.md). Spokes listed here use wiggum.
-  wiggumSpokes = [ ];
-
+  hub = "hyllan";
   subnet = "10.64.1.0/24";
   port = 51820;
-  hubEndpoint = "hs.antob.se:${toString port}";
-  oldHubEndpoint = "wg.antob.se:${toString port}";
-  hyllanLanEndpoint = "192.168.1.2:${toString port}";
+  hubEndpoint = "wg.antob.se:${toString port}";
 in
 {
   flake.modules.nixos.wireguard =
@@ -65,48 +56,26 @@ in
       cfg = config.antob.wireguard;
       node = nodes.${cfg.name};
 
-      peer = name: attrs: { inherit (nodes.${name}) publicKey; } // attrs;
+      hubPeers = mapAttrsToList (_: n: {
+        inherit (n) publicKey;
+        allowedIPs = [ "${n.ip}/32" ];
+      }) (removeAttrs nodes [ cfg.name ]);
 
-      hubPeers = [
-        (peer "hyllan" {
+      spokePeers = [
+        {
+          inherit (nodes.${hub}) publicKey;
           allowedIPs = [ subnet ];
-          endpoint = oldHubEndpoint;
+          endpoint = hubEndpoint;
           persistentKeepalive = 25;
-        })
-      ]
-      ++ map (name: peer name { allowedIPs = [ "${nodes.${name}.ip}/32" ]; }) wiggumSpokes;
-
-      spokePeers =
-        if elem cfg.name wiggumSpokes then
-          [
-            (peer "wiggum" {
-              allowedIPs = [ subnet ];
-              endpoint = hubEndpoint;
-              persistentKeepalive = 25;
-            })
-          ]
-          ++ optional (node.home or false) (
-            peer "hyllan" {
-              allowedIPs = [ "${nodes.hyllan.ip}/32" ];
-              endpoint = hyllanLanEndpoint;
-              persistentKeepalive = 25;
-            }
-          )
-        else
-          [
-            (peer "hyllan" {
-              allowedIPs = [ subnet ];
-              endpoint = oldHubEndpoint;
-              persistentKeepalive = 25;
-            })
-          ];
+        }
+      ];
     in
     {
       options.antob.wireguard = with types; {
         name = mkOpt (enum (
           attrNames nodes
         )) config.networking.hostName "This node's name in the mesh table.";
-        hub = mkBoolOpt false "Whether this node is the wg0 hub that forwards between spokes.";
+        hub = mkBoolOpt false "Whether this node is a wg0 hub that peers with every node and forwards between them.";
         privateKeyFile =
           mkOpt str config.sops.secrets.wg0_private_key.path
             "Path to this node's WireGuard private key file.";
