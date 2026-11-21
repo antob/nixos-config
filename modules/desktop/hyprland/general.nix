@@ -238,6 +238,11 @@
             force_zero_scaling = true,
           },
 
+          render = {
+            -- HDR only for fullscreen apps that request it; desktop stays SDR
+            cm_auto_hdr = 1,
+          },
+
           ecosystem = {
             no_update_news = true,
             no_donation_nag = true,
