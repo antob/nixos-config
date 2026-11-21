@@ -83,6 +83,15 @@ in
           ];
     in
     {
+      # Same palette as the Neovim colorscheme (catppuccin-mocha).
+      programs.bat.themes."Catppuccin Mocha" = {
+        src = "${pkgs.catppuccin.override {
+          variant = "mocha";
+          themeList = [ "bat" ];
+        }}/bat";
+        file = "Catppuccin Mocha.tmTheme";
+      };
+
       xdg.configFile."lazygit/config.yml".text = /* yaml */ ''
         gui:
           showFileTree: false
@@ -154,11 +163,13 @@ in
           };
           delta = {
             navigate = true; # use n and N to move between diff sections
-            syntax-theme = "base16-stylix"; # bat theme from the Stylix bat target
+            syntax-theme = "Catppuccin Mocha";
 
             features = "side-by-side line-numbers decorations";
             plus-style = "syntax '#${mix "base00" "base0B" 20}'";
             minus-style = "syntax '#${mix "base00" "base08" 20}'";
+            plus-emph-style = "syntax '#${mix "base00" "base0B" 28}'";
+            minus-emph-style = "syntax '#${mix "base00" "base08" 28}'";
 
             decorations = {
               commit-decoration-style = "yellow ul ol";
