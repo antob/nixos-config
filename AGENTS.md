@@ -132,6 +132,17 @@ unpushed local changes are not in that build.
 
 ---
 
+## Networking
+
+- Hosts are meshed over a self-run **WireGuard** network (`wireguard` aspect,
+  `wg0`, `10.9.0.0/24`-style addresses, tunnel-scoped DNS for `~antob.net` and `~lan`).
+- There is **no headscale server and no tailnet of our own** any more. The `tailscale`
+  aspect only installs the Tailscale client. Do not assume a local tailnet, MagicDNS
+  names or `hs.antob.se` exist. `wiggum-headscale` is an unused standalone aspect kept
+  for reference only.
+
+---
+
 ## Repository Layout
 
 `flake.nix` only declares inputs; `outputs` is `mkFlake` over `import-tree ./modules`.
@@ -263,7 +274,7 @@ settings (host ids, addresses, hardware, extras). Put config shared by several
 hosts in the lowest profile they all import; nothing opts out of a profile's
 import. When only some hosts want a feature, those hosts import it.
 Unused host-specific files are standalone aspects named `<host>-<file>`
-(`hyllan-plex`, `wiggum-headscale`): import one to enable it.
+(`hyllan-plex`, `wiggum-mailserver`): import one to enable it.
 
 ### Overlays and Multiple nixpkgs Channels
 
