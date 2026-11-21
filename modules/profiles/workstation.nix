@@ -42,10 +42,6 @@ in
           storageDriver = "btrfs";
         };
 
-        wireguard = {
-          privateKeyFile = secrets.wg0_private_key.path;
-        };
-
         restic-backup = {
           paths = [
             "${config.antob.persistence.path}/safe"

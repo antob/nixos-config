@@ -21,11 +21,6 @@ in
         hostId = "b4a80555";
       };
 
-      antob.wireguard = {
-        address = "10.64.1.9/24";
-        privateKeyFile = secrets.wg0_private_key.path;
-      };
-
       imports = with nixos; [
         rpi
         wireguard

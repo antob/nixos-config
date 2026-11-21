@@ -10,15 +10,9 @@ in
       ...
     }:
 
-    let
-      inherit (config.sops) secrets;
-    in
     {
       antob = {
-        wireguard = {
-          address = "10.64.1.5/24";
-          privateKeyFile = secrets.wg0_private_key.path;
-        };
+        wireguard.hub = true;
 
         openssh = {
           # TODO: restore listenAddresses = [ "10.64.1.5" ] in phase 4 (docs/wireguard-hub-migration.md)

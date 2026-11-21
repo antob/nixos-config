@@ -32,10 +32,6 @@ in
           resticEnvFile = secrets.restic_env_file.path;
         };
 
-        wireguard = {
-          address = "${wgIp}/24";
-        };
-
         clipperd = {
           bindIp = wgIp;
         };

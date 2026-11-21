@@ -22,10 +22,6 @@ in
           hostId = "6278643e";
         };
 
-        wireguard = {
-          address = "${wgIp}/24";
-        };
-
         clipperd = {
           bindIp = wgIp;
         };

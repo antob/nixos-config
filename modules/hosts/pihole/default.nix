@@ -13,7 +13,6 @@ in
 
     with lib;
     let
-      inherit (config.sops) secrets;
       piholeFtl = config.services.pihole-ftl;
     in
     {
@@ -31,11 +30,6 @@ in
           ];
           gateway = "192.168.1.1";
         };
-      };
-
-      antob.wireguard = {
-        address = "10.64.1.4/24";
-        privateKeyFile = secrets.wg0_private_key.path;
       };
 
       imports = with nixos; [
