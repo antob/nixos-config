@@ -35,8 +35,11 @@ in
 
         services.openssh = {
           enable = true;
+          # Firewall rules are managed below (global or per interface)
+          openFirewall = false;
           settings = {
             PasswordAuthentication = false;
+            KbdInteractiveAuthentication = false;
             PermitRootLogin = if cfg.permitRootLogin then "yes" else "no";
           };
 
