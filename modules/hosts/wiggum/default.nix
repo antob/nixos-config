@@ -21,7 +21,7 @@ in
         };
 
         openssh = {
-          listenAddresses = [ "10.64.1.5" ]; # bind to the wg0 IP
+          # TODO: restore listenAddresses = [ "10.64.1.5" ] in phase 4 (docs/wireguard-hub-migration.md)
           interfaces = [ "wg0" ]; # open firewall only on wg0
         };
 
@@ -56,6 +56,10 @@ in
         firewall = {
           enable = true;
           allowPing = true;
+          # TODO: temporary public SSH from home, remove in phase 4
+          extraInputRules = ''
+            iifname "enp1s0" ip saddr 195.198.148.47 tcp dport 22 accept
+          '';
         };
         nftables.enable = true;
         useDHCP = lib.mkForce false;

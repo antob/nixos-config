@@ -16,14 +16,14 @@ Goal: wiggum (public VPS) becomes the wg0 hub so the network no longer depends o
 
 ## Phase 1: safety net and wiggum key rotation
 
-1. wiggum: temporary SSH on the public interface, home IP only: sshd also listens on `46.62.214.26`, nft rule `iifname "enp1s0" ip saddr 195.198.148.47 tcp dport 22 accept`. Confirm the Hetzner web console login works as a last resort (needs the `tob` password).
+1. wiggum: temporary SSH on the public interface, home IP only: sshd listens on all addresses (instead of binding `46.62.214.26`, so it does not depend on enp1s0 DHCP timing), nft rule `iifname "enp1s0" ip saddr 195.198.148.47 tcp dport 22 accept`; the firewall still only opens 22/2222 on wg0 otherwise. Confirm the Hetzner web console login works as a last resort (needs the `tob` password).
 2. New wg0 key for wiggum into sops (`wg0_private_key`). Update wiggum's peer pubkey on hyllan.
 3. Deploy wiggum (over the public SSH path), then hyllan. Only the hyllan to wiggum link is down in between. Verify the handshake.
 4. Delete `~/priv_key` and the `priv_key=` line from zsh history on wiggum.
 
 ## Phase 2: wiggum hub-capable, no spoke changes
 
-1. Refactor the `wireguard` aspect: one node table (name, IP, pubkey), option `antob.wireguard.hub` (`hyllan` or `wiggum`, default `hyllan` during migration) that selects the spoke's peer block, and a hub mode that generates peers from the table.
+1. Refactor the `wireguard` aspect: one node table (name, IP, pubkey, `home` flag for the stationary hosts that keep a direct link to hyllan), option `antob.wireguard.hub` (`hyllan` or `wiggum`, default `hyllan` during migration) that selects the spoke's peer block, and a hub mode that generates peers from the table. With `hub = "wiggum"`, a `home` spoke gets two peers: wiggum `10.64.1.0/24` (endpoint `hub.antob.se:51820`, keepalive 25) and hyllan `10.64.1.2/32` (endpoint `192.168.1.2:51820`, a literal IP so it does not depend on DNS).
 2. wiggum: `listenPort = 51820`, open UDP 51820 on enp1s0, IPv4 forwarding with an nft forward chain (`iifname wg0 oifname wg0 accept`, policy drop), IPv6 forwarding off, no masquerade. Peers: hyllan only, still `10.64.1.0/24`, endpoint `wg.antob.se:51820`.
 3. hyllan: widen the wiggum peer to `AllowedIPs = 10.64.1.0/24`. The direct `/32` spoke peers still win.
 4. DNS: new record `hub.antob.se` A `46.62.214.26` (a dedicated name so the hub can move again without touching clients).
@@ -31,23 +31,23 @@ Goal: wiggum (public VPS) becomes the wg0 hub so the network no longer depends o
 
 ## Phase 3: move spokes one at a time
 
-Order: laptob, desktob, pidesk, pikvm, pihole, iPhone. Home hosts keep LAN SSH as a fallback.
+Order: laptob, desktob, pidesk, pikvm, pihole, iPhone. Home hosts keep LAN SSH as a fallback. Home spokes (option B): desktob, pidesk, pikvm, pihole. Roaming spokes: laptob, iPhone.
 
 Per spoke X:
 
 1. wiggum: add peer X `/32`. Deploy wiggum. Harmless: only wiggum to X breaks until step 2.
-2. X: `antob.wireguard.hub = "wiggum"` (endpoint `hub.antob.se:51820`). Deploy X.
-3. hyllan: remove X's direct peer. Deploy hyllan right after step 2. Between 2 and 3, X cannot reach hyllan or the unmigrated spokes.
-4. Verify: handshake for X on wiggum, ping X from hyllan and from another spoke.
+2. X: `antob.wireguard.hub = "wiggum"`. Deploy X.
+3. Roaming X: hyllan removes X's direct peer; deploy hyllan right after step 2. Between 2 and 3, X cannot reach hyllan or the unmigrated spokes. Home X: hyllan keeps X's `/32` peer, nothing to deploy (X now reaches hyllan directly and everything else via wiggum).
+4. Verify: handshake for X on wiggum (and on hyllan for home X), ping X from hyllan and from another spoke, `ip route get` / `wg show` on X to confirm hyllan traffic uses the direct peer.
 
 iPhone: point `gen-wg-conf` at the wiggum pubkey and `hub.antob.se`, regenerate the QR code, re-import.
 
 ## Phase 4: hyllan becomes a spoke
 
-1. hyllan: single peer wiggum, `AllowedIPs = 10.64.1.0/24`, endpoint `hub.antob.se:51820`, keepalive 25. Remove `ListenPort`, the UDP 51820 firewall rule and `IPMasquerade`. Deploy hyllan (it now initiates; wiggum still has the old endpoint, so both directions work).
+1. hyllan: wiggum peer `AllowedIPs = 10.64.1.0/24`, endpoint `hub.antob.se:51820`, keepalive 25, plus the `/32` peers of the home spokes (no endpoint, they initiate). Keep `ListenPort 51820` for the home spokes, but open UDP 51820 only on the LAN interface. Remove `IPMasquerade` and `IPv4Forwarding` (hyllan no longer forwards). Deploy hyllan (it now initiates; wiggum still has the old endpoint, so both directions work).
 2. wiggum: hyllan peer to `10.64.1.2/32`, no endpoint. Deploy wiggum.
 3. Remove the router port forward for UDP 51820. Remove or repoint `wg.antob.se`.
-4. Remove the temporary public SSH path on wiggum.
+4. Remove the temporary public SSH path on wiggum (restore `listenAddresses = [ "10.64.1.5" ]`, drop `extraInputRules`).
 
 ## Phase 5: cleanup
 
@@ -60,4 +60,13 @@ With a pure hub, home hosts reach hyllan via Helsinki (home upload, then downloa
 - A: pure hub. Simple. All traffic hairpins.
 - B: hub plus direct links from stationary home hosts to hyllan (spoke: hyllan peer `10.64.1.2/32` with LAN endpoint; hyllan: spoke peer `/32` next to wiggum `/24`). Bulk traffic stays local, no port forward needed. laptob and iPhone roam, so they stay on the pure hub.
 
-Status: option B chosen (2026-11-21). Not started. Phase 1 key rotation still pending; `~/priv_key` and the history lines are already deleted.
+Status: option B chosen (2026-11-21) and folded into phases 2 to 4.
+
+## Progress
+
+- Phase 1.4 done: `~/priv_key` and the history lines are deleted.
+- Phase 1.1 done and deployed (2026-11-21): public SSH from home and the Hetzner console both work.
+- Phase 1.2 done (2026-11-21, uncommitted): new `wg0_private_key` in `modules/hosts/wiggum/secrets.yaml`, wiggum pubkey `kXis0LY2yJ9xmauVtbd0XvGGOFpgUU0etPHB//1JCQ0=` on hyllan.
+- Phase 1.3 done (2026-11-21): hyllan shows a handshake with wiggum's new key from `46.62.214.26`. Phase 1 complete.
+- Note: rotating a sops key file does not restart `wg-quick-wg0` (same path, unit unchanged); restart it by hand or set `restartUnits` on the secret.
+- Next: phase 2.1, refactor the `wireguard` aspect.
