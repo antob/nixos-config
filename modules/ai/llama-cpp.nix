@@ -20,6 +20,12 @@ in
         package = mkOpt package pkgs.llama-cpp "The llama-cpp package to use.";
         runAsService = mkBoolOpt false "Run llama.cpp as a systemd service.";
         loadOnStartup = mkOpt (listOf str) [ ] "Models to be loaded on startup.";
+        host = mkOpt str "127.0.0.1" "Address the llama-server service listens on.";
+        port = mkOpt port 8080 "Port the llama-server service listens on.";
+        openFirewallInterfaces = mkOpt (listOf str) [ ] "Interface names on which to open the port.";
+        apiKeyFile =
+          mkOpt (nullOr str) null
+            "File with the API key clients must send. Passed to the service as a credential.";
       };
 
       config = {
@@ -30,8 +36,7 @@ in
         services.llama-cpp = mkIf cfg.runAsService {
           enable = true;
           settings = {
-            host = "127.0.0.1";
-            port = 8080;
+            inherit (cfg) host port;
             models-max = 2;
             models-preset =
               let
@@ -85,8 +90,28 @@ in
                   '')
                 ]
               );
+          }
+          // optionalAttrs (cfg.apiKeyFile != null) {
+            api-key-file = "/run/credentials/llama-cpp.service/api-key";
           };
         };
+
+        # The service runs as a DynamicUser, so it cannot read the root-owned secret directly.
+        systemd.services.llama-cpp.serviceConfig.LoadCredential = mkIf (
+          cfg.runAsService && cfg.apiKeyFile != null
+        ) [ "api-key:${cfg.apiKeyFile}" ];
+
+        networking.firewall.interfaces = mkIf (cfg.runAsService && cfg.openFirewallInterfaces != [ ]) (
+          listToAttrs (
+            map (iface: {
+              name = iface;
+              value.allowedTCPPorts = [ cfg.port ];
+            }) cfg.openFirewallInterfaces
+          )
+        );
+
+        # Model downloads (LLAMA_CACHE) would otherwise be repeated on every boot.
+        antob.persistence.directories = mkIf cfg.runAsService [ "/var/cache/private/llama-cpp" ];
 
         antob.persistence.home.directories = [
           ".cache/llama.cpp"
