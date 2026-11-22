@@ -7,3 +7,4 @@ result
 .claude/skills
 
 .direnv/
+__pycache__/
