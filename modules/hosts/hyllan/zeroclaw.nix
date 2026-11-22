@@ -24,6 +24,7 @@
         bindReadOnlyPaths = {
           "${workspace}/IDENTITY.md" = ./_files/zeroclaw/IDENTITY.md;
           "${workspace}/SOUL.md" = ./_files/zeroclaw/SOUL.md;
+          "${workspace}/USER.md" = ./_files/zeroclaw/USER.md;
         };
 
         settings = {

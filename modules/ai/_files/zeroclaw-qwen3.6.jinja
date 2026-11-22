@@ -57,7 +57,7 @@
 {%- endif %}
 {#- ZeroClaw: its own prompt text follows SOUL.md, so restate the language and emoji rules last. #}
 {%- if merged_system %}
-    {%- set merged_system = merged_system + '\n\n' + "Reply in the language of the user's latest message: Swedish if it is Swedish, English if it is English. No emojis." %}
+    {%- set merged_system = merged_system + '\n\n' + "Always reply in English, also when the user writes Swedish. No emojis." %}
 {%- endif %}
 {%- if tools and tools is iterable and tools is not mapping %}
     {{- '<|im_start|>system\n' }}
@@ -88,29 +88,13 @@
         {%- endif %}
     {%- endif %}
 {%- endfor %}
-{#- ZeroClaw: name the reply language in the latest user message, or the history wins. Not in the generation prompt: llama-server derives its output parser from it. #}
-{%- set reply = namespace(language='English') %}
-{%- set last_query = messages[ns.last_query_index] %}
-{%- if last_query.role == 'user' %}
-    {%- set query = render_content(last_query.content, false).split(':00] ')[-1] %}
-    {%- for ch in ['å', 'ä', 'ö', 'Å', 'Ä', 'Ö'] %}
-        {%- if ch in query %}
-            {%- set reply.language = 'Swedish' %}
-        {%- endif %}
-    {%- endfor %}
-    {%- set query = query|lower|replace('.', ' ')|replace(',', ' ')|replace('!', ' ')|replace('?', ' ')|replace(':', ' ')|replace('\n', ' ') %}
-    {%- for word in query.split(' ') %}
-        {%- if word in ['hej', 'tack', 'och', 'jag', 'inte', 'vad', 'hur', 'kan', 'du', 'mig', 'dig', 'nu', 'alla', 'lampor', 'lampan', 'lamporna', 'spela', 'vilka', 'vilken', 'idag', 'imorgon', 'klockan', 'har', 'det', 'som', 'en', 'ett'] %}
-            {%- set reply.language = 'Swedish' %}
-        {%- endif %}
-    {%- endfor %}
-{%- endif %}
+{#- ZeroClaw: repeat the reply rules on the latest user message, or the history wins. Not in the generation prompt: llama-server derives its output parser from it. #}
 {%- for message in messages %}
     {%- if loop.index0 >= num_sys and message.role != "system" and message.role != "developer" %}
     {%- set content = render_content(message.content, true)|trim %}
     {%- if message.role == "user" %}
         {%- if loop.index0 == ns.last_query_index %}
-            {%- set content = content + '\n\nReply in ' + reply.language + '.' %}
+            {%- set content = content + '\n\nReply in English, without emojis.' %}
         {%- endif %}
         {{- '<|im_start|>' + message.role + '\n' + content + '<|im_end|>' + '\n' }}
     {%- elif message.role == "assistant" %}
