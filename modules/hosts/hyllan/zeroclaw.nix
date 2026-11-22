@@ -119,6 +119,11 @@
 
           skills.prompt_injection_mode = "compact";
 
+          # SHA-256 hashes. Runtime pairings would be lost: config.toml is re-rendered on start.
+          gateway.paired_tokens = [
+            "26d1643f5ab5a9b054865580177c36bafc8d7a5a528717947961264369017e97" # Home Assistant Assist
+          ];
+
           # Home Assistant "Device control" tools, limited to what is exposed to Assist.
           mcp.servers = [
             {
