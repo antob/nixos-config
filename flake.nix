@@ -106,6 +106,13 @@
     # LLM Agents - A collection of agents for various LLMs
     llm-agents.url = "github:numtide/llm-agents.nix";
 
+    # ZeroClaw - Personal assistant agent. Only its NixOS module is used, the package comes
+    # from llm-agents. Bump together with llm-agents.
+    zeroclaw = {
+      url = "github:zeroclaw-labs/zeroclaw/v0.9.0";
+      flake = false;
+    };
+
     # Copyparty - A self-hosted file sharing web server
     copyparty = {
       url = "github:9001/copyparty";

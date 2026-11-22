@@ -1151,7 +1151,8 @@
         "preservation": "preservation",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "sops-nix": "sops-nix",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "zeroclaw": "zeroclaw"
       }
     },
     "rust-overlay": {
@@ -1421,6 +1422,23 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "zeroclaw": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794418822,
+        "narHash": "sha256-h5x5+ubEHLS6//Fge30wp2b+MBXSasXC/YNS3uk05bM=",
+        "owner": "zeroclaw-labs",
+        "repo": "zeroclaw",
+        "rev": "6c78ba59bce6a3d5079cf0c0310488770e264ad4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zeroclaw-labs",
+        "ref": "v0.9.0",
+        "repo": "zeroclaw",
         "type": "github"
       }
     }

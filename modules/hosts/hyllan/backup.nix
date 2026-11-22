@@ -109,6 +109,7 @@ in
             "/services/caddy"
             "/services/esphome"
             "/services/freshrss"
+            "/services/zeroclaw"
           ];
         }
       ];
