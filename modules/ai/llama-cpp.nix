@@ -64,6 +64,22 @@ in
                     image-max-tokens = 1120
                   '')
 
+                  (model "zeroclaw" /* ini */ ''
+                    hf = unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_XL
+                    ctx-size = 32768
+                    parallel = 1
+                    n-predict = 2048
+                    temp = 0.7
+                    top-p = 0.8
+                    top-k = 20
+                    min-p = 0.00
+                    presence-penalty = 1.5
+                    flash-attn = on
+                    reasoning = off
+                    no-mmproj = true
+                    chat-template-file = ${./_files/zeroclaw-qwen3.6.jinja}
+                  '')
+
                   (model "gemma4-26B" /* ini */ ''
                     hf = unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL
                     ctx-size = 262144
