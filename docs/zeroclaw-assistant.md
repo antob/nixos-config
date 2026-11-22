@@ -34,6 +34,17 @@ desktob switched 2026-11-22: `whisper-server` active, model loaded on the GPU (`
 
 hyllan switched 2026-11-22: Telegram voice notes work in Swedish and English (user verified). whisper-server log: 2.4 to 3.3 s clips, language auto-detected (sv p=0.93 and 0.99, en p=0.99), each transcribed within about a second.
 
+Phase 4b plan (2026-11-22): HA has only Google Translate TTS (cloud, not used) and no Wyoming integration. HA `internal_url` is `https://ha.antob.net`, language `en`.
+1. Piper on hyllan: `modules/hosts/hyllan/piper.nix` (`git add -N`), nixpkgs `services.wyoming.piper.servers.home`, wyoming-piper 2.5.2, default voice `sv_SE-nst-medium`, `tcp://127.0.0.1:10200`, zeroconf off, unit `wyoming-piper-home` readable via agent-logs. Voices download to `/var/lib/wyoming/piper` on first use (not backed up, re-downloadable). Written, not switched.
+2. HA: add the Wyoming integration (127.0.0.1:10200), check the voice list (one server should serve `en_US-lessac-medium` too; otherwise a second server), create `script.announce(message, player, language)` calling `tts.speak` on the MA speaker (MA handles it as an announcement and resumes music), expose it, test on the kitchen speaker.
+3. ZeroClaw: `ha__script__announce` in `auto_approve`; reminders can then be spoken (`cron_add` agent job).
+
+Status 2026-11-22: step 1 switched (`wyoming-piper-home` active on 127.0.0.1:10200, Swedish voice downloaded). Step 2 done: Wyoming integration added (entry `piper`, entity `tts.piper`); one server offers all voices and downloads each on first use (Swedish: nst, alma, lisa). `script.announce(message, player, language)` calls `tts.speak` with `sv_SE-nst-medium` or `en_US-lessac-medium`, exposed as MCP tool `ha__script__announce`, committed in the HA config repo. MA plays it as an announcement with a pre-announce chime, fetching `https://ha.antob.net/api/tts_proxy/...mp3`. The script returns when playback is done (about 8 s for a short Swedish sentence, 12 s for English including the first voice download). The kitchen test interrupted music that was playing there (it resumed). Use the living room speaker for tests from now on (user request). Step 3: `ha__script__announce` added to `auto_approve` (edited, not switched). Voices changed at the user's request: `sv_SE-alma-medium` and `en_GB-jenny_dioco-medium` (language `en_GB`); tested on the living room speaker (MA player name "Office"), about 13 s per call including the first voice download.
+
+Volume and chime (user request: volume 25, own soft chime): HA's `music_assistant` media player passes `extra.use_pre_announce`, `extra.pre_announce_url` and `extra.announce_volume` from `media_player.play_media` with `announce: true` to MA (`media_player.py` `async_play_media`), and resolves `media-source://tts/tts.piper?message=...&language=...&voice=...` itself. Chime: synthesised locally with ffmpeg (two sine tones, 880 Hz then 1318.5 Hz 160 ms later, exponential decay, 1.3 s, peak -7 dB, sha256 `ff9c8a22...`), copied to `/mnt/tank/services/hass/home-assistant/www/announce-chime.mp3` (root-owned dir, needed `ssh hyllan.lan`), served at `https://ha.antob.net/local/announce-chime.mp3`. Not in the HA config git allow-list. Played alone on the living room speaker at volume 25; the user kept it. `script.announce` now calls `media_player.play_media` (`announce: true`, `media-source://tts/tts.piper?message={{ message | urlencode }}&language=...&voice=...`, `extra: { use_pre_announce: true, pre_announce_url: <chime>, announce_volume: 20 }`, lowered from 25 at the user's request); tested on the living room speaker (7.7 s for a Swedish sentence including chime), committed in the HA config repo.
+
+hyllan switched 2026-11-22 with `ha__script__announce` auto-approved; announcements from Telegram verified by the user. Phase 4b done.
+
 Next steps, in order:
 1. Phase 3b music (`media_player__search_media`/`play_media` already exposed by HA), then Phase 4 voice memos and announcements, Phase 6 vault (Syncthing receive-only `Work`, stdio MCP parser). Blocked on the user: one sanitized daily note with the hours table and its filename.
 
@@ -267,6 +278,8 @@ systemd.services.zeroclaw-assistant.serviceConfig.MemoryMax = "1G";
 3. Two STT stacks (whisper.cpp for ZeroClaw, faster-whisper for HA) is acceptable; unify later only if RAM becomes a problem.
 
 ## Later ideas
+
+- GLaDOS-style voice (user wish, 2026-11-22). Options: a community Piper/VITS GLaDOS model (English only, drop-in `.onnx` + `.json` for Piper); an effects chain on the normal voice (pitch, flattening, slight ring modulation and reverb via sox/ffmpeg, works for Swedish, needs a small Wyoming wrapper or HA-side processing); or Swedish Piper output fed through an RVC voice-conversion model of GLaDOS (Swedish words in her timbre, best fit on desktob's GPU). Fan-made models trained on game audio: fine for home use, not for redistribution.
 
 - Declarative morning brief: cron job (`job_type = "agent"`) at 07:00 delivered to Telegram (weather, calendar, electricity price from HA).
 - Web search via an MCP server (searxng runs on hyllan already).

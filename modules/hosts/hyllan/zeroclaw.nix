@@ -67,6 +67,7 @@
               "ha__intent__HassTurnOn"
               "ha__intent__HassTurnOff"
               "ha__script__play_music"
+              "ha__script__announce"
               "ha__media_player__HassMediaPause"
               "ha__media_player__HassMediaUnpause"
               "ha__media_player__HassSetVolume"
