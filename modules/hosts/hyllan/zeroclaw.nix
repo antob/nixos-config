@@ -40,6 +40,13 @@
             max_tokens = 1024;
           };
 
+          # Telegram voice notes, transcribed by whisper-server on desktob (language detected there).
+          transcription.enabled = true;
+          providers.transcription.local_whisper.desktob = {
+            uri = "http://10.64.1.6:8091/inference";
+            timeout_secs = 60;
+          };
+
           agents.assistant = {
             model_provider = "llamacpp.desktob";
             risk_profile = "assistant";
@@ -48,6 +55,7 @@
             # The reply/no-reply classifier is for group chats and costs a full LLM call per message.
             precheck.enabled = false;
             mcp_bundles = [ "home" ];
+            transcription_provider = "local_whisper.desktob";
           };
 
           risk_profiles.assistant = {
