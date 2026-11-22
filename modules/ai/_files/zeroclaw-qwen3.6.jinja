@@ -88,9 +88,7 @@
         {%- endif %}
     {%- endif %}
 {%- endfor %}
-{#- ZeroClaw: the reply language follows the history unless the latest user message names it.
-    Not in the generation prompt: llama-server derives its output parser from that. #}
-{#- Swedish if the user's own text (after ZeroClaw's "[... +01:00] " timestamp) has å/ä/ö or a common Swedish word. #}
+{#- ZeroClaw: name the reply language in the latest user message, or the history wins. Not in the generation prompt: llama-server derives its output parser from it. #}
 {%- set reply = namespace(language='English') %}
 {%- set last_query = messages[ns.last_query_index] %}
 {%- if last_query.role == 'user' %}

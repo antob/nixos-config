@@ -38,8 +38,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            # --convert lets it accept OGG/Opus (Telegram voice notes) via ffmpeg, which the
-            # package puts on whisper-server's PATH.
+            # --convert accepts OGG (Telegram voice notes); the package puts ffmpeg on PATH.
             ExecStart = concatStringsSep " " [
               "${cfg.package}/bin/whisper-server"
               "--host ${cfg.host}"
@@ -53,8 +52,7 @@ in
             Restart = "on-failure";
             RestartSec = 10;
 
-            # Same sandbox as llama-cpp. The GPU render node is world-accessible, so
-            # PrivateDevices stays off and no extra groups are needed.
+            # The GPU render node is world-accessible, so no device or group access is needed.
             DynamicUser = true;
             PrivateTmp = true;
             PrivateDevices = false;

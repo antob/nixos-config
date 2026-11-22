@@ -21,7 +21,6 @@
         # Must define TELEGRAM_BOT_TOKEN, HA_TOKEN and LLAMA_API_KEY
         environmentFile = secrets.zeroclaw_env.path;
 
-        # Declarative persona, read-only for the agent.
         bindReadOnlyPaths = {
           "${workspace}/IDENTITY.md" = ./_files/zeroclaw/IDENTITY.md;
           "${workspace}/SOUL.md" = ./_files/zeroclaw/SOUL.md;
@@ -30,7 +29,7 @@
         settings = {
           schema_version = 4;
 
-          # llama-server on desktob over wg0. No fallback: the assistant stays private.
+          # No fallback: the assistant stays private.
           providers.models.llamacpp.desktob = {
             uri = "http://10.64.1.6:8080/v1";
             model = "zeroclaw";
@@ -40,7 +39,6 @@
             max_tokens = 1024;
           };
 
-          # Telegram voice notes, transcribed by whisper-server on desktob (language detected there).
           transcription.enabled = true;
           providers.transcription.local_whisper.desktob = {
             uri = "http://10.64.1.6:8091/inference";
@@ -60,7 +58,7 @@
 
           risk_profiles.assistant = {
             level = "supervised";
-            # Every HA tool left after excluded_tools. A tool HA adds later asks for approval on Telegram.
+            # New HA tools still ask for approval.
             auto_approve = [
               "ha__homeassistant__GetLiveContext"
               "ha__llm__GetDateTime"
@@ -78,7 +76,7 @@
               "ha__media_player__HassMediaPrevious"
               "ha__light__HassLightSet"
             ];
-            # Not needed for a home assistant, and they keep the system prompt small.
+            # Keeps the system prompt small.
             excluded_tools = [
               "shell"
               "file_write"
@@ -103,8 +101,7 @@
               "ha__todo__HassListAddItem"
               "ha__todo__HassListCompleteItem"
               "ha__todo__HassListRemoveItem"
-              # Generic media search and play: playing an artist made Music Assistant fetch every
-              # track from every provider and time out. script.play_music asks MA directly.
+              # Playing an artist through these made Music Assistant time out; use script.play_music.
               "ha__media_player__search_media"
               "ha__media_player__play_media"
             ];
@@ -124,7 +121,6 @@
             "26d1643f5ab5a9b054865580177c36bafc8d7a5a528717947961264369017e97" # Home Assistant Assist
           ];
 
-          # Home Assistant "Device control" tools, limited to what is exposed to Assist.
           mcp.servers = [
             {
               name = "ha";
