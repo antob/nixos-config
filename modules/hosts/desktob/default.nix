@@ -42,6 +42,10 @@ in
 
         llama-cpp = {
           package = pkgs.llama-cpp-vulkan;
+          runAsService = true;
+          host = "0.0.0.0";
+          openFirewallInterfaces = [ "wg0" ];
+          apiKeyFile = secrets.llama_api_key.path;
         };
 
         ollama = {
@@ -99,6 +103,7 @@ in
       # Sops secrets
       sops.secrets = {
         wg0_private_key.sopsFile = ./secrets.yaml;
+        llama_api_key.sopsFile = ./secrets.yaml;
         restic_env_file = {
           sopsFile = ../common/secrets.yaml;
         };
