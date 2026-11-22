@@ -53,6 +53,13 @@ in
           package = pkgs.whisper-cpp-vulkan;
           host = "0.0.0.0";
           allowedClients.wg0 = [ "10.64.1.2" ];
+          language = "sv";
+          # KB-Whisper: Whisper large-v3 fine-tuned on Swedish by the National Library of Sweden.
+          model = pkgs.fetchurl {
+            name = "kb-whisper-large-ggml-model.bin";
+            url = "https://huggingface.co/KBLab/kb-whisper-large/resolve/d5d5984b4d8f7c4847a8ea203f1976285fb28300/ggml-model.bin";
+            sha256 = "b66f2dda369a88f6c03fe37326d7cc37aa216f6f34e6fc1be686e497ba9c2f39";
+          };
         };
 
         ollama = {

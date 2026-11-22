@@ -4,7 +4,8 @@
     services.wyoming.faster-whisper.servers.assist = {
       enable = true;
       sttLibrary = "faster-whisper";
-      model = "turbo";
+      # Swedish fine-tune; downloaded from Hugging Face on first start (not pinned).
+      model = "KBLab/kb-whisper-small";
       language = "sv";
       uri = "tcp://0.0.0.0:10300";
       zeroconf.enable = false;
