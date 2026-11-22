@@ -52,12 +52,22 @@
 
           risk_profiles.assistant = {
             level = "supervised";
-            # Other HA tools (media, light settings, ...) still ask for approval on Telegram.
+            # Every HA tool left after excluded_tools. A tool HA adds later asks for approval on Telegram.
             auto_approve = [
               "ha__homeassistant__GetLiveContext"
               "ha__llm__GetDateTime"
               "ha__intent__HassTurnOn"
               "ha__intent__HassTurnOff"
+              "ha__script__play_music"
+              "ha__media_player__HassMediaPause"
+              "ha__media_player__HassMediaUnpause"
+              "ha__media_player__HassSetVolume"
+              "ha__media_player__HassSetVolumeRelative"
+              "ha__media_player__HassMediaPlayerMute"
+              "ha__media_player__HassMediaPlayerUnmute"
+              "ha__media_player__HassMediaNext"
+              "ha__media_player__HassMediaPrevious"
+              "ha__light__HassLightSet"
             ];
             # Not needed for a home assistant, and they keep the system prompt small.
             excluded_tools = [
@@ -84,6 +94,10 @@
               "ha__todo__HassListAddItem"
               "ha__todo__HassListCompleteItem"
               "ha__todo__HassListRemoveItem"
+              # Generic media search and play: playing an artist made Music Assistant fetch every
+              # track from every provider and time out. script.play_music asks MA directly.
+              "ha__media_player__search_media"
+              "ha__media_player__play_media"
             ];
           };
 
