@@ -48,6 +48,13 @@ in
           apiKeyFile = secrets.llama_api_key.path;
         };
 
+        # Transcribes the ZeroClaw assistant's Telegram voice notes for hyllan.
+        whisper-server = {
+          package = pkgs.whisper-cpp-vulkan;
+          host = "0.0.0.0";
+          allowedClients.wg0 = [ "10.64.1.2" ];
+        };
+
         ollama = {
           package = pkgs.ollama-vulkan;
           host = "0.0.0.0";
@@ -74,6 +81,7 @@ in
         solaar
         ollama
         llama-cpp
+        whisper-server
         voxtype
         rescue
       ];
