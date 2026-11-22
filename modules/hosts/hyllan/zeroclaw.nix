@@ -41,6 +41,15 @@
           };
 
           transcription.enabled = true;
+
+          # Voice replies after a Telegram voice note, through tts-bridge (Piper). The key is unused.
+          tts.enabled = true;
+          providers.tts.openai.home = {
+            uri = "http://127.0.0.1:10210/v1/audio/speech";
+            api_key = "local";
+            voice = "en_GB-jenny_dioco-medium";
+            response_format = "opus";
+          };
           providers.transcription.local_whisper.desktob = {
             uri = "http://10.64.1.6:8091/inference";
             timeout_secs = 60;
@@ -55,6 +64,7 @@
             precheck.enabled = false;
             mcp_bundles = [ "home" ];
             transcription_provider = "local_whisper.desktob";
+            tts_provider = "openai.home";
           };
 
           risk_profiles.assistant = {
@@ -135,6 +145,8 @@
           channels.telegram.home = {
             enabled = true;
             bot_token = "$TELEGRAM_BOT_TOKEN";
+            # Draft streaming; its final send queues the voice reply without the 10 s debounce.
+            stream_mode = "partial";
           };
 
           peer_groups.telegram_home = {
