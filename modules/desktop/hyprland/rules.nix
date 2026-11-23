@@ -100,6 +100,11 @@
           tag = "+floating-window-lg",
         })
         hl.window_rule({
+          name = "tag-floating-obsidian-settings",
+          match = { class = "^md.obsidian.Obsidian$", title = "^Settings - .*Obsidian.*$" },
+          tag = "+floating-window-lg",
+        })
+        hl.window_rule({
           name = "tag-floating-window-lg",
           match = { class = "(TUI.float.lg|nwg-displays|X64)" },
           tag = "+floating-window-lg",
