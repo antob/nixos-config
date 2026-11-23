@@ -1,4 +1,4 @@
-"""Copy Greenely usage (purged by the recorder) into long-term statistics, plus its cost at Nord Pool prices."""
+"""Copy Greenely usage (purged by the recorder) into long-term statistics, plus its cost and the plugs' cost at Nord Pool prices."""
 
 import asyncio
 import json
@@ -17,10 +17,15 @@ STAT_ID = "greenely:consumption"
 COST_ID = "greenely:cost"
 VAT = 1.25
 ADDONS = ["input_number.electricity_supplier_markup", "input_number.electricity_grid_transfer_fee", "input_number.electricity_energy_tax"]
+# Energy sensor of a measuring plug -> cost statistic.
+PLUGS = [
+    ("sensor.upstairs_closet_hyllan_energy", "plug_cost:hyllan", "Hyllan cost"),
+    ("sensor.living_room_desktob_energy", "plug_cost:desktob", "Desktob cost"),
+]
 
 
 def metadata(stat_id, name, unit, unit_class):
-    return {"source": "greenely", "statistic_id": stat_id, "name": name, "unit_of_measurement": unit,
+    return {"source": stat_id.split(":")[0], "statistic_id": stat_id, "name": name, "unit_of_measurement": unit,
             "unit_class": unit_class, "has_mean": False, "mean_type": 0, "has_sum": True}
 
 
@@ -75,6 +80,19 @@ async def known_rows(ha, stat_id):
         types=["state", "sum"],
     )
     return {datetime.fromtimestamp(r["start"] / 1000, timezone.utc): float(r["state"]) for r in result.get(stat_id, [])}
+
+
+async def hourly_change(ha, entity_id):
+    """{utc hour: kWh used in that hour} from a sensor's own long-term statistics."""
+    result = await ha.call(
+        type="recorder/statistics_during_period",
+        start_time="2000-01-01T00:00:00+00:00",
+        statistic_ids=[entity_id],
+        period="hour",
+        types=["change"],
+    )
+    return {datetime.fromtimestamp(r["start"] / 1000, timezone.utc): float(r["change"])
+            for r in result.get(entity_id, []) if r.get("change") is not None}
 
 
 async def import_series(ha, meta, wanted, known, unit):
@@ -165,6 +183,17 @@ async def main():
             elif t in day_price:
                 wanted_cost[t] = round(kwh * day_price[t], 4)
         await import_series(ha, metadata(COST_ID, "Greenely cost", CURRENCY, None), wanted_cost, known_cost, CURRENCY)
+
+        # Plugs: each hour is priced once; hours without a Nord Pool price are retried on later runs.
+        for entity_id, cost_id, name in PLUGS:
+            known_plug = await known_rows(ha, cost_id)
+            wanted_plug = dict(known_plug)
+            for t, kwh in (await hourly_change(ha, entity_id)).items():
+                if t not in wanted_plug:
+                    price = (await day_prices(local_day(t))).get(t)
+                    if price is not None:
+                        wanted_plug[t] = round(kwh * price, 4)
+            await import_series(ha, metadata(cost_id, name, CURRENCY, None), wanted_plug, known_plug, CURRENCY)
 
 
 if __name__ == "__main__":

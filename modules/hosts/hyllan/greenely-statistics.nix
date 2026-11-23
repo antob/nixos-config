@@ -10,7 +10,8 @@
       } (builtins.readFile ./_files/greenely-statistics.py);
     in
     {
-      # Copies Greenely usage into Home Assistant long-term statistics (greenely:consumption).
+      # Copies Greenely usage into Home Assistant long-term statistics (greenely:consumption, greenely:cost)
+      # and prices the measuring plugs' hourly energy (plug_cost:*).
       systemd = {
         timers.greenely-statistics = {
           wantedBy = [ "timers.target" ];
