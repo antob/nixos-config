@@ -26,16 +26,5 @@
     '';
 
     antob.persistence.directories = [ "/var/lib/private/wyoming/faster-whisper" ];
-
-    # TODO: the tests pull in ROCm torch, whose aotriton-0.12b fails against triton 3.9.0.
-    nixpkgs.overlays = [
-      (_: prev: {
-        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-          (_: pyPrev: {
-            ctranslate2 = pyPrev.ctranslate2.overridePythonAttrs { doCheck = false; };
-          })
-        ];
-      })
-    ];
   };
 }

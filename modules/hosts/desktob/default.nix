@@ -98,9 +98,7 @@ in
         mesa-demos
         rocmPackages.rocminfo
         s-tui
-        # TODO: pkgs.calibre pulls in ROCm torch via piper-tts, and its aotriton-0.12b
-        # dependency fails to build against triton 3.9.0. prev has no rocmSupport.
-        prev.calibre
+        calibre
         spotify
       ];
 
