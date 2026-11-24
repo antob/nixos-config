@@ -15,6 +15,20 @@
         pkgs.callPackage ../_scripts/dm-herdr-session.nix { config = osConfig; }
       );
       dm-keybindings = getExe (pkgs.callPackage ./_files/scripts/dm-keybindings.nix { });
+      # Shows the auto-hiding bar briefly; a tap while it is shown hides it again.
+      cmd-peek-bar = pkgs.writeShellScript "cmd-peek-bar" ''
+        pidfile="''${XDG_RUNTIME_DIR:-/tmp}/noctalia-peek-bar.pid"
+        if [ -f "$pidfile" ] && kill "$(cat "$pidfile")" 2>/dev/null; then
+          rm -f "$pidfile"
+          noctalia msg bar-auto-hide-set on
+          exit
+        fi
+        echo $$ > "$pidfile"
+        noctalia msg bar-show
+        sleep 3
+        rm -f "$pidfile"
+        noctalia msg bar-auto-hide-set on
+      '';
       cmd-launch-webapp = getExe (
         pkgs.callPackage ../_scripts/cmd-launch-webapp.nix { inherit (osConfig.antob.rofi) launchPrefix; }
       );
@@ -121,6 +135,8 @@
         hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(ipc .. "session lock"), { description = "Lock screen" })
         hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(ipc .. "caffeine-toggle"), { description = "Toggle locking on idle" })
         hl.bind("ALT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher hold"), { description = "Window switcher" })
+        -- Release bind on the bare key fires only when Super was not part of a combo.
+        hl.bind("Super_L", hl.dsp.exec_cmd("${cmd-peek-bar}"), { release = true, description = "Peek bar" })
 
         -- Media keys ------------------------------------------------------------------
 
