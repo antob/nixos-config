@@ -26,6 +26,8 @@ in
 
         alacritty.fontSize = 14;
 
+        hyprland.lockEnabled = false;
+
         kitty.fontSize = 14;
 
         rescue = {

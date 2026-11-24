@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.aspects) homeManager nixos;
+  inherit (config.flake.lib) mkOpt;
 in
 {
   flake.modules.nixos.hyprland =
@@ -19,6 +20,10 @@ in
         noctalia
         rofi
       ];
+
+      options.antob.hyprland = with types; {
+        lockEnabled = mkOpt bool true "Whether Mod + L locks the session. When false it turns the screen off instead.";
+      };
 
       config = {
         antob = {

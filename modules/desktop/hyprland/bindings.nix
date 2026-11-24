@@ -132,7 +132,14 @@
         hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"), { description = "Control center" })
         hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd(ipc .. "settings-toggle"), { description = "Settings" })
         hl.bind(mainMod .. " + X", hl.dsp.exec_cmd(ipc .. "panel-open session"), { description = "System menu" })
-        hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(ipc .. "session lock"), { description = "Lock screen" })
+        ${
+          if osConfig.antob.hyprland.lockEnabled then
+            ''hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(ipc .. "session lock"), { description = "Lock screen" })''
+          else
+            ''
+              -- Delayed so the release of the keys themselves does not wake the screen again
+                          hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("sleep 0.3; " .. ipc .. "dpms-off"), { description = "Screen off" })''
+        }
         hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(ipc .. "caffeine-toggle"), { description = "Toggle locking on idle" })
         hl.bind("ALT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher hold"), { description = "Window switcher" })
         -- Release bind on the bare key fires only when Super was not part of a combo.
