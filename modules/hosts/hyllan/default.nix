@@ -25,6 +25,8 @@ in
         "zfs-mount"
         "zfs-zed"
         "smartd"
+        # Transient unit that `nixos-rebuild --target-host` activates through; holds the switch output.
+        "nixos-rebuild-switch-to-configuration"
       ];
 
       antob = {
