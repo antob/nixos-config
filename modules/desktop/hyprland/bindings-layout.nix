@@ -210,6 +210,62 @@
         hl.bind(mainMod .. " + CTRL + mouse_down", ifWorkspaceBelow(hl.dsp.window.move({ workspace = "r+1" })), { description = "Move window to workspace down" })
         hl.bind(mainMod .. " + CTRL + mouse_up", ifWorkspaceAbove(hl.dsp.window.move({ workspace = "r-1" })), { description = "Move window to workspace up" })
 
+        -- Shift the active workspace up/down by swapping its windows with the neighbour's.
+        -- Moved windows come back as new columns, so column widths are restored afterwards.
+        local function columnPos(win)
+          local l = win.layout
+          return l and l.column and { l.column.index or 0, l.index_in_column or 0 } or { 0, 0 }
+        end
+
+        local function windowsOn(id)
+          local list = {}
+          for _, win in ipairs(hl.get_windows()) do
+            if win.workspace and win.workspace.id == id then
+              local pos = columnPos(win)
+              table.insert(list, {
+                win = win,
+                col = pos[1],
+                row = pos[2],
+                width = win.layout and win.layout.column and win.layout.column.width,
+              })
+            end
+          end
+          table.sort(list, function(a, b)
+            if a.col ~= b.col then return a.col < b.col end
+            return a.row < b.row
+          end)
+          return list
+        end
+
+        local function swapWorkspaceWith(offset)
+          return function()
+            local ws = hl.get_active_workspace()
+            if not ws then return end
+            local from, to = ws.id, ws.id + offset
+            if to < 1 or to > maxWorkspace then return end
+            local active = hl.get_active_window()
+            local fromWins, toWins = windowsOn(from), windowsOn(to)
+            for _, e in ipairs(fromWins) do
+              hl.dispatch(hl.dsp.window.move({ workspace = to, follow = false, window = e.win }))
+            end
+            for _, e in ipairs(toWins) do
+              hl.dispatch(hl.dsp.window.move({ workspace = from, follow = false, window = e.win }))
+            end
+            for _, list in ipairs({ fromWins, toWins }) do
+              for _, e in ipairs(list) do
+                if e.width then
+                  hl.dispatch(hl.dsp.focus({ window = e.win }))
+                  hl.dispatch(hl.dsp.layout("colresize " .. e.width))
+                end
+              end
+            end
+            hl.dispatch(hl.dsp.focus({ workspace = to }))
+            if active then hl.dispatch(hl.dsp.focus({ window = active })) end
+          end
+        end
+        hl.bind(mainMod .. " + ALT + Page_Down", swapWorkspaceWith(1), { description = "Shift workspace down" })
+        hl.bind(mainMod .. " + ALT + Page_Up", swapWorkspaceWith(-1), { description = "Shift workspace up" })
+
         -- Previous workspace
         hl.bind("ALT + grave", hl.dsp.focus({ workspace = "previous" }), { description = "Switch to previous workspace" })
 
