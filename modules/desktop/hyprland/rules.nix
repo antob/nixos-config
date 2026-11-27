@@ -165,6 +165,29 @@
         -- Do not animate fullscreen windows
         hl.window_rule({ name = "no-anim-fullscreen", match = { fullscreen = true }, no_anim = true })
 
+        -- New scrolling columns open full width. On ultrawide monitors (aspect ratio
+        -- of at least 2) a column that starts alone is shrunk to 2/3 of the width.
+        -- Called on window open and after Firefox is unparked (see below).
+        local ultrawideRatio = 2
+        local ultrawideColumnWidth = 0.667
+        local function shrinkUltrawideColumn(id)
+          hl.timer(function()
+            local active = hl.get_active_window()
+            if not (active and active.stable_id == id) or active.floating then return end
+            -- Fullscreen keeps the column width, so games would not fill the monitor
+            if (active.fullscreen or 0) ~= 0 or active.class:match("^gamescope$") or active.class:match("^steam_app_") then return end
+            local ws = active.workspace
+            local mon = active.monitor
+            local col = active.layout and active.layout.column
+            if not (ws and not ws.special and ws.tiled_layout == "scrolling" and mon and col) then return end
+            if mon.width / mon.height < ultrawideRatio then return end
+            -- Skip a window that joined an existing column or was already resized
+            if col.windows and #col.windows > 1 then return end
+            if col.width < 0.999 then return end
+            hl.dispatch(hl.dsp.layout("colresize " .. ultrawideColumnWidth))
+          end, { timeout = 1, type = "oneshot" })
+        end
+
         -- Float and center the Bitwarden browser extension popup. Firefox maps every new
         -- window as "Mozilla Firefox" and sets the real title ~50ms later, so park them on a
         -- hidden workspace until then and bring them back tiled, or floating if Bitwarden.
@@ -191,6 +214,7 @@
           hl.dispatch(hl.dsp.window.move({ workspace = target, follow = false, window = w }))
           if isBitwarden then hl.dispatch(hl.dsp.window.center({ window = w })) end
           hl.dispatch(hl.dsp.focus({ window = w }))
+          if not isBitwarden then shrinkUltrawideColumn(w.stable_id) end
         end
 
         hl.on("window.open", function(w)

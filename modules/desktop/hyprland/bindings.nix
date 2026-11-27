@@ -56,28 +56,9 @@
         -- Unused
         -- local chromium = "uwsm app -- chromium --app="
 
-        -- New scrolling columns open full width. On ultrawide monitors (aspect ratio
-        -- of at least 2) a column that starts alone is shrunk to 2/3 of the width.
-        local ultrawideRatio = 2
-        local ultrawideColumnWidth = 0.667
         hl.on("window.open", function(w)
           if w.floating then return end
-          local id = w.stable_id
-          hl.timer(function()
-            local active = hl.get_active_window()
-            if not (active and active.stable_id == id) or active.floating then return end
-            -- Fullscreen keeps the column width, so games would not fill the monitor
-            if (active.fullscreen or 0) ~= 0 or active.class:match("^gamescope$") or active.class:match("^steam_app_") then return end
-            local ws = active.workspace
-            local mon = active.monitor
-            local col = active.layout and active.layout.column
-            if not (ws and not ws.special and ws.tiled_layout == "scrolling" and mon and col) then return end
-            if mon.width / mon.height < ultrawideRatio then return end
-            -- Skip a window that joined an existing column or was already resized
-            if col.windows and #col.windows > 1 then return end
-            if col.width < 0.999 then return end
-            hl.dispatch(hl.dsp.layout("colresize " .. ultrawideColumnWidth))
-          end, { timeout = 1, type = "oneshot" })
+          shrinkUltrawideColumn(w.stable_id)
         end)
 
         -- Pick the dispatcher for the active workspace's tiled layout (scrolling,
