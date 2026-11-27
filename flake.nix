@@ -128,6 +128,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Roost - Self-hosted agent <-> iPhone messenger
+    roost = {
+      url = "github:antob/roost";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Lanzaboote - Secure boot
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.2.0";

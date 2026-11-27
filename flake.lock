@@ -1123,6 +1123,26 @@
         "type": "github"
       }
     },
+    "roost": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795800293,
+        "narHash": "sha256-anayvUeZ/gSU9Q38XgQGb3Ok+3R08t8DERWlnFwJSpM=",
+        "owner": "antob",
+        "repo": "roost",
+        "rev": "5e1302745fa6cfd9db98a10994bd18b1130fa40a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "antob",
+        "repo": "roost",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "betterfox": "betterfox",
@@ -1149,6 +1169,7 @@
         "paperwm": "paperwm",
         "pi-coding-agent": "pi-coding-agent",
         "preservation": "preservation",
+        "roost": "roost",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "sops-nix": "sops-nix",
         "stylix": "stylix",

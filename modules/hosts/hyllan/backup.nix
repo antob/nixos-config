@@ -110,6 +110,7 @@ in
             "/services/esphome"
             "/services/freshrss"
             "/services/zeroclaw"
+            "/services/roost"
           ];
         }
       ];

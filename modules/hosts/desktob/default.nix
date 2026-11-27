@@ -102,6 +102,7 @@ in
         s-tui
         calibre
         spotify
+        inputs.roost.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
 
       # Only use 5GHz WiFi. iwd only roams on weak signal, so once it lands on
