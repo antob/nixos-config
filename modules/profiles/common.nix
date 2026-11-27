@@ -10,7 +10,6 @@ in
         server
         direnv
         devenv
-        rustup
         fhs
         fonts
         audio
