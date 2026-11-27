@@ -121,6 +121,8 @@ Net: a moderate simplification (the language check, the bilingual persona rules,
 
 ## Telegram voice replies: plan (2026-11-22, not implemented)
 
+Status (2026-11-27): disabled (`tts.enabled = false` in `zeroclaw.nix`, needs a hyllan switch) because Telegram does not autoplay voice messages. The `tts-bridge` unit, `providers.tts.openai.home` and the agent `tts_provider` are kept; set `tts.enabled = true` to re-enable.
+
 ZeroClaw 0.9.0 facts (`telegram.rs`, `tts.rs`, `schema.rs`): with `tts.enabled = true` and an agent `tts_provider`, the Telegram channel answers with audio when the session is in voice mode (the user sent a voice note) or the chat is a configured voice peer; typed messages stay text. `voice_reply_skip_reason` skips URLs, JSON, code and short status text. Audio format decides the Telegram call: `opus`/`ogg` goes out as `sendVoice` (a voice bubble), `mp3`/`wav` as `sendAudio` (a file with a player). The `piper` provider expects an OpenAI-style HTTP endpoint and always yields WAV; the `openai` provider takes `uri`, `model`, `voice`, `speed`, `response_format` and a required `api_key` (sent as a bearer token). Our Piper is Wyoming only, so ZeroClaw cannot use it directly.
 
 Plan (option 1, an adapter):
@@ -406,7 +408,12 @@ From hyllan (`ssh agent@hyllan.antob.net`): `http://10.64.1.6:8080/v1/models` re
 
 ## Open items
 
-- Telegram user id and bot name (Phase 1).
-- Exact HA MCP URL path and Device control tool names (after Phase 1 / first connect).
-- `transcription_provider` field name on agents and the `[providers.transcription.local_whisper.<alias>]` vs `[transcription.local_whisper]` shape (docs show both; verify against `zeroclaw config schema` on the built binary).
-- Workspace path (module env vs docs layout).
+Resolved (2026-11-22): Telegram user id and bot (`@antob_home_bot`), HA MCP URL and tool names (14 tools left after `excluded_tools`), the `transcription_provider` shape (`providers.transcription.local_whisper.<alias>` plus `agents.assistant.transcription_provider = "local_whisper.<alias>"`), and the workspace path (`${dataDir}/agents/assistant/workspace`, with `IDENTITY.md`, `SOUL.md` and `USER.md` bind-mounted read-only from Nix).
+
+Open:
+
+- The local `api.py` patch in the HA `zeroclaw_conversation` component is overwritten by a Marketplace update. Re-apply it (see the English-only section) or skip updates, or send it upstream.
+- KB-Whisper large and small were tuned for Swedish. English recognition has not been compared against `large-v3-turbo`.
+- Telegram voice replies are disabled (2026-11-27), see "Telegram voice replies". Re-enable with `tts.enabled = true`.
+- Phase 5 remainder: wake word and a satellite device (ESPHome or the HA companion app) for hands-free Assist.
+- Backlog from "Later ideas": GLaDOS-style voice, morning brief cron job, web search through an MCP server (searxng).

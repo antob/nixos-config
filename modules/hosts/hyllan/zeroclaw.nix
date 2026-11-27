@@ -43,7 +43,8 @@
           transcription.enabled = true;
 
           # Voice replies after a Telegram voice note, through tts-bridge (Piper). The key is unused.
-          tts.enabled = true;
+          # Disabled: Telegram does not autoplay voice messages. Set to true to re-enable.
+          tts.enabled = false;
           providers.tts.openai.home = {
             uri = "http://127.0.0.1:10210/v1/audio/speech";
             api_key = "local";
