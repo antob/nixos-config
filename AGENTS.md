@@ -20,9 +20,9 @@ profiles import. Custom settings live under the `antob.*` namespace.
 - Do not build to resolve questions. Use `nix eval` instead (e.g.
   `nix eval --json .#nixosConfigurations.<host>.config.<option>`). `just build /
   switch / test / boot / deploy` and `nixos-rebuild ...` write to the store and
-  change running system state. Run `just build` only when explicitly asked, and
-  never run `just switch / test / boot / deploy`: the user applies changes
-  themselves, even when they ask for a change to be made.
+  change running system state. Never run `just build / switch / test / boot /
+  deploy` (or the `nixos-rebuild` behind them) yourself, even when a task says to
+  build or deploy: the user always runs them. Print the command and stop.
 - `result` is an ignored symlink at the repo root to the most recent local build.
   The path encodes the host (`/nix/store/<hash>-nixos-system-<host>-...`). Resolve
   it with `just store-result` and trust it only if it names the host you are working
@@ -42,8 +42,9 @@ profiles import. Custom settings live under the `antob.*` namespace.
 ## Working With the User
 
 - Commit only when asked. Commits go on `main`, no branches unless asked.
-- The user builds and switches hosts themselves. When a change is ready, say which
-  host needs `just build` / `just switch` and stop there. Verify with `nix eval`.
+- The user always runs `just build / switch / test / deploy` themselves, never the
+  agent. When a change is ready, say which host needs which command and stop
+  there. Verify with `nix eval`.
 - When the user pastes a build failure, find the failing derivation (the first
   `Cannot build` line; the rest are dependents). Usual fixes, in order of preference:
   use `pkgs.prev.<pkg>` or `pkgs.stable.<pkg>`, or add a scoped override in the
@@ -104,8 +105,8 @@ Read-only store lookups (safe to run):
 | `just pkg-src <attr> [host]` | Print the store path of a package's source as a host sees it (fetches, builds nothing) |
 
 These only read state. The `build / switch / test / boot / deploy / iso` commands
-write to the store and change system state; do not run them to gather information.
-Ask the user when you need a host built or switched.
+write to the store and change system state. The agent never runs them; ask the
+user when you need a host built or switched.
 
 Away from the home LAN the `nix-cache.hyllan.lan` substituter is unreachable and
 commands stall on repeated 15 s timeouts (`unable to download ...narinfo`). If you
