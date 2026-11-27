@@ -20,6 +20,7 @@ in
         hostId = mkOpt str "" "The system host ID.";
         enableWireless = mkBoolOpt true "Whether or not to enable wireless support";
         enableWoL = mkBoolOpt false "Whether or not to enable Wake-on-LAN on eth0";
+        routingDomains = mkOpt (listOf str) [ "~lan" "~antob.net" ] "Routing domains sent to the DNS server of the local links.";
         staticIp = {
           enable = mkBoolOpt false "Whether or not to configure static IP on eth0";
           address = mkOpt str "" "Static IP address";
@@ -76,6 +77,7 @@ in
               };
               linkConfig.RequiredForOnline = "yes";
 
+              domains = cfg.routingDomains;
               address = mkIf cfg.staticIp.enable [ cfg.staticIp.address ];
               dns = mkIf cfg.staticIp.enable cfg.staticIp.dns;
               routes = mkIf cfg.staticIp.enable [
@@ -89,6 +91,7 @@ in
                 DHCP = "yes";
                 MulticastDNS = true;
               };
+              domains = cfg.routingDomains;
             };
           };
         };

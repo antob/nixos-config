@@ -83,7 +83,6 @@ in
         dns = mkOpt str nodes.pihole.ip "DNS server used to resolve tunnel-scoped domains via wg0.";
         domains = mkOpt (listOf str) [
           "~antob.net"
-          "~lan"
         ] "Route-only routing domains resolved through the tunnel.";
       };
 
