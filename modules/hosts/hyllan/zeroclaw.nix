@@ -63,7 +63,10 @@
             channels = [ "telegram.home" ];
             # The reply/no-reply classifier is for group chats and costs a full LLM call per message.
             precheck.enabled = false;
-            mcp_bundles = [ "home" ];
+            mcp_bundles = [
+              "home"
+              "ops"
+            ];
             transcription_provider = "local_whisper.desktob";
             tts_provider = "openai.home";
           };
@@ -87,6 +90,20 @@
               "ha__media_player__HassMediaNext"
               "ha__media_player__HassMediaPrevious"
               "ha__light__HassLightSet"
+              # Read-only hyllan diagnosis tools (hyllan-diag).
+              "ops__failed_units"
+              "ops__unit_status"
+              "ops__log_units"
+              "ops__logs"
+              "ops__recent_failures"
+              "ops__timers"
+              "ops__zpool_status"
+              "ops__disk_usage"
+              "ops__deployed_generation"
+              "ops__backup_status"
+              "ops__syncthing_status"
+              # Discovery of deferred tools, so the model finds the ops tools without asking each time.
+              "tool_search"
             ];
             # Keeps the system prompt small.
             excluded_tools = [
@@ -106,6 +123,10 @@
               "weather"
               "email_read"
               "email_search"
+              # The built-in backup tool manages ZeroClaw's own workspace backups and was picked
+              # instead of ops__backup_status.
+              "backup"
+              "data_management"
               # Unused HA tools. HassBroadcast was picked instead of HassTurnOn in tests.
               "ha__assist_satellite__HassBroadcast"
               "ha__intent__HassCancelAllTimers"
@@ -124,6 +145,7 @@
             compact_context = true;
             deferred_builtin_tools = true;
             max_context_tokens = 24000;
+            max_tool_iterations = 15;
           };
 
           skills.prompt_injection_mode = "compact";
@@ -140,8 +162,15 @@
               url = "http://127.0.0.1:8123/api/mcp/assist";
               headers.Authorization = "Bearer $HA_TOKEN";
             }
+            {
+              name = "ops";
+              transport = "http";
+              url = "http://127.0.0.1:10220/mcp";
+              tool_timeout_secs = 30;
+            }
           ];
           mcp_bundles.home.servers = [ "ha" ];
+          mcp_bundles.ops.servers = [ "ops" ];
 
           channels.telegram.home = {
             enabled = true;

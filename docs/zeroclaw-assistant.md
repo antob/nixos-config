@@ -1,6 +1,6 @@
 # ZeroClaw personal assistant on hyllan
 
-Status (2026-11-22): Phases 1 and 2 done, Phase 3 working. Sources: ZeroClaw docs, schema and `nix/module.nix` at tag `v0.9.0`; OpenRouter models API; HA `mcp_server` and `llm` docs.
+Status (2026-11-27): the assistant runs on the local model with Telegram text and voice notes, Home Assistant control, music, English-only replies and read-only hyllan diagnosis (see "Current state" at the end). Original plan status (2026-11-22): Phases 1 and 2 done, Phase 3 working. Sources: ZeroClaw docs, schema and `nix/module.nix` at tag `v0.9.0`; OpenRouter models API; HA `mcp_server` and `llm` docs.
 
 ## Handoff state (2026-11-22)
 
@@ -417,3 +417,97 @@ Open:
 - Telegram voice replies are disabled (2026-11-27), see "Telegram voice replies". Re-enable with `tts.enabled = true`.
 - Phase 5 remainder: wake word and a satellite device (ESPHome or the HA companion app) for hands-free Assist.
 - Backlog from "Later ideas": GLaDOS-style voice, morning brief cron job, web search through an MCP server (searxng).
+
+## Hyllan diagnosis for the assistant: plan (2026-11-27, not implemented)
+
+Goal: the assistant can look at hyllan (failed units, logs, disks, backups) from Telegram, read-only, and explain what is wrong. Fixing stays with the user.
+
+Findings:
+- The `shell` tool is in `excluded_tools`, and the unit could not diagnose anything with it anyway: `PrivateUsers`, `ProtectProc = invisible`, an empty capability set, no `systemd-journal` group, no sudo. Loosening that sandbox for the assistant is the wrong direction.
+- The `agent-access` aspect already defines the rights a diagnosing agent gets: a restricted `agent` user, `sudo agent-logs` for the units in `logUnits` (zeroclaw-assistant is one), polkit restart for a short unit list, `syncthing-ctl` and `hass-ctl` through `sudoPackages`. The `hyllan` skill in `.agents/skills/hyllan/SKILL.md` lists the commands and the name map. These are the tools to expose, not new rights.
+- The `agent` login only accepts keys from `10.64.1.0/24` with `restrict`, and `authorizedKeys` is one shared list with no forced command. Giving ZeroClaw a key there would give it a shell as `agent`.
+- Model: the preset `zeroclaw` (Qwen3.6-35B-A3B, 32k context, `max_context_tokens = 24000`, reasoning off) is tuned for short home commands. Log output eats that budget quickly. The `qwen3.6-35B` preset has 262k context, so it is the candidate for a diagnosis agent. Logs may hold private data, so stay local (no OpenRouter).
+
+Plan (phases, stop after each):
+1. `hyllan-diag` MCP server on hyllan (`modules/hosts/hyllan/diag.nix`, script in `_files/hyllan-diag/`), HTTP on `127.0.0.1`, systemd unit running as the existing `agent` user so it reuses the sudo rules above. Fixed read-only tools, no free-form command: `failed_units`, `unit_status(unit)`, `logs(unit, lines, since, grep)` (through `sudo agent-logs`, unit checked against its allow list, output capped to about 60 lines and 6 kB), `timers`, `zpool_status`, `disk_usage`, `deployed_generation`, `backup_status`, `syncthing_status`. Every output is capped so one call cannot fill the context.
+2. ZeroClaw: add the server to `mcp.servers` as bundle `ops`, put its read tools in `auto_approve`. Test through the existing agent first ("which units failed?", "why did last night's backup fail?").
+3. External model for diagnosis: deferred (decided 2026-11-27, the local model is good enough). The design is kept in "Remote model for diagnosis (deferred)" below.
+4. `SOUL.md` and the ops agent prompt: diagnosis is read-only, quote the log line relied on, and never build, switch or deploy hyllan (the user does that from desktob or laptob). Report the cause and the change to make, nothing more. The diag tools include the assistant's own unit (`zeroclaw-assistant` is already in `logUnits`), so it can read its own logs and status.
+5. Later, only if wanted: a restart tool limited to the units already in `agent-access.units` (needs approval on Telegram, not auto-approved).
+
+Not in scope: access to other hosts, `/run/secrets`, vaultwarden and photoprism logs (the `agent` user cannot read them either).
+
+Phase 1 status (2026-11-27): switched on hyllan; the unit is active and `failed_units`, `deployed_generation`, `syncthing_status`, `zpool_status`, `logs` (through sudo) work. `backup_status` listed timers instead of services in the first version; fixed (needs another switch), checked on hyllan by running the new function through the agent login. `modules/hosts/hyllan/diag.nix` (unit `hyllan-diag`, runs as `agent`, `127.0.0.1:10220`, journal readable through agent-logs) and `_files/hyllan-diag/hyllan_diag.py` (stdlib only, stateless MCP over HTTP POST to `/mcp`, matches ZeroClaw's HTTP transport: JSON responses, 202 for notifications). Tools: `failed_units`, `unit_status`, `log_units`, `logs`, `timers`, `zpool_status`, `disk_usage`, `deployed_generation`, `backup_status`, `syncthing_status`. Arguments are validated (unit name regex, `since` regex, priority enum, lines 1 to 200) and passed as argv, never through a shell; output is capped to 6 kB, newest lines kept. Checked locally on desktob (protocol, tool list, argument rejection, `failed_units`, `disk_usage`, `unit_status`); `sudo agent-logs`, `zpool` and `syncthing-ctl` paths are untested until hyllan runs it. Unit hardening leaves out `NoNewPrivileges`, `PrivateUsers` and a capability bound because sudo needs setuid. Any local process on hyllan can call the port (no token); it exposes only what `agent` may read. Option if that matters: a bearer token from sops, or an nftables rule limiting the port to the `zeroclaw-assistant` uid.
+
+Phase 2 status (2026-11-27): edited, not switched. `zeroclaw.nix`: MCP server `ops` (`http://127.0.0.1:10220/mcp`, 30 s tool timeout), bundle `ops`, added to the existing `assistant` agent (`mcp_bundles = [ "home" "ops" ]`) as a test, and the ten tools (`ops__failed_units` and so on, prefix is the server name) in `auto_approve`. `nix eval` shows the expected settings. Test from Telegram after a hyllan switch: "Which units failed on hyllan?", "Did last night's backups succeed?", "Show the last lines of your own log". Phase 3 moves the `ops` bundle from `assistant` to a separate `ops` agent. Check in the first test that the local model picks the right tool and that the 10 extra tools do not push the prompt over the 24k budget. `OPENROUTER_API_KEY` is in `zeroclaw_env` (user, 2026-11-27) and OpenRouter ZDR is on.
+
+Phase 2 first Telegram test (2026-11-27): "Which units failed on hyllan?" was answered ("No units or devices have failed"), but the `hyllan-diag` journal shows no tool call from it, so the answer probably came from the HA tools. "Did last night's backups succeed?" went through `tool_search "backup"`, which asked for approval, and then picked ZeroClaw's built-in `backup` tool (`command: list`, workspace backups) instead of `ops__backup_status`, and concluded no backups exist. Fixes (edited, not switched): `tool_search` in `auto_approve`; `backup` and `data_management` in `excluded_tools`; a "Server" section in `SOUL.md` (use `ops__` tools for hyllan questions, read-only, quote the evidence, never claim to change anything); clearer descriptions for `failed_units` and `backup_status`. Retest the same two questions after a hyllan switch and check the `hyllan-diag` journal for the `POST /mcp` calls.
+
+Phase 2 retest (2026-11-27, after the switch, fresh session): "Which units failed on hyllan?" answered correctly with no approval prompt; "Did last night's backups succeed?" answered "all nine backup jobs succeeded, between 01:09 and 01:37", which matches `backup_status` on hyllan. The `hyllan-diag` journal shows the matching `POST /mcp` calls. Not yet tested: reading its own log, a logs query with `since` or `grep`, and a real failure (e.g. a stopped unit).
+
+Logs tool test (2026-11-27, run against the live server through the agent login, not Telegram): `since`, `grep` (regex alternation), `priority` and `lines` (clamped to 200) work; `since: "1 hour ago"` on a unit that ran at 01:08 returns "No entries". Fixes found: a failing journal query (`since: "today 01:00"` is not a valid journalctl time, bad grep regex, unit not allowed) returned `isError: false`, so the model could read it as a normal result; the "not allowed" reply also listed units and was cut at 300 characters. Now failing queries return `isError: true`, "No entries" stays a normal result, and a disallowed unit gets "call log_units for the list". Edited in `hyllan_diag.py`, needs a hyllan switch to go live (the deployed unit still has the old behaviour).
+
+Crash test (2026-11-27, `systemctl kill -s SIGKILL tts-bridge` at 16:47, unit restarted itself): failed. "Did anything crash on hyllan in the last 10 minutes?" ended with "No crashes or errors ... Everything appears stable" plus "Turn stopped: reached maximum tool iterations (10)". The journal of `hyllan-diag` shows the model read eight units one by one (caddy, syncthing, podman-hass, zigbee2mqtt, systemd-networkd, mosquitto, esphome, zeroclaw-assistant) with `-p err`, never `tts-bridge`. The crash lines are logged at priority 4 (warning), so `-p err` hid them even for the right unit, and the answer claimed more than was checked. Root causes: no tool to find failures across units, a priority filter chosen by the model, and no rule to state what was checked. Fixes (edited, not switched): tool `recent_failures(since)` (one call, all 39 readable units, regex on "Failed with result", "Scheduled restart job", "code=killed", "code=dumped", OOM and failed starts, no priority filter, newest last) and `ops__recent_failures` in `auto_approve`; `SOUL.md` rules to call it first, never filter by priority for crash questions, and name the units and window actually checked. Run on hyllan through the agent login against the same journal, the new function returns the three tts-bridge lines (killed, failed with result 'signal', scheduled restart). The 10 tool iteration cap is the default (`runtime_profiles.assistant.max_tool_iterations`); left unchanged, since one call now answers this question. Retest with the same prompt after a switch and a fresh kill.
+
+Crash retest (2026-11-27, after the switch, second kill at 16:50:45): passed. The `hyllan-diag` journal shows the model read the allowed-unit list and ran one all-unit `agent-logs` search (`recent_failures`), then `agent-logs tts-bridge.service -n 60 -S '10 minutes ago'` with no priority filter. The answer named both kills with the right times (16:47:18 and 16:50:45) and the restarts after about 5 s, which matches the journal. Weakness: it called this "not a crash" and guessed the caller was "likely Home Assistant or another caller", which no log line supports. `SOUL.md` now says "on client request" means someone ran `systemctl stop` or `kill`, not to guess who, and not to call a SIGKILL a clean stop (edited, needs a hyllan switch). Remaining untested: a unit that stays failed (`failed_units`) and a service log with a real error message to diagnose.
+
+Diagnosis tests (2026-11-27, after the `SOUL.md` and `recent_failures` switch), local model only: passed with two weaknesses.
+- Kill retest (kill at 16:54): the model called `agent-logs` (unit list), one all-unit search and `agent-logs tts-bridge.service -n 60 -S '10 minutes ago'` with no priority filter. It named all three kills (16:47, 16:50, 16:54), said "on client request" means someone or something ran `systemctl kill` or `stop`, and that systemd restarted the unit. It still floated Home Assistant as a possible cause, hedged as an offer.
+- Failed unit with a real error (runtime drop-in with a missing `ExecStart` script): without being told the unit, it found `tts-bridge`, quoted the exact line `python3: can't open file '/var/lib/missing/tts_bridge.py': [Errno 2] No such file or directory`, linked it to the `test.conf` drop-in (visible in `systemctl status`), and suggested checking or removing the override, with no command run. Weakness: it opened with the three earlier kills, which were not failures, before the actual failure, and the reply was long for Telegram.
+Residual issues are style and focus, not wrong facts: the local 35B-A3B model follows the tools but not every `SOUL.md` rule. Phase 3 (OpenRouter `ops` agent) is where a stronger model would be compared on the same two prompts.
+
+Context check (2026-11-27, llama-server journal on desktob, last 12 h, `slot release ... n_tokens`): 52 requests, median 9,749 tokens, p90 10,489, max 13,628 (a long `logs` result), none truncated, slot `n_ctx_slot = 32768`. The system prompt and tool list are about 9k tokens, so a diagnosis turn uses roughly 10 to 14k of 32k. No reason to raise the context. `runtime_profiles.assistant.max_tool_iterations` raised from 10 to 15 (edited, not switched) after the one "reached maximum tool iterations" stop.
+
+## Remote model for diagnosis (deferred, 2026-11-27)
+
+Decision: keep the local model (Qwen3.6-35B-A3B on desktob) for everything, including hyllan diagnosis. Evidence: the crash and failed-unit tests gave correct facts, times and exact log quotes; the weaknesses were style (long replies, history before the current failure, a hedged guess about Home Assistant), not wrong facts. The context is not a limit: 52 requests over 12 hours had a median of 9,749 tokens, a maximum of 13,628 and none truncated, against a 32,768 slot. No external model is configured today. The unused `OPENROUTER_API_KEY` was removed from `zeroclaw_env` on 2026-11-27 (add it again if a remote model is enabled). OpenRouter ZDR and no-training are on in the account.
+
+When to reconsider: a real incident the local model cannot untangle (several overlapping failures, long noisy logs, wrong conclusions that `SOUL.md` rules do not fix), or desktob being off while hyllan needs diagnosis. Then compare on the same prompts as the 2026-11-27 tests: (1) "Did anything crash on hyllan in the last 10 minutes?" after `sudo systemctl kill -s SIGKILL tts-bridge`; (2) "Something may be wrong on hyllan. What is failing, and why? Quote the log line." with `tts-bridge` broken by a runtime drop-in (`/run/systemd/system/tts-bridge.service.d/test.conf` with `Restart=no` and an `ExecStart` pointing at a missing script). Remove the drop-in, `daemon-reload` and restart afterwards.
+
+How it works in ZeroClaw 0.9.0 (checked in the source, not built):
+- A channel is bound to one agent and there is no per-message routing. Do not try to pick a model per Telegram message.
+- Hand work to a second agent with the `delegate` tool. It sends only the `prompt` and optional `context` the calling model writes, not the chat history. `delegation_policy.mode` is `forbidden` by default and gates all delegation; `agents.<name>.delegates` lists the targets, `mode = "independent"` runs the target under its own risk profile, tools and budget.
+- A provider is a normal entry: `providers.models.openrouter.<alias>` with its own `model`. `fallback` between providers would send chat to the remote model after a local failure, so do not set it on the local provider.
+- `model_routes` (`hint:<name>`) is a narrower alternative that maps a hint to a provider and model, but it does not give a separate tool envelope.
+
+Sketch (untested, check with `nix eval` first). Model `deepseek/deepseek-v4.1-flash-1017` on OpenRouter: 1M context, tool calling, $0.15 per million input and $0.60 per million output, ZDR endpoints exist (Fireworks, Together, Google, Inceptron).
+
+```nix
+providers.models.openrouter.ops = {
+  model = "deepseek/deepseek-v4.1-flash-1017";
+  api_key = "$OPENROUTER_API_KEY";
+};
+
+agents.ops = {
+  model_provider = "openrouter.ops";
+  risk_profile = "ops";
+  runtime_profile = "ops";
+  mcp_bundles = [ "ops" ];            # remove "ops" from agents.assistant.mcp_bundles
+};
+risk_profiles.ops = {
+  level = "supervised";
+  auto_approve = [ /* the ten ops__ tools */ ];
+  excluded_tools = [ /* same built-ins as the assistant, plus ha__* is not reachable */ ];
+};
+runtime_profiles.ops = { max_tool_iterations = 15; };
+
+agents.assistant = {
+  delegates = [ { agent = "ops"; mode = "independent"; } ];
+  delegate_same_risk_profile = false;
+};
+risk_profiles.assistant.delegation_policy.mode = "allow";
+
+cost = { daily_limit_usd = 1.0; monthly_limit_usd = 10.0; };
+```
+
+Checklist before enabling:
+0. Add `OPENROUTER_API_KEY` to `zeroclaw_env` in `modules/hosts/hyllan/secrets.yaml` again.
+1. Check `deferred_builtin_tools` does not hide `delegate`, and add a `SOUL.md` line saying when to delegate ("a hyllan problem you could not explain from one or two ops tool calls"). The local model must delegate reliably; test it.
+2. Delegate only diagnosis. The remote agent gets the ops tools only, never the HA tools, and the prompt must be self-contained: no chat history, no home details.
+3. Logs go to OpenRouter and the upstream provider. Keep the account ZDR toggle ("All other models") on and the training toggles off. Per-request `provider` fields (`zdr`, `data_collection`) are not confirmed to be sendable through ZeroClaw, so rely on the account setting.
+4. Set a spending limit (`cost`) and an OpenRouter credit cap.
+5. Keep the `ops` tools read-only (no restart tool) so a remote model can never change hyllan. Never build, switch or deploy from the assistant; the user does that from desktob or laptob.
+
+## Current state (2026-11-27)
+
+Switched on hyllan and verified from Telegram: local model only (Qwen3.6-35B-A3B on desktob, 32k slot, 24k budget); `hyllan-diag` MCP server (`ops__` tools, read-only, runs as `agent`, `127.0.0.1:10220`) attached to the `assistant` agent with `tool_search` and the ten ops tools plus `recent_failures` auto-approved; built-in `backup` and `data_management` tools excluded; `SOUL.md` has a "Server" section (use `ops__` tools for hyllan, read-only, quote evidence, state the units and window checked, do not guess who sent "client request"); `max_tool_iterations = 15`; Telegram voice replies disabled (`tts.enabled = false`, bridge and provider kept). No OpenRouter key, no remote model, no delegation. Open: optional remote diagnosis model (see the previous section), restart tool for the units in `agent-access.units` (not wanted so far), wake word and satellite for Assist, GLaDOS voice, morning brief, web search.
