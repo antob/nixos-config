@@ -109,6 +109,7 @@ in
           antob.persistence.home.directories = [
             ".local/share/nvim"
             ".local/state/nvim"
+            ".config/github-copilot"
           ];
 
           fileSystems."${userHome}/.config/nvim" = {
