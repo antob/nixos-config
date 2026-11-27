@@ -62,11 +62,6 @@ in
             ".aws"
           ];
         };
-
-        system.env = {
-          GITHUB_COPILOT_TOKEN = "$(cat ${secrets.github_copilot_token.path})";
-          OPENROUTER_API_KEY = "$(cat ${secrets.openrouter_api_key.path})";
-        };
       };
 
       # Sops secrets; each host adds its own wg0_private_key sopsFile
