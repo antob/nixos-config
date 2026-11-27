@@ -16,7 +16,7 @@ in
         in
         {
           ".." = "cd ..";
-          ls = "${pkgs.eza}/bin/eza --group-directories-first --icons";
+          ls = "${pkgs.eza}/bin/eza --group-directories-first --icons=auto";
           la = "ls -a";
           l = "ls -lg";
           ll = "ls -alg";
